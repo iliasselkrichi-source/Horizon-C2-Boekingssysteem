@@ -15,7 +15,7 @@
         <div class="card ta-form">
             <h3>Nieuwe Boeking Invoeren</h3>
             
-            <label>Kies Unit:</label>
+            <label>🏠 Kies Unit:</label>
             <select id="taUnitSelect">
                 <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">TA-U1 - Al Houara Villa (€500/nacht)</option>
                 <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618b" data-price="400" data-type="Villa">TA-U2 - La Perla (€400/nacht)</option>
@@ -29,12 +29,76 @@
                 <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7e1f4d1cc6" data-price="195" data-type="Penthouse">TA-U10 - Sovereign Skyline (€195/nacht)</option>
             </select>
 
-            <label>Gastnaam:</label>
+            <label>👤 Gastnaam:</label>
             <input type="text" id="taGuestName" placeholder="Volledige naam">
 
-            <label>Email:</label>
+            <label>📧 Email:</label>
             <input type="email" id="taGuestEmail" placeholder="naam@voorbeeld.com">
 
+            <label>📞 Telefoon:</label>
+            <input type="tel" id="taGuestPhone" placeholder="+212 ...">
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 1;">
+                    <label>📅 Check-in:</label>
+                    <input type="date" id="taCheckIn">
+                </div>
+                <div style="flex: 1;">
+                    <label>📅 Check-out:</label>
+                    <input type="date" id="taCheckOut">
+                </div>
+            </div>
+
+            <!-- DIENSTEN (MET PRIJZEN) -->
+            <div style="margin-top: 1rem;">
+                <label>🛠️ Extra Diensten (worden bij totaal opgeteld):</label>
+                <select id="taDiensten" multiple style="height: 100px; width: 100%;">
+                    <option value="housekeeping">Housekeeping (€50)</option>
+                    <option value="cleaning">Cleaning (€25)</option>
+                    <option value="transfer">Transfer (€15)</option>
+                    <option value="breakfast">Breakfast (€25)</option>
+                    <option value="chef">Chef (€20)</option>
+                </select>
+            </div>
+
+            <!-- ACTIVITEITEN (ALLEEN OFFERTE) -->
+            <div style="margin-top: 1rem;">
+                <label>🏇 Activiteiten (offerte - geen prijs in totaal):</label>
+                <select id="taActiviteiten" multiple style="height: 100px; width: 100%;">
+                    <option value="paardrijden_strand">Strand Paardrijden</option>
+                    <option value="quad_tour">Quad Tour</option>
+                    <option value="gids">Gids</option>
+                    <option value="wellness">Wellness</option>
+                </select>
+            </div>
+
+            <!-- ZORG & WENSEN -->
+            <div style="margin-top: 1rem;">
+                <label>🩺 Zorgbehoeften of Medische wensen:</label>
+                <textarea id="taZorgWensen" rows="2" placeholder="Beschrijf eventuele zorgbehoeften of medische assistentie..."></textarea>
+            </div>
+
+            <div style="margin-top: 0.5rem;">
+                <label>📝 Algemene Speciale Wensen:</label>
+                <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen..."></textarea>
+            </div>
+
+            <div style="margin-top: 0.5rem;">
+                <label><input type="checkbox" id="taTransfer"> 🚗 Luchthaven Transfer nodig?</label>
+            </div>
+
+            <label>💰 Totaalprijs (€):</label>
+            <input type="number" id="taTotaalprijs" readonly style="background: #eee; font-weight: bold;">
+
+            <button id="taBookBtn" style="margin-top: 20px; width: 100%; padding: 15px; background: #1e293b; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                📌 BEVESTIG BOEKING
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
             <label>Telefoon:</label>
             <input type="tel" id="taGuestPhone" placeholder="+212 ...">
 
