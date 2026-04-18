@@ -31,14 +31,27 @@
             padding: 40px 20px;
         }
 
-        /* Grid voor de 10 units */
+        /* Categorie titels */
+        .category-title {
+            width: 100%;
+            max-width: 1200px;
+            margin: 40px 0 20px 0;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            border-left: 5px solid var(--accent-gold);
+            padding-left: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Grid voor de units */
         .unit-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
             max-width: 1200px;
             width: 100%;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
         }
 
         .unit-card {
@@ -73,12 +86,6 @@
             margin-bottom: 5px;
         }
 
-        .unit-info p {
-            font-size: 0.85rem;
-            color: #888;
-            margin-bottom: 12px;
-        }
-
         .info-btn {
             background: var(--accent-gold);
             color: white;
@@ -88,6 +95,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
+            margin-top: 10px;
         }
 
         .info-btn:hover {
@@ -157,6 +165,7 @@
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.05);
             border: 1px solid var(--border-soft);
+            margin-top: 20px;
         }
 
         h1 {
@@ -296,85 +305,86 @@
 </head>
 <body>
 
-<!-- ========== UNIT GRID ========== -->
+<!-- ========== CATEGORIE 1: HOUARA LONVINITY ========== -->
+<h2 class="category-title">✨ Houara Longvinity</h2>
 <div class="unit-grid">
-    <div class="unit-card" onclick="openInfo('U1', 'Al Houara Villa', 'Een prachtige luxe villa aan de kust van Tanger met privézwembad, zeezicht en volledig uitgeruste keuken.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Al+Houara" alt="Al Houara Villa">
+    <div class="unit-card" onclick="openInfo('U1', 'Al Houara Villa', 'Luxe villa aan de kust van Tanger. Geniet van rust, privacy en een prachtig uitzicht.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Al+Houara+Villa" alt="U1">
         <div class="unit-info">
             <h4>Al Houara Villa</h4>
-            <p>Houara Longvinity</p>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U2', 'La Perla', 'Luxe villa met infinity pool, gelegen in Achakar. Perfect voor een ontspannen vakantie.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=La+Perla" alt="La Perla">
+</div>
+
+<!-- ========== CATEGORIE 2: ACHAKAR TRINITY ========== -->
+<h2 class="category-title">🌊 Achakar Trinity</h2>
+<div class="unit-grid">
+    <div class="unit-card" onclick="openInfo('U2', 'La Perla', 'Een parel aan de kust van Achakar. Modern design met alle comfort.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=La+Perla" alt="U2">
         <div class="unit-info">
             <h4>La Perla</h4>
-            <p>Achakar Trinity</p>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U3', 'Al Bahar', 'Villa met adembenemend zeezicht. Direct aan het strand van Achakar.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Al+Bahar" alt="Al Bahar">
+    <div class="unit-card" onclick="openInfo('U3', 'Al Bahar', 'Direct aan zee. Perfect voor liefhebbers van strand en zon.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Al+Bahar" alt="U3">
         <div class="unit-info">
             <h4>Al Bahar</h4>
-            <p>Achakar Trinity</p>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U4', 'Le Rocher', 'Unieke villa gebouwd op een rotsformatie. Spectaculair uitzicht.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Le+Rocher" alt="Le Rocher">
+    <div class="unit-card" onclick="openInfo('U4', 'Le Rocher', 'Unieke locatie op de rotsen. Spectaculair uitzicht over de oceaan.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Le+Rocher" alt="U4">
         <div class="unit-info">
             <h4>Le Rocher</h4>
-            <p>Achakar Trinity</p>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U5', 'L\'Essence Suite', 'Luxe suite in het hart van Marrakech. Perfect voor stelletjes.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Essence" alt="L'Essence Suite">
+</div>
+
+<!-- ========== CATEGORIE 3: MARRAKECH URBAN ========== -->
+<h2 class="category-title">🏙️ Marrakech Urban</h2>
+<div class="unit-grid">
+    <div class="unit-card" onclick="openInfo('U5', 'L\'Essence Suite', 'Luxe stadssuite in het hart van Marrakech.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Essence+Suite" alt="U5">
         <div class="unit-info">
             <h4>L'Essence Suite</h4>
-            <p>Marrakech</p>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U6', 'Oasis de Paix', 'Rustgevende tuinappartement met privé terras.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Oasis" alt="Oasis de Paix">
+    <div class="unit-card" onclick="openInfo('U6', 'Oasis de Paix', 'Rustgevend appartement met privéterras.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Oasis+de+Paix" alt="U6">
         <div class="unit-info">
             <h4>Oasis de Paix</h4>
-            <p>Marrakech</p>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U7', 'Le Refuge', 'Knusse studio met dakterras. Ideaal voor solo reizigers.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Refuge" alt="Le Refuge">
+    <div class="unit-card" onclick="openInfo('U7', 'Le Refuge', 'Modern en veilig verblijf in het hart van de stad.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Le+Refuge" alt="U7">
         <div class="unit-info">
             <h4>Le Refuge</h4>
-            <p>Marrakech</p>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U8', 'Imperial Duplex', 'Ruim duplex appartement met 2 slaapkamers en luxe afwerking.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Imperial" alt="Imperial Duplex">
+    <div class="unit-card" onclick="openInfo('U8', 'Imperial Duplex', 'Ruim en koninklijk wonen in dit duplex appartement.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Imperial+Duplex" alt="U8">
         <div class="unit-info">
             <h4>Imperial Duplex</h4>
-            <p>Marrakech</p>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U9', 'Palmeraie Royale', 'Prachtige villa aan de Palmeraie. Zwembad en grote tuin.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Palmeraie" alt="Palmeraie Royale">
+    <div class="unit-card" onclick="openInfo('U9', 'Palmeraie Royale', 'Stijlvolle villa in de beroemde Palmeraie.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Palmeraie+Royale" alt="U9">
         <div class="unit-info">
             <h4>Palmeraie Royale</h4>
-            <p>Marrakech</p>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U10', 'Sovereign Skyline', 'Penthouse met adembenemend uitzicht op het Atlasgebergte.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Skyline" alt="Sovereign Skyline">
+    <div class="unit-card" onclick="openInfo('U10', 'Sovereign Skyline', 'Exclusief penthouse met adembenemend uitzicht.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Sovereign+Skyline" alt="U10">
         <div class="unit-info">
             <h4>Sovereign Skyline</h4>
-            <p>Marrakech</p>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
@@ -395,18 +405,28 @@
 <div class="booking-card">
     <h1>✨ Réservation ✨</h1>
 
-    <label>Accommodatie</label>
-    <select id="taUnitSelect">
-        <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa</option>
-        <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618" data-price="400" data-type="Villa">La Perla</option>
-        <option value="U3" data-resource="90285810-ae69-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar</option>
-        <option value="U4" data-resource="72168bd2-a348-457b-8892-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
-        <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82cda52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
-        <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix</option>
-        <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge</option>
-        <option value="U8" data-resource="7454d0e6-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
-        <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-3584650d6cd5" data-price="195" data-type="Villa">Palmeraie Royale</option>
-        <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7ef4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
+    <label>Accommodatie *</label>
+    <select id="taUnitSelect" required>
+        <option value="">Selecteer uw verblijf...</option>
+        
+        <optgroup label="✨ Houara Longvinity">
+            <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa</option>
+        </optgroup>
+
+        <optgroup label="🌊 Achakar Trinity">
+            <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618" data-price="400" data-type="Villa">La Perla</option>
+            <option value="U3" data-resource="90285810-ae69-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar</option>
+            <option value="U4" data-resource="72168bd2-a348-457b-8892-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
+        </optgroup>
+
+        <optgroup label="🏙️ Marrakech Urban">
+            <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82cda52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
+            <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix</option>
+            <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge</option>
+            <option value="U8" data-resource="7454d0e6-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
+            <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-3584650d6cd5" data-price="195" data-type="Villa">Palmeraie Royale</option>
+            <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7ef4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
+        </optgroup>
     </select>
 
     <div class="row-2">
