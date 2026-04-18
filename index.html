@@ -163,6 +163,11 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
+        button#taBookBtn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         textarea {
             resize: vertical;
@@ -190,22 +195,36 @@
 
     <div class="row-2">
         <div>
-            <label>Check-in</label>
-            <input type="date" id="taCheckIn">
+            <label>Check-in *</label>
+            <input type="date" id="taCheckIn" required>
         </div>
         <div>
-            <label>Check-out</label>
-            <input type="date" id="taCheckOut">
+            <label>Check-out *</label>
+            <input type="date" id="taCheckOut" required>
         </div>
     </div>
 
-    <label>Gastgegevens</label>
-    <input type="text" id="taGuestName" placeholder="Volledige naam">
+    <label>Gastgegevens *</label>
+    <input type="text" id="taGuestName" placeholder="Volledige naam" required>
 
     <div class="row-2">
-        <input type="email" id="taGuestEmail" placeholder="Emailadres">
-        <input type="tel" id="taGuestPhone" placeholder="Telefoonnummer">
+        <div>
+            <label>Emailadres *</label>
+            <input type="email" id="taGuestEmail" placeholder="bijv. naam@mail.com" required>
+        </div>
+        <div>
+            <label>Telefoonnummer *</label>
+            <input type="tel" id="taGuestPhone" placeholder="bijv. +212..." required>
+        </div>
     </div>
+
+    <label>Betaalmethode *</label>
+    <select id="taPaymentMethod" required>
+        <option value="">Kies een betaalmethode...</option>
+        <option value="Cash">Contant (Cash)</option>
+        <option value="Kaart">Creditcard / Debetkaart</option>
+        <option value="PayPal">PayPal</option>
+    </select>
 
     <h3>✨ Extra Diensten & Ervaringen</h3>
     <div class="option-group">
@@ -270,18 +289,31 @@
 
     // ========== BOEKING VERZENDEN ==========
     async function handleBooking() {
-        const unitSelect = document.getElementById('taUnitSelect');
+        // 1. Haal alle elementen op
+        const name = document.getElementById('taGuestName').value.trim();
+        const email = document.getElementById('taGuestEmail').value.trim();
+        const phone = document.getElementById('taGuestPhone').value.trim();
+        const payment = document.getElementById('taPaymentMethod').value;
         const checkIn = document.getElementById('taCheckIn').value;
         const checkOut = document.getElementById('taCheckOut').value;
+        const unitSelect = document.getElementById('taUnitSelect');
 
-        if (!checkIn || !checkOut) {
-            alert("❌ Selecteer beide datums.");
+        // 2. Strikte controle op verplichte velden
+        if (!name || !email || !phone || !payment || !checkIn || !checkOut) {
+            alert("⚠️ Vul alstublieft alle verplichte velden in (Naam, Email, GSM, Datums en Betaalmethode).");
             return;
         }
+
+        // 3. Controleer datums
         if (new Date(checkIn) >= new Date(checkOut)) {
             alert("❌ Check-out moet na check-in liggen.");
             return;
         }
+
+        // Knop uitschakelen om dubbele boekingen te voorkomen
+        const btn = document.getElementById('taBookBtn');
+        btn.disabled = true;
+        btn.innerText = "BEZIG MET VERWERKEN...";
 
         const diensten = Array.from(document.querySelectorAll('.ta-dienst:checked')).map(cb => cb.value);
         const activiteiten = Array.from(document.querySelectorAll('.ta-activiteit:checked')).map(cb => cb.value);
@@ -290,11 +322,8 @@
             team: "TA",
             unit_code: unitSelect.value,
             resource_id: unitSelect.selectedOptions[0].dataset.resource,
-            gast_naam: document.getElementById('taGuestName').value,
-            gast_contact: {
-                email: document.getElementById('taGuestEmail').value,
-                telefoon: document.getElementById('taGuestPhone').value
-            },
+            gast_naam: name,
+            gast_contact: { email: email, telefoon: phone },
             check_in: checkIn,
             check_out: checkOut,
             metadata: {
@@ -303,7 +332,8 @@
                 activiteiten: activiteiten,
                 zorg_wensen: document.getElementById('taZorgWensen').value,
                 speciaal: document.getElementById('taSpeciaal')?.value || '',
-                transfer: document.getElementById('taTransfer')?.checked || false
+                transfer: document.getElementById('taTransfer')?.checked || false,
+                betaalmethode: payment
             },
             totaalprijs: parseFloat(document.getElementById('taTotaalprijs').value) || 0,
             status: "NIEUW"
@@ -312,10 +342,13 @@
         console.log("📤 Boeking:", record);
 
         const { error } = await supabaseClient.from('boekingen').insert([record]);
+        
         if (error) {
             alert("❌ Fout: " + error.message);
+            btn.disabled = false;
+            btn.innerText = "📌 BEVESTIG RESERVATIE";
         } else {
-            alert("✅ Boeking succesvol! De activiteiten staan genoteerd voor de offerte.");
+            alert("✅ Merci! Uw reservatie met " + payment + " is succesvol ontvangen.");
             location.reload();
         }
     }
