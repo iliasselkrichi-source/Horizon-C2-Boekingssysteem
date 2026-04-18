@@ -4,87 +4,335 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horizon C2 | Team Alpha - Boekingen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-warm: #fdfbf8;
+            --accent-gold: #c5a059;
+            --text-main: #2c3e50;
+            --border-soft: #e5e7eb;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-warm);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .booking-card {
+            background: var(--white);
+            max-width: 550px;
+            width: 100%;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-soft);
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            text-align: center;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            letter-spacing: 1.5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-soft);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfcfc;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-gold);
+            outline: none;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
+        }
+
+        .row-2 {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+        .row-2 > div {
+            flex: 1;
+        }
+
+        .option-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0 10px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 6px 0;
+        }
+
+        .check-item input {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: var(--accent-gold);
+        }
+
+        .price-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .total-label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: #888;
+        }
+        .total-amount {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        button#taBookBtn {
+            width: 100%;
+            background: var(--text-main);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button#taBookBtn:hover {
+            background: #1a252f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🏠 Team Alpha — Boeking</h1>
-        
-        <div class="card ta-form">
-            <h3>🏠 Accommodatie & Gast</h3>
-            
-            <label>Kies unit:</label>
-            <select id="taUnitSelect">
-                <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa (€500/nacht)</option>
-                <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618b" data-price="400" data-type="Villa">La Perla (€400/nacht)</option>
-                <option value="U3" data-resource="90285810-aeg469-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar (€400/nacht)</option>
-                <option value="U4" data-resource="72168b2d-a348-457b-8092-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher (€400/nacht)</option>
-                <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82cdea52189f" data-price="150" data-type="Suite">L'Essence Suite (€150/nacht)</option>
-                <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix (€150/nacht)</option>
-                <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge (€150/nacht)</option>
-                <option value="U8" data-resource="7454d0ef-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex (€195/nacht)</option>
-                <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-35846506dc5d" data-price="195" data-type="Villa">Palmeraie Royale (€195/nacht)</option>
-                <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7e1f4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline (€195/nacht)</option>
-            </select>
+<div class="booking-card">
+    <h1>✨ Réservation ✨</h1>
 
-            <div class="form-row" style="margin-top: 10px;">
-                <div>
-                    <label>📅 Check-in:</label>
-                    <input type="date" id="taCheckIn">
-                </div>
-                <div>
-                    <label>📅 Check-out:</label>
-                    <input type="date" id="taCheckOut">
-                </div>
-            </div>
+    <label>Accommodatie</label>
+    <select id="taUnitSelect">
+        <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa</option>
+        <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618b" data-price="400" data-type="Villa">La Perla</option>
+        <option value="U3" data-resource="90285810-aeg469-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar</option>
+        <option value="U4" data-resource="72168b2d-a348-457b-8092-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
+        <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82cdea52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
+        <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix</option>
+        <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge</option>
+        <option value="U8" data-resource="7454d0ef-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
+        <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-35846506dc5d" data-price="195" data-type="Villa">Palmeraie Royale</option>
+        <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7e1f4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
+    </select>
 
-            <label>👤 Naam Hoofdgast:</label>
-            <input type="text" id="taGuestName" placeholder="Volledige naam">
-
-            <label>📧 Email:</label>
-            <input type="email" id="taGuestEmail" placeholder="naam@voorbeeld.com">
-
-            <label>📞 Telefoon:</label>
-            <input type="tel" id="taGuestPhone" placeholder="+212 ...">
-
-            <!-- DIENSTEN & ACTIVITEITEN -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: rgba(255,255,255,0.4); padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #cbd5e1;">
-                <div>
-                    <p><strong>🛠️ Extra Diensten</strong></p>
-                    <label><input type="checkbox" class="ta-optie ta-dienst" value="Housekeeping" data-price="50"> Housekeeping (€50)</label><br>
-                    <label><input type="checkbox" class="ta-optie ta-dienst" value="Cleaning" data-price="25"> Schoonmaak (€25)</label><br>
-                    <label><input type="checkbox" class="ta-optie ta-dienst" value="Breakfast" data-price="25"> Ontbijt (€25)</label><br>
-                    <label><input type="checkbox" class="ta-optie ta-dienst" value="Chef" data-price="20"> Privé Kok (€20)</label>
-                </div>
-                <div>
-                    <p><strong>🏇 Activiteiten (Offerte)</strong></p>
-                    <label><input type="checkbox" class="ta-optie ta-activiteit" value="Strand Paardrijden"> Strand Paardrijden</label><br>
-                    <label><input type="checkbox" class="ta-optie ta-activiteit" value="Quad Tour"> Quad Tour</label><br>
-                    <label><input type="checkbox" class="ta-optie ta-activiteit" value="Gids"> Gids</label><br>
-                    <label><input type="checkbox" class="ta-optie ta-activiteit" value="Wellness"> Wellness</label>
-                </div>
-            </div>
-
-            <label>🩺 Assistentie & Bijzonderheden (Medisch/Zorg):</label>
-            <textarea id="taZorgWensen" rows="2" placeholder="Beschrijf hier eventuele benodigde assistentie..."></textarea>
-
-            <label>📝 Aanvullende Wensen:</label>
-            <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen..."></textarea>
-
-            <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
-                <input type="checkbox" id="taTransfer" style="width: auto; margin: 0;"> 
-                <label for="taTransfer" style="margin: 0;">🚗 Luchthaven Transfer nodig?</label>
-            </div>
-
-            <label>💰 Totaalprijs (€):</label>
-            <input type="number" id="taTotaalprijs" readonly style="background:#e2e8f0; font-weight: bold;">
-
-            <button id="taBookBtn" style="background:#3b82f6; width: 100%; margin-top: 10px;">📌 Bevestig Reservatie</button>
+    <div class="row-2">
+        <div>
+            <label>Check-in</label>
+            <input type="date" id="taCheckIn">
+        </div>
+        <div>
+            <label>Check-out</label>
+            <input type="date" id="taCheckOut">
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <label>Gastgegevens</label>
+    <input type="text" id="taGuestName" placeholder="Volledige naam">
+
+    <div class="row-2">
+        <input type="email" id="taGuestEmail" placeholder="Emailadres">
+        <input type="tel" id="taGuestPhone" placeholder="Telefoonnummer">
+    </div>
+
+    <h3>✨ Extra Diensten & Ervaringen</h3>
+    <div class="option-group">
+        <div>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" value="Housekeeping" data-price="50"> Housekeeping (€50)</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" value="Cleaning" data-price="25"> Schoonmaak (€25)</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" value="Breakfast" data-price="25"> Ontbijt (€25)</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" value="Chef" data-price="20"> Privé Kok (€20)</label>
+        </div>
+        <div>
+            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Strand Paardrijden"> 🏇 Paardrijden</label>
+            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Quad Tour"> 🚙 Quad Tour</label>
+            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Gids"> 🧭 Gids</label>
+            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Wellness"> 🧘 Wellness</label>
+        </div>
+    </div>
+
+    <label>Wensen & Assistentie</label>
+    <textarea id="taZorgWensen" placeholder="Bijv. medische zorg, dieetwensen of transfer details..."></textarea>
+    <textarea id="taSpeciaal" placeholder="Overige wensen (optioneel)" style="margin-top: 0;"></textarea>
+
+    <div style="display: flex; align-items: center; gap: 12px; margin: 15px 0;">
+        <input type="checkbox" id="taTransfer" style="width: 20px; margin: 0;">
+        <label for="taTransfer" style="margin: 0; text-transform: none;">🚗 Luchthaven Transfer nodig?</label>
+    </div>
+
+    <div class="price-summary">
+        <span class="total-label">TOTAALBEDRAG</span>
+        <span class="total-amount" id="displayTotaal">€ 0,00</span>
+        <input type="hidden" id="taTotaalprijs">
+    </div>
+
+    <button id="taBookBtn">📌 BEVESTIG RESERVATIE</button>
+</div>
+
+<script>
+    // ========== SUPABASE CONFIGURATIE ==========
+    const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
+    const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
+    // ========== PRIJS BEREKENING ==========
+    function updatePrices() {
+        let totaal = 0;
+        const checkIn = document.getElementById('taCheckIn').value;
+        const checkOut = document.getElementById('taCheckOut').value;
+        const unitSelect = document.getElementById('taUnitSelect');
+
+        if (checkIn && checkOut && unitSelect.selectedOptions[0]) {
+            const nachten = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
+            const prijsPerNacht = parseFloat(unitSelect.selectedOptions[0].dataset.price) || 0;
+            if (nachten > 0) totaal += nachten * prijsPerNacht;
+        }
+
+        document.querySelectorAll('.ta-dienst:checked').forEach(cb => {
+            totaal += parseFloat(cb.dataset.price) || 0;
+        });
+
+        document.getElementById('displayTotaal').innerText = `€ ${totaal.toFixed(2)}`;
+        document.getElementById('taTotaalprijs').value = totaal.toFixed(2);
+    }
+
+    // ========== BOEKING VERZENDEN ==========
+    async function handleBooking() {
+        const unitSelect = document.getElementById('taUnitSelect');
+        const checkIn = document.getElementById('taCheckIn').value;
+        const checkOut = document.getElementById('taCheckOut').value;
+
+        if (!checkIn || !checkOut) {
+            alert("❌ Selecteer check-in en check-out datum.");
+            return;
+        }
+        if (new Date(checkIn) >= new Date(checkOut)) {
+            alert("❌ Check-out moet na check-in liggen.");
+            return;
+        }
+
+        const diensten = Array.from(document.querySelectorAll('.ta-dienst:checked')).map(cb => cb.value);
+        const activiteiten = Array.from(document.querySelectorAll('.ta-activiteit:checked')).map(cb => cb.value);
+
+        const record = {
+            team: "TA",
+            unit_code: unitSelect.value,
+            resource_id: unitSelect.selectedOptions[0].dataset.resource,
+            gast_naam: document.getElementById('taGuestName').value,
+            gast_contact: {
+                email: document.getElementById('taGuestEmail').value,
+                telefoon: document.getElementById('taGuestPhone').value
+            },
+            check_in: checkIn,
+            check_out: checkOut,
+            metadata: {
+                woning_type: unitSelect.selectedOptions[0].dataset.type || "Villa",
+                extra_diensten: diensten,
+                activiteiten: activiteiten,
+                zorg_wensen: document.getElementById('taZorgWensen').value,
+                speciaal: document.getElementById('taSpeciaal').value,
+                transfer: document.getElementById('taTransfer').checked
+            },
+            totaalprijs: parseFloat(document.getElementById('taTotaalprijs').value) || 0,
+            status: "NIEUW"
+        };
+
+        console.log("📤 Boeking:", record);
+
+        const { error } = await supabaseClient.from('boekingen').insert([record]);
+        if (error) {
+            alert("❌ Fout: " + error.message);
+        } else {
+            alert("✅ Boeking succesvol! De activiteiten staan genoteerd voor de offerte.");
+            location.reload();
+        }
+    }
+
+    // ========== EVENT LISTENERS ==========
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+        el.addEventListener('change', updatePrices);
+        el.addEventListener('input', updatePrices);
+    });
+    document.getElementById('taBookBtn').addEventListener('click', handleBooking);
+
+    // Datumbeperking (niet in verleden)
+    const vandaag = new Date().toISOString().split('T')[0];
+    document.getElementById('taCheckIn').setAttribute('min', vandaag);
+    document.getElementById('taCheckOut').setAttribute('min', vandaag);
+
+    updatePrices();
+</script>
 </body>
 </html>
