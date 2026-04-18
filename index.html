@@ -182,15 +182,15 @@
     <label>Accommodatie</label>
     <select id="taUnitSelect">
         <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa</option>
-        <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618b" data-price="400" data-type="Villa">La Perla</option>
-        <option value="U3" data-resource="90285810-aeg469-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar</option>
-        <option value="U4" data-resource="72168b2d-a348-457b-8092-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
-        <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82cdea52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
+        <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618" data-price="400" data-type="Villa">La Perla</option>
+        <option value="U3" data-resource="90285810-ae69-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar</option>
+        <option value="U4" data-resource="72168bd2-a348-457b-8892-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
+        <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82cda52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
         <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix</option>
         <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge</option>
-        <option value="U8" data-resource="7454d0ef-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
-        <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-35846506dc5d" data-price="195" data-type="Villa">Palmeraie Royale</option>
-        <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7e1f4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
+        <option value="U8" data-resource="7454d0e6-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
+        <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-3584650d6cd5" data-price="195" data-type="Villa">Palmeraie Royale</option>
+        <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7ef4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
     </select>
 
     <div class="row-2">
@@ -289,7 +289,6 @@
 
     // ========== BOEKING VERZENDEN ==========
     async function handleBooking() {
-        // 1. Haal alle elementen op
         const name = document.getElementById('taGuestName').value.trim();
         const email = document.getElementById('taGuestEmail').value.trim();
         const phone = document.getElementById('taGuestPhone').value.trim();
@@ -298,19 +297,16 @@
         const checkOut = document.getElementById('taCheckOut').value;
         const unitSelect = document.getElementById('taUnitSelect');
 
-        // 2. Strikte controle op verplichte velden
         if (!name || !email || !phone || !payment || !checkIn || !checkOut) {
-            alert("⚠️ Vul alstublieft alle verplichte velden in (Naam, Email, GSM, Datums en Betaalmethode).");
+            alert("⚠️ Vul alstublieft alle verplichte velden in.");
             return;
         }
 
-        // 3. Controleer datums
         if (new Date(checkIn) >= new Date(checkOut)) {
             alert("❌ Check-out moet na check-in liggen.");
             return;
         }
 
-        // Knop uitschakelen om dubbele boekingen te voorkomen
         const btn = document.getElementById('taBookBtn');
         btn.disabled = true;
         btn.innerText = "BEZIG MET VERWERKEN...";
@@ -342,13 +338,13 @@
         console.log("📤 Boeking:", record);
 
         const { error } = await supabaseClient.from('boekingen').insert([record]);
-        
+
         if (error) {
             alert("❌ Fout: " + error.message);
             btn.disabled = false;
             btn.innerText = "📌 BEVESTIG RESERVATIE";
         } else {
-            alert("✅ Merci! Uw reservatie met " + payment + " is succesvol ontvangen.");
+            alert("✅ Merci! Uw reservatie is succesvol ontvangen.");
             location.reload();
         }
     }
