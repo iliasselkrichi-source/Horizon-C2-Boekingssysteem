@@ -26,10 +26,129 @@
             background-color: var(--bg-warm);
             color: var(--text-main);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             padding: 40px 20px;
         }
 
+        /* Grid voor de 10 units */
+        .unit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 50px;
+        }
+
+        .unit-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .unit-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #e0e0e0;
+        }
+
+        .unit-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .unit-info h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .unit-info p {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .info-btn {
+            background: var(--accent-gold);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .info-btn:hover {
+            background: #a87d3a;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .book-now-trigger {
+            background: var(--accent-gold);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+
+        .book-now-trigger:hover {
+            background: #a87d3a;
+        }
+
+        /* Booking card styling */
         .booking-card {
             background: var(--white);
             max-width: 550px;
@@ -176,6 +295,103 @@
     </style>
 </head>
 <body>
+
+<!-- ========== UNIT GRID ========== -->
+<div class="unit-grid">
+    <div class="unit-card" onclick="openInfo('U1', 'Al Houara Villa', 'Een prachtige luxe villa aan de kust van Tanger met privézwembad, zeezicht en volledig uitgeruste keuken.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Al+Houara" alt="Al Houara Villa">
+        <div class="unit-info">
+            <h4>Al Houara Villa</h4>
+            <p>Houara Longvinity</p>
+            <button class="info-btn">Meer info</button>
+        </div>
+    </div>
+    <div class="unit-card" onclick="openInfo('U2', 'La Perla', 'Luxe villa met infinity pool, gelegen in Achakar. Perfect voor een ontspannen vakantie.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=La+Perla" alt="La Perla">
+        <div class="unit-info">
+            <h4>La Perla</h4>
+            <p>Achakar Trinity</p>
+            <button class="info-btn">Meer info</button>
+        </div>
+    </div>
+    <div class="unit-card" onclick="openInfo('U3', 'Al Bahar', 'Villa met adembenemend zeezicht. Direct aan het strand van Achakar.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Al+Bahar" alt="Al Bahar">
+        <div class="unit-info">
+            <h4>Al Bahar</h4>
+            <p>Achakar Trinity</p>
+            <button class="info-btn">Meer info</button>
+        </div>
+    </div>
+    <div class="unit-card" onclick="openInfo('U4', 'Le Rocher', 'Unieke villa gebouwd op een rotsformatie. Spectaculair uitzicht.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Le+Rocher" alt="Le Rocher">
+        <div class="unit-info">
+            <h4>Le Rocher</h4>
+            <p>Achakar Trinity</p>
+            <button class="info-btn">Meer info</button>
+        </div>
+    </div>
+    <div class="unit-card" onclick="openInfo('U5', 'L\'Essence Suite', 'Luxe suite in het hart van Marrakech. Perfect voor stelletjes.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Essence" alt="L'Essence Suite">
+        <div class="unit-info">
+            <h4>L'Essence Suite</h4>
+            <p>Marrakech</p>
+            <button class="info-btn">Meer info</button>
+        </div>
+    </div>
+    <div class="unit-card" onclick="openInfo('U6', 'Oasis de Paix', 'Rustgevende tuinappartement met privé terras.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Oasis" alt="Oasis de Paix">
+        <div class="unit-info">
+            <h4>Oasis de Paix</h4>
+            <p>Marrakech</p>
+            <button class="info-btn">Meer info</button>
+        </div>
+    </div>
+    <div class="unit-card" onclick="openInfo('U7', 'Le Refuge', 'Knusse studio met dakterras. Ideaal voor solo reizigers.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Refuge" alt="Le Refuge">
+        <div class="unit-info">
+            <h4>Le Refuge</h4>
+            <p>Marrakech</p>
+            <button class="info-btn">Meer info</button>
+        </div>
+    </div>
+    <div class="unit-card" onclick="openInfo('U8', 'Imperial Duplex', 'Ruim duplex appartement met 2 slaapkamers en luxe afwerking.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Imperial" alt="Imperial Duplex">
+        <div class="unit-info">
+            <h4>Imperial Duplex</h4>
+            <p>Marrakech</p>
+            <button class="info-btn">Meer info</button>
+        </div>
+    </div>
+    <div class="unit-card" onclick="openInfo('U9', 'Palmeraie Royale', 'Prachtige villa aan de Palmeraie. Zwembad en grote tuin.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Palmeraie" alt="Palmeraie Royale">
+        <div class="unit-info">
+            <h4>Palmeraie Royale</h4>
+            <p>Marrakech</p>
+            <button class="info-btn">Meer info</button>
+        </div>
+    </div>
+    <div class="unit-card" onclick="openInfo('U10', 'Sovereign Skyline', 'Penthouse met adembenemend uitzicht op het Atlasgebergte.')">
+        <img src="https://placehold.co/400x200/e0e0e0/888?text=Skyline" alt="Sovereign Skyline">
+        <div class="unit-info">
+            <h4>Sovereign Skyline</h4>
+            <p>Marrakech</p>
+            <button class="info-btn">Meer info</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL ========== -->
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeInfo()">&times;</span>
+        <h2 id="modalTitle">Unit Naam</h2>
+        <p id="modalDescription">Uitleg komt hier...</p>
+        <hr>
+        <button class="book-now-trigger" onclick="goToBooking()">BOEK NU</button>
+    </div>
+</div>
+
+<!-- ========== BOEKINGSFORMULIER ========== -->
 <div class="booking-card">
     <h1>✨ Réservation ✨</h1>
 
@@ -265,6 +481,34 @@
     const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
+    // ========== MODAL FUNCTIES ==========
+    let currentUnitId = "";
+
+    function openInfo(id, title, description) {
+        currentUnitId = id;
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalDescription').innerText = description;
+        document.getElementById('infoModal').style.display = "block";
+    }
+
+    function closeInfo() {
+        document.getElementById('infoModal').style.display = "none";
+    }
+
+    function goToBooking() {
+        closeInfo();
+        const bookingForm = document.querySelector('.booking-card');
+        bookingForm.scrollIntoView({ behavior: 'smooth' });
+        const select = document.getElementById('taUnitSelect');
+        select.value = currentUnitId;
+        updatePrices();
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('infoModal');
+        if (event.target == modal) closeInfo();
+    }
 
     // ========== PRIJS BEREKENING ==========
     function updatePrices() {
@@ -356,7 +600,6 @@
     });
     document.getElementById('taBookBtn').addEventListener('click', handleBooking);
 
-    // Datumbeperking (niet in verleden)
     const vandaag = new Date().toISOString().split('T')[0];
     document.getElementById('taCheckIn').setAttribute('min', vandaag);
     document.getElementById('taCheckOut').setAttribute('min', vandaag);
