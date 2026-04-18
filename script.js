@@ -18,7 +18,7 @@ if (typeof supabase !== 'undefined') {
     loadMockData();
 }
 
-// ========== DATUMBEPERKING (niet in verleden boeken) ==========
+// ========== DATUMBEPERKING ==========
 function setMinDates() {
     const vandaag = new Date().toISOString().split('T')[0];
     const checkIn = document.getElementById('taCheckIn');
@@ -53,7 +53,6 @@ async function loadBookingsFromSupabase() {
         refreshUI();
         console.log(`📚 ${bookingsDB.length} boekingen geladen`);
     } else {
-        console.error("Fout bij laden:", error);
         loadMockData();
     }
 }
@@ -87,7 +86,6 @@ function renderPanel() {
     `).join('');
 }
 
-// ========== DYNAMISCHE KALENDER (huidige maand) ==========
 function renderCalendar() {
     const cal = document.getElementById('calendar');
     if (!cal) return;
@@ -151,42 +149,32 @@ document.getElementById('closeModal')?.addEventListener('click', () => {
     document.getElementById('ficheModal')?.classList.add('hidden');
 });
 
-// ========== PRIJS BEREKENING (VERBETERD) ==========
+// ========== PRIJS BEREKENING (MET CHECKBOXES) ==========
 function updatePrices() {
     let totaal = 0;
+    const prefix = 'ta';
     
-    const taIn = document.getElementById('taCheckIn')?.value;
-    const taOut = document.getElementById('taCheckOut')?.value;
-    const taSelect = document.getElementById('taUnitSelect');
+    const checkIn = document.getElementById(`${prefix}CheckIn`)?.value;
+    const checkOut = document.getElementById(`${prefix}CheckOut`)?.value;
+    const unitSelect = document.getElementById(`${prefix}UnitSelect`);
     
-    if (taIn && taOut && taSelect && taSelect.selectedOptions[0]) {
-        const nachten = (new Date(taOut) - new Date(taIn)) / (1000 * 60 * 60 * 24);
-        const prijsPerNacht = parseFloat(taSelect.selectedOptions[0].dataset.price) || 0;
+    // 1. Basis overnachtingsprijs
+    if (checkIn && checkOut && unitSelect && unitSelect.selectedOptions[0]) {
+        const nachten = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
+        const prijsPerNacht = parseFloat(unitSelect.selectedOptions[0].dataset.price) || 0;
         if (nachten > 0) {
-            totaal = nachten * prijsPerNacht;
+            totaal += nachten * prijsPerNacht;
         }
     }
 
-    const dienstenSelect = document.getElementById('taDiensten');
-    if (dienstenSelect) {
-        const prijzenDiensten = {
-            'housekeeping': 50,
-            'cleaning': 25,
-            'transfer': 15,
-            'breakfast': 25,
-            'chef': 20
-        };
-        Array.from(dienstenSelect.options).forEach(opt => {
-            if (opt.selected) {
-                const prijs = prijzenDiensten[opt.value] || 0;
-                totaal += prijs;
-                console.log(`Dienst toegevoegd: ${opt.value} (+€${prijs})`);
-            }
-        });
-    }
+    // 2. Extra diensten optellen (checkboxes met data-price)
+    document.querySelectorAll('.ta-dienst:checked').forEach(cb => {
+        totaal += parseFloat(cb.dataset.price) || 0;
+    });
 
-    document.getElementById('taTotaalprijs').value = totaal.toFixed(2);
+    document.getElementById(`${prefix}Totaalprijs`).value = totaal.toFixed(2);
     
+    // Team Bravo
     const tbSelect = document.getElementById('tbPackageSelect');
     if (tbSelect && tbSelect.selectedOptions[0]) {
         document.getElementById('tbTotaalprijs').value = parseFloat(tbSelect.selectedOptions[0].dataset.price).toFixed(2);
@@ -195,7 +183,7 @@ function updatePrices() {
 
 // ========== BOEKING VERZENDEN ==========
 async function handleBooking(prefix) {
-    const unitSelect = document.getElementById(`${prefix}UnitSelect`) || document.getElementById(`${prefix}PackageSelect`);
+    const unitSelect = document.getElementById(`${prefix}UnitSelect`);
     const checkIn = document.getElementById(`${prefix}CheckIn`)?.value;
     const checkOut = document.getElementById(`${prefix}CheckOut`)?.value;
     
@@ -208,11 +196,9 @@ async function handleBooking(prefix) {
         return;
     }
     
-    const dienstenSelect = document.getElementById(`${prefix}Diensten`);
-    const activiteitenSelect = document.getElementById(`${prefix}Activiteiten`);
-    
-    const geselecteerdeDiensten = dienstenSelect ? Array.from(dienstenSelect.selectedOptions).map(o => o.value) : [];
-    const geselecteerdeActiviteiten = activiteitenSelect ? Array.from(activiteitenSelect.selectedOptions).map(o => o.value) : [];
+    // Verzamel geselecteerde opties uit checkboxes
+    const diensten = Array.from(document.querySelectorAll('.ta-dienst:checked')).map(cb => cb.value);
+    const activiteiten = Array.from(document.querySelectorAll('.ta-activiteit:checked')).map(cb => cb.value);
     
     const record = {
         team: prefix.toUpperCase(),
@@ -229,8 +215,8 @@ async function handleBooking(prefix) {
             transfer: document.getElementById(`${prefix}Transfer`)?.checked || false,
             speciaal: document.getElementById(`${prefix}Speciaal`)?.value || '',
             woning_type: unitSelect.selectedOptions[0].dataset.type || "Onbekend",
-            extra_diensten: geselecteerdeDiensten,
-            activiteiten: geselecteerdeActiviteiten,
+            extra_diensten: diensten,
+            activiteiten: activiteiten,
             zorg_wensen: document.getElementById(`${prefix}ZorgWensen`)?.value || ''
         },
         totaalprijs: parseFloat(document.getElementById(`${prefix}Totaalprijs`)?.value) || 0,
@@ -244,17 +230,7 @@ async function handleBooking(prefix) {
         alert("❌ Fout: " + error.message);
     } else {
         alert("✅ Boeking succesvol! De activiteiten staan genoteerd voor de offerte.");
-        document.getElementById(`${prefix}GuestName`).value = '';
-        document.getElementById(`${prefix}GuestEmail`).value = '';
-        document.getElementById(`${prefix}GuestPhone`).value = '';
-        document.getElementById(`${prefix}CheckIn`).value = '';
-        document.getElementById(`${prefix}CheckOut`).value = '';
-        document.getElementById(`${prefix}Transfer`).checked = false;
-        document.getElementById(`${prefix}Speciaal`).value = '';
-        if (document.getElementById(`${prefix}ZorgWensen`)) document.getElementById(`${prefix}ZorgWensen`).value = '';
-        if (dienstenSelect) dienstenSelect.selectedIndex = -1;
-        if (activiteitenSelect) activiteitenSelect.selectedIndex = -1;
-        updatePrices();
+        location.reload();
     }
 }
 
@@ -262,8 +238,9 @@ async function handleBooking(prefix) {
 document.getElementById('taCheckIn')?.addEventListener('change', updatePrices);
 document.getElementById('taCheckOut')?.addEventListener('change', updatePrices);
 document.getElementById('taUnitSelect')?.addEventListener('change', updatePrices);
-document.getElementById('taDiensten')?.addEventListener('change', updatePrices);
-document.getElementById('taActiviteiten')?.addEventListener('change', updatePrices);
+document.querySelectorAll('.ta-optie').forEach(el => {
+    el.addEventListener('change', updatePrices);
+});
 document.getElementById('tbPackageSelect')?.addEventListener('change', updatePrices);
 document.getElementById('taBookBtn')?.addEventListener('click', () => handleBooking('ta'));
 document.getElementById('tbBookBtn')?.addEventListener('click', () => handleBooking('tb'));
