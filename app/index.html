@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizon C2 | Boekingssysteem - Met Realtime</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>🏷️ HORIZON C2 — Boekingssysteem <span class="realtime-active">🔴 Realtime actief</span></h1>
+    <p style="margin-bottom: 2rem;">Team Alpha (units) · Team Bravo (pakketten) · Cross-team beschikbaarheid · JSONB data structuur</p>
+
+    <!-- ========== PREFIX, UNITS, PAKKETTEN ========== -->
+    <div class="card">
+        <h3>🔤 Boekingsnummer formaat</h3>
+        <div class="prefix-format">TA-U[unit]-[DDMM]-[volgorde] | TB-P[pakket]-[DDMM]-[volgorde]</div>
+
+        <div class="section-title">📌 Team Alpha — 10 luxe villa units</div>
+        <div class="grid-4">
+            <div><span class="prefix-example">TA-U1</span><br>Al Houara Villa <span class="badge">fysiek</span><br><span class="badge">Villa</span></div>
+            <div><span class="prefix-example">TA-U2</span><br>La Perla<br><span class="badge">Villa</span></div>
+            <div><span class="prefix-example">TA-U3</span><br>Al Bahar<br><span class="badge">Villa</span></div>
+            <div><span class="prefix-example">TA-U4</span><br>Le Rocher<br><span class="badge">Villa</span></div>
+            <div><span class="prefix-example">TA-U5</span><br>L'Essence Suite<br><span class="badge">Suite</span></div>
+            <div><span class="prefix-example">TA-U6</span><br>Oasis de Paix<br><span class="badge">Appartement</span></div>
+            <div><span class="prefix-example">TA-U7</span><br>Le Refuge<br><span class="badge">Studio</span></div>
+            <div><span class="prefix-example">TA-U8</span><br>Imperial Duplex<br><span class="badge">Duplex</span></div>
+            <div><span class="prefix-example">TA-U9</span><br>Palmeraie Royale<br><span class="badge">Villa</span></div>
+            <div><span class="prefix-example">TA-U10</span><br>Sovereign Skyline<br><span class="badge">Penthouse</span></div>
+        </div>
+
+        <div class="section-title">📌 Team Bravo — Bootcamp pakketten (locatie: Al Houara Villa)</div>
+        <div class="grid-4">
+            <div><span class="prefix-example">TB-P1</span> Essence of Orient · €250 · 3d/2n<br><span class="badge">Wellness</span></div>
+            <div><span class="prefix-example">TB-P2</span> Souk & Soul · €450 · 4d/3n<br><span class="badge">Cultuur</span></div>
+            <div><span class="prefix-example">TB-P3</span> Arabian Nights · €750 · 5d/4n<br><span class="badge">Luxe</span></div>
+            <div><span class="prefix-example">TB-P4</span> Royal Caravan · €1250 · 7d/6n<br><span class="badge">Premium</span></div>
+        </div>
+
+        <div class="warning-note">
+            ⚠️ <strong>Cross-team resource:</strong> TA-U1 (Al Houara Villa) is dezelfde fysieke locatie als alle TB-pakketten.
+            Boekingen op TA-U1 blokkeren TB-P1..P4 (en omgekeerd) via database trigger.
+        </div>
+    </div>
+
+    <!-- ========== DATAFLOW DIAGRAM ========== -->
+    <h2>🌊 Dataflow Diagram — Met Realtime</h2>
+    <div class="card">
+        <div class="diagram-container">
+            <pre class="mermaid">
+                sequenceDiagram
+                    participant User as 👤 Gebruiker
+                    participant Form as 📝 Formulier
+                    participant JS as ⚡ JavaScript
+                    participant API as 📡 Supabase API
+                    participant DB as 🗄️ PostgreSQL
+                    participant Trig as ⚙️ Triggers
+                    participant RT as 🔔 Realtime
+                    participant Panel as 🖥️ Besturingspaneel
+                    participant Agenda as 📅 Agenda
+
+                    Note over User,Form: 1. GEBRUIKER VULT FORMULIER IN
+                    User->>Form: Kiest unit/pakket + datums
+
+                    Note over User,JS: 2. KLIK OP "BEVESTIG RESERVATIE"
+                    User->>JS: Klikt op knop
+
+                    Note over JS: 3. JSON FICHE WORDT SAMENGESTELD
+                    JS->>JS: {team, unit_code, resource_id, gast_naam, gast_contact, check_in, check_out, metadata, totaalprijs}
+
+                    Note over JS,API: 4. 📤 VERZENDING NAAR SUPABASE
+                    JS->>API: POST /rest/v1/boekingen (zonder boekingsnummer!)
+
+                    Note over API,DB: 5. DATABASE ONTVANGT DATA
+                    API->>DB: INSERT INTO boekingen
+
+                    Note over DB,Trig: 6. TRIGGERS WORDEN UITGEVOERD
+                    DB->>Trig: check_resource_availability() + generate_booking_number()
+
+                    Note over DB,RT: 7. REALTIME BROADCAST
+                    DB->>RT: Nieuwe boeking wordt gepubliceerd
+
+                    Note over RT,Panel: 8. REALTIME LISTENER ONTVANGT UPDATE
+                    RT->>Panel: postgres_changes (INSERT)
+                    RT->>Agenda: postgres_changes (INSERT)
+
+                    Note over Panel,Agenda: 9. UI WORDT LIVE BIJGEWERKT
+                    Panel->>Panel: refreshUI() - tabel update
+                    Agenda->>Agenda: refreshUI() - kalender update
+
+                    Note over JS,User: 10. FEEDBACK
+                    JS-->>User: Alert met boekingsnummer
+            </pre>
+        </div>
+        <div class="legend">
+            <div><span style="background:#dbeafe;"></span> Gebruiker</div>
+            <div><span style="background:#e0e7ff;"></span> JSON fiche</div>
+            <div><span style="background:#fef9c3;"></span> Database + Triggers</div>
+            <div><span style="background:#d1fae5;"></span> Realtime</div>
+            <div><span style="background:#fce7f3;"></span> Besturingspaneel</div>
+        </div>
+    </div>
+
+    <!-- ========== SUPABASE MAPSTRUCTUUR ========== -->
+    <h2>📁 Supabase Project — Mappenboom</h2>
+    <div class="card">
+        <div class="tree">
+            <span>📦 horizon-c2-project/</span><br>
+            ├── <span>📂 app/</span><br>
+            │   ├── index.html<br>
+            │   ├── style.css<br>
+            │   └── script.js<br>
+            ├── <span>📂 supabase/</span><br>
+            │   ├── <span>📂 migrations/</span><br>
+            │   │   ├── <span>📄 001_initial_schema.sql</span><br>
+            │   │   ├── <span>📄 002_triggers.sql</span><br>
+            │   │   ├── <span>📄 003_enable_realtime.sql</span><br>
+            │   │   └── <span>📄 004_seed_data.sql</span><br>
+            │   └── <span>📂 functions/</span><br>
+            └── <span>📄 README.md</span>
+        </div>
+    </div>
+
+    <!-- ========== TWEE APARTE BOEKINGSFORMULIEREN ========== -->
+    <h2>📝 Boekingsformulieren</h2>
+    <div class="form-row">
+        <div class="ta-form">
+            <h3>🔵 Team Alpha — Luxury Villa Rental</h3>
+            <label>🏠 Kies unit:</label>
+            <select id="taUnitSelect">
+                <option value="U1" data-resource="VILLA_ALHOURA" data-price="500" data-type="Villa">TA-U1 - Al Houara Villa (€500/nacht) ⚠️ gedeeld</option>
+                <option value="U2" data-resource="VILLA_LA_PERLA" data-price="400" data-type="Villa">TA-U2 - La Perla (€400/nacht)</option>
+                <option value="U3" data-resource="VILLA_AL_BAHAR" data-price="400" data-type="Villa">TA-U3 - Al Bahar (€400/nacht)</option>
+                <option value="U4" data-resource="VILLA_LE_ROCHER" data-price="400" data-type="Villa">TA-U4 - Le Rocher (€400/nacht)</option>
+                <option value="U5" data-resource="VILLA_ESSENCE" data-price="150" data-type="Suite">TA-U5 - L'Essence Suite (€150/nacht)</option>
+                <option value="U6" data-resource="VILLA_OASIS" data-price="150" data-type="Appartement">TA-U6 - Oasis de Paix (€150/nacht)</option>
+                <option value="U7" data-resource="VILLA_REFUGE" data-price="150" data-type="Studio">TA-U7 - Le Refuge (€150/nacht)</option>
+                <option value="U8" data-resource="VILLA_IMPERIAL" data-price="195" data-type="Duplex">TA-U8 - Imperial Duplex (€195/nacht)</option>
+                <option value="U9" data-resource="VILLA_PALMERAIE" data-price="195" data-type="Villa">TA-U9 - Palmeraie Royale (€195/nacht)</option>
+                <option value="U10" data-resource="VILLA_SKYLINE" data-price="195" data-type="Penthouse">TA-U10 - Sovereign Skyline (€195/nacht)</option>
+            </select>
+            <label>👤 Gastnaam:</label>
+            <input type="text" id="taGuestName" placeholder="Volledige naam" value="Ahmed El Khayat">
+            <label>📧 Email:</label>
+            <input type="email" id="taGuestEmail" value="ahmed@horizon.com">
+            <label>📞 GSM nummer:</label>
+            <input type="text" id="taGuestPhone" value="+212 612345678">
+            <label>📅 Check-in datum:</label>
+            <input type="date" id="taCheckIn" value="2026-06-25">
+            <label>📅 Check-out datum:</label>
+            <input type="date" id="taCheckOut" value="2026-06-28">
+            <div><label><input type="checkbox" id="taTransfer"> 🚗 Transfer</label></div>
+            <textarea id="taSpeciaal" placeholder="Speciale verzoeken"></textarea>
+            <label>💰 Totaalprijs:</label>
+            <input type="number" id="taTotaalprijs" readonly style="background:#e2e8f0;">
+            <button id="taBookBtn" style="background:#3b82f6;">📌 TA - Bevestig reservatie</button>
+        </div>
+
+        <div class="tb-form">
+            <h3>🟡 Team Bravo — Bootcamp Pakketten</h3>
+            <label>🎁 Kies pakket:</label>
+            <select id="tbPackageSelect">
+                <option value="P1" data-resource="VILLA_ALHOURA" data-price="250" data-type="Wellness">TB-P1 - Essence of Orient (€250)</option>
+                <option value="P2" data-resource="VILLA_ALHOURA" data-price="450" data-type="Cultuur">TB-P2 - Souk & Soul (€450)</option>
+                <option value="P3" data-resource="VILLA_ALHOURA" data-price="750" data-type="Luxe">TB-P3 - Arabian Nights (€750)</option>
+                <option value="P4" data-resource="VILLA_ALHOURA" data-price="1250" data-type="Premium">TB-P4 - Royal Caravan (€1250)</option>
+            </select>
+            <label>👤 Gastnaam:</label>
+            <input type="text" id="tbGuestName" placeholder="Volledige naam" value="Sofia Boutella">
+            <label>📧 Email:</label>
+            <input type="email" id="tbGuestEmail" value="sofia@bootcamp.com">
+            <label>📞 GSM nummer:</label>
+            <input type="text" id="tbGuestPhone" value="+212 698765432">
+            <label>📅 Check-in datum:</label>
+            <input type="date" id="tbCheckIn" value="2026-06-25">
+            <label>📅 Check-out datum:</label>
+            <input type="date" id="tbCheckOut" value="2026-06-28">
+            <div><label><input type="checkbox" id="tbTransfer"> 🚗 Transfer</label></div>
+            <textarea id="tbSpeciaal" placeholder="Speciale verzoeken"></textarea>
+            <label>💰 Pakketprijs:</label>
+            <input type="number" id="tbTotaalprijs" readonly style="background:#e2e8f0;">
+            <button id="tbBookBtn" style="background:#eab308;">📌 TB - Bevestig reservatie</button>
+        </div>
+    </div>
+
+    <!-- ========== BESTURINGSPANEEL & AGENDA ========== -->
+    <div class="dashboard-row">
+        <div class="card">
+            <h3>🖥️ Besturingspaneel <span class="realtime-active" style="font-size:0.6rem;">LIVE</span></h3>
+            <div class="table-container">
+                <table style="width:100%">
+                    <thead><tr><th>Boekingsnr</th><th>Gast</th><th>Check-in</th><th>Transfer</th><th>Prijs</th><th>Status</th><th>Actie</th></tr></thead>
+                    <tbody id="bookingTable"></tbody>
+                </table>
+            </div>
+            <div class="realtime-badge">🔴 Realtime actief - Nieuwe boekingen verschijnen direct</div>
+        </div>
+        <div class="card">
+            <h3>📆 Universele agenda <span class="realtime-active" style="font-size:0.6rem;">LIVE</span></h3>
+            <div id="calendar" class="calendar-grid"></div>
+            <p class="badge">🔵 TA = blauw | 🟡 TB = goud | 🚗 = transfer | 📌 = vertrekdag ook gemarkeerd</p>
+        </div>
+    </div>
+
+    <!-- ========== VOORBEELD FICHE ========== -->
+    <h2>📄 Voorbeeld universele boekingsfiche</h2>
+    <div class="card">
+        <div style="background:#f8fafc; padding:1rem; border-radius:1rem;">
+            <p><strong>🏷️ Boekingsnummer:</strong> TA-U1-1505-01</p>
+            <p><strong>👤 Gast:</strong> Ahmed El Khayat | 📞 +212 611111111</p>
+            <p><strong>📅 Verblijf:</strong> 15-05-2026 t/m 18-05-2026</p>
+            <p><strong>🚗 Transfer:</strong> Ja | <strong>Prijs:</strong> €1200</p>
+            <p><strong>🏠 Woningtype:</strong> Villa</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="ficheModal" class="modal-overlay hidden">
+        <div class="fiche-modal">
+            <h3>📄 Universele boekingsfiche</h3>
+            <div id="modalContent"></div>
+            <button id="closeModal">Sluiten</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+</body>
+</html>
