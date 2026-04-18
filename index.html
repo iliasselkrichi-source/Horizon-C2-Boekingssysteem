@@ -1,92 +1,241 @@
-neem de codes uit deze html code aub <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horizon C2 | Team Alpha - Boekingen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Horizon C2 | Horizon of Infinity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --bg-warm: #fdfbf8;
-            --accent-gold: #c5a059;
-            --text-main: #2c3e50;
-            --border-soft: #e5e7eb;
-            --white: #ffffff;
+            --sandstone: #F9F7F4;
+            --copper: #AD8B53;
+            --copper-dark: #8b6e42;
+            --deep-anthracite: #1A1A1A;
+            --border-light: #E8E3DA;
+            --card-bg: #FFFFFF;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 20px 30px -12px rgba(0, 0, 0, 0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-warm);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
+            font-weight: 400;
+            background-color: var(--sandstone);
+            color: var(--deep-anthracite);
+            line-height: 1.5;
         }
 
-        /* Categorie titels */
+        h1, h2, h3, .logo, .category-title, .section-title {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 3px;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+            margin-bottom: 2rem;
+            border-left: 2px solid var(--copper);
+            padding-left: 1.2rem;
+            color: var(--deep-anthracite);
+        }
+
         .category-title {
-            width: 100%;
-            max-width: 1200px;
-            margin: 40px 0 20px 0;
-            font-size: 1.5rem;
-            color: var(--text-main);
-            border-left: 5px solid var(--accent-gold);
-            padding-left: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            margin: 3rem 0 1.5rem 0;
+            border-left: 2px solid var(--copper);
+            padding-left: 1rem;
         }
 
-        /* Grid voor units */
-        .unit-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1200px;
-            width: 100%;
-            margin-bottom: 30px;
+        .header {
+            position: sticky;
+            top: 0;
+            background: rgba(249, 247, 244, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            padding: 1.2rem 2rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .logo {
+            font-size: 1.7rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, var(--deep-anthracite), var(--copper));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--deep-anthracite);
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        .nav-links a:hover {
+            color: var(--copper);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown > a {
+            cursor: pointer;
+            user-select: none;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: var(--card-bg);
+            min-width: 220px;
+            box-shadow: var(--shadow-hover);
+            z-index: 101;
+            top: 100%;
+            left: 0;
+            margin-top: 0.5rem;
+            border: 1px solid var(--border-light);
+        }
+        .dropdown-content a {
+            padding: 0.9rem 1.2rem;
+            display: block;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: none;
+            border-bottom: 1px solid var(--border-light);
+            transition: background 0.2s;
+        }
+        .dropdown-content a:last-child { border-bottom: none; }
+        .dropdown-content a:hover {
+            background: var(--sandstone);
+            color: var(--copper);
+        }
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+
+        .section {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+            scroll-margin-top: 90px;
+        }
+        .section + .section {
+            padding-top: 6rem;
+        }
+
+        .unit-card, .activity-card, .menu-card, .booking-card, .modal-content, 
+        .dropdown-content, .filosofie-card, input, select, button {
+            border-radius: 2px;
         }
 
         .unit-card {
-            background: white;
-            border-radius: 20px;
+            background: var(--card-bg);
             overflow: hidden;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.25s, box-shadow 0.25s;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
         }
-
         .unit-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            box-shadow: var(--shadow-hover);
         }
-
         .unit-card img {
             width: 100%;
-            height: 200px;
+            height: 220px;
             object-fit: cover;
-            background: #e0e0e0;
+            filter: sepia(8%) contrast(105%);
+            transition: filter 0.3s;
         }
-
-        .unit-info { padding: 20px; text-align: center; }
-        .unit-info h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
-
-        .info-btn {
-            background: var(--accent-gold);
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 600;
+        .unit-card:hover img {
+            filter: sepia(5%) contrast(108%);
+        }
+        .unit-info {
+            padding: 1.5rem 1.5rem 1.8rem;
+            text-align: center;
+        }
+        .unit-info h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+        }
+        .info-btn, .book-now-trigger {
+            background: transparent;
+            border: 1px solid var(--copper);
+            color: var(--copper);
+            padding: 0.5rem 1.5rem;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            font-weight: 500;
         }
-        .info-btn:hover { background: #a87d3a; }
+        .info-btn:hover, .book-now-trigger:hover {
+            background: var(--copper);
+            color: white;
+        }
 
-        /* Modal */
+        .unit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+        .activities-grid, .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .activity-card, .menu-card {
+            background: var(--card-bg);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: transform 0.2s;
+        }
+        .activity-card:hover, .menu-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .filosofie-card {
+            background: var(--card-bg);
+            padding: 3rem;
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+        .filosofie-card p:first-child {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: var(--copper);
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -95,253 +244,372 @@ neem de codes uit deze html code aub <!DOCTYPE html>
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);
         }
         .modal-content {
-            background-color: white;
+            background: var(--card-bg);
             margin: 10% auto;
-            padding: 30px;
-            border-radius: 20px;
+            padding: 2rem;
             max-width: 450px;
             width: 90%;
             text-align: center;
             position: relative;
+            border: 1px solid var(--border-light);
         }
         .close {
             position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            font-weight: bold;
+            top: 0.8rem;
+            right: 1.2rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            color: #aaa;
+            color: #888;
         }
-        .close:hover { color: #000; }
-        .book-now-trigger {
-            background: var(--accent-gold);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .book-now-trigger:hover { background: #a87d3a; }
 
-        /* Booking card */
         .booking-card {
-            background: var(--white);
-            max-width: 550px;
+            background: var(--card-bg);
+            max-width: 600px;
             width: 100%;
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            border: 1px solid var(--border-soft);
-            margin-top: 50px;
+            padding: 2.5rem;
+            margin: 0 auto;
+            border: 1px solid var(--border-light);
         }
-        h1 { font-size: 1.35rem; text-align: center; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; font-weight: 700; }
-        h3 { font-size: 0.85rem; text-transform: uppercase; color: var(--accent-gold); letter-spacing: 1.5px; margin-top: 25px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #f0f0f0; }
-        label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; color: #888; text-transform: uppercase; }
-        input, select, textarea { width: 100%; padding: 12px 14px; margin-bottom: 16px; border: 1px solid var(--border-soft); border-radius: 12px; font-size: 0.9rem; font-family: 'Inter', sans-serif; }
-        .row-2 { display: flex; gap: 15px; }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 0.4rem;
+            color: #5f5546;
+            text-transform: uppercase;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-light);
+            background: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: border 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--copper);
+        }
+        .row-2 {
+            display: flex;
+            gap: 1rem;
+        }
         .row-2 > div { flex: 1; }
-        .option-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .check-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; cursor: pointer; }
-        .price-summary { display: flex; justify-content: space-between; align-items: baseline; margin-top: 25px; padding-top: 20px; border-top: 2px solid #f0f0f0; }
-        .total-amount { font-size: 1.8rem; font-weight: 800; }
-        button#taBookBtn { width: 100%; background: var(--text-main); color: white; border: none; padding: 16px; border-radius: 40px; font-weight: 700; margin-top: 25px; cursor: pointer; transition: 0.3s; }
-        button#taBookBtn:disabled { background: #aaa; cursor: not-allowed; }
+        .option-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .price-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-light);
+        }
+        .total-amount {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--copper);
+            font-family: 'Playfair Display', serif;
+        }
+        button#taBookBtn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--copper);
+            color: var(--copper);
+            padding: 1rem;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 1.8rem;
+        }
+        button#taBookBtn:hover {
+            background: var(--copper);
+            color: white;
+        }
+
+        @media (max-width: 700px) {
+            .nav-container { flex-direction: column; gap: 0.8rem; }
+            .nav-links { justify-content: center; gap: 1.5rem; }
+            .section { padding: 3rem 1.5rem; }
+            .section + .section { padding-top: 4rem; }
+            .unit-grid { gap: 1.2rem; }
+        }
     </style>
 </head>
 <body>
 
-<!-- ========== CATEGORIE 1: LONVINITY HUB ========== -->
-<h2 class="category-title">✨ Longvinity Hub</h2>
-<div class="unit-grid">
-    <div class="unit-card" onclick="openInfo('U1', 'Al Houara Villa', 'Luxe villa aan de kust van Tanger. Geniet van rust, privacy en een prachtig uitzicht.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Al+Houara+Villa" alt="U1">
-        <div class="unit-info">
-            <h4>Al Houara Villa</h4>
-            <button class="info-btn">Meer info</button>
+<!-- HEADER -->
+<div class="header">
+    <div class="nav-container">
+        <div class="logo">HORIZON ∞</div>
+        <div class="nav-links">
+            <a onclick="scrollToSection('filosofie')">Filosofie</a>
+            <a onclick="scrollToSection('hubs')">Hubs</a>
+            <a onclick="scrollToSection('activiteiten')">Activiteiten</a>
+            <a onclick="scrollToSection('menu')">Menu</a>
+            <div class="dropdown" id="bookingDropdown">
+                <a onclick="toggleDropdown()">Boek nu ▼</a>
+                <div class="dropdown-content">
+                    <a onclick="scrollToBooking('U1')">Al Houara Villa</a>
+                    <a onclick="scrollToBooking('U2')">La Perla</a>
+                    <a onclick="scrollToBooking('U3')">Al Bahar</a>
+                    <a onclick="scrollToBooking('U4')">Le Rocher</a>
+                    <a onclick="scrollToBooking('U5')">L'Essence Suite</a>
+                    <a onclick="scrollToBooking('U6')">Oasis de Paix</a>
+                    <a onclick="scrollToBooking('U7')">Le Refuge</a>
+                    <a onclick="scrollToBooking('U8')">Imperial Duplex</a>
+                    <a onclick="scrollToBooking('U9')">Palmeraie Royale</a>
+                    <a onclick="scrollToBooking('U10')">Sovereign Skyline</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- ========== CATEGORIE 2: ACHAKAR TRINITY ========== -->
-<h2 class="category-title">🌊 Achakar Trinity</h2>
-<div class="unit-grid">
-    <div class="unit-card" onclick="openInfo('U2', 'La Perla', 'Een parel aan de kust van Achakar. Modern design met alle comfort.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=La+Perla" alt="U2">
-        <div class="unit-info">
-            <h4>La Perla</h4>
-            <button class="info-btn">Meer info</button>
-        </div>
+<!-- FILOSOFIE -->
+<section id="filosofie" class="section">
+    <h2 class="section-title">Filosofie</h2>
+    <div class="filosofie-card">
+        <p>“Waar luxe en welzijn samenkomen”</p>
+        <p style="margin-top: 1.5rem; color: #4a4238;">[Hier komt later de tekst over de visie van Horizon of Infinity]</p>
     </div>
-    <div class="unit-card" onclick="openInfo('U3', 'Al Bahar', 'Direct aan zee. Perfect voor liefhebbers van strand en zon.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Al+Bahar" alt="U3">
-        <div class="unit-info">
-            <h4>Al Bahar</h4>
-            <button class="info-btn">Meer info</button>
-        </div>
-    </div>
-    <div class="unit-card" onclick="openInfo('U4', 'Le Rocher', 'Unieke locatie op de rotsen. Spectaculair uitzicht over de oceaan.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Le+Rocher" alt="U4">
-        <div class="unit-info">
-            <h4>Le Rocher</h4>
-            <button class="info-btn">Meer info</button>
-        </div>
-    </div>
-</div>
+</section>
 
-<!-- ========== CATEGORIE 3: MARRAKECH URBAN ========== -->
-<h2 class="category-title">🏙️ Marrakech Urban</h2>
-<div class="unit-grid">
-    <div class="unit-card" onclick="openInfo('U5', 'L\'Essence Suite', 'Luxe stadssuite in het hart van Marrakech.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Essence+Suite" alt="U5">
-        <div class="unit-info">
-            <h4>L'Essence Suite</h4>
-            <button class="info-btn">Meer info</button>
+<!-- HUBS (10 UNITS) -->
+<section id="hubs" class="section">
+    <h2 class="section-title">Hubs</h2>
+    
+    <h3 class="category-title">Longvinity Hub</h3>
+    <div class="unit-grid">
+        <div class="unit-card" onclick="openInfo('U1', 'Al Houara Villa', 'Luxe villa aan de kust van Tanger. Rust, privacy en een prachtig uitzicht.')">
+            <img src="https://placehold.co/600x400/e0e0e0/888?text=Al+Houara+Villa" alt="U1">
+            <div class="unit-info"><h4>Al Houara Villa</h4><button class="info-btn">Meer info</button></div>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U6', 'Oasis de Paix', 'Rustgevend appartement met privéterras.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Oasis+de+Paix" alt="U6">
-        <div class="unit-info">
-            <h4>Oasis de Paix</h4>
-            <button class="info-btn">Meer info</button>
-        </div>
-    </div>
-    <div class="unit-card" onclick="openInfo('U7', 'Le Refuge', 'Modern en veilig verblijf in de stad.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Le+Refuge" alt="U7">
-        <div class="unit-info">
-            <h4>Le Refuge</h4>
-            <button class="info-btn">Meer info</button>
-        </div>
-    </div>
-    <div class="unit-card" onclick="openInfo('U8', 'Imperial Duplex', 'Ruim en koninklijk duplex appartement.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Imperial+Duplex" alt="U8">
-        <div class="unit-info">
-            <h4>Imperial Duplex</h4>
-            <button class="info-btn">Meer info</button>
-        </div>
-    </div>
-    <div class="unit-card" onclick="openInfo('U9', 'Palmeraie Royale', 'Stijlvolle villa in de beroemde Palmeraie.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Palmeraie+Royale" alt="U9">
-        <div class="unit-info">
-            <h4>Palmeraie Royale</h4>
-            <button class="info-btn">Meer info</button>
-        </div>
-    </div>
-    <div class="unit-card" onclick="openInfo('U10', 'Sovereign Skyline', 'Exclusief penthouse met adembenemend uitzicht.')">
-        <img src="https://placehold.co/400x200/e0e0e0/888?text=Sovereign+Skyline" alt="U10">
-        <div class="unit-info">
-            <h4>Sovereign Skyline</h4>
-            <button class="info-btn">Meer info</button>
-        </div>
-    </div>
-</div>
 
-<!-- ========== MODAL ========== -->
+    <h3 class="category-title">Achakar Trinity</h3>
+    <div class="unit-grid">
+        <div class="unit-card" onclick="openInfo('U2', 'La Perla', 'Een parel aan de kust van Achakar. Modern design met alle comfort.')">
+            <img src="https://placehold.co/600x400/e0e0e0/888?text=La+Perla" alt="U2">
+            <div class="unit-info"><h4>La Perla</h4><button class="info-btn">Meer info</button></div>
+        </div>
+        <div class="unit-card" onclick="openInfo('U3', 'Al Bahar', 'Direct aan zee. Perfect voor strandliefhebbers.')">
+            <img src="https://placehold.co/600x400/e0e0e0/888?text=Al+Bahar" alt="U3">
+            <div class="unit-info"><h4>Al Bahar</h4><button class="info-btn">Meer info</button></div>
+        </div>
+        <div class="unit-card" onclick="openInfo('U4', 'Le Rocher', 'Unieke locatie op de rotsen. Spectaculair oceaanuitzicht.')">
+            <img src="https://placehold.co/600x400/e0e0e0/888?text=Le+Rocher" alt="U4">
+            <div class="unit-info"><h4>Le Rocher</h4><button class="info-btn">Meer info</button></div>
+        </div>
+    </div>
+
+    <h3 class="category-title">Marrakech Urban</h3>
+    <div class="unit-grid">
+        <div class="unit-card" onclick="openInfo('U5', 'L\'Essence Suite', 'Luxe stadssuite in het hart van Marrakech.')">
+            <img src="https://placehold.co/600x400/e0e0e0/888?text=Essence+Suite" alt="U5">
+            <div class="unit-info"><h4>L'Essence Suite</h4><button class="info-btn">Meer info</button></div>
+        </div>
+        <div class="unit-card" onclick="openInfo('U6', 'Oasis de Paix', 'Rustgevend appartement met privéterras.')">
+            <img src="https://placehold.co/600x400/e0e0e0/888?text=Oasis+de+Paix" alt="U6">
+            <div class="unit-info"><h4>Oasis de Paix</h4><button class="info-btn">Meer info</button></div>
+        </div>
+        <div class="unit-card" onclick="openInfo('U7', 'Le Refuge', 'Modern en veilig verblijf in de stad.')">
+            <img src="https://placehold.co/600x400/e0e0e0/888?text=Le+Refuge" alt="U7">
+            <div class="unit-info"><h4>Le Refuge</h4><button class="info-btn">Meer info</button></div>
+        </div>
+        <div class="unit-card" onclick="openInfo('U8', 'Imperial Duplex', 'Ruim en koninklijk duplex appartement.')">
+            <img src="https://placehold.co/600x400/e0e0e0/888?text=Imperial+Duplex" alt="U8">
+            <div class="unit-info"><h4>Imperial Duplex</h4><button class="info-btn">Meer info</button></div>
+        </div>
+        <div class="unit-card" onclick="openInfo('U9', 'Palmeraie Royale', 'Stijlvolle villa in de beroemde Palmeraie.')">
+            <img src="https://placehold.co/600x400/e0e0e0/888?text=Palmeraie+Royale" alt="U9">
+            <div class="unit-info"><h4>Palmeraie Royale</h4><button class="info-btn">Meer info</button></div>
+        </div>
+        <div class="unit-card" onclick="openInfo('U10', 'Sovereign Skyline', 'Exclusief penthouse met adembenemend uitzicht.')">
+            <img src="https://placehold.co/600x400/e0e0e0/888?text=Sovereign+Skyline" alt="U10">
+            <div class="unit-info"><h4>Sovereign Skyline</h4><button class="info-btn">Meer info</button></div>
+        </div>
+    </div>
+</section>
+
+<!-- ACTIVITEITEN -->
+<section id="activiteiten" class="section">
+    <h2 class="section-title">Activiteiten</h2>
+    <div class="activities-grid">
+        <div class="activity-card"><h3>Strand Paardrijden</h3><p>Rit langs de kustlijn</p></div>
+        <div class="activity-card"><h3>Quad Tour</h3><p>Verken de duinen</p></div>
+        <div class="activity-card"><h3>Gids</h3><p>Culturele wandelingen</p></div>
+        <div class="activity-card"><h3>Wellness</h3><p>Spa & yoga</p></div>
+    </div>
+    <p style="margin-top: 2rem; color: #5f5546;">[Hier komt later uitgebreide tekst over activiteiten]</p>
+</section>
+
+<!-- MENU -->
+<section id="menu" class="section">
+    <h2 class="section-title">Menu</h2>
+    <div class="menu-grid">
+        <div class="menu-card"><h3>Ontbijt</h3><p>Vers brood, lokale producten</p></div>
+        <div class="menu-card"><h3>Lunch</h3><p>Mediterrane gerechten</p></div>
+        <div class="menu-card"><h3>Diner</h3><p>Chef's special</p></div>
+        <div class="menu-card"><h3>Dranken</h3><p>Wijn, cocktail, thee</p></div>
+    </div>
+    <p style="margin-top: 2rem; color: #5f5546;">[Hier komt later het volledige menu]</p>
+</section>
+
+<!-- BOEKINGSFORMULIER -->
+<section id="booking" class="section">
+    <h2 class="section-title">Boek nu</h2>
+    <div class="booking-card">
+        <h1>Réservation</h1>
+
+        <label>Accommodatie</label>
+        <select id="taUnitSelect" required>
+            <option value="">Selecteer uw verblijf</option>
+            <optgroup label="Longvinity Hub">
+                <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa</option>
+            </optgroup>
+            <optgroup label="Achakar Trinity">
+                <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618b" data-price="400" data-type="Villa">La Perla</option>
+                <option value="U3" data-resource="90285810-ae69-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar</option>
+                <option value="U4" data-resource="72168bd2-a348-457b-8892-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
+            </optgroup>
+            <optgroup label="Marrakech Urban">
+                <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82ceda52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
+                <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix</option>
+                <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge</option>
+                <option value="U8" data-resource="7454d0ef-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
+                <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-3584650d6cd5" data-price="195" data-type="Villa">Palmeraie Royale</option>
+                <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7ef4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
+            </optgroup>
+        </select>
+
+        <div class="row-2">
+            <div><label>Check-in</label><input type="date" id="taCheckIn" required></div>
+            <div><label>Check-out</label><input type="date" id="taCheckOut" required></div>
+        </div>
+
+        <label>Gastgegevens</label>
+        <input type="text" id="taGuestName" placeholder="Volledige naam" required>
+        <div class="row-2">
+            <div><input type="email" id="taGuestEmail" placeholder="Emailadres" required></div>
+            <div><input type="tel" id="taGuestPhone" placeholder="Telefoonnummer" required></div>
+        </div>
+
+        <label>Betaalmethode</label>
+        <select id="taPaymentMethod" required>
+            <option value="">Kies methode</option>
+            <option value="Cash">Contant</option>
+            <option value="Kaart">Creditcard</option>
+            <option value="PayPal">PayPal</option>
+        </select>
+
+        <h3 style="font-family:'Playfair Display'; letter-spacing:2px; margin:1.5rem 0 0.8rem;">Extra Diensten</h3>
+        <div class="option-group">
+            <div>
+                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="50" value="Housekeeping"> Housekeeping (€50)</label>
+                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Cleaning"> Schoonmaak (€25)</label>
+                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Breakfast"> Ontbijt (€25)</label>
+                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="20" value="Chef"> Privé Kok (€20)</label>
+            </div>
+            <div>
+                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Strand Paardrijden"> Paardrijden</label>
+                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Quad Tour"> Quad Tour</label>
+                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Gids"> Gids</label>
+                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Wellness"> Wellness</label>
+            </div>
+        </div>
+
+        <label>Wensen & Assistentie</label>
+        <textarea id="taZorgWensen" rows="2" placeholder="Medische zorg, dieetwensen..."></textarea>
+        <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen (optioneel)"></textarea>
+
+        <div style="display: flex; align-items: center; gap: 12px; margin: 1rem 0;">
+            <input type="checkbox" id="taTransfer" style="width: 20px; margin: 0;">
+            <label for="taTransfer" style="margin: 0;">Luchthaven Transfer</label>
+        </div>
+
+        <div class="price-summary">
+            <span class="total-label">TOTAAL</span>
+            <span class="total-amount" id="displayTotaal">€ 0,00</span>
+            <input type="hidden" id="taTotaalprijs">
+        </div>
+
+        <button id="taBookBtn">BEVESTIG RESERVATIE</button>
+    </div>
+</section>
+
+<!-- MODAL -->
 <div id="infoModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeInfo()">&times;</span>
         <h2 id="modalTitle">Unit Naam</h2>
-        <p id="modalDescription">Beschrijving...</p>
-        <button class="book-now-trigger" onclick="goToBooking()">DIRECT BOEKEN</button>
+        <p id="modalDescription" style="margin:1rem 0;">Beschrijving...</p>
+        <button class="book-now-trigger" onclick="goToBooking()">BOEK NU</button>
     </div>
-</div>
-
-<!-- ========== BOEKINGSFORMULIER ========== -->
-<div class="booking-card">
-    <h1>✨ Réservation ✨</h1>
-
-    <label>Accommodatie *</label>
-    <select id="taUnitSelect" required>
-        <option value="">Selecteer uw verblijf...</option>
-        
-        <optgroup label="✨ Longvinity Hub">
-            <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa</option>
-        </optgroup>
-
-        <optgroup label="🌊 Achakar Trinity">
-            <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618" data-price="400" data-type="Villa">La Perla</option>
-            <option value="U3" data-resource="90285810-ae69-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar</option>
-            <option value="U4" data-resource="72168bd2-a348-457b-8892-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
-        </optgroup>
-
-        <optgroup label="🏙️ Marrakech Urban">
-            <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82cda52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
-            <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix</option>
-            <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge</option>
-            <option value="U8" data-resource="7454d0e6-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
-            <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-3584650d6cd5" data-price="195" data-type="Villa">Palmeraie Royale</option>
-            <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7ef4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
-        </optgroup>
-    </select>
-
-    <div class="row-2">
-        <div><label>Check-in *</label><input type="date" id="taCheckIn" required></div>
-        <div><label>Check-out *</label><input type="date" id="taCheckOut" required></div>
-    </div>
-
-    <label>Gastgegevens *</label>
-    <input type="text" id="taGuestName" placeholder="Volledige naam" required>
-
-    <div class="row-2">
-        <div><label>Email *</label><input type="email" id="taGuestEmail" required></div>
-        <div><label>Telefoon *</label><input type="tel" id="taGuestPhone" required></div>
-    </div>
-
-    <label>Betaalmethode *</label>
-    <select id="taPaymentMethod" required>
-        <option value="">Kies methode...</option>
-        <option value="Cash">Contant</option>
-        <option value="Kaart">Kaart</option>
-        <option value="PayPal">PayPal</option>
-    </select>
-
-    <h3>✨ Extra Diensten</h3>
-    <div class="option-group">
-        <div>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="50" value="Housekeeping"> Housekeeping (€50)</label>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Cleaning"> Schoonmaak (€25)</label>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Breakfast"> Ontbijt (€25)</label>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="20" value="Chef"> Privé Kok (€20)</label>
-        </div>
-        <div>
-            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Strand Paardrijden"> 🏇 Paardrijden</label>
-            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Quad Tour"> 🚙 Quad Tour</label>
-            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Gids"> 🧭 Gids</label>
-            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Wellness"> 🧘 Wellness</label>
-        </div>
-    </div>
-
-    <label>Wensen & Assistentie</label>
-    <textarea id="taZorgWensen" rows="2" placeholder="Bijv. medische zorg, dieetwensen of transfer details..."></textarea>
-    <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen (optioneel)"></textarea>
-
-    <div style="display: flex; align-items: center; gap: 12px; margin: 15px 0;">
-        <input type="checkbox" id="taTransfer" style="width: 20px; margin: 0;">
-        <label for="taTransfer" style="margin: 0; text-transform: none;">🚗 Luchthaven Transfer nodig?</label>
-    </div>
-
-    <div class="price-summary">
-        <span class="total-label">TOTAAL</span>
-        <span class="total-amount" id="displayTotaal">€ 0,00</span>
-        <input type="hidden" id="taTotaalprijs">
-    </div>
-
-    <button id="taBookBtn">📌 BEVESTIG RESERVATIE</button>
 </div>
 
 <script>
-    // ========== SUPABASE CONFIGURATIE ==========
+    // Supabase configuratie
     const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
     let tempUnitId = "";
+
+    function toggleDropdown() {
+        const dd = document.getElementById('bookingDropdown');
+        dd.classList.toggle('active');
+    }
+    window.onclick = function(e) {
+        if (!e.target.closest('.dropdown')) {
+            const dd = document.getElementById('bookingDropdown');
+            if (dd) dd.classList.remove('active');
+        }
+        const modal = document.getElementById('infoModal');
+        if (e.target == modal) closeInfo();
+    }
+
+    function scrollToSection(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function scrollToBooking(unitId) {
+        tempUnitId = unitId;
+        document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+            const select = document.getElementById('taUnitSelect');
+            if (tempUnitId) select.value = tempUnitId;
+            updatePrices();
+        }, 500);
+        document.getElementById('bookingDropdown').classList.remove('active');
+    }
 
     function openInfo(id, title, desc) {
         tempUnitId = id;
@@ -350,22 +618,14 @@ neem de codes uit deze html code aub <!DOCTYPE html>
         document.getElementById('infoModal').style.display = "block";
     }
 
-    function closeInfo() {
-        document.getElementById('infoModal').style.display = "none";
-    }
+    function closeInfo() { document.getElementById('infoModal').style.display = "none"; }
 
     function goToBooking() {
         closeInfo();
         const select = document.getElementById('taUnitSelect');
         if (tempUnitId) select.value = tempUnitId;
-        document.querySelector('.booking-card').scrollIntoView({ behavior: 'smooth' });
-        updatePrices();
-        document.getElementById('taCheckIn').focus();
-    }
-
-    window.onclick = function(event) {
-        const modal = document.getElementById('infoModal');
-        if (event.target == modal) closeInfo();
+        document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => updatePrices(), 100);
     }
 
     function updatePrices() {
@@ -373,17 +633,14 @@ neem de codes uit deze html code aub <!DOCTYPE html>
         const select = document.getElementById('taUnitSelect');
         const checkIn = document.getElementById('taCheckIn').value;
         const checkOut = document.getElementById('taCheckOut').value;
-
         if (select.value && checkIn && checkOut) {
             const nachten = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
             const prijs = parseFloat(select.selectedOptions[0]?.dataset.price || 0);
             if (nachten > 0) totaal += nachten * prijs;
         }
-
         document.querySelectorAll('.ta-dienst:checked').forEach(cb => {
             totaal += parseFloat(cb.dataset.price) || 0;
         });
-
         document.getElementById('displayTotaal').innerText = `€ ${totaal.toFixed(2)}`;
         document.getElementById('taTotaalprijs').value = totaal.toFixed(2);
     }
@@ -398,11 +655,11 @@ neem de codes uit deze html code aub <!DOCTYPE html>
         const payment = document.getElementById('taPaymentMethod').value;
 
         if (!select.value || !checkIn || !checkOut || !name || !email || !phone || !payment) {
-            alert("⚠️ Vul alle verplichte velden in.");
+            alert("Vul alle verplichte velden in.");
             return;
         }
         if (new Date(checkIn) >= new Date(checkOut)) {
-            alert("❌ Check-out moet na check-in liggen.");
+            alert("Check-out moet na check-in liggen.");
             return;
         }
 
@@ -418,7 +675,7 @@ neem de codes uit deze html code aub <!DOCTYPE html>
             unit_code: select.value,
             resource_id: select.selectedOptions[0].dataset.resource,
             gast_naam: name,
-            gast_contact: { email: email, telefoon: phone },
+            gast_contact: { email, telefoon: phone },
             check_in: checkIn,
             check_out: checkOut,
             metadata: {
@@ -435,31 +692,25 @@ neem de codes uit deze html code aub <!DOCTYPE html>
         };
 
         const { error } = await supabaseClient.from('boekingen').insert([record]);
-
         if (error) {
-            alert("❌ Fout: " + error.message);
+            alert("Fout: " + error.message);
             btn.disabled = false;
-            btn.innerText = "📌 BEVESTIG RESERVATIE";
+            btn.innerText = "BEVESTIG RESERVATIE";
         } else {
-            alert("✅ Reservatie succesvol!");
+            alert("Reservatie succesvol!");
             location.reload();
         }
     }
 
-    // Event listeners
     document.getElementById('taCheckIn').addEventListener('change', updatePrices);
     document.getElementById('taCheckOut').addEventListener('change', updatePrices);
     document.getElementById('taUnitSelect').addEventListener('change', updatePrices);
-    document.querySelectorAll('.ta-dienst, .ta-activiteit').forEach(el => {
-        el.addEventListener('change', updatePrices);
-    });
+    document.querySelectorAll('.ta-dienst, .ta-activiteit').forEach(el => el.addEventListener('change', updatePrices));
     document.getElementById('taBookBtn').addEventListener('click', handleBooking);
 
-    // Datumbeperking
     const vandaag = new Date().toISOString().split('T')[0];
     document.getElementById('taCheckIn').setAttribute('min', vandaag);
     document.getElementById('taCheckOut').setAttribute('min', vandaag);
-
     updatePrices();
 </script>
 </body>
