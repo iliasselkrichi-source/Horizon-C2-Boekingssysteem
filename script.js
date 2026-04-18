@@ -53,6 +53,7 @@ async function loadBookingsFromSupabase() {
         refreshUI();
         console.log(`📚 ${bookingsDB.length} boekingen geladen`);
     } else {
+        console.error("Fout bij laden:", error);
         loadMockData();
     }
 }
@@ -102,7 +103,6 @@ function renderCalendar() {
     const maandNamen = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
     cal.innerHTML += `<div style="grid-column: span 7; text-align: center; font-weight: bold; margin-bottom: 10px;">${maandNamen[month]} ${year}</div>`;
     
-    // Dagen van de week koppen
     const dagen = ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'];
     for (let i = 0; i < 7; i++) {
         cal.innerHTML += `<div class="cal-day-header" style="text-align: center; font-weight: bold; padding: 5px;">${dagen[i]}</div>`;
