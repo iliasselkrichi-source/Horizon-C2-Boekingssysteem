@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizon C2 | Team Bravo - Bootcamp Pakketten</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>🏷️ HORIZON C2 — Team Bravo <span class="realtime-active">🔴 Realtime actief</span></h1>
+    <p style="margin-bottom: 2rem;">Bootcamp Pakketten · Team Bravo</p>
+
+    <div class="card tb-form">
+        <h3>🟡 Team Bravo — Bootcamp Pakketten</h3>
+        <label>🎁 Kies pakket:</label>
+        <select id="tbPackageSelect">
+            <option value="P1" data-resource="VILLA_ALHOURA" data-price="250" data-type="Wellness">TB-P1 - Essence of Orient (€250)</option>
+            <option value="P2" data-resource="VILLA_ALHOURA" data-price="450" data-type="Cultuur">TB-P2 - Souk & Soul (€450)</option>
+            <option value="P3" data-resource="VILLA_ALHOURA" data-price="750" data-type="Luxe">TB-P3 - Arabian Nights (€750)</option>
+            <option value="P4" data-resource="VILLA_ALHOURA" data-price="1250" data-type="Premium">TB-P4 - Royal Caravan (€1250)</option>
+        </select>
+        <label>👤 Gastnaam:</label>
+        <input type="text" id="tbGuestName" placeholder="Volledige naam">
+        <label>📧 Email:</label>
+        <input type="email" id="tbGuestEmail" placeholder="naam@voorbeeld.com">
+        <label>📞 GSM nummer:</label>
+        <input type="text" id="tbGuestPhone" placeholder="+212 ...">
+        <label>📅 Check-in datum:</label>
+        <input type="date" id="tbCheckIn">
+        <label>📅 Check-out datum:</label>
+        <input type="date" id="tbCheckOut">
+        <div><label><input type="checkbox" id="tbTransfer"> 🚗 Transfer</label></div>
+        <textarea id="tbSpeciaal" placeholder="Speciale verzoeken"></textarea>
+        <label>💰 Pakketprijs:</label>
+        <input type="number" id="tbTotaalprijs" readonly style="background:#e2e8f0;">
+        <button id="tbBookBtn" style="background:#eab308;">📌 TB - Bevestig reservatie</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+</body>
+</html>
