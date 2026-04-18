@@ -1,0 +1,255 @@
+mermaid.initialize({ startOnLoad: true, theme: 'base', securityLevel: 'loose' });
+
+// ========== CONFIGURATIE ==========
+const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
+let supabaseClient = null;
+let bookingsDB = [];
+let realtimeChannel = null;
+
+// Initialisatie
+if (SB_URL !== "JOUW_SUPABASE_URL" && SB_KEY !== "JOUW_SUPABASE_ANON_KEY") {
+    supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+    console.log("✅ Supabase client geïnitialiseerd");
+    loadBookingsFromSupabase();
+    setupRealtimeListener();  // 🔴 START REALTIME LISTENER
+} else {
+    console.log("⚠️ Demo modus - vul SB_URL en SB_KEY in voor live connectie");
+    loadMockData();
+}
+
+// ========== REALTIME LISTENER (DE ONTVANGER) ==========
+function setupRealtimeListener() {
+    if (!supabaseClient) return;
+
+    realtimeChannel = supabaseClient
+        .channel('schema-db-changes')
+        .on(
+            'postgres_changes',
+            { event: 'INSERT', schema: 'public', table: 'boekingen' },
+            (payload) => {
+                console.log('🔔 Nieuwe boeking ontvangen via Realtime!', payload.new);
+
+                // Voeg de nieuwe boeking toe aan de lokale lijst (voorkom duplicaten)
+                const exists = bookingsDB.some(b => b.id === payload.new.id);
+                if (!exists) {
+                    bookingsDB.unshift(payload.new);
+                    refreshUI();
+                    console.log('✅ UI geüpdatet met nieuwe boeking');
+                }
+            }
+        )
+        .on(
+            'postgres_changes',
+            { event: 'UPDATE', schema: 'public', table: 'boekingen' },
+            (payload) => {
+                console.log('🔄 Boeking geüpdatet via Realtime!', payload.new);
+                const index = bookingsDB.findIndex(b => b.id === payload.new.id);
+                if (index !== -1) {
+                    bookingsDB[index] = payload.new;
+                    refreshUI();
+                }
+            }
+        )
+        .subscribe((status) => {
+            console.log('📡 Realtime status:', status);
+            if (status === 'SUBSCRIBED') {
+                console.log('✅ Realtime listener actief - wacht op nieuwe boekingen');
+            }
+        });
+}
+
+// ========== DATA LADEN ==========
+async function loadBookingsFromSupabase() {
+    const { data, error } = await supabaseClient.from('boekingen').select('*').order('created_at', { ascending: false });
+    if (!error && data) {
+        bookingsDB = data;
+        refreshUI();
+        console.log(`📚 ${bookingsDB.length} boekingen geladen vanuit Supabase`);
+    } else {
+        console.error("Fout bij laden:", error);
+        loadMockData();
+    }
+}
+
+function loadMockData() {
+    bookingsDB = [
+        { id: "m1", boekingsnummer: "TA-U1-1505-01", team: "TA", unit_code: "U1", resource_id: "VILLA_ALHOURA", gast_naam: "Ahmed El Khayat", gast_contact: { email: "a@horizon.com", telefoon: "+212 111" }, check_in: "2026-06-15", check_out: "2026-06-18", metadata: { transfer: true, speciaal: "", woning_type: "Villa" }, totaalprijs: 1200, status: "BEVESTIGD" }
+    ];
+    refreshUI();
+}
+
+// ========== PRIJS LOGICA ==========
+function updatePrices() {
+    const taIn = document.getElementById('taCheckIn').value;
+    const taOut = document.getElementById('taCheckOut').value;
+    const taSelect = document.getElementById('taUnitSelect');
+    if(taIn && taOut && taSelect) {
+        const nachten = (new Date(taOut) - new Date(taIn)) / (1000 * 60 * 60 * 24);
+        const prijsPerNacht = parseFloat(taSelect.selectedOptions[0].dataset.price);
+        document.getElementById('taTotaalprijs').value = nachten > 0 ? (nachten * prijsPerNacht).toFixed(2) : 0;
+    }
+
+    const tbSelect = document.getElementById('tbPackageSelect');
+    if(tbSelect) {
+        document.getElementById('tbTotaalprijs').value = parseFloat(tbSelect.selectedOptions[0].dataset.price).toFixed(2);
+    }
+}
+
+document.getElementById('taCheckIn').addEventListener('change', updatePrices);
+document.getElementById('taCheckOut').addEventListener('change', updatePrices);
+document.getElementById('taUnitSelect').addEventListener('change', updatePrices);
+document.getElementById('tbPackageSelect').addEventListener('change', updatePrices);
+updatePrices();
+
+// ========== RESERVATIE VERWERKEN (DE ZENDER) ==========
+async function handleBookingClick(team) {
+    const prefix = team.toLowerCase();
+    const unitEl = document.getElementById(`${prefix}UnitSelect`) || document.getElementById(`${prefix}PackageSelect`);
+
+    const formData = {
+        team: team,
+        unit_code: unitEl.value,
+        resource_id: unitEl.selectedOptions[0].dataset.resource,
+        gast_naam: document.getElementById(`${prefix}GuestName`).value,
+        gast_email: document.getElementById(`${prefix}GuestEmail`).value,
+        gast_telefoon: document.getElementById(`${prefix}GuestPhone`).value,
+        check_in: document.getElementById(`${prefix}CheckIn`).value,
+        check_out: document.getElementById(`${prefix}CheckOut`).value,
+        transfer: document.getElementById(`${prefix}Transfer`).checked,
+        speciaal: document.getElementById(`${prefix}Speciaal`).value,
+        totaalprijs: parseFloat(document.getElementById(`${prefix}Totaalprijs`).value) || 0,
+        woning_type: unitEl.selectedOptions[0].dataset.type || "Onbekend"
+    };
+
+    try {
+        const result = await processReservation(formData);
+        alert(`✅ Succes! Boekingsnummer: ${result.boekingsnummer}`);
+    } catch (e) {
+        alert(`❌ Fout: ${e.message}`);
+    }
+}
+
+async function processReservation(formData) {
+    if (!formData.check_in || !formData.check_out) throw new Error("Selecteer beide datums.");
+    if (new Date(formData.check_in) >= new Date(formData.check_out)) throw new Error("Check-out moet na check-in liggen.");
+
+    // Mock conflict check (alleen in demo modus)
+    if (!supabaseClient) {
+        const overlap = bookingsDB.some(b =>
+            b.resource_id === formData.resource_id &&
+            new Date(formData.check_in) <= new Date(b.check_out) &&
+            new Date(formData.check_out) >= new Date(b.check_in)
+        );
+        if (overlap) throw new Error("Cross-team conflict: Al Houara Villa is al bezet.");
+    }
+
+    // 📤 DE JSON FICHE WORDT HIER SAMENGESTELD EN VERZONDEN
+    const record = {
+        team: formData.team,
+        unit_code: formData.unit_code,
+        resource_id: formData.resource_id,
+        gast_naam: formData.gast_naam,
+        gast_contact: { email: formData.gast_email, telefoon: formData.gast_telefoon },
+        check_in: formData.check_in,
+        check_out: formData.check_out,
+        metadata: { transfer: formData.transfer, speciaal: formData.speciaal, woning_type: formData.woning_type },
+        totaalprijs: formData.totaalprijs,
+        status: "NIEUW"
+    };
+
+    console.log("📤 JSON Fiche verzonden naar Supabase:", JSON.stringify(record, null, 2));
+
+    if (supabaseClient) {
+        // 🔴 VERZENDEN NAAR SUPABASE - De trigger genereert het boekingsnummer
+        const { data, error } = await supabaseClient.from('boekingen').insert([record]).select();
+        if (error) throw new Error(error.message);
+        // De Realtime listener zal de UI automatisch updaten
+        return data[0];
+    } else {
+        // Demo modus: lokaal genereren
+        const d = new Date(formData.check_in);
+        const ddmm = String(d.getDate()).padStart(2,'0') + String(d.getMonth()+1).padStart(2,'0');
+        let suffix = 1;
+        let num;
+        do { num = `${formData.team}-${formData.unit_code}-${ddmm}-${String(suffix++).padStart(2,'0')}`; }
+        while (bookingsDB.some(b => b.boekingsnummer === num));
+        record.id = crypto.randomUUID();
+        record.boekingsnummer = num;
+        bookingsDB.unshift(record);
+        refreshUI();
+        return record;
+    }
+}
+
+document.getElementById('taBookBtn').onclick = () => handleBookingClick('TA');
+document.getElementById('tbBookBtn').onclick = () => handleBookingClick('TB');
+
+// ========== UI RENDERING ==========
+function refreshUI() {
+    renderPanel();
+    renderCalendar();
+}
+
+function renderPanel() {
+    const tbody = document.getElementById('bookingTable');
+    if (!tbody) return;
+    tbody.innerHTML = bookingsDB.map(b => `
+        <tr>
+            <td><span class="prefix-example">${b.boekingsnummer}</span></td>
+            <td>${b.gast_naam}</span></td>
+            <td>${b.check_in}</span></td>
+            <td>${b.metadata?.transfer ? '🚗 Ja' : '❌'}</span></td>
+            <td>€${b.totaalprijs}</span></td>
+            <td><span class="badge">${b.status}</span></span></td>
+            <td><button onclick="viewFiche('${b.id}')">Bekijk</button></span></td>
+        </tr>
+    `).join('');
+}
+
+function renderCalendar() {
+    const cal = document.getElementById('calendar');
+    if (!cal) return;
+    cal.innerHTML = '';
+    const year = 2026, month = 5;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDay = new Date(year, month, 1).getDay();
+
+    for (let i = 0; i < firstDay; i++) {
+        cal.innerHTML += '<div class="cal-day"></div>';
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const dayBookings = bookingsDB.filter(b => dateStr >= b.check_in && dateStr <= b.check_out);
+
+        const markers = dayBookings.map(b => `
+            <div class="booking-marker" style="background:${b.team==='TA'?'#dbeafe':'#fef3c7'}">
+                ${b.unit_code}${b.metadata?.transfer ? '🚗' : ''}
+            </div>
+        `).join('');
+
+        cal.innerHTML += `<div class="cal-day"><strong>${d}</strong>${markers}</div>`;
+    }
+}
+
+window.viewFiche = (id) => {
+    const b = bookingsDB.find(x => x.id === id);
+    if (!b) return;
+    document.getElementById('modalContent').innerHTML = `
+        <p><strong>🏷️ Boekingsnummer:</strong> ${b.boekingsnummer}</p>
+        <p><strong>👤 Gast:</strong> ${b.gast_naam}</p>
+        <p><strong>📞 Telefoon:</strong> ${b.gast_contact?.telefoon || '-'}</p>
+        <p><strong>📧 Email:</strong> ${b.gast_contact?.email || '-'}</p>
+        <p><strong>📅 Verblijf:</strong> ${b.check_in} tot ${b.check_out}</p>
+        <p><strong>🏠 Team/Unit:</strong> ${b.team} - ${b.unit_code}</p>
+        <p><strong>🏠 Woningtype:</strong> ${b.metadata?.woning_type || '-'}</p>
+        <p><strong>🚗 Transfer:</strong> ${b.metadata?.transfer ? 'Ja' : 'Nee'}</p>
+        <p><strong>💰 Prijs:</strong> €${b.totaalprijs}</p>
+        <p><strong>📝 Speciaal:</strong> ${b.metadata?.speciaal || 'Geen'}</p>
+        <p><strong>🔖 Status:</strong> ${b.status}</p>
+    `;
+    document.getElementById('ficheModal').classList.remove('hidden');
+};
+
+document.getElementById('closeModal').onclick = () => document.getElementById('ficheModal').classList.add('hidden');
