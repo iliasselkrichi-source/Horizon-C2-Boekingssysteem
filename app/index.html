@@ -1,97 +1,26 @@
-<script>
-    // Supabase configuratie
-    const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
-    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
-    
-    let supabaseClient = supabase.createClient(SB_URL, SB_KEY);
-    
-    // Prijs berekenen op basis van nachten (met validatie)
-    function updatePrice() {
-        const select = document.getElementById('taUnitSelect');
-        const pricePerNight = parseFloat(select.selectedOptions[0].dataset.price);
-        const checkIn = document.getElementById('taCheckIn').value;
-        const checkOut = document.getElementById('taCheckOut').value;
-        
-        // Fix #3: Check of beide datums zijn ingevuld
-        if (!checkIn || !checkOut) {
-            document.getElementById('taTotaalprijs').value = '';
-            return;
-        }
-        
-        const nights = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
-        if (nights > 0) {
-            document.getElementById('taTotaalprijs').value = (pricePerNight * nights).toFixed(2);
-        } else {
-            document.getElementById('taTotaalprijs').value = pricePerNight;
-        }
-    }
-    
-    // Formulier resetten na succesvolle boeking
-    function resetFormulier() {
-        document.getElementById('taGuestName').value = '';
-        document.getElementById('taGuestEmail').value = '';
-        document.getElementById('taGuestPhone').value = '';
-        document.getElementById('taCheckIn').value = '';
-        document.getElementById('taCheckOut').value = '';
-        document.getElementById('taTransfer').checked = false;
-        document.getElementById('taSpeciaal').value = '';
-        document.getElementById('taTotaalprijs').value = '';
-    }
-    
-    // Event listeners
-    document.getElementById('taUnitSelect').addEventListener('change', updatePrice);
-    document.getElementById('taCheckIn').addEventListener('change', updatePrice);
-    document.getElementById('taCheckOut').addEventListener('change', updatePrice);
-    updatePrice();
-    
-    // Boeking verzenden naar Supabase
-    document.getElementById('taBookBtn').addEventListener('click', async () => {
-        const checkIn = document.getElementById('taCheckIn').value;
-        const checkOut = document.getElementById('taCheckOut').value;
-        
-        // Fix #3: Extra validatie voor datums
-        if (!checkIn || !checkOut) {
-            alert("❌ Selecteer zowel check-in als check-out datum.");
-            return;
-        }
-        
-        if (new Date(checkIn) >= new Date(checkOut)) {
-            alert("❌ Check-out datum moet na check-in datum liggen.");
-            return;
-        }
-        
-        const record = {
-            team: "TA",
-            unit_code: document.getElementById('taUnitSelect').value,
-            resource_id: document.getElementById('taUnitSelect').selectedOptions[0].dataset.resource,
-            gast_naam: document.getElementById('taGuestName').value,
-            gast_contact: {
-                email: document.getElementById('taGuestEmail').value,
-                telefoon: document.getElementById('taGuestPhone').value
-            },
-            check_in: checkIn,
-            check_out: checkOut,
-            metadata: {
-                transfer: document.getElementById('taTransfer').checked,
-                speciaal: document.getElementById('taSpeciaal').value
-            },
-            totaalprijs: parseFloat(document.getElementById('taTotaalprijs').value) || 0,
-            status: "NIEUW"
-        };
-        
-        // Fix #5: Bevestiging vragen voordat verzonden wordt
-        if (!confirm(`Bevestig boeking voor ${record.gast_naam}?`)) return;
-        
-        console.log("📤 Boeking verzenden:", record);
-        
-        const { data, error } = await supabaseClient.from('boekingen').insert([record]).select();
-        
-        if (error) {
-            alert("❌ Fout: " + error.message);
-        } else {
-            alert("✅ Succes! Boeking is opgeslagen.");
-            resetFormulier();  // Fix #5: Formulier leegmaken
-            updatePrice();     // Prijsveld updaten
-        }
-    });
-</script>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Horizon C2 | Menu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Horizon C2 Navigatie</h1>
+        <div class="dashboard-row" style="display: flex; gap: 20px; margin-top: 2rem;">
+            
+            <a href="bravo.html" class="card" style="flex: 1; text-decoration: none; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                <h2>📝 Naar Team Bravo</h2>
+                <p>Klik hier om een nieuwe boeking in te vullen.</p>
+            </a>
+
+            <a href="commander.html" class="card" style="flex: 1; text-decoration: none; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+                <h2>🖥️ Naar Team Commander</h2>
+                <p>Klik hier om de agenda en alle boekingen te zien.</p>
+            </a>
+
+        </div>
+    </div>
+</body>
+</html>
