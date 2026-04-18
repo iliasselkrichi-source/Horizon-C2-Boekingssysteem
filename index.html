@@ -13,23 +13,34 @@
         <h1>🏠 Team Alpha — Boeking</h1>
         
         <div class="card ta-form">
-            <h3>Nieuwe Boeking Invoeren</h3>
+            <h3>🏠 Accommodatie & Gast</h3>
             
-            <label>🏠 Kies Unit:</label>
+            <label>Kies unit:</label>
             <select id="taUnitSelect">
-                <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">TA-U1 - Al Houara Villa (€500/nacht)</option>
-                <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618b" data-price="400" data-type="Villa">TA-U2 - La Perla (€400/nacht)</option>
-                <option value="U3" data-resource="90285810-aeg469-4686-9827-c40406e05897" data-price="400" data-type="Villa">TA-U3 - Al Bahar (€400/nacht)</option>
-                <option value="U4" data-resource="72168b2d-a348-457b-8092-64dcedf44f25" data-price="400" data-type="Villa">TA-U4 - Le Rocher (€400/nacht)</option>
-                <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82cdea52189f" data-price="150" data-type="Suite">TA-U5 - L'Essence Suite (€150/nacht)</option>
-                <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">TA-U6 - Oasis de Paix (€150/nacht)</option>
-                <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">TA-U7 - Le Refuge (€150/nacht)</option>
-                <option value="U8" data-resource="7454d0ef-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">TA-U8 - Imperial Duplex (€195/nacht)</option>
-                <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-35846506dc5d" data-price="195" data-type="Villa">TA-U9 - Palmeraie Royale (€195/nacht)</option>
-                <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7e1f4d1cc6" data-price="195" data-type="Penthouse">TA-U10 - Sovereign Skyline (€195/nacht)</option>
+                <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa (€500/nacht)</option>
+                <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618b" data-price="400" data-type="Villa">La Perla (€400/nacht)</option>
+                <option value="U3" data-resource="90285810-aeg469-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar (€400/nacht)</option>
+                <option value="U4" data-resource="72168b2d-a348-457b-8092-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher (€400/nacht)</option>
+                <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82cdea52189f" data-price="150" data-type="Suite">L'Essence Suite (€150/nacht)</option>
+                <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix (€150/nacht)</option>
+                <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge (€150/nacht)</option>
+                <option value="U8" data-resource="7454d0ef-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex (€195/nacht)</option>
+                <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-35846506dc5d" data-price="195" data-type="Villa">Palmeraie Royale (€195/nacht)</option>
+                <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7e1f4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline (€195/nacht)</option>
             </select>
 
-            <label>👤 Gastnaam:</label>
+            <div class="form-row" style="margin-top: 10px;">
+                <div>
+                    <label>📅 Check-in:</label>
+                    <input type="date" id="taCheckIn">
+                </div>
+                <div>
+                    <label>📅 Check-out:</label>
+                    <input type="date" id="taCheckOut">
+                </div>
+            </div>
+
+            <label>👤 Naam Hoofdgast:</label>
             <input type="text" id="taGuestName" placeholder="Volledige naam">
 
             <label>📧 Email:</label>
@@ -38,61 +49,39 @@
             <label>📞 Telefoon:</label>
             <input type="tel" id="taGuestPhone" placeholder="+212 ...">
 
-            <div style="display: flex; gap: 10px;">
-                <div style="flex: 1;">
-                    <label>📅 Check-in:</label>
-                    <input type="date" id="taCheckIn">
+            <!-- DIENSTEN & ACTIVITEITEN -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: rgba(255,255,255,0.4); padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #cbd5e1;">
+                <div>
+                    <p><strong>🛠️ Extra Diensten</strong></p>
+                    <label><input type="checkbox" class="ta-optie ta-dienst" value="Housekeeping" data-price="50"> Housekeeping (€50)</label><br>
+                    <label><input type="checkbox" class="ta-optie ta-dienst" value="Cleaning" data-price="25"> Schoonmaak (€25)</label><br>
+                    <label><input type="checkbox" class="ta-optie ta-dienst" value="Breakfast" data-price="25"> Ontbijt (€25)</label><br>
+                    <label><input type="checkbox" class="ta-optie ta-dienst" value="Chef" data-price="20"> Privé Kok (€20)</label>
                 </div>
-                <div style="flex: 1;">
-                    <label>📅 Check-out:</label>
-                    <input type="date" id="taCheckOut">
+                <div>
+                    <p><strong>🏇 Activiteiten (Offerte)</strong></p>
+                    <label><input type="checkbox" class="ta-optie ta-activiteit" value="Strand Paardrijden"> Strand Paardrijden</label><br>
+                    <label><input type="checkbox" class="ta-optie ta-activiteit" value="Quad Tour"> Quad Tour</label><br>
+                    <label><input type="checkbox" class="ta-optie ta-activiteit" value="Gids"> Gids</label><br>
+                    <label><input type="checkbox" class="ta-optie ta-activiteit" value="Wellness"> Wellness</label>
                 </div>
             </div>
 
-            <!-- DIENSTEN (MET PRIJZEN) -->
-            <div style="margin-top: 1rem;">
-                <label>🛠️ Extra Diensten (worden bij totaal opgeteld):</label>
-                <select id="taDiensten" multiple style="height: 100px; width: 100%;">
-                    <option value="housekeeping">Housekeeping (€50)</option>
-                    <option value="cleaning">Cleaning (€25)</option>
-                    <option value="transfer">Transfer (€15)</option>
-                    <option value="breakfast">Breakfast (€25)</option>
-                    <option value="chef">Chef (€20)</option>
-                </select>
-            </div>
+            <label>🩺 Assistentie & Bijzonderheden (Medisch/Zorg):</label>
+            <textarea id="taZorgWensen" rows="2" placeholder="Beschrijf hier eventuele benodigde assistentie..."></textarea>
 
-            <!-- ACTIVITEITEN (ALLEEN OFFERTE) -->
-            <div style="margin-top: 1rem;">
-                <label>🏇 Activiteiten (offerte - geen prijs in totaal):</label>
-                <select id="taActiviteiten" multiple style="height: 100px; width: 100%;">
-                    <option value="paardrijden_strand">Strand Paardrijden</option>
-                    <option value="quad_tour">Quad Tour</option>
-                    <option value="gids">Gids</option>
-                    <option value="wellness">Wellness</option>
-                </select>
-            </div>
+            <label>📝 Aanvullende Wensen:</label>
+            <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen..."></textarea>
 
-            <!-- ZORG & WENSEN -->
-            <div style="margin-top: 1rem;">
-                <label>🩺 Zorgbehoeften of Medische wensen:</label>
-                <textarea id="taZorgWensen" rows="2" placeholder="Beschrijf eventuele zorgbehoeften of medische assistentie..."></textarea>
-            </div>
-
-            <div style="margin-top: 0.5rem;">
-                <label>📝 Algemene Speciale Wensen:</label>
-                <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen..."></textarea>
-            </div>
-
-            <div style="margin-top: 0.5rem;">
-                <label><input type="checkbox" id="taTransfer"> 🚗 Luchthaven Transfer nodig?</label>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+                <input type="checkbox" id="taTransfer" style="width: auto; margin: 0;"> 
+                <label for="taTransfer" style="margin: 0;">🚗 Luchthaven Transfer nodig?</label>
             </div>
 
             <label>💰 Totaalprijs (€):</label>
-            <input type="number" id="taTotaalprijs" readonly style="background: #eee; font-weight: bold;">
+            <input type="number" id="taTotaalprijs" readonly style="background:#e2e8f0; font-weight: bold;">
 
-            <button id="taBookBtn" style="margin-top: 20px; width: 100%; padding: 15px; background: #1e293b; color: white; border: none; border-radius: 8px; cursor: pointer;">
-                📌 BEVESTIG BOEKING
-            </button>
+            <button id="taBookBtn" style="background:#3b82f6; width: 100%; margin-top: 10px;">📌 Bevestig Reservatie</button>
         </div>
     </div>
 
