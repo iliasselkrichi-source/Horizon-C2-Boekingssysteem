@@ -1,4 +1,6 @@
-mermaid.initialize({ startOnLoad: true, theme: 'base', securityLevel: 'loose' });
+if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({ startOnLoad: true, theme: 'base', securityLevel: 'loose' });
+}
 
 // ========== CONFIGURATIE ==========
 const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
@@ -81,8 +83,8 @@ function loadMockData() {
 
 // ========== PRIJS LOGICA ==========
 function updatePrices() {
-    const taIn = document.getElementById('taCheckIn').value;
-    const taOut = document.getElementById('taCheckOut').value;
+    const taIn = document.getElementById('taCheckIn')?.value;
+    const taOut = document.getElementById('taCheckOut')?.value;
     const taSelect = document.getElementById('taUnitSelect');
     if(taIn && taOut && taSelect) {
         const nachten = (new Date(taOut) - new Date(taIn)) / (1000 * 60 * 60 * 24);
@@ -96,10 +98,10 @@ function updatePrices() {
     }
 }
 
-document.getElementById('taCheckIn').addEventListener('change', updatePrices);
-document.getElementById('taCheckOut').addEventListener('change', updatePrices);
-document.getElementById('taUnitSelect').addEventListener('change', updatePrices);
-document.getElementById('tbPackageSelect').addEventListener('change', updatePrices);
+document.getElementById('taCheckIn')?.addEventListener('change', updatePrices);
+document.getElementById('taCheckOut')?.addEventListener('change', updatePrices);
+document.getElementById('taUnitSelect')?.addEventListener('change', updatePrices);
+document.getElementById('tbPackageSelect')?.addEventListener('change', updatePrices);
 updatePrices();
 
 // ========== RESERVATIE VERWERKEN (DE ZENDER) ==========
@@ -129,6 +131,12 @@ async function handleBookingClick(team) {
         alert(`❌ Fout: ${e.message}`);
     }
 }
+
+const taBtn = document.getElementById('taBookBtn');
+if (taBtn) taBtn.onclick = () => handleBookingClick('TA');
+
+const tbBtn = document.getElementById('tbBookBtn');
+if (tbBtn) tbBtn.onclick = () => handleBookingClick('TB');
 
 async function processReservation(formData) {
     if (!formData.check_in || !formData.check_out) throw new Error("Selecteer beide datums.");
@@ -181,9 +189,6 @@ async function processReservation(formData) {
         return record;
     }
 }
-
-document.getElementById('taBookBtn').onclick = () => handleBookingClick('TA');
-document.getElementById('tbBookBtn').onclick = () => handleBookingClick('TB');
 
 // ========== UI RENDERING ==========
 function refreshUI() {
@@ -252,4 +257,5 @@ window.viewFiche = (id) => {
     document.getElementById('ficheModal').classList.remove('hidden');
 };
 
-document.getElementById('closeModal').onclick = () => document.getElementById('ficheModal').classList.add('hidden');
+const closeModalBtn = document.getElementById('closeModal');
+if (closeModalBtn) closeModalBtn.onclick = () => document.getElementById('ficheModal').classList.add('hidden');
