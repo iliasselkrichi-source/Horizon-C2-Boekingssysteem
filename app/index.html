@@ -1,53 +1,97 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horizon C2 | Team Alpha - Luxury Villa Rental</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="container">
-    <h1>🏷️ HORIZON C2 — Team Alpha <span class="realtime-active">🔴 Realtime actief</span></h1>
-    <p style="margin-bottom: 2rem;">Luxury Villa Rental · Team Alpha</p>
-
-    <!-- ========== BOEKINGSFORMULIER TEAM ALPHA ========== -->
-    <div class="card ta-form">
-        <h3>🔵 Team Alpha — Luxury Villa Rental</h3>
-        <label>🏠 Kies unit:</label>
-        <select id="taUnitSelect">
-            <option value="U1" data-resource="VILLA_ALHOURA" data-price="500" data-type="Villa">TA-U1 - Al Houara Villa (€500/nacht) ⚠️ gedeeld</option>
-            <option value="U2" data-resource="VILLA_LA_PERLA" data-price="400" data-type="Villa">TA-U2 - La Perla (€400/nacht)</option>
-            <option value="U3" data-resource="VILLA_AL_BAHAR" data-price="400" data-type="Villa">TA-U3 - Al Bahar (€400/nacht)</option>
-            <option value="U4" data-resource="VILLA_LE_ROCHER" data-price="400" data-type="Villa">TA-U4 - Le Rocher (€400/nacht)</option>
-            <option value="U5" data-resource="VILLA_ESSENCE" data-price="150" data-type="Suite">TA-U5 - L'Essence Suite (€150/nacht)</option>
-            <option value="U6" data-resource="VILLA_OASIS" data-price="150" data-type="Appartement">TA-U6 - Oasis de Paix (€150/nacht)</option>
-            <option value="U7" data-resource="VILLA_REFUGE" data-price="150" data-type="Studio">TA-U7 - Le Refuge (€150/nacht)</option>
-            <option value="U8" data-resource="VILLA_IMPERIAL" data-price="195" data-type="Duplex">TA-U8 - Imperial Duplex (€195/nacht)</option>
-            <option value="U9" data-resource="VILLA_PALMERAIE" data-price="195" data-type="Villa">TA-U9 - Palmeraie Royale (€195/nacht)</option>
-            <option value="U10" data-resource="VILLA_SKYLINE" data-price="195" data-type="Penthouse">TA-U10 - Sovereign Skyline (€195/nacht)</option>
-        </select>
-        <label>👤 Gastnaam:</label>
-        <input type="text" id="taGuestName" placeholder="Volledige naam" value="Ahmed El Khayat">
-        <label>📧 Email:</label>
-        <input type="email" id="taGuestEmail" value="ahmed@horizon.com">
-        <label>📞 GSM nummer:</label>
-        <input type="text" id="taGuestPhone" value="+212 612345678">
-        <label>📅 Check-in datum:</label>
-        <input type="date" id="taCheckIn" value="2026-06-25">
-        <label>📅 Check-out datum:</label>
-        <input type="date" id="taCheckOut" value="2026-06-28">
-        <div><label><input type="checkbox" id="taTransfer"> 🚗 Transfer</label></div>
-        <textarea id="taSpeciaal" placeholder="Speciale verzoeken"></textarea>
-        <label>💰 Totaalprijs:</label>
-        <input type="number" id="taTotaalprijs" readonly style="background:#e2e8f0;">
-        <button id="taBookBtn" style="background:#3b82f6;">📌 TA - Bevestig reservatie</button>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
-</body>
-</html>
+<script>
+    // Supabase configuratie
+    const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
+    
+    let supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+    
+    // Prijs berekenen op basis van nachten (met validatie)
+    function updatePrice() {
+        const select = document.getElementById('taUnitSelect');
+        const pricePerNight = parseFloat(select.selectedOptions[0].dataset.price);
+        const checkIn = document.getElementById('taCheckIn').value;
+        const checkOut = document.getElementById('taCheckOut').value;
+        
+        // Fix #3: Check of beide datums zijn ingevuld
+        if (!checkIn || !checkOut) {
+            document.getElementById('taTotaalprijs').value = '';
+            return;
+        }
+        
+        const nights = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
+        if (nights > 0) {
+            document.getElementById('taTotaalprijs').value = (pricePerNight * nights).toFixed(2);
+        } else {
+            document.getElementById('taTotaalprijs').value = pricePerNight;
+        }
+    }
+    
+    // Formulier resetten na succesvolle boeking
+    function resetFormulier() {
+        document.getElementById('taGuestName').value = '';
+        document.getElementById('taGuestEmail').value = '';
+        document.getElementById('taGuestPhone').value = '';
+        document.getElementById('taCheckIn').value = '';
+        document.getElementById('taCheckOut').value = '';
+        document.getElementById('taTransfer').checked = false;
+        document.getElementById('taSpeciaal').value = '';
+        document.getElementById('taTotaalprijs').value = '';
+    }
+    
+    // Event listeners
+    document.getElementById('taUnitSelect').addEventListener('change', updatePrice);
+    document.getElementById('taCheckIn').addEventListener('change', updatePrice);
+    document.getElementById('taCheckOut').addEventListener('change', updatePrice);
+    updatePrice();
+    
+    // Boeking verzenden naar Supabase
+    document.getElementById('taBookBtn').addEventListener('click', async () => {
+        const checkIn = document.getElementById('taCheckIn').value;
+        const checkOut = document.getElementById('taCheckOut').value;
+        
+        // Fix #3: Extra validatie voor datums
+        if (!checkIn || !checkOut) {
+            alert("❌ Selecteer zowel check-in als check-out datum.");
+            return;
+        }
+        
+        if (new Date(checkIn) >= new Date(checkOut)) {
+            alert("❌ Check-out datum moet na check-in datum liggen.");
+            return;
+        }
+        
+        const record = {
+            team: "TA",
+            unit_code: document.getElementById('taUnitSelect').value,
+            resource_id: document.getElementById('taUnitSelect').selectedOptions[0].dataset.resource,
+            gast_naam: document.getElementById('taGuestName').value,
+            gast_contact: {
+                email: document.getElementById('taGuestEmail').value,
+                telefoon: document.getElementById('taGuestPhone').value
+            },
+            check_in: checkIn,
+            check_out: checkOut,
+            metadata: {
+                transfer: document.getElementById('taTransfer').checked,
+                speciaal: document.getElementById('taSpeciaal').value
+            },
+            totaalprijs: parseFloat(document.getElementById('taTotaalprijs').value) || 0,
+            status: "NIEUW"
+        };
+        
+        // Fix #5: Bevestiging vragen voordat verzonden wordt
+        if (!confirm(`Bevestig boeking voor ${record.gast_naam}?`)) return;
+        
+        console.log("📤 Boeking verzenden:", record);
+        
+        const { data, error } = await supabaseClient.from('boekingen').insert([record]).select();
+        
+        if (error) {
+            alert("❌ Fout: " + error.message);
+        } else {
+            alert("✅ Succes! Boeking is opgeslagen.");
+            resetFormulier();  // Fix #5: Formulier leegmaken
+            updatePrice();     // Prijsveld updaten
+        }
+    });
+</script>
