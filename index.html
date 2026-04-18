@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horizon C2 | Horizon of Infinity</title>
-    <!-- Serif voor headings, Sans-Serif voor body -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* ----- Oasis Palette ----- */
         :root {
-            --sandstone: #F9F7F4;      /* warm bone achtergrond */
-            --copper: #AD8B53;          /* Marokkaans koper - mat */
+            --sandstone: #F9F7F4;
+            --copper: #AD8B53;
             --copper-dark: #8b6e42;
-            --deep-anthracite: #1A1A1A; /* tekst - diep antraciet */
+            --deep-anthracite: #1A1A1A;
             --border-light: #E8E3DA;
             --card-bg: #FFFFFF;
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
@@ -30,7 +29,6 @@
             line-height: 1.5;
         }
 
-        /* Typografie */
         h1, h2, h3, .logo, .category-title, .section-title {
             font-family: 'Playfair Display', serif;
             letter-spacing: 3px;
@@ -54,7 +52,6 @@
             padding-left: 1rem;
         }
 
-        /* Header - sticky + semi-transparant met blur */
         .header {
             position: sticky;
             top: 0;
@@ -102,7 +99,6 @@
             color: var(--copper);
         }
 
-        /* Dropdown – klikgebaseerd, strak */
         .dropdown {
             position: relative;
             display: inline-block;
@@ -141,19 +137,16 @@
             display: block;
         }
 
-        /* Secties – ruime witruimte (120px padding) */
         .section {
             max-width: 1280px;
             margin: 0 auto;
             padding: 5rem 2rem;
             scroll-margin-top: 90px;
         }
-        /* Verdubbelde witruimte tussen secties (bestaande margin + padding) */
         .section + .section {
             padding-top: 6rem;
         }
 
-        /* Kaarten – rechte hoeken (max 2px) */
         .unit-card, .activity-card, .menu-card, .booking-card, .modal-content, 
         .dropdown-content, .filosofie-card, input, select, button {
             border-radius: 2px;
@@ -191,7 +184,6 @@
             letter-spacing: 2px;
             margin-bottom: 0.8rem;
         }
-        /* Ghost button */
         .info-btn, .book-now-trigger {
             background: transparent;
             border: 1px solid var(--copper);
@@ -209,7 +201,6 @@
             color: white;
         }
 
-        /* Grids */
         .unit-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -233,7 +224,6 @@
             transform: translateY(-3px);
         }
 
-        /* Filosofie card */
         .filosofie-card {
             background: var(--card-bg);
             padding: 3rem;
@@ -247,7 +237,6 @@
             color: var(--copper);
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -278,7 +267,6 @@
             color: #888;
         }
 
-        /* Booking formulier – strak, ghost buttons, rechte hoeken */
         .booking-card {
             background: var(--card-bg);
             max-width: 600px;
@@ -514,10 +502,10 @@
                 <option value="U4" data-resource="72168bd2-a348-457b-8892-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
             </optgroup>
             <optgroup label="Marrakech Urban">
-                <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82cda52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
+                <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82ceda52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
                 <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix</option>
                 <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge</option>
-                <option value="U8" data-resource="7454d0e6-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
+                <option value="U8" data-resource="7454d0ef-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
                 <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-3584650d6cd5" data-price="195" data-type="Villa">Palmeraie Royale</option>
                 <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7ef4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
             </optgroup>
@@ -596,7 +584,6 @@
 
     let tempUnitId = "";
 
-    // Dropdown toggle
     function toggleDropdown() {
         const dd = document.getElementById('bookingDropdown');
         dd.classList.toggle('active');
