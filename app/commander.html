@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizon C2 | Team Commander - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>🏷️ HORIZON C2 — Team Commander <span class="realtime-active">🔴 Realtime actief</span></h1>
+    <p style="margin-bottom: 2rem;">Besturingspaneel & Agenda · Team Commander</p>
+
+    <!-- ========== BESTURINGSPANEEL & AGENDA ========== -->
+    <div class="dashboard-row">
+        <div class="card">
+            <h3>🖥️ Besturingspaneel <span class="realtime-active" style="font-size:0.6rem;">LIVE</span></h3>
+            <div class="table-container">
+                <table style="width:100%">
+                    <thead><tr><th>Boekingsnr</th><th>Gast</th><th>Check-in</th><th>Transfer</th><th>Prijs</th><th>Status</th><th>Actie</th></tr></thead>
+                    <tbody id="bookingTable"></tbody>
+                </table>
+            </div>
+            <div class="realtime-badge">🔴 Realtime actief - Nieuwe boekingen verschijnen direct</div>
+        </div>
+        <div class="card">
+            <h3>📆 Universele agenda <span class="realtime-active" style="font-size:0.6rem;">LIVE</span></h3>
+            <div id="calendar" class="calendar-grid"></div>
+            <p class="badge">🔵 TA = blauw | 🟡 TB = goud | 🚗 = transfer | 📌 = vertrekdag ook gemarkeerd</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="ficheModal" class="modal-overlay hidden">
+        <div class="fiche-modal">
+            <h3>📄 Universele boekingsfiche</h3>
+            <div id="modalContent"></div>
+            <button id="closeModal">Sluiten</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+</body>
+</html>
