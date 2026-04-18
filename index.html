@@ -15,11 +15,7 @@
             --white: #ffffff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -44,7 +40,7 @@
             letter-spacing: 2px;
         }
 
-        /* Grid voor de units */
+        /* Grid voor units */
         .unit-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -75,16 +71,8 @@
             background: #e0e0e0;
         }
 
-        .unit-info {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .unit-info h4 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
+        .unit-info { padding: 20px; text-align: center; }
+        .unit-info h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
 
         .info-btn {
             background: var(--accent-gold);
@@ -95,14 +83,10 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
-            margin-top: 10px;
         }
+        .info-btn:hover { background: #a87d3a; }
 
-        .info-btn:hover {
-            background: #a87d3a;
-        }
-
-        /* Modal Styling */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -114,7 +98,6 @@
             background-color: rgba(0,0,0,0.6);
             backdrop-filter: blur(5px);
         }
-
         .modal-content {
             background-color: white;
             margin: 10% auto;
@@ -125,7 +108,6 @@
             text-align: center;
             position: relative;
         }
-
         .close {
             position: absolute;
             top: 15px;
@@ -135,11 +117,7 @@
             cursor: pointer;
             color: #aaa;
         }
-
-        .close:hover {
-            color: #000;
-        }
-
+        .close:hover { color: #000; }
         .book-now-trigger {
             background: var(--accent-gold);
             color: white;
@@ -149,14 +127,10 @@
             font-weight: 700;
             cursor: pointer;
             margin-top: 20px;
-            transition: background 0.2s;
         }
+        .book-now-trigger:hover { background: #a87d3a; }
 
-        .book-now-trigger:hover {
-            background: #a87d3a;
-        }
-
-        /* Booking card styling */
+        /* Booking card */
         .booking-card {
             background: var(--white);
             max-width: 550px;
@@ -165,148 +139,26 @@
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.05);
             border: 1px solid var(--border-soft);
-            margin-top: 20px;
+            margin-top: 50px;
         }
-
-        h1 {
-            font-size: 1.35rem;
-            text-align: center;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 30px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        h3 {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            color: var(--accent-gold);
-            letter-spacing: 1.5px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 14px;
-            margin-bottom: 16px;
-            border: 1px solid var(--border-soft);
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            background-color: #fcfcfc;
-            transition: all 0.2s ease;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--accent-gold);
-            outline: none;
-            background-color: #fff;
-            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
-        }
-
-        .row-2 {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 5px;
-        }
-        .row-2 > div {
-            flex: 1;
-        }
-
-        .option-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 15px 0 10px;
-        }
-
-        .check-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            padding: 6px 0;
-        }
-
-        .check-item input {
-            width: 18px;
-            height: 18px;
-            margin: 0;
-            accent-color: var(--accent-gold);
-        }
-
-        .price-summary {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 2px solid #f0f0f0;
-        }
-
-        .total-label {
-            font-weight: 600;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            color: #888;
-        }
-        .total-amount {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-
-        button#taBookBtn {
-            width: 100%;
-            background: var(--text-main);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            margin-top: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        button#taBookBtn:hover {
-            background: #1a252f;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        button#taBookBtn:disabled {
-            background: #aaa;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 70px;
-        }
+        h1 { font-size: 1.35rem; text-align: center; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; font-weight: 700; }
+        h3 { font-size: 0.85rem; text-transform: uppercase; color: var(--accent-gold); letter-spacing: 1.5px; margin-top: 25px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #f0f0f0; }
+        label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; color: #888; text-transform: uppercase; }
+        input, select, textarea { width: 100%; padding: 12px 14px; margin-bottom: 16px; border: 1px solid var(--border-soft); border-radius: 12px; font-size: 0.9rem; font-family: 'Inter', sans-serif; }
+        .row-2 { display: flex; gap: 15px; }
+        .row-2 > div { flex: 1; }
+        .option-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .check-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; cursor: pointer; }
+        .price-summary { display: flex; justify-content: space-between; align-items: baseline; margin-top: 25px; padding-top: 20px; border-top: 2px solid #f0f0f0; }
+        .total-amount { font-size: 1.8rem; font-weight: 800; }
+        button#taBookBtn { width: 100%; background: var(--text-main); color: white; border: none; padding: 16px; border-radius: 40px; font-weight: 700; margin-top: 25px; cursor: pointer; transition: 0.3s; }
+        button#taBookBtn:disabled { background: #aaa; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
-<!-- ========== CATEGORIE 1: HOUARA LONVINITY ========== -->
-<h2 class="category-title">✨ Houara Longvinity</h2>
+<!-- ========== CATEGORIE 1: LONVINITY HUB ========== -->
+<h2 class="category-title">✨ Longvinity Hub</h2>
 <div class="unit-grid">
     <div class="unit-card" onclick="openInfo('U1', 'Al Houara Villa', 'Luxe villa aan de kust van Tanger. Geniet van rust, privacy en een prachtig uitzicht.')">
         <img src="https://placehold.co/400x200/e0e0e0/888?text=Al+Houara+Villa" alt="U1">
@@ -360,14 +212,14 @@
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U7', 'Le Refuge', 'Modern en veilig verblijf in het hart van de stad.')">
+    <div class="unit-card" onclick="openInfo('U7', 'Le Refuge', 'Modern en veilig verblijf in de stad.')">
         <img src="https://placehold.co/400x200/e0e0e0/888?text=Le+Refuge" alt="U7">
         <div class="unit-info">
             <h4>Le Refuge</h4>
             <button class="info-btn">Meer info</button>
         </div>
     </div>
-    <div class="unit-card" onclick="openInfo('U8', 'Imperial Duplex', 'Ruim en koninklijk wonen in dit duplex appartement.')">
+    <div class="unit-card" onclick="openInfo('U8', 'Imperial Duplex', 'Ruim en koninklijk duplex appartement.')">
         <img src="https://placehold.co/400x200/e0e0e0/888?text=Imperial+Duplex" alt="U8">
         <div class="unit-info">
             <h4>Imperial Duplex</h4>
@@ -395,9 +247,8 @@
     <div class="modal-content">
         <span class="close" onclick="closeInfo()">&times;</span>
         <h2 id="modalTitle">Unit Naam</h2>
-        <p id="modalDescription">Uitleg komt hier...</p>
-        <hr>
-        <button class="book-now-trigger" onclick="goToBooking()">BOEK NU</button>
+        <p id="modalDescription">Beschrijving...</p>
+        <button class="book-now-trigger" onclick="goToBooking()">DIRECT BOEKEN</button>
     </div>
 </div>
 
@@ -409,12 +260,12 @@
     <select id="taUnitSelect" required>
         <option value="">Selecteer uw verblijf...</option>
         
-        <optgroup label="✨ Houara Longvinity">
+        <optgroup label="✨ Longvinity Hub">
             <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa</option>
         </optgroup>
 
         <optgroup label="🌊 Achakar Trinity">
-            <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618" data-price="400" data-type="Villa">La Perla</option>
+            <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf70618b" data-price="400" data-type="Villa">La Perla</option>
             <option value="U3" data-resource="90285810-ae69-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar</option>
             <option value="U4" data-resource="72168bd2-a348-457b-8892-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
         </optgroup>
@@ -430,45 +281,33 @@
     </select>
 
     <div class="row-2">
-        <div>
-            <label>Check-in *</label>
-            <input type="date" id="taCheckIn" required>
-        </div>
-        <div>
-            <label>Check-out *</label>
-            <input type="date" id="taCheckOut" required>
-        </div>
+        <div><label>Check-in *</label><input type="date" id="taCheckIn" required></div>
+        <div><label>Check-out *</label><input type="date" id="taCheckOut" required></div>
     </div>
 
     <label>Gastgegevens *</label>
     <input type="text" id="taGuestName" placeholder="Volledige naam" required>
 
     <div class="row-2">
-        <div>
-            <label>Emailadres *</label>
-            <input type="email" id="taGuestEmail" placeholder="bijv. naam@mail.com" required>
-        </div>
-        <div>
-            <label>Telefoonnummer *</label>
-            <input type="tel" id="taGuestPhone" placeholder="bijv. +212..." required>
-        </div>
+        <div><label>Email *</label><input type="email" id="taGuestEmail" required></div>
+        <div><label>Telefoon *</label><input type="tel" id="taGuestPhone" required></div>
     </div>
 
     <label>Betaalmethode *</label>
     <select id="taPaymentMethod" required>
-        <option value="">Kies een betaalmethode...</option>
-        <option value="Cash">Contant (Cash)</option>
-        <option value="Kaart">Creditcard / Debetkaart</option>
+        <option value="">Kies methode...</option>
+        <option value="Cash">Contant</option>
+        <option value="Kaart">Kaart</option>
         <option value="PayPal">PayPal</option>
     </select>
 
-    <h3>✨ Extra Diensten & Ervaringen</h3>
+    <h3>✨ Extra Diensten</h3>
     <div class="option-group">
         <div>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" value="Housekeeping" data-price="50"> Housekeeping (€50)</label>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" value="Cleaning" data-price="25"> Schoonmaak (€25)</label>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" value="Breakfast" data-price="25"> Ontbijt (€25)</label>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" value="Chef" data-price="20"> Privé Kok (€20)</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="50" value="Housekeeping"> Housekeeping (€50)</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Cleaning"> Schoonmaak (€25)</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Breakfast"> Ontbijt (€25)</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="20" value="Chef"> Privé Kok (€20)</label>
         </div>
         <div>
             <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Strand Paardrijden"> 🏇 Paardrijden</label>
@@ -479,8 +318,8 @@
     </div>
 
     <label>Wensen & Assistentie</label>
-    <textarea id="taZorgWensen" placeholder="Bijv. medische zorg, dieetwensen of transfer details..."></textarea>
-    <textarea id="taSpeciaal" placeholder="Overige wensen (optioneel)" style="margin-top: 0;"></textarea>
+    <textarea id="taZorgWensen" rows="2" placeholder="Bijv. medische zorg, dieetwensen of transfer details..."></textarea>
+    <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen (optioneл)"></textarea>
 
     <div style="display: flex; align-items: center; gap: 12px; margin: 15px 0;">
         <input type="checkbox" id="taTransfer" style="width: 20px; margin: 0;">
@@ -488,7 +327,7 @@
     </div>
 
     <div class="price-summary">
-        <span class="total-label">TOTAALBEDRAG</span>
+        <span class="total-label">TOTAAL</span>
         <span class="total-amount" id="displayTotaal">€ 0,00</span>
         <input type="hidden" id="taTotaalprijs">
     </div>
@@ -502,13 +341,12 @@
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    // ========== MODAL FUNCTIES ==========
-    let currentUnitId = "";
+    let tempUnitId = "";
 
-    function openInfo(id, title, description) {
-        currentUnitId = id;
+    function openInfo(id, title, desc) {
+        tempUnitId = id;
         document.getElementById('modalTitle').innerText = title;
-        document.getElementById('modalDescription').innerText = description;
+        document.getElementById('modalDescription').innerText = desc;
         document.getElementById('infoModal').style.display = "block";
     }
 
@@ -518,11 +356,11 @@
 
     function goToBooking() {
         closeInfo();
-        const bookingForm = document.querySelector('.booking-card');
-        bookingForm.scrollIntoView({ behavior: 'smooth' });
         const select = document.getElementById('taUnitSelect');
-        select.value = currentUnitId;
+        if (tempUnitId) select.value = tempUnitId;
+        document.querySelector('.booking-card').scrollIntoView({ behavior: 'smooth' });
         updatePrices();
+        document.getElementById('taCheckIn').focus();
     }
 
     window.onclick = function(event) {
@@ -530,17 +368,16 @@
         if (event.target == modal) closeInfo();
     }
 
-    // ========== PRIJS BEREKENING ==========
     function updatePrices() {
         let totaal = 0;
+        const select = document.getElementById('taUnitSelect');
         const checkIn = document.getElementById('taCheckIn').value;
         const checkOut = document.getElementById('taCheckOut').value;
-        const unitSelect = document.getElementById('taUnitSelect');
 
-        if (checkIn && checkOut && unitSelect.selectedOptions[0]) {
+        if (select.value && checkIn && checkOut) {
             const nachten = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
-            const prijsPerNacht = parseFloat(unitSelect.selectedOptions[0].dataset.price) || 0;
-            if (nachten > 0) totaal += nachten * prijsPerNacht;
+            const prijs = parseFloat(select.selectedOptions[0]?.dataset.price || 0);
+            if (nachten > 0) totaal += nachten * prijs;
         }
 
         document.querySelectorAll('.ta-dienst:checked').forEach(cb => {
@@ -551,21 +388,19 @@
         document.getElementById('taTotaalprijs').value = totaal.toFixed(2);
     }
 
-    // ========== BOEKING VERZENDEN ==========
     async function handleBooking() {
+        const select = document.getElementById('taUnitSelect');
+        const checkIn = document.getElementById('taCheckIn').value;
+        const checkOut = document.getElementById('taCheckOut').value;
         const name = document.getElementById('taGuestName').value.trim();
         const email = document.getElementById('taGuestEmail').value.trim();
         const phone = document.getElementById('taGuestPhone').value.trim();
         const payment = document.getElementById('taPaymentMethod').value;
-        const checkIn = document.getElementById('taCheckIn').value;
-        const checkOut = document.getElementById('taCheckOut').value;
-        const unitSelect = document.getElementById('taUnitSelect');
 
-        if (!name || !email || !phone || !payment || !checkIn || !checkOut) {
-            alert("⚠️ Vul alstublieft alle verplichte velden in.");
+        if (!select.value || !checkIn || !checkOut || !name || !email || !phone || !payment) {
+            alert("⚠️ Vul alle verplichte velden in.");
             return;
         }
-
         if (new Date(checkIn) >= new Date(checkOut)) {
             alert("❌ Check-out moet na check-in liggen.");
             return;
@@ -573,33 +408,31 @@
 
         const btn = document.getElementById('taBookBtn');
         btn.disabled = true;
-        btn.innerText = "BEZIG MET VERWERKEN...";
+        btn.innerText = "VERWERKEN...";
 
         const diensten = Array.from(document.querySelectorAll('.ta-dienst:checked')).map(cb => cb.value);
         const activiteiten = Array.from(document.querySelectorAll('.ta-activiteit:checked')).map(cb => cb.value);
 
         const record = {
             team: "TA",
-            unit_code: unitSelect.value,
-            resource_id: unitSelect.selectedOptions[0].dataset.resource,
+            unit_code: select.value,
+            resource_id: select.selectedOptions[0].dataset.resource,
             gast_naam: name,
             gast_contact: { email: email, telefoon: phone },
             check_in: checkIn,
             check_out: checkOut,
             metadata: {
-                woning_type: unitSelect.selectedOptions[0].dataset.type || "Villa",
+                woning_type: select.selectedOptions[0].dataset.type || "Villa",
                 extra_diensten: diensten,
                 activiteiten: activiteiten,
                 zorg_wensen: document.getElementById('taZorgWensen').value,
-                speciaal: document.getElementById('taSpeciaal')?.value || '',
-                transfer: document.getElementById('taTransfer')?.checked || false,
+                speciaal: document.getElementById('taSpeciaal').value,
+                transfer: document.getElementById('taTransfer').checked,
                 betaalmethode: payment
             },
             totaalprijs: parseFloat(document.getElementById('taTotaalprijs').value) || 0,
             status: "NIEUW"
         };
-
-        console.log("📤 Boeking:", record);
 
         const { error } = await supabaseClient.from('boekingen').insert([record]);
 
@@ -608,18 +441,21 @@
             btn.disabled = false;
             btn.innerText = "📌 BEVESTIG RESERVATIE";
         } else {
-            alert("✅ Merci! Uw reservatie is succesvol ontvangen.");
+            alert("✅ Reservatie succesvol!");
             location.reload();
         }
     }
 
-    // ========== EVENT LISTENERS ==========
-    document.querySelectorAll('input, select, textarea').forEach(el => {
+    // Event listeners
+    document.getElementById('taCheckIn').addEventListener('change', updatePrices);
+    document.getElementById('taCheckOut').addEventListener('change', updatePrices);
+    document.getElementById('taUnitSelect').addEventListener('change', updatePrices);
+    document.querySelectorAll('.ta-dienst, .ta-activiteit').forEach(el => {
         el.addEventListener('change', updatePrices);
-        el.addEventListener('input', updatePrices);
     });
     document.getElementById('taBookBtn').addEventListener('click', handleBooking);
 
+    // Datumbeperking
     const vandaag = new Date().toISOString().split('T')[0];
     document.getElementById('taCheckIn').setAttribute('min', vandaag);
     document.getElementById('taCheckOut').setAttribute('min', vandaag);
