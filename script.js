@@ -12,9 +12,19 @@ if (typeof supabase !== 'undefined') {
     console.log("✅ Supabase client geïnitialiseerd");
     loadBookingsFromSupabase();
     setupRealtimeListener();
+    setMinDates();
 } else {
     console.error("❌ Supabase library niet gevonden");
     loadMockData();
+}
+
+// ========== DATUMBEPERKING (niet in verleden boeken) ==========
+function setMinDates() {
+    const vandaag = new Date().toISOString().split('T')[0];
+    const checkIn = document.getElementById('taCheckIn');
+    const checkOut = document.getElementById('taCheckOut');
+    if (checkIn) checkIn.setAttribute('min', vandaag);
+    if (checkOut) checkOut.setAttribute('min', vandaag);
 }
 
 // ========== REALTIME LISTENER ==========
@@ -76,19 +86,41 @@ function renderPanel() {
     `).join('');
 }
 
+// ========== DYNAMISCHE KALENDER (huidige maand) ==========
 function renderCalendar() {
     const cal = document.getElementById('calendar');
     if (!cal) return;
     cal.innerHTML = '';
-    const year = 2026, month = 5;
+    
+    const nu = new Date();
+    const year = nu.getFullYear();
+    const month = nu.getMonth();
+    
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDay = new Date(year, month, 1).getDay();
-    for (let i = 0; i < firstDay; i++) cal.innerHTML += '<div class="cal-day"></div>';
+    
+    const maandNamen = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
+    cal.innerHTML += `<div style="grid-column: span 7; text-align: center; font-weight: bold; margin-bottom: 10px;">${maandNamen[month]} ${year}</div>`;
+    
+    // Dagen van de week koppen
+    const dagen = ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'];
+    for (let i = 0; i < 7; i++) {
+        cal.innerHTML += `<div class="cal-day-header" style="text-align: center; font-weight: bold; padding: 5px;">${dagen[i]}</div>`;
+    }
+    
+    for (let i = 0; i < firstDay; i++) {
+        cal.innerHTML += '<div class="cal-day empty"></div>';
+    }
+
     for (let d = 1; d <= daysInMonth; d++) {
-        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const dayBookings = bookingsDB.filter(b => dateStr >= b.check_in && dateStr <= b.check_out);
-        const markers = dayBookings.map(b => `<div class="booking-marker" style="background:${b.team === 'TA' ? '#dbeafe' : '#fef3c7'}">${b.unit_code}${b.metadata?.transfer ? ' 🚗' : ''}</div>`).join('');
-        cal.innerHTML += `<div class="cal-day"><strong>${d}</strong>${markers}</div>`;
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const isBezet = bookingsDB.some(b => dateStr >= b.check_in && dateStr <= b.check_out);
+        cal.innerHTML += `
+            <div class="cal-day ${isBezet ? 'is-bezet' : ''}">
+                <strong>${d}</strong>
+                ${isBezet ? '<div class="status-dot"></div>' : ''}
+            </div>
+        `;
     }
 }
 
@@ -119,11 +151,10 @@ document.getElementById('closeModal')?.addEventListener('click', () => {
     document.getElementById('ficheModal')?.classList.add('hidden');
 });
 
-// ========== PRIJS BEREKENING (MET DIENSTEN) ==========
+// ========== PRIJS BEREKENING (VERBETERD) ==========
 function updatePrices() {
     let totaal = 0;
     
-    // 1. Basis overnachtingsprijs
     const taIn = document.getElementById('taCheckIn')?.value;
     const taOut = document.getElementById('taCheckOut')?.value;
     const taSelect = document.getElementById('taUnitSelect');
@@ -136,7 +167,6 @@ function updatePrices() {
         }
     }
 
-    // 2. Diensten (met vaste prijzen)
     const dienstenSelect = document.getElementById('taDiensten');
     if (dienstenSelect) {
         const prijzenDiensten = {
@@ -146,17 +176,17 @@ function updatePrices() {
             'breakfast': 25,
             'chef': 20
         };
-        Array.from(dienstenSelect.selectedOptions).forEach(opt => {
-            totaal += prijzenDiensten[opt.value] || 0;
+        Array.from(dienstenSelect.options).forEach(opt => {
+            if (opt.selected) {
+                const prijs = prijzenDiensten[opt.value] || 0;
+                totaal += prijs;
+                console.log(`Dienst toegevoegd: ${opt.value} (+€${prijs})`);
+            }
         });
     }
 
-    // 3. Activiteiten (geen prijs, alleen voor offerte)
-    // Worden in metadata opgeslagen via handleBooking
-
     document.getElementById('taTotaalprijs').value = totaal.toFixed(2);
     
-    // Team Bravo (vaste prijs)
     const tbSelect = document.getElementById('tbPackageSelect');
     if (tbSelect && tbSelect.selectedOptions[0]) {
         document.getElementById('tbTotaalprijs').value = parseFloat(tbSelect.selectedOptions[0].dataset.price).toFixed(2);
@@ -178,7 +208,6 @@ async function handleBooking(prefix) {
         return;
     }
     
-    // Verzamel extra velden
     const dienstenSelect = document.getElementById(`${prefix}Diensten`);
     const activiteitenSelect = document.getElementById(`${prefix}Activiteiten`);
     
@@ -215,7 +244,6 @@ async function handleBooking(prefix) {
         alert("❌ Fout: " + error.message);
     } else {
         alert("✅ Boeking succesvol! De activiteiten staan genoteerd voor de offerte.");
-        // Reset formulier
         document.getElementById(`${prefix}GuestName`).value = '';
         document.getElementById(`${prefix}GuestEmail`).value = '';
         document.getElementById(`${prefix}GuestPhone`).value = '';
