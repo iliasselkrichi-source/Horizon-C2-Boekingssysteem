@@ -275,7 +275,7 @@
         const checkOut = document.getElementById('taCheckOut').value;
 
         if (!checkIn || !checkOut) {
-            alert("❌ Selecteer check-in en check-out datum.");
+            alert("❌ Selecteer beide datums.");
             return;
         }
         if (new Date(checkIn) >= new Date(checkOut)) {
@@ -302,8 +302,8 @@
                 extra_diensten: diensten,
                 activiteiten: activiteiten,
                 zorg_wensen: document.getElementById('taZorgWensen').value,
-                speciaal: document.getElementById('taSpeciaal').value,
-                transfer: document.getElementById('taTransfer').checked
+                speciaal: document.getElementById('taSpeciaal')?.value || '',
+                transfer: document.getElementById('taTransfer')?.checked || false
             },
             totaalprijs: parseFloat(document.getElementById('taTotaalprijs').value) || 0,
             status: "NIEUW"
