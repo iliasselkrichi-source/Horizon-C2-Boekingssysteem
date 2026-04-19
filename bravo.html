@@ -3,222 +3,978 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horizon C2 | Team Bravo - Bootcamp Pakketten</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <title>Horizon Of Infinity | Team Bravo - Tanger Riad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e9eef5 100%); min-height: 100vh; padding: 2rem; color: #0f172a; }
-        .container { max-width: 600px; margin: 0 auto; }
-        h1 { font-size: 1.75rem; font-weight: 800; background: linear-gradient(135deg, #1e293b, #3b4a6e); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-        .realtime-active { background: #10b981; color: white; padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
-        .realtime-active::before { content: "●"; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        .card { background: white; border-radius: 1.5rem; padding: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1); border: 1px solid rgba(226, 237, 242, 0.8); transition: transform 0.2s, box-shadow 0.2s; }
-        .card:hover { box-shadow: 0 25px 40px -15px rgba(0,0,0,0.15); }
-        .tb-form { background: linear-gradient(125deg, #fffbeb 0%, #fef7e0 100%); border-left: 5px solid #eab308; border-radius: 1.5rem; }
-        h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.25rem; color: #92400e; display: flex; align-items: center; gap: 0.5rem; }
-        label { font-weight: 500; font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0.25rem; display: block; color: #334155; }
-        input, select, textarea { width: 100%; padding: 0.75rem 1rem; margin-bottom: 0.25rem; border-radius: 14px; border: 1px solid #e2e8f0; font-family: inherit; font-size: 0.9rem; transition: all 0.2s; background: white; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #eab308; box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1); }
-        textarea { min-height: 80px; resize: vertical; }
-        .checkbox-wrapper { background: #fef9c3; padding: 0.75rem 1rem; border-radius: 14px; margin: 0.75rem 0; border: 1px solid #fde047; }
-        .checkbox-wrapper label { margin: 0; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: #854d0e; }
-        .checkbox-wrapper input { width: auto; margin: 0; transform: scale(1.1); }
-        .price-input { background: #fef3c7 !important; font-weight: 700; font-size: 1.1rem; color: #b45309; border-color: #fcd34d; text-align: center; }
-        button { width: 100%; background: linear-gradient(95deg, #eab308, #ca8a04); border: none; color: white; font-weight: 700; padding: 0.9rem; border-radius: 40px; cursor: pointer; font-size: 1rem; transition: all 0.2s; margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.3); }
-        button:hover { background: linear-gradient(95deg, #ca8a04, #b45309); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(234, 179, 8, 0.4); }
-        .package-badge { display: inline-block; background: #eab30820; color: #b45309; font-size: 0.7rem; border-radius: 40px; padding: 0.2rem 0.7rem; margin-left: 0.5rem; font-weight: 500; }
-        hr { margin: 1rem 0; border: none; border-top: 1px solid #fde68a; }
-        .subtext { font-size: 0.7rem; color: #78716c; text-align: center; margin-top: 1rem; }
-        @media (max-width: 640px) { body { padding: 1rem; } .card { padding: 1.25rem; } h1 { font-size: 1.35rem; } }
+        /* ========== KONINKLIJK MUNT & PAREL - SALIEGROEN PALET ========== */
+        :root {
+            --mint-green: #E8F1ED;
+            --mint-dark: #D4E4DC;
+            --saffron-amber: #D97706;
+            --saffron-light: #F59E0B;
+            --silver-pearl: #E2E8F0;
+            --silver-dark: #CBD5E1;
+            --charcoal-blue: #1E293B;
+            --charcoal-light: #475569;
+            --white-soft: #FFFFFF;
+            --copper: #B87333;
+            --copper-light: #DA8A67;
+            --shadow-royal: 0 25px 50px rgba(0,0,0,0.08);
+            --border-radius-arab: 60px 8px 60px 8px;
+            --border-radius-arch: 100px 12px 100px 12px;
+            --frosted-bg: rgba(255, 255, 255, 0.85);
+            --frosted-blur: blur(10px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--mint-green);
+            /* Verbeterde Zellij-mozaïek achtergrond - scherper en hogere opacity */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.65"><path fill="none" stroke="%23FFFFFF" stroke-width="1.2" d="M10,10 L20,5 L30,10 L20,15 Z M40,20 L50,15 L60,20 L50,25 Z M70,10 L80,5 L90,10 L80,15 Z M25,40 L35,35 L45,40 L35,45 Z M55,50 L65,45 L75,50 L65,55 Z M10,70 L20,65 L30,70 L20,75 Z M70,70 L80,65 L90,70 L80,75 Z M40,80 L50,75 L60,80 L50,85 Z"/><polygon points="50,30 55,38 50,46 45,38" fill="none" stroke="%23FFFFFF" stroke-width="1"/><rect x="80" y="40" width="8" height="8" transform="rotate(45 84 44)" fill="none" stroke="%23FFFFFF" stroke-width="1"/></svg>');
+            background-repeat: repeat;
+            background-size: 150px 150px;
+            color: var(--charcoal-blue);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, .logo {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ========== TITELS MET AMBER ACCENT & GLOED ========== */
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--charcoal-blue);
+            letter-spacing: 0.2em; /* Vergrote letter-spacing */
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+        .section-title::before,
+        .section-title::after {
+            font-size: 1.3rem;
+            color: var(--saffron-amber);
+            font-weight: normal;
+            text-shadow: 0 0 10px var(--saffron-amber); /* Gloed effect */
+        }
+        .section-title::before {
+            content: "❦";
+        }
+        .section-title::after {
+            content: "❦";
+        }
+
+        /* ========== ARABESK SCHEIDINGSLIJN ========== */
+        .arabesk-divider {
+            text-align: center;
+            margin: 2rem auto;
+            font-size: 1.2rem;
+            color: var(--saffron-amber);
+            letter-spacing: 8px;
+        }
+        .arabesk-divider span {
+            display: inline-block;
+            font-size: 1rem;
+        }
+
+        /* ========== STICKY MENU ========== */
+        .sticky-menu {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(232, 241, 237, 0.96);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--silver-pearl);
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--charcoal-blue);
+            letter-spacing: 2px;
+        }
+        .logo span {
+            color: var(--saffron-amber);
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal-blue);
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            cursor: pointer;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .nav-links a:hover {
+            color: var(--saffron-amber);
+        }
+        .book-btn {
+            background: var(--saffron-amber);
+            color: white !important;
+            padding: 0.6rem 1.6rem;
+            border-radius: 40px;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .book-btn:hover {
+            background: var(--copper);
+            transform: translateY(-2px);
+        }
+
+        /* ========== HERO SECTIE - FROSTED GLASS EFFECT ========== */
+        .hero {
+            height: 85vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url('https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg');
+            background-size: cover;
+            background-position: center;
+            margin-top: 75px;
+        }
+        .hero-content {
+            text-align: center;
+            color: var(--charcoal-blue);
+            max-width: 800px;
+            padding: 3rem;
+            position: relative;
+            background: var(--frosted-bg);
+            backdrop-filter: var(--frosted-blur);
+            border-radius: var(--border-radius-arab);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .hero-content::before {
+            content: "❦";
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--saffron-amber);
+            text-shadow: 0 0 15px var(--saffron-amber);
+        }
+        .hero-subtitle {
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--saffron-amber);
+        }
+        .hero-title {
+            font-size: clamp(2.8rem, 7vw, 4rem);
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            margin: 1rem 0;
+            line-height: 1.2;
+            letter-spacing: 3px;
+        }
+        .hero-text {
+            font-size: 1.1rem;
+            opacity: 0.92;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        /* ========== SECTIES ========== */
+        .section {
+            padding: 100px 5% 80px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ========== HOST STYLING - KOPEREN NIS & OVERLAP ========== */
+        .host-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0; /* Gap naar 0 voor overlap */
+            flex-wrap: wrap;
+            background: transparent;
+            padding: 2rem;
+        }
+        .host-image-wrapper {
+            position: relative;
+            flex: 0 0 400px;
+            display: flex;
+            justify-content: center;
+            z-index: 1;
+        }
+        .host-dome {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(217, 119, 6, 0.4) 0%, rgba(217, 119, 6, 0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .host-image {
+            width: 320px;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+            border: 8px solid var(--copper);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+        .host-text {
+            flex: 1;
+            background: var(--frosted-bg);
+            backdrop-filter: var(--frosted-blur);
+            padding: 3.5rem;
+            border-radius: var(--border-radius-arab);
+            position: relative;
+            color: var(--charcoal-blue);
+            margin-left: -50px; /* Overlap effect */
+            z-index: 3;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: var(--shadow-royal);
+        }
+        .host-text h3 {
+            color: var(--saffron-amber);
+            margin-bottom: 1.5rem;
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .taal-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--copper), var(--copper-light));
+            padding: 0.5rem 1rem;
+            margin: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            text-align: center;
+            line-height: 60px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .host-quote {
+            font-style: italic;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            padding-top: 1.2rem;
+            border-top: 2px solid var(--saffron-amber);
+            color: var(--charcoal-light);
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ========== WONING STYLING - FROSTED TEXT BOXES ========== */
+        .woning-container {
+            display: flex;
+            align-items: center;
+            gap: 5rem;
+            margin-bottom: 6rem;
+            flex-wrap: wrap;
+        }
+        .woning-image-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 320px;
+        }
+        .woning-img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            border-radius: 20px;
+            transition: 0.5s;
+            border: 2px solid var(--silver-pearl);
+        }
+        .woning-border {
+            position: absolute;
+            top: -25px;
+            left: -15px;
+            right: 15px;
+            bottom: 25px;
+            border: 3px solid var(--saffron-amber);
+            border-radius: 120px 20px 120px 20px;
+            pointer-events: none;
+        }
+        .woning-text {
+            flex: 1;
+            min-width: 300px;
+            background: var(--frosted-bg);
+            backdrop-filter: var(--frosted-blur);
+            padding: 3rem;
+            border-radius: var(--border-radius-arab);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: var(--shadow-royal);
+        }
+        .woning-label {
+            color: var(--saffron-amber);
+            font-weight: 700;
+            letter-spacing: 5px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+        .woning-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 1.5px;
+            color: var(--charcoal-blue);
+        }
+
+        /* ========== PAKKETTEN - SLANKE MOORSE BOGEN ========== */
+        .pakket-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            max-width: 900px; /* Gecentreerd 900px */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+        .pakket-card {
+            flex: 0 1 220px; /* Slankere kaarten */
+            min-height: 480px; /* Extra lang */
+            background: var(--frosted-bg);
+            backdrop-filter: var(--frosted-blur);
+            padding: 3.5rem 1.5rem;
+            text-align: center;
+            border-radius: 150px 150px 0 0; /* Moorse boogvorm */
+            transition: all 0.4s ease;
+            border: 1px solid var(--silver-pearl);
+            position: relative;
+            box-shadow: var(--shadow-royal);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .pakket-card::before {
+            content: "✦";
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            color: var(--saffron-amber);
+        }
+        .pakket-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--saffron-amber);
+            box-shadow: 0 30px 45px rgba(0,0,0,0.1);
+        }
+        .pakket-card strong {
+            font-size: 1.4rem;
+            color: var(--charcoal-blue);
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .pakket-prijs {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--saffron-amber);
+            margin-top: 1.5rem;
+        }
+
+        /* ========== ACTIVITEITEN - ZIGZAG PATROON ========== */
+        #activiteiten {
+            background: transparent;
+            padding: 100px 5%;
+            margin: 0 auto 80px;
+            max-width: 1200px;
+        }
+        .experience-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .experience-item {
+            background: var(--frosted-bg);
+            backdrop-filter: var(--frosted-blur);
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
+            border-radius: var(--border-radius-arab);
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative;
+            box-shadow: var(--shadow-royal);
+            width: 80%;
+            margin-bottom: 4rem; /* Spatiëring tussen items */
+        }
+        .experience-item:nth-child(odd) {
+            align-self: flex-start;
+            transform: translateX(-10%); /* 10% naar links */
+        }
+        .experience-item:nth-child(even) {
+            align-self: flex-end;
+            transform: translateX(10%); /* 10% naar rechts */
+        }
+        .experience-item:hover {
+            transform: translateX(0) translateY(-8px);
+            border-color: var(--saffron-amber);
+            box-shadow: 0 25px 40px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .experience-icon {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+        }
+        .experience-item h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+            color: var(--charcoal-blue);
+        }
+        .experience-item p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--charcoal-light);
+        }
+
+        /* ========== MODAL - FROSTED ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(30, 41, 59, 0.94);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background: var(--frosted-bg);
+            backdrop-filter: var(--frosted-blur);
+            padding: 3.5rem;
+            max-width: 500px;
+            width: 90%;
+            border-radius: 80px 8px 80px 8px;
+            text-align: center;
+            border: 2px solid var(--saffron-amber);
+            position: relative;
+            box-shadow: var(--shadow-royal);
+        }
+        .modal-content::before {
+            content: "❦";
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0 12px;
+            color: var(--saffron-amber);
+            font-size: 1.2rem;
+        }
+        .modal-content h3 {
+            color: var(--saffron-amber);
+            margin-bottom: 1rem;
+            font-size: 1.7rem;
+            font-family: 'Playfair Display', serif;
+        }
+        .modal-content p {
+            color: var(--charcoal-light);
+            line-height: 1.7;
+        }
+        .modal-content button {
+            margin-top: 2rem;
+            padding: 0.8rem 2.2rem;
+            background: var(--saffron-amber);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .modal-content button:hover {
+            background: var(--copper);
+        }
+
+        /* ========== BOEKINGSFORMULIER - FROSTED & RECHTE LIJNEN ========== */
+        .form-container {
+            background: var(--frosted-bg);
+            backdrop-filter: var(--frosted-blur);
+            border-radius: var(--border-radius-arab);
+            overflow: hidden;
+            box-shadow: var(--shadow-royal);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .form-grid {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .form-info {
+            background: rgba(217, 119, 6, 0.08);
+            color: var(--charcoal-blue);
+            padding: 3.5rem;
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+        .form-info::before {
+            content: "✧";
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            font-size: 1.5rem;
+            color: var(--saffron-amber);
+            text-shadow: 0 0 10px var(--saffron-amber);
+        }
+        .form-info h3 {
+            color: var(--saffron-amber);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+        .form-fields {
+            padding: 3.5rem;
+            flex: 2;
+            min-width: 300px;
+        }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            color: var(--charcoal-light);
+            letter-spacing: 2px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 1.1rem;
+            border: none;
+            border-bottom: 2px solid var(--silver-pearl); /* Strakke rechte lijn */
+            border-radius: 0px; /* Geen afgeronde hoeken */
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: 0.3s;
+            background: rgba(232, 241, 237, 0.5);
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-bottom-color: var(--saffron-amber);
+            background: rgba(232, 241, 237, 0.8);
+        }
+        .checkbox-custom {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1.2rem;
+            background: rgba(217, 119, 6, 0.05);
+            border-radius: 8px;
+        }
+        .checkbox-custom input {
+            width: auto;
+            margin: 0;
+            border-bottom: none;
+        }
+        .checkbox-custom label {
+            margin: 0;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .price-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--saffron-amber);
+        }
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--saffron-amber);
+        }
+        .submit-btn {
+            background: var(--saffron-amber);
+            color: white;
+            padding: 1.2rem 2.8rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .submit-btn:hover {
+            background: var(--copper);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(184, 115, 51, 0.3);
+        }
+        .realtime-active {
+            background: #10b981;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 900px) {
+            .host-image-wrapper { flex: 0 0 100%; }
+            .host-text { margin-left: 0; margin-top: -30px; text-align: center; }
+            .experience-item { width: 100%; transform: none !important; }
+            .pakket-grid { gap: 1.5rem; }
+            .pakket-card { flex: 0 1 260px; min-height: 400px; }
+            .hero-content { padding: 2rem; }
+            .section-title { font-size: 2rem; gap: 1rem; letter-spacing: 0.1em; }
+            .form-row-2 { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>🏷️ HORIZON C2 — Team Bravo <span class="realtime-active">🔴 Realtime actief</span></h1>
-    <p style="margin-bottom: 1.5rem; color: #475569;">Bootcamp Pakketten · Team Bravo</p>
 
-    <div class="card tb-form">
-        <h3>🟡 Team Bravo — Bootcamp Pakketten <span class="package-badge">exclusieve woestijnervaring</span></h3>
-        
-        <label>🎁 Kies jouw beleving:</label>
-        <select id="tbPackageSelect">
-            <option value="P1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="250" data-type="Wellness">TB-P1 - Essence of Orient (€250)</option>
-            <option value="P2" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="450" data-type="Cultuur">TB-P2 - Souk & Soul (€450)</option>
-            <option value="P3" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="750" data-type="Luxe">TB-P3 - Arabian Nights (€750)</option>
-            <option value="P4" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="1250" data-type="Premium">TB-P4 - Royal Caravan (€1250)</option>
-            <option value="P5" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="150" data-type="Single">✨ TB-P5 - Single overnachting (€150 p/nacht)</option>
-        </select>
-
-        <label>👤 Gastnaam:</label>
-        <input type="text" id="tbGuestName" placeholder="Volledige naam">
-
-        <label>📧 Emailadres:</label>
-        <input type="email" id="tbGuestEmail" placeholder="naam@voorbeeld.com">
-
-        <label>📞 GSM nummer:</label>
-        <input type="text" id="tbGuestPhone" placeholder="+212 ...">
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <div>
-                <label>📅 Check-in datum:</label>
-                <input type="date" id="tbCheckIn">
-            </div>
-            <div>
-                <label>📅 Check-out datum:</label>
-                <input type="date" id="tbCheckOut">
-            </div>
-        </div>
-
-        <div class="checkbox-wrapper">
-            <label>
-                <input type="checkbox" id="tbTransfer"> 🚗 Transfer van/naar luchthaven (optioneel)
-            </label>
-        </div>
-
-        <label>💬 Speciale wensen / verzoeken:</label>
-        <textarea id="tbSpeciaal" placeholder="Dieetwensen, allergieën, viering, extra service ..."></textarea>
-
-        <hr>
-
-        <label>💰 Totaalprijs (pakket):</label>
-        <input type="number" id="tbTotaalprijs" readonly class="price-input" step="1" value="250">
-
-        <button id="tbBookBtn">📌 Bevestig reservatie — Team Bravo</button>
-        <div class="subtext">🔒 Je boeking is realtime zichtbaar voor onze gastheer</div>
+<!-- STICKY SCROLL MENU -->
+<div class="sticky-menu">
+    <div class="logo">HORIZON <span>OF INFINITY</span></div>
+    <div class="nav-links">
+        <a href="#slogan">Home</a>
+        <a href="#filosofie">Filosofie</a>
+        <a href="#woning">Woning</a>
+        <a href="#pakketten">Pakketten</a>
+        <a href="#activiteiten">Activiteiten</a>
+        <a href="#boekingsformulier" class="book-btn">Boek nu</a>
     </div>
 </div>
 
+<!-- HERO SECTIE - TANGER KUSTLIJN -->
+<section id="slogan" class="hero">
+    <div class="hero-content">
+        <div class="hero-subtitle">Tanger - Witte Stad</div>
+        <h1 class="hero-title">Horizon of <br>Infinity.</h1>
+        <p class="hero-text">Waar de frisse zeewind en de koele binnentuinen van de Riad samenkomen in één luxueuze ervaring.</p>
+    </div>
+</section>
+
+<!-- ARABESK SCHEIDINGSLIJN -->
+<div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
+
+<!-- SECTIE: HOST FILOSOFIE - RONDE KOPEREN NIS -->
+<section id="filosofie" class="section">
+    <h2 class="section-title">Ontmoet je gastheer</h2>
+    <div class="host-container">
+        <div class="host-image-wrapper">
+            <div class="host-dome"></div>
+            <img src="https://images.pexels.com/photos/3184402/pexels-photo-3184402.jpeg" class="host-image" alt="Gastheer serveert muntthee in Tanger Riad">
+        </div>
+        <div class="host-text">
+            <h3>Geboren en getogen in België,<br>al jaren thuis in Tanger.</h3>
+            <div>
+                <span class="taal-badge">🇳🇱</span>
+                <span class="taal-badge">🇫🇷</span>
+                <span class="taal-badge">🇬🇧</span>
+                <span class="taal-badge">🇸🇦</span>
+            </div>
+            <ul style="margin: 1.5rem 0 0 1.2rem; color: var(--charcoal-light); line-height: 1.9;">
+                <li>✅ 24/7 aanwezig in de villa – vertrouwd gezicht</li>
+                <li>✅ Taal is nooit een probleem</li>
+                <li>✅ Lokale tips, souk, cultuur</li>
+                <li>✅ Uitstapjes naar Chefchaouen, Asilah, Fes, woestijn</li>
+            </ul>
+            <div class="host-quote">
+                "Je komt niet naar een anoniem hotel. Je komt naar mijn thuis."
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ARABESK SCHEIDINGSLIJN -->
+<div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
+
+<!-- SECTIE: WONING - RIAD PATIO MET FONTEIN & MOORSE BOOG -->
+<section id="woning" class="section">
+    <h2 class="section-title">Architecture of the Soul</h2>
+
+    <div class="woning-container">
+        <div class="woning-image-wrapper">
+            <div class="woning-border"></div>
+            <img src="https://images.pexels.com/photos/258196/pexels-photo-258196.jpeg" class="woning-img" alt="Marokkaanse Riad patio met fontein en Zellij tegels - Tanger">
+        </div>
+        <div class="woning-text">
+            <div class="woning-label">✦ PATIO & FONTEIN ✦</div>
+            <div class="woning-title">Een oase van rust</div>
+            <p>Betreed een traditionele Marokkaanse patio met centrale fontein, omringd door Zellij-tegels en Moorse bogen. De perfecte plek om te ontspannen na een dag in de Medina.</p>
+        </div>
+    </div>
+
+    <div class="woning-container" style="flex-direction: row-reverse; flex-wrap: wrap;">
+        <div class="woning-image-wrapper">
+            <div class="woning-border" style="top: 20px; left: 20px; right: -20px; bottom: -20px;"></div>
+            <img src="https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg" class="woning-img" alt="Luxe Super Suite in Tanger Riad met uitzicht">
+        </div>
+        <div class="woning-text">
+            <div class="woning-label">✦ SUPER SUITE ✦</div>
+            <div class="woning-title">Ontwaken met uitzicht</div>
+            <p>Onze Super Suite op de eerste verdieping biedt een prachtig uitzicht over de patio en de stad. Met dressing room, badkamer met douche, 2 wasbakken en badkuip.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ARABESK SCHEIDINGSLIJN -->
+<div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
+
+<!-- SECTIE: PAKKETTEN - SLANKE VERTICALE BOGEN, CENTRAAL -->
+<section id="pakketten" class="section">
+    <h2 class="section-title">Onze pakketten</h2>
+    <div class="pakket-grid">
+        <div class="pakket-card"><strong>TB-P1</strong>Essence of Orient<span class="pakket-prijs">€250</span></div>
+        <div class="pakket-card"><strong>TB-P2</strong>Souk & Soul<span class="pakket-prijs">€450</span></div>
+        <div class="pakket-card"><strong>TB-P3</strong>Arabian Nights<span class="pakket-prijs">€750</span></div>
+        <div class="pakket-card"><strong>TB-P4</strong>Royal Caravan<span class="pakket-prijs">€1250</span></div>
+        <div class="pakket-card"><strong>TB-P5</strong>Single overnachting<span class="pakket-prijs">€150 p/n</span></div>
+    </div>
+</section>
+
+<!-- ARABESK SCHEIDINGSLIJN -->
+<div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
+
+<!-- SECTIE: ACTIVITEITEN - ZIGZAG PATROON -->
+<section id="activiteiten">
+    <h2 class="section-title">The Experience Collection</h2>
+    <div class="experience-grid">
+        <div class="experience-item" onclick="openModal('Strand Paardrijden')">
+            <div class="experience-icon">🐎</div>
+            <h3>Strand Paardrijden</h3>
+            <p>Galoppeer langs de branding van de Atlantische kust bij zonsondergang.</p>
+        </div>
+        <div class="experience-item" onclick="openModal('Quad Tour')">
+            <div class="experience-icon">🏍️</div>
+            <h3>Quad Tour</h3>
+            <p>Verken de heuvels rond Tanger met een opwindende quadtocht.</p>
+        </div>
+        <div class="experience-item" onclick="openModal('Gids & Cultuur')">
+            <div class="experience-icon">🗺️</div>
+            <h3>Privé Gids</h3>
+            <p>Verken de verborgen schatten van de Tanger Medina met onze privé conciërge.</p>
+        </div>
+        <div class="experience-item" onclick="openModal('Wellness & Spa')">
+            <div class="experience-icon">💆</div>
+            <h3>Wellness & Spa</h3>
+            <p>Een eeuwenoude hammam reiniging van lichaam en geest met lokale natuurlijke oliën.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ARABESK SCHEIDINGSLIJN -->
+<div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
+
+<!-- MODAL POP-UP -->
+<div id="activiteitModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitel">Strand Paardrijden</h3>
+        <p id="modalText">Een onvergetelijke ervaring wacht op je.</p>
+        <button onclick="closeModal()">Sluiten</button>
+    </div>
+</div>
+
+<!-- SECTIE: BOEKINGSFORMULIER -->
+<section id="boekingsformulier" class="section">
+    <div class="form-container">
+        <div class="form-grid">
+            <div class="form-info">
+                <h3>Boek uw verblijf</h3>
+                <p>Horizon of Infinity biedt meer dan alleen een dak; wij bieden een op maat gemaakte ervaring in het hart van Tanger.</p>
+                <div style="margin-top: 2rem; font-size: 0.85rem; opacity: 0.8;">
+                    <p>📍 Tanger / Houara Coast</p>
+                    <p>📧 info@horizoninfinity.com</p>
+                </div>
+            </div>
+
+            <div class="form-fields">
+                <div class="form-row-2">
+                    <div>
+                        <label>Kies pakket</label>
+                        <select id="tbPackageSelect">
+                            <option value="P1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="250" data-type="Wellness">TB-P1 - Essence of Orient (€250)</option>
+                            <option value="P2" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="450" data-type="Cultuur">TB-P2 - Souk & Soul (€450)</option>
+                            <option value="P3" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="750" data-type="Luxe">TB-P3 - Arabian Nights (€750)</option>
+                            <option value="P4" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="1250" data-type="Premium">TB-P4 - Royal Caravan (€1250)</option>
+                            <option value="P5" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="150" data-type="Single">✨ TB-P5 - Single overnachting (€150 p/nacht)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Gastnaam</label>
+                        <input type="text" id="tbGuestName" placeholder="Volledige naam">
+                    </div>
+                    <div>
+                        <label>Email</label>
+                        <input type="email" id="tbGuestEmail" placeholder="naam@voorbeeld.com">
+                    </div>
+                    <div>
+                        <label>GSM</label>
+                        <input type="text" id="tbGuestPhone" placeholder="+212 ...">
+                    </div>
+                    <div>
+                        <label>Check-in</label>
+                        <input type="date" id="tbCheckIn">
+                    </div>
+                    <div>
+                        <label>Check-out</label>
+                        <input type="date" id="tbCheckOut">
+                    </div>
+                </div>
+
+                <div class="checkbox-custom">
+                    <input type="checkbox" id="tbTransfer">
+                    <label>🚗 Transfer van/naar luchthaven</label>
+                </div>
+
+                <div>
+                    <label>Speciale wensen</label>
+                    <textarea id="tbSpeciaal" rows="2" placeholder="Dieetwensen, allergieën, viering ..."></textarea>
+                </div>
+
+                <div class="price-bar">
+                    <div>
+                        <div class="price-label">Totaalprijs</div>
+                        <div class="price-amount">€ <span id="tbTotaalprijsDisplay">250</span></div>
+                        <input type="hidden" id="tbTotaalprijs" value="250">
+                    </div>
+                    <button id="tbBookBtn" class="submit-btn">Bevestig reservatie</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+
 <script>
-    // ========== CONFIGURATIE ==========
-    const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
-    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
-
-    let supabaseClient = null;
-
-    // ========== INITIALISATIE ==========
-    if (typeof supabase !== 'undefined') {
-        supabaseClient = supabase.createClient(SB_URL, SB_KEY);
-        console.log("✅ Supabase client geïnitialiseerd");
-        initBravoPage();
-    } else {
-        console.error("❌ Supabase library niet gevonden");
-        alert("Fout: Kan geen verbinding maken met de database.");
-    }
-
-    // ========== BRAVO PAGINA INIT ==========
-    function initBravoPage() {
-        setMinDatesBravo();
-        updateBravoPrice();
-        
-        document.getElementById('tbPackageSelect')?.addEventListener('change', updateBravoPrice);
-        document.getElementById('tbBookBtn')?.addEventListener('click', handleBravoBooking);
-        
-        // Optioneel: bij datums wijzigen niets met prijs (vast pakket)
-        console.log("✅ Team Bravo formulier klaar voor gebruik");
-    }
-
-    // ========== DATUMBEPERKING ==========
-    function setMinDatesBravo() {
-        const vandaag = new Date().toISOString().split('T')[0];
-        const checkIn = document.getElementById('tbCheckIn');
-        const checkOut = document.getElementById('tbCheckOut');
-        if (checkIn) checkIn.setAttribute('min', vandaag);
-        if (checkOut) checkOut.setAttribute('min', vandaag);
-    }
-
-    // ========== PRIJS WERKT OP BASIS VAN HET GEKOZEN PAKKET ==========
-    function updateBravoPrice() {
-        const tbSelect = document.getElementById('tbPackageSelect');
-        if (tbSelect && tbSelect.selectedOptions[0]) {
-            const price = parseFloat(tbSelect.selectedOptions[0].dataset.price);
-            const priceField = document.getElementById('tbTotaalprijs');
-            if (priceField) {
-                priceField.value = price.toFixed(2);
+    // Soepele scroll voor menu links
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if (targetId && targetId.startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
             }
+        });
+    });
+
+    // Sync zichtbare prijs met verborgen input veld (voor script.js)
+    const tbSelect = document.getElementById('tbPackageSelect');
+    const priceDisplay = document.getElementById('tbTotaalprijsDisplay');
+    const priceHidden = document.getElementById('tbTotaalprijs');
+
+    function updatePriceDisplay() {
+        if (!tbSelect) return;
+        const selectedOption = tbSelect.selectedOptions[0];
+        if (selectedOption) {
+            const price = selectedOption.dataset.price;
+            if (priceDisplay) priceDisplay.innerText = price;
+            if (priceHidden) priceHidden.value = price;
         }
     }
 
-    // ========== BOEKING VERZENDEN NAAR SUPABASE ==========
-    async function handleBravoBooking() {
-        const checkIn = document.getElementById('tbCheckIn')?.value;
-        const checkOut = document.getElementById('tbCheckOut')?.value;
+    if (tbSelect) {
+        tbSelect.addEventListener('change', updatePriceDisplay);
+        updatePriceDisplay();
+    }
+
+    // MODAL FUNCTIES
+    function openModal(activiteit) {
+        const modal = document.getElementById('activiteitModal');
+        const titel = document.getElementById('modalTitel');
+        const tekstElement = document.getElementById('modalText');
+        let tekst = '';
         
-        if (!checkIn || !checkOut) {
-            alert("❌ Selecteer zowel check-in als check-out datum.");
-            return;
-        }
-        if (new Date(checkIn) >= new Date(checkOut)) {
-            alert("❌ Check-out datum moet na de check-in datum vallen.");
-            return;
-        }
-        
-        const tbSelect = document.getElementById('tbPackageSelect');
-        const selectedOption = tbSelect.selectedOptions[0];
-        if (!selectedOption) {
-            alert("❌ Selecteer een geldig pakket.");
-            return;
-        }
-        
-        const gastNaam = document.getElementById('tbGuestName')?.value.trim();
-        if (!gastNaam) {
-            alert("❌ Gelieve uw volledige naam in te vullen.");
-            return;
-        }
-        
-        const gastEmail = document.getElementById('tbGuestEmail')?.value.trim();
-        if (!gastEmail) {
-            alert("❌ Gelieve uw e-mailadres in te vullen.");
-            return;
-        }
-        
-        const record = {
-            team: "TB",
-            unit_code: selectedOption.value,
-            resource_id: selectedOption.dataset.resource,
-            gast_naam: gastNaam,
-            gast_contact: {
-                email: gastEmail,
-                telefoon: document.getElementById('tbGuestPhone')?.value || ''
-            },
-            check_in: checkIn,
-            check_out: checkOut,
-            metadata: {
-                transfer: document.getElementById('tbTransfer')?.checked || false,
-                speciaal: document.getElementById('tbSpeciaal')?.value || '',
-                woning_type: selectedOption.dataset.type || "Onbekend"
-            },
-            totaalprijs: parseFloat(document.getElementById('tbTotaalprijs')?.value) || 0,
-            status: "NIEUW"
-        };
-        
-        console.log("📤 Versturen boeking:", record);
-        
-        if (!supabaseClient) {
-            alert("❌ Geen verbinding met database. Probeer later opnieuw.");
-            return;
+        switch(activiteit) {
+            case 'Strand Paardrijden':
+                titel.innerHTML = '🐎 Strand Paardrijden';
+                tekst = 'Ervaar de vrijheid van paardrijden op het strand. Geschikt voor alle niveaus, begeleiding inbegrepen. Duur: 2 uur.';
+                break;
+            case 'Quad Tour':
+                titel.innerHTML = '🏍️ Quad Tour';
+                tekst = 'Een adrenalinekick door de heuvels rond Tanger. 2 uur off-road avontuur met gids.';
+                break;
+            case 'Gids & Cultuur':
+                titel.innerHTML = '🗺️ Gids & Cultuur';
+                tekst = 'Verken de medina met een privé gids. Ontdek verborgen pleinen, souks en lokale verhalen. Duur: 3 uur.';
+                break;
+            case 'Wellness & Spa':
+                titel.innerHTML = '💆 Wellness & Spa';
+                tekst = 'Geniet van een traditionele hammam, massage en lichaamsbehandeling. Pure ontspanning. Duur: 2 uur.';
+                break;
+            default:
+                titel.innerHTML = activiteit;
+                tekst = 'Een onvergetelijke ervaring wacht op je.';
         }
         
-        const { error } = await supabaseClient.from('boekingen').insert([record]);
-        if (error) {
-            console.error("Supabase fout:", error);
-            alert("❌ Boeking mislukt: " + error.message);
-        } else {
-            alert("✅ Boeking succesvol! Je ontvangt een bevestiging per e-mail.");
-            // Reset formulier optioneel
-            document.getElementById('tbGuestName').value = '';
-            document.getElementById('tbGuestEmail').value = '';
-            document.getElementById('tbGuestPhone').value = '';
-            document.getElementById('tbSpeciaal').value = '';
-            document.getElementById('tbTransfer').checked = false;
-            // Datums leegmaken
-            document.getElementById('tbCheckIn').value = '';
-            document.getElementById('tbCheckOut').value = '';
-            // Prijs weer instellen op eerste pakket (P1)
-            document.getElementById('tbPackageSelect').value = 'P1';
-            updateBravoPrice();
-            setMinDatesBravo();
+        if (tekstElement) tekstElement.innerHTML = tekst;
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('activiteitModal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('activiteitModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
         }
     }
 </script>
