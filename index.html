@@ -43,7 +43,7 @@
             padding-left: 0;
         }
 
-        /* Algemene sectietitel (geldt voor alle behalve filosofie en de titel na hubs) */
+        /* Algemene sectietitel */
         .section-title {
             font-size: 2.2rem;
             letter-spacing: 6px;
@@ -68,21 +68,21 @@
 
         /* Filosofie: dichter bij hero */
         #filosofie {
-            padding-top: 1rem;  /* was 6rem via .section */
+            padding-top: 1rem;
         }
         #filosofie .section-title {
-            margin-top: 0.5rem; /* was 4rem */
+            margin-top: 0.5rem;
         }
 
         /* Verminder witruimte boven activiteiten */
         #hubs .marrakech-grid:last-child {
-            margin-bottom: 1rem; /* was 6rem */
+            margin-bottom: 1rem;
         }
         #hubs + .section-title {
-            margin-top: 1rem; /* was 4rem */
+            margin-top: 1rem;
         }
         .intro-grid-container {
-            margin-top: 1rem; /* overschrijft eerdere margin: 4rem auto 8rem auto */
+            margin-top: 1rem;
         }
 
         /* Activiteiten grid: 4 kolommen naast elkaar op desktop */
@@ -101,6 +101,7 @@
             margin-right: auto;
         }
 
+        /* Modals (bestaand) */
         .modal {
             display: none;
             position: fixed;
@@ -149,6 +150,7 @@
             flex-wrap: wrap;
         }
 
+        /* Services modal (bestaand) */
         .services-modal {
             display: none;
             position: fixed;
@@ -204,6 +206,7 @@
             font-size: 0.8rem;
         }
 
+        /* Header (aangepast met slogan) */
         .header {
             position: sticky;
             top: 0;
@@ -290,6 +293,7 @@
             display: block;
         }
 
+        /* Hero */
         .header-hero {
             width: 100%;
             height: 70vh;
@@ -430,6 +434,7 @@
             padding: 1rem;
             text-align: center;
             border: 1px solid var(--border-soft);
+            cursor: pointer;
         }
         .activity-card img, .menu-card img {
             width: 100%;
@@ -538,6 +543,52 @@
             background: var(--champagne-gold);
             color: white;
         }
+
+        /* Nieuwe footer stijlen */
+        .main-footer {
+            background-color: var(--deep-anthracite);
+            color: #fff;
+            padding: 5rem 2rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 4rem;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+            padding-bottom: 3rem;
+        }
+        .footer-section h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--champagne-gold);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .partner-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+        .partner-name {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            color: #f1f1f1;
+            letter-spacing: 1px;
+            border-left: 1px solid var(--champagne-gold);
+            padding-left: 10px;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            font-size: 0.75rem;
+            color: #666;
+            font-family: 'Inter', sans-serif;
+        }
+
         @media (max-width: 900px) {
             .marrakech-grid {
                 grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -562,10 +613,15 @@
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- NIEUWE HEADER MET SLOGAN -->
 <div class="header">
     <div class="nav-container">
-        <div class="logo">Horizon of Infinity</div>
+        <div style="display: flex; flex-direction: column;">
+            <div class="logo">Horizon of Infinity</div>
+            <span style="font-family: 'Cinzel'; font-size: 0.55rem; letter-spacing: 3px; color: var(--champagne-gold); text-transform: uppercase; margin-top: -5px; font-weight: 600;">
+                Where Elegance Meets the Horizon
+            </span>
+        </div>
         <div class="nav-links">
             <a onclick="scrollToSection('filosofie')">Filosofie</a>
             <a onclick="scrollToSection('hubs')">Hubs</a>
@@ -606,7 +662,7 @@
     </div>
 </section>
 
-<!-- HUBS (units) -->
+<!-- HUBS (units) - onveranderd -->
 <section id="hubs" class="section">
     <h2 class="section-title">Hubs</h2>
     
@@ -666,7 +722,7 @@
     </div>
 </section>
 
-<!-- INTRO KAARTEN (boven activiteiten) -->
+<!-- INTRO KAARTEN (boven activiteiten) - onveranderd -->
 <h2 class="section-title">Activiteiten</h2>
 <div class="intro-grid-container">
     <div class="intro-card">
@@ -685,62 +741,50 @@
     </div>
 </div>
 
-<!-- ACTIVITEITEN GRID -->
+<!-- NIEUWE ACTIVITEITEN GRID (met pop-up) -->
 <section id="activiteiten" class="section" style="padding-top: 0;">
     <div class="activities-grid">
-        <div class="activity-card">
-            <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=400&q=80" alt="Strand Paardrijden">
+        <div class="activity-card" onclick="openPopup('Strand Paardrijden', 'Beleef de ultieme vrijheid terwijl de zon wegzakt in de Atlantische Oceaan. Onze geselecteerde Arabische volbloeden dragen u over het goudgele zand van Achakar. Een ervaring die de ziel raakt en de essentie van Marokkaanse luxe vangt.', 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=400&q=80">
             <h3>Strand Paardrijden</h3>
-            <p>Rit langs de kustlijn</p>
+            <button class="info-btn">Ontdek de Magie</button>
         </div>
-        <div class="activity-card">
-            <img src="https://images.unsplash.com/photo-1547432020-9430bc275217?auto=format&fit=crop&w=400&q=80" alt="Quad Tour">
+        <div class="activity-card" onclick="openPopup('Quad Tour', 'Verleg uw grenzen in de ruige duinen en over de uitgestrekte stranden. Een symfonie van adrenaline en panoramische vergezichten, perfect voor wie de Marokkaanse natuur op een krachtige manier wil herontdekken.', 'https://images.unsplash.com/photo-1547432020-9430bc275217?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1547432020-9430bc275217?auto=format&fit=crop&w=400&q=80">
             <h3>Quad Tour</h3>
-            <p>Verken de duinen</p>
+            <button class="info-btn">Beleef Adrenaline</button>
         </div>
-        <div class="activity-card">
-            <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&w=400&q=80" alt="Gids">
-            <h3>Gids</h3>
-            <p>Culturele wandelingen</p>
+        <div class="activity-card" onclick="openPopup('Gids & Cultuur', 'Dwaal door de verborgen steegjes van de medina met een privégids die de geschiedenis tot leven wekt. Van ambachtelijke ateliers tot historische paleizen; wij openen de deuren die voor anderen gesloten blijven.', 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&w=400&q=80">
+            <h3>Privé Gids</h3>
+            <button class="info-btn">Verken de Medina</button>
         </div>
-        <div class="activity-card">
-            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=400&q=80" alt="Wellness">
+        <div class="activity-card" onclick="openPopup('Wellness & Spa', 'Herschrijf de definitie van rust. Geniet van een authentieke hamam-ervaring of een verkwikkende massage in de discretie van uw eigen unit, omringd door de geur van eucalyptus en pure sereniteit.', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=400&q=80">
             <h3>Wellness</h3>
-            <p>Spa & yoga</p>
+            <button class="info-btn">Vind uw Rust</button>
         </div>
     </div>
-    <p style="margin-top: 1rem; color: #6a6a6a; text-align: center;">[Hier komt later uitgebreide tekst over activiteiten]</p>
 </section>
 
-<!-- MENU -->
+<!-- NIEUWE MENU GRID (met pop-up) -->
 <section id="menu" class="section">
     <h2 class="section-title">Menu</h2>
     <div class="menu-grid">
-        <div class="menu-card">
-            <img src="https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=400&q=80" alt="Ontbijt">
+        <div class="menu-card" onclick="openPopup('Gastronomisch Ontbijt', 'Begin uw ochtend met een eerbetoon aan de lokale terroir. Versgebakken brood, honing uit de Atlas en seizoensgebonden fruit, geserveerd op uw eigen terras met uitzicht op de horizon.', 'https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=400&q=80">
             <h3>Ontbijt</h3>
-            <p>Vers brood, lokale producten</p>
+            <button class="info-btn">Bekijk Selectie</button>
         </div>
-        <div class="menu-card">
-            <img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=400&q=80" alt="Lunch">
-            <h3>Lunch</h3>
-            <p>Mediterrane gerechten</p>
-        </div>
-        <div class="menu-card">
-            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=400&q=80" alt="Diner">
+        <div class="menu-card" onclick="openPopup('Fine Dining Diner', 'Een gastronomisch hoogstandje onder de sterrenhemel. Onze chef combineert de finesse van de Belgische keuken met de rijke kruiden van Marokko voor een diner dat al uw zintuigen prikkelt.', 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=400&q=80">
             <h3>Diner</h3>
-            <p>Chef's special</p>
-        </div>
-        <div class="menu-card">
-            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=400&q=80" alt="Dranken">
-            <h3>Dranken</h3>
-            <p>Wijn, cocktail, thee</p>
+            <button class="info-btn">À la Carte</button>
         </div>
     </div>
-    <p style="margin-top: 1rem; color: #6a6a6a; text-align: center;">[Hier komt later het volledige menu]</p>
 </section>
 
-<!-- BOEKINGSFORMULIER -->
+<!-- BOEKINGSFORMULIER (onveranderd) -->
 <section id="booking" class="section">
     <h2 class="section-title">Boek nu</h2>
     <div class="booking-card">
@@ -821,7 +865,7 @@
     </div>
 </section>
 
-<!-- MODAL VOOR UNIT INFO -->
+<!-- MODAL VOOR UNIT INFO (bestaand) -->
 <div id="infoModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -831,7 +875,7 @@
     </div>
 </div>
 
-<!-- MODAL VOOR EXTRA DIENSTEN -->
+<!-- MODAL VOOR EXTRA DIENSTEN (bestaand) -->
 <div id="servicesModal" class="services-modal">
     <div class="services-modal-content">
         <span class="close" onclick="closeServicesModal()" style="float: right; font-size: 1.8rem; cursor: pointer;">&times;</span>
@@ -841,49 +885,64 @@
     </div>
 </div>
 
-<!-- FOOTER -->
-<footer style="background: var(--deep-anthracite); color: white; padding: 4rem 2rem; margin-top: 6rem; font-family: 'Inter', sans-serif;">
-    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem;">
+<!-- NIEUWE UNIVERSELE POP-UP VOOR ACTIVITEITEN EN MENU -->
+<div id="infoPopup" class="modal">
+    <div class="modal-content" style="max-width: 700px; padding: 0; overflow: hidden; border: 1px solid var(--champagne-gold);">
+        <span onclick="closePopup()" style="position: absolute; right: 20px; top: 15px; font-size: 35px; color: white; cursor: pointer; z-index: 10; font-family: Arial;">&times;</span>
         
-        <div>
-            <h2 style="font-family: 'Cinzel'; color: var(--champagne-gold); margin-bottom: 1.5rem;">Horizon Of Infinity</h2>
-            <div style="background: white; padding: 10px; width: 120px; height: 120px; border-radius: 10px;">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://horizonofinfinity.com" alt="QR Code" style="width: 100%; height: 100%;">
+        <img id="popImg" src="" style="width: 100%; height: 320px; object-fit: cover;">
+        
+        <div style="padding: 2.5rem; max-height: 400px; overflow-y: auto;">
+            <h2 id="popTitle" style="font-family: 'Cinzel'; color: var(--champagne-gold); margin-bottom: 1.2rem; letter-spacing: 2px;"></h2>
+            <p id="popDesc" style="font-family: 'Montserrat'; font-size: 1.05rem; line-height: 1.8; color: #333; margin-bottom: 2rem;"></p>
+            <button class="btn-gold" style="width: 100%;" onclick="scrollToSection('booking'); closePopup();">Reserveer dit moment</button>
+        </div>
+    </div>
+</div>
+
+<!-- NIEUWE FOOTER -->
+<footer class="main-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>Onze Partners</h3>
+            <div class="partner-grid">
+                <div class="partner-name">Royal Golf Tanger</div>
+                <div class="partner-name">Marrakech Concierge</div>
+                <div class="partner-name">Hilton Al Houara</div>
+                <div class="partner-name">Achakar Equestrian</div>
             </div>
         </div>
-
-        <div>
-            <h4 style="font-family: 'Cinzel'; margin-bottom: 1.5rem; color: var(--champagne-gold);">Contact</h4>
-            <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">E-mail: contact@horizonofinfinity.com</p>
-            <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Locatie: Marrakech & Achakar, Marokko</p>
+        <div class="footer-section">
+            <h3>Contact & Locaties</h3>
+            <p style="font-size: 0.9rem; color: #aaa; margin-bottom: 0.5rem;">Tanger | Marrakech | België</p>
+            <p style="color: var(--champagne-gold); font-weight: 500;">contact@horizonofinfinity.com</p>
         </div>
-
-        <div>
-            <h4 style="font-family: 'Cinzel'; margin-bottom: 1.5rem; color: var(--champagne-gold);">Partners</h4>
-            <ul style="list-style: none; font-size: 0.9rem; opacity: 0.8;">
-                <li style="margin-bottom: 0.5rem;">Aziris srl</li>
-                <li style="margin-bottom: 0.5rem;">Kms7</li>
-                <li style="margin-bottom: 0.5rem;">Feetconnect</li>
-            </ul>
+        <div class="footer-section">
+            <h3>Horizon C2</h3>
+            <p style="font-size: 0.85rem; line-height: 1.8; color: #aaa;">
+                Curated rentals en exceptionele service met de finesse van de Belgische etiquette.
+            </p>
         </div>
-
     </div>
-    <div style="text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.7rem; letter-spacing: 2px;">
-        © 2026 HORIZON OF INFINITY - ALL RIGHTS RESERVED
+    <div class="footer-bottom">
+        &copy; 2026 HORIZON OF INFINITY | ALL RIGHTS RESERVED
     </div>
 </footer>
 
 <script>
-    // ========== JAVASCRIPT (onaangetast) ==========
+    // ========== ALLE JAVASCRIPT (bestaande + nieuwe pop-up functies) ==========
     const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
     let tempUnitId = "";
 
+    // Bestaande functies
     function toggleDropdown() {
         document.getElementById('bookingDropdown').classList.toggle('active');
     }
+
+    // Aangepaste window.onclick (sluit ook infoPopup)
     window.onclick = function(e) {
         if (!e.target.closest('.dropdown')) {
             document.getElementById('bookingDropdown')?.classList.remove('active');
@@ -892,6 +951,8 @@
         if (e.target == modal) closeModal();
         const servicesModal = document.getElementById('servicesModal');
         if (e.target == servicesModal) closeServicesModal();
+        const infoPopup = document.getElementById('infoPopup');
+        if (e.target == infoPopup) closePopup();
     }
 
     function scrollToSection(id) {
@@ -932,6 +993,7 @@
         document.body.style.overflow = "auto";
     }
 
+    // Services modal functies (bestaand)
     function openServicesModal() {
         const originalContainer = document.getElementById('originalCheckboxRow');
         const originalChecks = originalContainer.querySelectorAll('input[type="checkbox"]');
@@ -980,6 +1042,23 @@
         closeServicesModal();
     }
 
+    // Nieuwe pop-up functies voor activiteiten & menu
+    function openPopup(title, description, imgSrc) {
+        const modal = document.getElementById('infoPopup');
+        document.getElementById('popTitle').innerText = title;
+        document.getElementById('popDesc').innerText = description;
+        document.getElementById('popImg').src = imgSrc;
+        
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePopup() {
+        document.getElementById('infoPopup').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    // Bestaande prijs & boeking functies (onaangetast)
     function updatePrices() {
         let totaal = 0;
         const select = document.getElementById('taUnitSelect');
@@ -1054,6 +1133,7 @@
         }
     }
 
+    // Event listeners (onaangetast)
     document.getElementById('taCheckIn').addEventListener('change', updatePrices);
     document.getElementById('taCheckOut').addEventListener('change', updatePrices);
     document.getElementById('taUnitSelect').addEventListener('change', updatePrices);
