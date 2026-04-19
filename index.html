@@ -27,7 +27,7 @@
             font-weight: 400;
             background-color: var(--champagne-bg);
             color: var(--deep-anthracite);
-            line-height: 1.8;
+            line-height: 1.7;
         }
 
         h1, h2, h3, .logo, .category-title, .section-title, .main-title, .usp-item, .total-amount {
@@ -45,14 +45,14 @@
         .section-title {
             font-size: 1.8rem;
             letter-spacing: 4px;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             color: var(--deep-anthracite);
         }
 
         .category-title {
             font-size: 1.3rem;
             letter-spacing: 3px;
-            margin: 3rem 0 1.5rem 0;
+            margin: 2rem 0 1.2rem 0;
         }
 
         /* Glass header */
@@ -62,7 +62,7 @@
             background: rgba(253, 252, 251, 0.92);
             backdrop-filter: blur(12px);
             z-index: 100;
-            padding: 1.2rem 2rem;
+            padding: 1rem 2rem;
             border-bottom: 1px solid var(--border-soft);
         }
         .nav-container {
@@ -72,13 +72,13 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1.5rem;
+            gap: 1rem;
         }
         .logo {
             font-family: 'Cinzel', serif;
             letter-spacing: 2px;
             text-transform: uppercase;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 600;
             background: linear-gradient(135deg, var(--deep-anthracite), var(--champagne-gold));
             -webkit-background-clip: text;
@@ -87,7 +87,7 @@
         }
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1.8rem;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -95,7 +95,7 @@
             text-decoration: none;
             color: var(--deep-anthracite);
             font-weight: 500;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             transition: color 0.2s;
@@ -107,7 +107,7 @@
         .nav-links .dropdown > a {
             background: var(--champagne-gold);
             color: #121212;
-            padding: 0.5rem 1.2rem;
+            padding: 0.4rem 1rem;
             border-radius: 30px;
             transition: all 0.2s;
         }
@@ -126,7 +126,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         /* Dropdown */
@@ -138,7 +138,7 @@
             display: none;
             position: absolute;
             background: var(--card-bg);
-            min-width: 220px;
+            min-width: 200px;
             box-shadow: var(--shadow-soft);
             z-index: 101;
             top: 100%;
@@ -147,9 +147,9 @@
             border: 1px solid var(--border-soft);
         }
         .dropdown-content a {
-            padding: 0.8rem 1.2rem;
+            padding: 0.6rem 1rem;
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 1px;
             text-transform: none;
             border-bottom: 1px solid var(--border-soft);
@@ -164,75 +164,75 @@
             display: block;
         }
 
-        /* Secties */
+        /* Secties – minder witruimte */
         .section {
             max-width: 1280px;
             margin: 0 auto;
-            padding: 8rem 2rem;
+            padding: 5rem 2rem;
             scroll-margin-top: 90px;
         }
         .section + .section {
-            padding-top: 6rem;
+            padding-top: 3rem;
         }
 
         /* Filosofie tekst */
         .philosophy-text {
             font-size: 1rem;
-            line-height: 1.8;
+            line-height: 1.7;
             color: #3a3a3a;
             max-width: 800px;
-            margin: 1.2rem auto;
+            margin: 1rem auto;
             text-align: center;
         }
 
         /* Introductiekaarten */
         .intro-grid-container {
             display: flex;
-            gap: 2.5rem;
+            gap: 2rem;
             justify-content: center;
             flex-wrap: wrap;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1rem;
         }
         .intro-card {
             flex: 1;
-            min-width: 320px;
+            min-width: 280px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             background: var(--card-bg);
-            padding: 3rem;
+            padding: 2rem;
             border-radius: 20px;
             border: 1px solid var(--border-soft);
             box-shadow: var(--shadow-soft);
         }
         .intro-card h3 {
             color: var(--champagne-gold);
-            margin-bottom: 1.5rem;
-            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
         }
         .intro-card p {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #4a4a4a;
-            line-height: 1.8;
+            line-height: 1.6;
             margin-bottom: 1rem;
         }
         .tag-container {
             display: flex;
-            gap: 0.8rem;
+            gap: 0.6rem;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 1rem;
+            margin-top: 0.8rem;
         }
         .usp-tag {
             font-family: 'Cinzel', serif;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             letter-spacing: 1px;
             background: #F9F6F2;
             color: var(--champagne-gold);
-            padding: 6px 14px;
+            padding: 4px 12px;
             border-radius: 20px;
             text-transform: uppercase;
         }
@@ -240,8 +240,16 @@
         /* Units grid */
         .unit-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+        /* Al Houara centreren (Longvinity Hub – 1 unit) */
+        .unit-grid:first-of-type {
+            justify-items: center;
+        }
+        .unit-grid:first-of-type .unit-card {
+            max-width: 500px;
             width: 100%;
         }
         .unit-card {
@@ -261,7 +269,7 @@
         }
         .unit-card img {
             width: 100%;
-            height: 240px;
+            height: 220px;
             object-fit: cover;
             transition: transform 0.4s ease;
             filter: sepia(8%) contrast(105%);
@@ -271,21 +279,21 @@
             filter: sepia(5%) contrast(108%);
         }
         .unit-info {
-            padding: 1.8rem 1.5rem 2rem;
+            padding: 1.5rem 1.2rem 1.5rem;
             text-align: center;
         }
         .unit-info h4 {
             font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             letter-spacing: 2px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
         .info-btn, .book-now-trigger {
             background: transparent;
             border: 1px solid var(--champagne-gold);
             color: var(--champagne-gold);
-            padding: 0.5rem 1.5rem;
-            font-size: 0.7rem;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.65rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
@@ -300,13 +308,13 @@
         /* Activiteiten & menu – vaste afbeeldingshoogte */
         .activities-grid, .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
         }
         .activity-card, .menu-card {
             background: var(--card-bg);
-            padding: 2rem 1.5rem;
+            padding: 1.5rem;
             text-align: center;
             border: 1px solid var(--border-soft);
             transition: transform 0.2s;
@@ -316,7 +324,7 @@
         }
         .activity-card img, .menu-card img {
             width: 100%;
-            height: 150px;
+            height: 140px;
             object-fit: cover;
             border-radius: 4px;
             margin-bottom: 1rem;
@@ -337,8 +345,8 @@
         .modal-content {
             background: var(--card-bg);
             margin: 10% auto;
-            padding: 2rem;
-            max-width: 450px;
+            padding: 1.8rem;
+            max-width: 400px;
             width: 90%;
             text-align: center;
             position: relative;
@@ -346,47 +354,47 @@
         }
         .close {
             position: absolute;
-            top: 0.8rem;
-            right: 1.2rem;
-            font-size: 1.8rem;
+            top: 0.5rem;
+            right: 1rem;
+            font-size: 1.6rem;
             cursor: pointer;
             color: #888;
         }
 
-        /* Boekingsformulier */
+        /* Boekingsformulier – compacter */
         .booking-card {
             background: var(--card-bg);
-            max-width: 680px;
+            max-width: 520px;
             width: 100%;
-            padding: 3rem;
+            padding: 1.8rem;
             margin: 0 auto;
             border: 1px solid var(--border-soft);
             box-shadow: var(--shadow-soft);
         }
         h1 {
             font-family: 'Cinzel', serif;
-            font-size: 1.8rem;
-            letter-spacing: 4px;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         label {
             display: block;
             font-size: 0.7rem;
             font-weight: 500;
-            letter-spacing: 2px;
-            margin-bottom: 0.4rem;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.3rem;
             color: #6a6a6a;
             text-transform: uppercase;
         }
         input, select, textarea {
             width: 100%;
-            padding: 0.9rem 1rem;
-            margin-bottom: 1.2rem;
+            padding: 0.7rem;
+            margin-bottom: 0.8rem;
             border: 1px solid var(--border-soft);
             background: var(--input-bg);
             font-family: 'Montserrat', 'Inter', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: border 0.2s;
         }
         input:focus, select:focus, textarea:focus {
@@ -395,36 +403,47 @@
         }
         .row-2 {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
         }
         .row-2 > div { flex: 1; }
-        .option-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.8rem;
-            margin: 1.5rem 0;
+        
+        /* Checkboxes – twee horizontale rijen van 4 */
+        .checkbox-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 0.8rem 0;
         }
         .check-item {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            font-size: 0.85rem;
+            gap: 0.5rem;
+            font-size: 0.8rem;
             cursor: pointer;
+            background: var(--input-bg);
+            padding: 0.4rem 0.8rem;
+            border-radius: 30px;
+            border: 1px solid var(--border-soft);
+        }
+        .check-item input {
+            width: auto;
+            margin: 0;
         }
         .price-summary {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
+            margin-top: 1.2rem;
+            padding-top: 1rem;
             border-top: 1px solid var(--border-soft);
         }
         .total-label {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             letter-spacing: 2px;
         }
         .total-amount {
-            font-size: 2rem;
+            font-size: 1.4rem;
             font-weight: 600;
             color: var(--champagne-gold);
             font-family: 'Cinzel', serif;
@@ -434,13 +453,13 @@
             background: transparent;
             border: 1px solid var(--champagne-gold);
             color: var(--champagne-gold);
-            padding: 1rem;
-            font-size: 0.8rem;
-            letter-spacing: 4px;
+            padding: 0.8rem;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.2s;
-            margin-top: 2rem;
+            margin-top: 1.2rem;
         }
         button#taBookBtn:hover {
             background: var(--champagne-gold);
@@ -448,13 +467,15 @@
         }
 
         @media (max-width: 700px) {
-            .nav-container { flex-direction: column; gap: 0.8rem; }
-            .nav-links { justify-content: center; gap: 1.2rem; }
-            .section { padding: 4rem 1.5rem; }
-            .unit-grid { gap: 1.5rem; }
+            .nav-container { flex-direction: column; gap: 0.5rem; }
+            .nav-links { justify-content: center; gap: 1rem; }
+            .section { padding: 3rem 1rem; }
+            .unit-grid { gap: 1.2rem; }
             .row-2 { flex-direction: column; gap: 0; }
-            .intro-card { padding: 2rem; }
+            .intro-card { padding: 1.5rem; }
             .header-hero { height: 30vh; }
+            .checkbox-row { gap: 0.6rem; }
+            .check-item { font-size: 0.7rem; padding: 0.3rem 0.6rem; }
         }
     </style>
 </head>
@@ -504,7 +525,7 @@
     </div>
 </section>
 
-<!-- HUBS (units) – met de juiste UUID's -->
+<!-- HUBS (units) -->
 <section id="hubs" class="section">
     <h2 class="section-title">Hubs</h2>
     
@@ -562,7 +583,7 @@
 </section>
 
 <!-- INTRO SECTIE (na units, boven activiteiten) -->
-<section id="pre-activities" class="section">
+<section id="pre-activities" class="section" style="padding-bottom: 0;">
     <div class="intro-grid-container">
         <div class="intro-card">
             <h3>Europees Vakmanschap & Anticiperende Service</h3>
@@ -590,8 +611,8 @@
     </div>
 </section>
 
-<!-- ACTIVITEITEN -->
-<section id="activiteiten" class="section">
+<!-- ACTIVITEITEN – met vervangen afbeeldingen -->
+<section id="activiteiten" class="section" style="padding-top: 1rem;">
     <h2 class="section-title">Activiteiten</h2>
     <div class="activities-grid">
         <div class="activity-card">
@@ -615,10 +636,10 @@
             <p>Spa & yoga</p>
         </div>
     </div>
-    <p style="margin-top: 2rem; color: #6a6a6a;">[Hier komt later uitgebreide tekst over activiteiten]</p>
+    <p style="margin-top: 1.5rem; color: #6a6a6a; text-align: center;">[Hier komt later uitgebreide tekst over activiteiten]</p>
 </section>
 
-<!-- MENU -->
+<!-- MENU – met vervangen ontbijt afbeelding -->
 <section id="menu" class="section">
     <h2 class="section-title">Menu</h2>
     <div class="menu-grid">
@@ -643,10 +664,10 @@
             <p>Wijn, cocktail, thee</p>
         </div>
     </div>
-    <p style="margin-top: 2rem; color: #6a6a6a;">[Hier komt later het volledige menu]</p>
+    <p style="margin-top: 1.5rem; color: #6a6a6a; text-align: center;">[Hier komt later het volledige menu]</p>
 </section>
 
-<!-- BOEKINGSFORMULIER (met de juiste UUID's) -->
+<!-- BOEKINGSFORMULIER (compacter, checkboxes in twee rijen) -->
 <section id="booking" class="section">
     <h2 class="section-title">Boek nu</h2>
     <div class="booking-card">
@@ -693,27 +714,29 @@
             <option value="PayPal">PayPal</option>
         </select>
 
-        <h3 style="font-family:'Cinzel'; letter-spacing:2px; margin:1.5rem 0 0.8rem;">Extra Diensten</h3>
-        <div class="option-group">
-            <div>
-                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="50" value="Housekeeping"> Housekeeping (€50)</label>
-                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Cleaning"> Schoonmaak (€25)</label>
-                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Breakfast"> Ontbijt (€25)</label>
-                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="20" value="Chef"> Privé Kok (€20)</label>
-            </div>
-            <div>
-                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Strand Paardrijden"> Paardrijden</label>
-                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Quad Tour"> Quad Tour</label>
-                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Gids"> Gids</label>
-                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Wellness"> Wellness</label>
-            </div>
+        <h3 style="font-family:'Cinzel'; letter-spacing:2px; margin:1rem 0 0.5rem;">Extra Diensten</h3>
+        
+        <!-- Rij 1: Diensten (met prijzen) -->
+        <div class="checkbox-row">
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="50" value="Housekeeping"> Housekeeping (€50)</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Cleaning"> Schoonmaak (€25)</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Breakfast"> Ontbijt (€25)</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="20" value="Chef"> Privé Kok (€20)</label>
+        </div>
+        
+        <!-- Rij 2: Activiteiten (alleen offerte) -->
+        <div class="checkbox-row">
+            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Strand Paardrijden"> Paardrijden</label>
+            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Quad Tour"> Quad Tour</label>
+            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Gids"> Gids</label>
+            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Wellness"> Wellness</label>
         </div>
 
         <label>Wensen & Assistentie</label>
         <textarea id="taZorgWensen" rows="2" placeholder="Medische zorg, dieetwensen..."></textarea>
         <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen (optioneel)"></textarea>
 
-        <div style="display: flex; align-items: center; gap: 12px; margin: 1rem 0;">
+        <div style="display: flex; align-items: center; gap: 12px; margin: 0.8rem 0;">
             <input type="checkbox" id="taTransfer" style="width: 20px; margin: 0;">
             <label for="taTransfer" style="margin: 0;">Luchthaven Transfer</label>
         </div>
