@@ -85,13 +85,25 @@
             margin-top: 1rem;
         }
 
-        /* Activiteiten grid: 4 kolommen naast elkaar op desktop */
-        @media (min-width: 900px) {
+        /* Activiteiten grid: 2 blokken naast elkaar op desktop */
+        @media (min-width: 768px) {
             .activities-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 1.5rem;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
                 padding: 0;
+                max-width: 900px;
+                margin-left: auto;
+                margin-right: auto;
             }
+        }
+
+        /* Activiteiten kaarten: afbeeldingen mooi groot */
+        .activity-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
         }
 
         .unit-grid, .marrakech-grid, .longvinity-wrapper {
@@ -135,8 +147,8 @@
 
         .activities-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: 1fr;
+            gap: 2rem;
             margin-top: 4rem;
             padding: 0 10%;
         }
@@ -569,7 +581,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Hover-effect voor menu-kaarten (toegevoegd) */
+        /* Hover-effect voor menu-kaarten */
         .menu-card {
             transition: transform 0.3s ease;
         }
@@ -729,55 +741,58 @@
     </div>
 </div>
 
-<!-- ACTIVITEITEN GRID -->
+<!-- ACTIVITEITEN SECTIE (2 blokken naast elkaar) -->
 <section id="activiteiten" class="section" style="padding-top: 0;">
     <div class="activities-grid">
-        <div class="activity-card" onclick="openPopup('Strand Paardrijden', 'Beleef de ultieme vrijheid terwijl de zon wegzakt in de Atlantische Oceaan. Onze geselecteerde Arabische volbloeden dragen u over het goudgele zand van Achakar. Een ervaring die de ziel raakt en de essentie van Marokkaanse luxe vangt.', 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=400&q=80">
+        <div class="activity-card" onclick="openPopup('Strand Paardrijden', 'Beleef de ultieme vrijheid terwijl de zon wegzakt in de Atlantische Oceaan.', 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=400&q=80" alt="Paardrijden">
             <h3>Strand Paardrijden</h3>
             <button class="info-btn">Ontdek de Magie</button>
         </div>
-        <div class="activity-card" onclick="openPopup('Quad Tour', 'Verleg uw grenzen in de ruige duinen en over de uitgestrekte stranden. Een symfonie van adrenaline en panoramische vergezichten, perfect voor wie de Marokkaanse natuur op een krachtige manier wil herontdekken.', 'https://images.unsplash.com/photo-1547432020-9430bc275217?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1547432020-9430bc275217?auto=format&fit=crop&w=400&q=80">
+
+        <div class="activity-card" onclick="openPopup('Quad Tour', 'Verleg uw grenzen in de ruige duinen en over de uitgestrekte stranden.', 'https://images.unsplash.com/photo-1547432020-9430bc275217?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1547432020-9430bc275217?auto=format&fit=crop&w=400&q=80" alt="Quad Tour">
             <h3>Quad Tour</h3>
             <button class="info-btn">Beleef Adrenaline</button>
         </div>
-        <div class="activity-card" onclick="openPopup('Gids & Cultuur', 'Dwaal door de verborgen steegjes van de medina met een privégids die de geschiedenis tot leven wekt. Van ambachtelijke ateliers tot historische paleizen; wij openen de deuren die voor anderen gesloten blijven.', 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&w=400&q=80">
+
+        <div class="activity-card" onclick="openPopup('Gids & Cultuur', 'Dwaal door de verborgen steegjes van de medina met een privégids.', 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&w=400&q=80" alt="Gids">
             <h3>Privé Gids</h3>
             <button class="info-btn">Verken de Medina</button>
         </div>
-        <div class="activity-card" onclick="openPopup('Wellness & Spa', 'Herschrijf de definitie van rust. Geniet van een authentieke hamam-ervaring of een verkwikkende massage in de discretie van uw eigen unit, omringd door de geur van eucalyptus en pure sereniteit.', 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=400&q=80">
-            <h3>Wellness</h3>
-            <button class="info-btn">Vind uw Rust</button>
+
+        <div class="activity-card" onclick="openPopup('Wellness & Spa', 'Herschrijf de definitie van rust in de discretie van uw eigen unit.', 'https://images.unsplash.com/photo-1544161515-4af6b1d462c2?auto=format&fit=crop&w=800&q=80')">
+            <img src="https://images.unsplash.com/photo-1544161515-4af6b1d462c2?auto=format&fit=crop&w=400&q=80" alt="Wellness">
+            <h3>Wellness & Spa</h3>
+            <button class="info-btn">Pure Ontspanning</button>
         </div>
     </div>
 </section>
 
-<!-- NIEUWE MENU SECTIE (aangepast) -->
+<!-- MENU SECTIE (2 blokken gecentreerd, ruime gap) -->
 <section id="menu" class="section" style="padding: 80px 0; background-color: #fdfdfd;">
     <h2 class="section-title" style="text-align: center; margin-bottom: 50px;">Menu</h2>
     
-    <div class="menu-grid" style="display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+    <div class="menu-grid" style="display: flex; justify-content: center; gap: 100px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
         
-        <div class="menu-card" style="flex: 0 1 380px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s ease;" onclick="openPopup('Gastronomisch Ontbijt', 'Begin uw ochtend met een eerbetoon aan de lokale terroir. Versgebakken brood, honing uit de Atlas en seizoensgebonden fruit, geserveerd op uw eigen terras.', 'https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=800&q=80')">
+        <div class="menu-card" style="flex: 0 1 380px; background: white; box-shadow: var(--shadow-soft); border: 1px solid var(--border-soft); cursor: pointer;" onclick="openPopup('Ontbijt', 'Een luxe start van de dag.', 'https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=800&q=80')">
             <div style="width: 100%; height: 250px; overflow: hidden;">
                 <img src="https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=800&q=80" alt="Ontbijt" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div style="padding: 30px; text-align: center;">
-                <h3 style="font-family: 'Cinzel'; letter-spacing: 2px; margin-bottom: 20px;">Ontbijt</h3>
-                <button class="info-btn" style="background: transparent; border: 1px solid var(--champagne-gold); padding: 10px 25px; color: var(--champagne-gold); cursor: pointer; font-family: 'Montserrat'; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Bekijk Selectie</button>
+                <h3 style="font-family: 'Cinzel'; letter-spacing: 2px;">Ontbijt</h3>
+                <button class="info-btn" style="margin-top: 15px;">Bekijk Selectie</button>
             </div>
         </div>
 
-        <div class="menu-card" style="flex: 0 1 380px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s ease;" onclick="openPopup('Fine Dining Diner', 'Een gastronomisch hoogstandje onder de sterrenhemel. Onze chef combineert de finesse van de Belgische keuken met de rijke kruiden van Marokko.', 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80')">
+        <div class="menu-card" style="flex: 0 1 380px; background: white; box-shadow: var(--shadow-soft); border: 1px solid var(--border-soft); cursor: pointer;" onclick="openPopup('Diner', 'Gastronomisch dineren.', 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80')">
             <div style="width: 100%; height: 250px; overflow: hidden;">
                 <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80" alt="Diner" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div style="padding: 30px; text-align: center;">
-                <h3 style="font-family: 'Cinzel'; letter-spacing: 2px; margin-bottom: 20px;">Diner</h3>
-                <button class="info-btn" style="background: transparent; border: 1px solid var(--champagne-gold); padding: 10px 25px; color: var(--champagne-gold); cursor: pointer; font-family: 'Montserrat'; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">À la Carte</button>
+                <h3 style="font-family: 'Cinzel'; letter-spacing: 2px;">Diner</h3>
+                <button class="info-btn" style="margin-top: 15px;">À la Carte</button>
             </div>
         </div>
 
@@ -930,7 +945,7 @@
 </footer>
 
 <script>
-    // ========== ALLE JAVASCRIPT ==========
+    // ========== ALLE JAVASCRIPT (onaangetast) ==========
     const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
