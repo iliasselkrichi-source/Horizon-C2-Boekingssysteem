@@ -6,23 +6,60 @@ let supabaseClient = null;
 let bookingsDB = [];
 let realtimeChannel = null;
 
+// ========== PAGINA DETECTIE ==========
+const isBravoPage = document.getElementById('tbPackageSelect') !== null;
+const isCommanderPage = document.getElementById('bookingTable') !== null;
+const isAlphaPage = document.getElementById('taUnitSelect') !== null;
+
 // ========== INITIALISATIE ==========
 if (typeof supabase !== 'undefined') {
     supabaseClient = supabase.createClient(SB_URL, SB_KEY);
     console.log("✅ Supabase client geïnitialiseerd");
-    loadBookingsFromSupabase();
-    setupRealtimeListener();
-    setMinDates();
+    
+    if (isCommanderPage) {
+        loadBookingsFromSupabase();
+        setupRealtimeListener();
+        setMinDates();
+    }
+    
+    if (isAlphaPage) {
+        setMinDates();
+        document.getElementById('taCheckIn')?.addEventListener('change', updatePrices);
+        document.getElementById('taCheckOut')?.addEventListener('change', updatePrices);
+        document.getElementById('taUnitSelect')?.addEventListener('change', updatePrices);
+        document.querySelectorAll('.ta-optie').forEach(el => {
+            el.addEventListener('change', updatePrices);
+        });
+        document.getElementById('taBookBtn')?.addEventListener('click', () => handleBooking('ta'));
+        updatePrices();
+    }
+    
+    if (isBravoPage) {
+        setMinDatesBravo();
+        document.getElementById('tbPackageSelect')?.addEventListener('change', updateBravoPrice);
+        document.getElementById('tbBookBtn')?.addEventListener('click', handleBravoBooking);
+        updateBravoPrice();
+    }
+    
 } else {
     console.error("❌ Supabase library niet gevonden");
-    loadMockData();
+    if (isCommanderPage) loadMockData();
 }
 
-// ========== DATUMBEPERKING ==========
+// ========== DATUMBEPERKING (ALPHA & COMMANDER) ==========
 function setMinDates() {
     const vandaag = new Date().toISOString().split('T')[0];
     const checkIn = document.getElementById('taCheckIn');
     const checkOut = document.getElementById('taCheckOut');
+    if (checkIn) checkIn.setAttribute('min', vandaag);
+    if (checkOut) checkOut.setAttribute('min', vandaag);
+}
+
+// ========== DATUMBEPERKING (BRAVO) ==========
+function setMinDatesBravo() {
+    const vandaag = new Date().toISOString().split('T')[0];
+    const checkIn = document.getElementById('tbCheckIn');
+    const checkOut = document.getElementById('tbCheckOut');
     if (checkIn) checkIn.setAttribute('min', vandaag);
     if (checkOut) checkOut.setAttribute('min', vandaag);
 }
@@ -149,7 +186,7 @@ document.getElementById('closeModal')?.addEventListener('click', () => {
     document.getElementById('ficheModal')?.classList.add('hidden');
 });
 
-// ========== PRIJS BEREKENING (MET CHECKBOXES) ==========
+// ========== PRIJS BEREKENING (ALPHA) ==========
 function updatePrices() {
     let totaal = 0;
     const prefix = 'ta';
@@ -158,7 +195,6 @@ function updatePrices() {
     const checkOut = document.getElementById(`${prefix}CheckOut`)?.value;
     const unitSelect = document.getElementById(`${prefix}UnitSelect`);
     
-    // 1. Basis overnachtingsprijs
     if (checkIn && checkOut && unitSelect && unitSelect.selectedOptions[0]) {
         const nachten = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
         const prijsPerNacht = parseFloat(unitSelect.selectedOptions[0].dataset.price) || 0;
@@ -167,21 +203,27 @@ function updatePrices() {
         }
     }
 
-    // 2. Extra diensten optellen (checkboxes met data-price)
     document.querySelectorAll('.ta-dienst:checked').forEach(cb => {
         totaal += parseFloat(cb.dataset.price) || 0;
     });
 
     document.getElementById(`${prefix}Totaalprijs`).value = totaal.toFixed(2);
     
-    // Team Bravo
     const tbSelect = document.getElementById('tbPackageSelect');
     if (tbSelect && tbSelect.selectedOptions[0]) {
         document.getElementById('tbTotaalprijs').value = parseFloat(tbSelect.selectedOptions[0].dataset.price).toFixed(2);
     }
 }
 
-// ========== BOEKING VERZENDEN ==========
+// ========== PRIJS BEREKENING (BRAVO) ==========
+function updateBravoPrice() {
+    const tbSelect = document.getElementById('tbPackageSelect');
+    if (tbSelect && tbSelect.selectedOptions[0]) {
+        document.getElementById('tbTotaalprijs').value = parseFloat(tbSelect.selectedOptions[0].dataset.price).toFixed(2);
+    }
+}
+
+// ========== BOEKING VERZENDEN (ALPHA) ==========
 async function handleBooking(prefix) {
     const unitSelect = document.getElementById(`${prefix}UnitSelect`);
     const checkIn = document.getElementById(`${prefix}CheckIn`)?.value;
@@ -196,7 +238,6 @@ async function handleBooking(prefix) {
         return;
     }
     
-    // Verzamel geselecteerde opties uit checkboxes
     const diensten = Array.from(document.querySelectorAll('.ta-dienst:checked')).map(cb => cb.value);
     const activiteiten = Array.from(document.querySelectorAll('.ta-activiteit:checked')).map(cb => cb.value);
     
@@ -234,16 +275,50 @@ async function handleBooking(prefix) {
     }
 }
 
-// ========== EVENT LISTENERS ==========
-document.getElementById('taCheckIn')?.addEventListener('change', updatePrices);
-document.getElementById('taCheckOut')?.addEventListener('change', updatePrices);
-document.getElementById('taUnitSelect')?.addEventListener('change', updatePrices);
-document.querySelectorAll('.ta-optie').forEach(el => {
-    el.addEventListener('change', updatePrices);
-});
-document.getElementById('tbPackageSelect')?.addEventListener('change', updatePrices);
-document.getElementById('taBookBtn')?.addEventListener('click', () => handleBooking('ta'));
-document.getElementById('tbBookBtn')?.addEventListener('click', () => handleBooking('tb'));
-
-// Initialiseer prijzen
-updatePrices();
+// ========== BOEKING VERZENDEN (BRAVO) ==========
+async function handleBravoBooking() {
+    const checkIn = document.getElementById('tbCheckIn')?.value;
+    const checkOut = document.getElementById('tbCheckOut')?.value;
+    
+    if (!checkIn || !checkOut) {
+        alert("❌ Selecteer beide datums.");
+        return;
+    }
+    if (new Date(checkIn) >= new Date(checkOut)) {
+        alert("❌ Check-out moet na check-in liggen.");
+        return;
+    }
+    
+    const tbSelect = document.getElementById('tbPackageSelect');
+    const selectedOption = tbSelect.selectedOptions[0];
+    
+    const record = {
+        team: "TB",
+        unit_code: selectedOption.value,
+        resource_id: selectedOption.dataset.resource,
+        gast_naam: document.getElementById('tbGuestName')?.value || '',
+        gast_contact: {
+            email: document.getElementById('tbGuestEmail')?.value || '',
+            telefoon: document.getElementById('tbGuestPhone')?.value || ''
+        },
+        check_in: checkIn,
+        check_out: checkOut,
+        metadata: {
+            transfer: document.getElementById('tbTransfer')?.checked || false,
+            speciaal: document.getElementById('tbSpeciaal')?.value || '',
+            woning_type: selectedOption.dataset.type || "Onbekend"
+        },
+        totaalprijs: parseFloat(document.getElementById('tbTotaalprijs')?.value) || 0,
+        status: "NIEUW"
+    };
+    
+    console.log("📤 Boeking:", record);
+    
+    const { error } = await supabaseClient.from('boekingen').insert([record]);
+    if (error) {
+        alert("❌ Fout: " + error.message);
+    } else {
+        alert("✅ Boeking succesvol!");
+        location.reload();
+    }
+}
