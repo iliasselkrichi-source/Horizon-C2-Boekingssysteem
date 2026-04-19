@@ -423,26 +423,6 @@
             background: var(--champagne-gold);
             color: white;
         }
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-top: 3rem;
-        }
-        .activity-card, .menu-card {
-            background: var(--card-bg);
-            padding: 1rem;
-            text-align: center;
-            border: 1px solid var(--border-soft);
-            cursor: pointer;
-        }
-        .activity-card img, .menu-card img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 0.8rem;
-        }
         .booking-card {
             background: var(--card-bg);
             max-width: 650px;
@@ -613,7 +593,7 @@
 </head>
 <body>
 
-<!-- NIEUWE HEADER MET SLOGAN -->
+<!-- HEADER MET SLOGAN -->
 <div class="header">
     <div class="nav-container">
         <div style="display: flex; flex-direction: column;">
@@ -722,7 +702,7 @@
     </div>
 </section>
 
-<!-- INTRO KAARTEN (boven activiteiten) - onveranderd -->
+<!-- INTRO KAARTEN (boven activiteiten) -->
 <h2 class="section-title">Activiteiten</h2>
 <div class="intro-grid-container">
     <div class="intro-card">
@@ -741,7 +721,7 @@
     </div>
 </div>
 
-<!-- NIEUWE ACTIVITEITEN GRID (met pop-up) -->
+<!-- ACTIVITEITEN GRID -->
 <section id="activiteiten" class="section" style="padding-top: 0;">
     <div class="activities-grid">
         <div class="activity-card" onclick="openPopup('Strand Paardrijden', 'Beleef de ultieme vrijheid terwijl de zon wegzakt in de Atlantische Oceaan. Onze geselecteerde Arabische volbloeden dragen u over het goudgele zand van Achakar. Een ervaring die de ziel raakt en de essentie van Marokkaanse luxe vangt.', 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=800&q=80')">
@@ -767,20 +747,32 @@
     </div>
 </section>
 
-<!-- NIEUWE MENU GRID (met pop-up) -->
-<section id="menu" class="section">
-    <h2 class="section-title">Menu</h2>
-    <div class="menu-grid">
-        <div class="menu-card" onclick="openPopup('Gastronomisch Ontbijt', 'Begin uw ochtend met een eerbetoon aan de lokale terroir. Versgebakken brood, honing uit de Atlas en seizoensgebonden fruit, geserveerd op uw eigen terras met uitzicht op de horizon.', 'https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=400&q=80">
-            <h3>Ontbijt</h3>
-            <button class="info-btn">Bekijk Selectie</button>
+<!-- NIEUWE MENU SECTIE (aangepast) -->
+<section id="menu" class="section" style="padding: 60px 0;">
+    <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">Menu</h2>
+    
+    <div class="menu-grid" style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto;">
+        
+        <div class="menu-card" style="flex: 0 1 350px;" onclick="openPopup('Gastronomisch Ontbijt', 'Begin uw ochtend met een eerbetoon aan de lokale terroir. Versgebakken brood, honing uit de Atlas en seizoensgebonden fruit.', 'https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=800&q=80')">
+            <div class="card-image-container" style="width: 100%; height: 200px; overflow: hidden;">
+                <img src="https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=800&q=80" alt="Ontbijt" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="padding: 20px; text-align: center; border: 1px solid #eee; border-top: none;">
+                <h3 style="font-family: 'Cinzel'; letter-spacing: 2px;">Ontbijt</h3>
+                <button class="info-btn" style="margin-top: 15px; background: transparent; border: 1px solid var(--champagne-gold); padding: 8px 20px; color: var(--champagne-gold); cursor: pointer;">Bekijk Selectie</button>
+            </div>
         </div>
-        <div class="menu-card" onclick="openPopup('Fine Dining Diner', 'Een gastronomisch hoogstandje onder de sterrenhemel. Onze chef combineert de finesse van de Belgische keuken met de rijke kruiden van Marokko voor een diner dat al uw zintuigen prikkelt.', 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80')">
-            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=400&q=80">
-            <h3>Diner</h3>
-            <button class="info-btn">À la Carte</button>
+
+        <div class="menu-card" style="flex: 0 1 350px;" onclick="openPopup('Fine Dining Diner', 'Een gastronomisch hoogstandje onder de sterrenhemel. Onze chef combineert de finesse van de Belgische keuken met de rijke kruiden van Marokko.', 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80')">
+            <div class="card-image-container" style="width: 100%; height: 200px; overflow: hidden;">
+                <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80" alt="Diner" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div style="padding: 20px; text-align: center; border: 1px solid #eee; border-top: none;">
+                <h3 style="font-family: 'Cinzel'; letter-spacing: 2px;">Diner</h3>
+                <button class="info-btn" style="margin-top: 15px; background: transparent; border: 1px solid var(--champagne-gold); padding: 8px 20px; color: var(--champagne-gold); cursor: pointer;">À la Carte</button>
+            </div>
         </div>
+
     </div>
 </section>
 
@@ -865,7 +857,7 @@
     </div>
 </section>
 
-<!-- MODAL VOOR UNIT INFO (bestaand) -->
+<!-- MODAL VOOR UNIT INFO -->
 <div id="infoModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -875,7 +867,7 @@
     </div>
 </div>
 
-<!-- MODAL VOOR EXTRA DIENSTEN (bestaand) -->
+<!-- MODAL VOOR EXTRA DIENSTEN -->
 <div id="servicesModal" class="services-modal">
     <div class="services-modal-content">
         <span class="close" onclick="closeServicesModal()" style="float: right; font-size: 1.8rem; cursor: pointer;">&times;</span>
@@ -885,7 +877,7 @@
     </div>
 </div>
 
-<!-- NIEUWE UNIVERSELE POP-UP VOOR ACTIVITEITEN EN MENU -->
+<!-- UNIVERSELE POP-UP VOOR ACTIVITEITEN & MENU -->
 <div id="infoPopup" class="modal">
     <div class="modal-content" style="max-width: 700px; padding: 0; overflow: hidden; border: 1px solid var(--champagne-gold);">
         <span onclick="closePopup()" style="position: absolute; right: 20px; top: 15px; font-size: 35px; color: white; cursor: pointer; z-index: 10; font-family: Arial;">&times;</span>
@@ -930,19 +922,17 @@
 </footer>
 
 <script>
-    // ========== ALLE JAVASCRIPT (bestaande + nieuwe pop-up functies) ==========
+    // ========== ALLE JAVASCRIPT ==========
     const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
     let tempUnitId = "";
 
-    // Bestaande functies
     function toggleDropdown() {
         document.getElementById('bookingDropdown').classList.toggle('active');
     }
 
-    // Aangepaste window.onclick (sluit ook infoPopup)
     window.onclick = function(e) {
         if (!e.target.closest('.dropdown')) {
             document.getElementById('bookingDropdown')?.classList.remove('active');
@@ -993,7 +983,6 @@
         document.body.style.overflow = "auto";
     }
 
-    // Services modal functies (bestaand)
     function openServicesModal() {
         const originalContainer = document.getElementById('originalCheckboxRow');
         const originalChecks = originalContainer.querySelectorAll('input[type="checkbox"]');
@@ -1042,7 +1031,6 @@
         closeServicesModal();
     }
 
-    // Nieuwe pop-up functies voor activiteiten & menu
     function openPopup(title, description, imgSrc) {
         const modal = document.getElementById('infoPopup');
         document.getElementById('popTitle').innerText = title;
@@ -1058,7 +1046,6 @@
         document.body.style.overflow = 'auto';
     }
 
-    // Bestaande prijs & boeking functies (onaangetast)
     function updatePrices() {
         let totaal = 0;
         const select = document.getElementById('taUnitSelect');
@@ -1133,7 +1120,6 @@
         }
     }
 
-    // Event listeners (onaangetast)
     document.getElementById('taCheckIn').addEventListener('change', updatePrices);
     document.getElementById('taCheckOut').addEventListener('change', updatePrices);
     document.getElementById('taUnitSelect').addEventListener('change', updatePrices);
