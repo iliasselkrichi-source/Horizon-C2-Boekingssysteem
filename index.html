@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horizon C2 | Horizon of Infinity</title>
-    <!-- Nieuwe luxe fonts: Cinzel voor titels, Montserrat als alternatief voor Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* ----- Midnight & Champagne palet ----- */
         :root {
-            --champagne-bg: #FDFCFB;      /* zacht marmer-wit */
-            --deep-anthracite: #121212;   /* diep antraciet voor tekst */
-            --champagne-gold: #C5A059;    /* gedempt goud accent */
+            --champagne-bg: #FDFCFB;
+            --deep-anthracite: #121212;
+            --champagne-gold: #C5A059;
             --gold-light: #D8B97A;
-            --border-soft: #E5E1DA;       /* zeer subtiele lijnen */
+            --border-soft: #E5E1DA;
             --card-bg: #FFFFFF;
             --input-bg: #F9F9F9;
             --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -28,22 +27,26 @@
             font-weight: 400;
             background-color: var(--champagne-bg);
             color: var(--deep-anthracite);
-            line-height: 1.8;  /* luchtige leeservaring */
+            line-height: 1.8;
         }
 
-        /* Typografie: Cinzel voor titels */
         h1, h2, h3, .logo, .category-title, .section-title, .main-title, .usp-item, .total-amount {
             font-family: 'Cinzel', 'Playfair Display', serif;
             letter-spacing: 2px;
             font-weight: 500;
         }
 
+        /* Gecentreerde sectietitels */
+        .section-title, .category-title {
+            text-align: center;
+            border-left: none;
+            padding-left: 0;
+        }
+
         .section-title {
             font-size: 1.8rem;
             letter-spacing: 4px;
             margin-bottom: 2.5rem;
-            border-left: 2px solid var(--champagne-gold);
-            padding-left: 1.2rem;
             color: var(--deep-anthracite);
         }
 
@@ -51,8 +54,6 @@
             font-size: 1.3rem;
             letter-spacing: 3px;
             margin: 3rem 0 1.5rem 0;
-            border-left: 2px solid var(--champagne-gold);
-            padding-left: 1rem;
         }
 
         /* Glass header */
@@ -75,9 +76,11 @@
             gap: 1.5rem;
         }
         .logo {
-            font-size: 1.7rem;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 1.5rem;
             font-weight: 600;
-            letter-spacing: 4px;
             background: linear-gradient(135deg, var(--deep-anthracite), var(--champagne-gold));
             -webkit-background-clip: text;
             background-clip: text;
@@ -102,7 +105,6 @@
         .nav-links a:hover {
             color: var(--champagne-gold);
         }
-        /* CTA knop "Boek nu" in de navigatie - goud accent */
         .nav-links .dropdown > a {
             background: var(--champagne-gold);
             color: #121212;
@@ -115,7 +117,20 @@
             color: white;
         }
 
-        /* Dropdown (functionaliteit blijft) */
+        /* Hero afbeelding */
+        .header-hero {
+            width: 100%;
+            height: 45vh;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
+                        url('https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Dropdown */
         .dropdown {
             position: relative;
             display: inline-block;
@@ -150,7 +165,7 @@
             display: block;
         }
 
-        /* Secties – meer witruimte */
+        /* Secties */
         .section {
             max-width: 1280px;
             margin: 0 auto;
@@ -161,7 +176,7 @@
             padding-top: 6rem;
         }
 
-        /* Filosofie tekst: gecentreerd, max-width */
+        /* Filosofie tekst */
         .philosophy-text {
             font-size: 1rem;
             line-height: 1.8;
@@ -171,47 +186,59 @@
             text-align: center;
         }
 
-        /* Intro sectie boven activiteiten (alleen layout) */
-        .intro-section {
+        /* Introductiekaarten (worden verplaatst) */
+        .intro-grid-container {
+            display: flex;
+            gap: 2.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .intro-card {
+            flex: 1;
+            min-width: 320px;
             text-align: center;
-            max-width: 900px;
-            margin: 0 auto 4rem auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-soft);
+            box-shadow: var(--shadow-soft);
         }
-        .main-title {
-            font-size: 2.2rem;
-            letter-spacing: 6px;
+        .intro-card h3 {
+            color: var(--champagne-gold);
             margin-bottom: 1.5rem;
+            font-size: 1.4rem;
         }
-        .lead-text {
-            font-size: 1.05rem;
-            line-height: 1.7;
+        .intro-card p {
+            font-size: 0.95rem;
             color: #4a4a4a;
+            line-height: 1.8;
             margin-bottom: 1rem;
         }
-        .sub-text {
-            font-size: 0.9rem;
-            color: #6a6a6a;
-            max-width: 700px;
-            margin: 0 auto 2rem auto;
-        }
-        .usp-bar {
+        .tag-container {
             display: flex;
-            justify-content: center;
-            gap: 3rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
-            margin-top: 2rem;
-            border-top: 1px solid var(--border-soft);
-            padding-top: 2rem;
+            justify-content: center;
+            margin-top: 1rem;
         }
-        .usp-item {
+        .usp-tag {
             font-family: 'Cinzel', serif;
-            letter-spacing: 4px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            background: #F9F6F2;
             color: var(--champagne-gold);
+            padding: 6px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
         }
 
-        /* Unit cards – breder, zoom op afbeelding */
+        /* Units grid */
         .unit-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -271,7 +298,7 @@
             color: white;
         }
 
-        /* Activiteiten & menu grids */
+        /* Activiteiten & menu */
         .activities-grid, .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -289,7 +316,7 @@
             transform: translateY(-3px);
         }
 
-        /* Modal (ongewijzigd) */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -320,7 +347,7 @@
             color: #888;
         }
 
-        /* Boekingsformulier – luxe stijl */
+        /* Boekingsformulier */
         .booking-card {
             background: var(--card-bg);
             max-width: 680px;
@@ -420,17 +447,17 @@
             .section { padding: 4rem 1.5rem; }
             .unit-grid { gap: 1.5rem; }
             .row-2 { flex-direction: column; gap: 0; }
-            .usp-bar { flex-direction: column; gap: 1rem; align-items: center; }
-            .main-title { font-size: 1.5rem; }
+            .intro-card { padding: 2rem; }
+            .header-hero { height: 30vh; }
         }
     </style>
 </head>
 <body>
 
-<!-- HEADER (glass effect, Boek nu knop goud) -->
+<!-- HEADER -->
 <div class="header">
     <div class="nav-container">
-        <div class="logo">HORIZON ∞</div>
+        <div class="logo">Horizon of Infinity</div>
         <div class="nav-links">
             <a onclick="scrollToSection('filosofie')">Filosofie</a>
             <a onclick="scrollToSection('hubs')">Hubs</a>
@@ -455,7 +482,10 @@
     </div>
 </div>
 
-<!-- FILOSOFIE SECTIE (gecentreerd) -->
+<!-- HERO AFBEELDING -->
+<div class="header-hero"></div>
+
+<!-- FILOSOFIE SECTIE -->
 <section id="filosofie" class="section">
     <h2 class="section-title">Onze Filosofie</h2>
     <div style="background: transparent; border: none; padding: 0;">
@@ -468,82 +498,93 @@
     </div>
 </section>
 
-<!-- HUBS (units) met zoom op afbeeldingen -->
+<!-- HUBS (units) -->
 <section id="hubs" class="section">
     <h2 class="section-title">Hubs</h2>
     
     <h3 class="category-title">Longvinity Hub</h3>
     <div class="unit-grid">
-        <div class="unit-card" onclick="openInfo('U1', 'Al Houara Villa', 'Luxe villa aan de kust van Tanger. Rust, privacy en een prachtig uitzicht.')">
-            <div class="unit-card-img"><img src="https://placehold.co/600x400/e0e0e0/888?text=Al+Houara+Villa" alt="U1"></div>
+        <div class="unit-card" onclick="openInfo('U1', 'Al Houara: Sovereign Sanctuary', 'Betreed een wereld van 500 m² pure sereniteit. Deze villa is een ode aan het licht en de natuur, met een panoramisch uitzicht op de azuurblauwe zee.\n\nHet pronkstuk is de Super Suite, een oase van rust direct tegenover de zee met een eigen private dressing en adembenemend uitzicht over het natuurdomein. De suite beschikt over een eigen badkamer met dubbele wasbakken, douche en badkuip.\n\nDe villa biedt daarnaast een grote guest room met zeezicht en twee tweepersoonsbedden, bediend door een tweede badkamer met sanitair, wasbak en douche. De royale living, uitgerust met veel natuurlijk licht, gaat over in een open ruimte keuken voorzien van alle apparatuur. Geniet van een dakterras met een ongeëvenaard 360-graden panorama. Uiteraard voorzien van wifi, airconditioning en videobewaking.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80" alt="U1 Al Houara"></div>
             <div class="unit-info"><h4>Al Houara Villa</h4><button class="info-btn">Meer info</button></div>
         </div>
     </div>
 
     <h3 class="category-title">Achakar Trinity</h3>
     <div class="unit-grid">
-        <div class="unit-card" onclick="openInfo('U2', 'La Perla', 'Een parel aan de kust van Achakar. Modern design met alle comfort.')">
-            <div class="unit-card-img"><img src="https://placehold.co/600x400/e0e0e0/888?text=La+Perla" alt="U2"></div>
+        <div class="unit-card" onclick="openInfo('U2', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1590716209351-4f7f6f57879e?auto=format&fit=crop&w=800&q=80" alt="U2 La Perla"></div>
             <div class="unit-info"><h4>La Perla</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U3', 'Al Bahar', 'Direct aan zee. Perfect voor strandliefhebbers.')">
-            <div class="unit-card-img"><img src="https://placehold.co/600x400/e0e0e0/888?text=Al+Bahar" alt="U3"></div>
+        <div class="unit-card" onclick="openInfo('U3', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" alt="U3 Al Bahar"></div>
             <div class="unit-info"><h4>Al Bahar</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U4', 'Le Rocher', 'Unieke locatie op de rotsen. Spectaculair oceaanuitzicht.')">
-            <div class="unit-card-img"><img src="https://placehold.co/600x400/e0e0e0/888?text=Le+Rocher" alt="U4"></div>
+        <div class="unit-card" onclick="openInfo('U4', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1527142879192-3c3e80d8f8a1?auto=format&fit=crop&w=800&q=80" alt="U4 Le Rocher"></div>
             <div class="unit-info"><h4>Le Rocher</h4><button class="info-btn">Meer info</button></div>
         </div>
     </div>
 
     <h3 class="category-title">Marrakech Urban</h3>
     <div class="unit-grid">
-        <div class="unit-card" onclick="openInfo('U5', 'L\'Essence Suite', 'Luxe stadssuite in het hart van Marrakech.')">
-            <div class="unit-card-img"><img src="https://placehold.co/600x400/e0e0e0/888?text=Essence+Suite" alt="U5"></div>
+        <div class="unit-card" onclick="openInfo('U5', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1549294413-26f195200c16?auto=format&fit=crop&w=800&q=80" alt="U5 L'Essence Suite"></div>
             <div class="unit-info"><h4>L'Essence Suite</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U6', 'Oasis de Paix', 'Rustgevend appartement met privéterras.')">
-            <div class="unit-card-img"><img src="https://placehold.co/600x400/e0e0e0/888?text=Oasis+de+Paix" alt="U6"></div>
+        <div class="unit-card" onclick="openInfo('U6', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1613977257363-707ba934f246?auto=format&fit=crop&w=800&q=80" alt="U6 Oasis de Paix"></div>
             <div class="unit-info"><h4>Oasis de Paix</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U7', 'Le Refuge', 'Modern en veilig verblijf in de stad.')">
-            <div class="unit-card-img"><img src="https://placehold.co/600x400/e0e0e0/888?text=Le+Refuge" alt="U7"></div>
+        <div class="unit-card" onclick="openInfo('U7', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80" alt="U7 Le Refuge"></div>
             <div class="unit-info"><h4>Le Refuge</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U8', 'Imperial Duplex', 'Ruim en koninklijk duplex appartement.')">
-            <div class="unit-card-img"><img src="https://placehold.co/600x400/e0e0e0/888?text=Imperial+Duplex" alt="U8"></div>
+        <div class="unit-card" onclick="openInfo('U8', 'Marrakech: City Refinement (2 slaapkamers)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 2 slaapkamers, elk met een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80" alt="U8 Imperial Duplex"></div>
             <div class="unit-info"><h4>Imperial Duplex</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U9', 'Palmeraie Royale', 'Stijlvolle villa in de beroemde Palmeraie.')">
-            <div class="unit-card-img"><img src="https://placehold.co/600x400/e0e0e0/888?text=Palmeraie+Royale" alt="U9"></div>
+        <div class="unit-card" onclick="openInfo('U9', 'Marrakech: City Refinement (2 slaapkamers)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 2 slaapkamers, elk met een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" alt="U9 Palmeraie Royale"></div>
             <div class="unit-info"><h4>Palmeraie Royale</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U10', 'Sovereign Skyline', 'Exclusief penthouse met adembenemend uitzicht.')">
-            <div class="unit-card-img"><img src="https://placehold.co/600x400/e0e0e0/888?text=Sovereign+Skyline" alt="U10"></div>
+        <div class="unit-card" onclick="openInfo('U10', 'Marrakech: City Refinement (2 slaapkamers)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 2 slaapkamers, elk met een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80" alt="U10 Sovereign Skyline"></div>
             <div class="unit-info"><h4>Sovereign Skyline</h4><button class="info-btn">Meer info</button></div>
         </div>
     </div>
 </section>
 
-<!-- INTRO & USP sectie (boven activiteiten) -->
-<section id="pre-activities" class="section" style="padding-bottom: 2rem;">
-    <div class="intro-section">
-        <h2 class="main-title">Rust, Vrede & Avontuur</h2>
-        <p class="lead-text">
-            In onze eigen units vindt u de balans tussen serene rust en verfijnde avonturen. Voor wie volledige autonomie wenst, bieden wij de mogelijkheid om lokalen te huren in ons kantoor — ideaal voor privé-bijeenkomsten of exclusieve werkruimtes.
-        </p>
-        <p class="sub-text">
-            Wij organiseren geen zakelijke meetings namens u, maar faciliteren graag de ruimte en middelen die u nodig heeft om uw eigen visie tot leven te brengen. Uw verblijf, uw ritme, uw soevereine keuze.
-        </p>
-        <div class="usp-bar">
-            <div class="usp-item">Absolute Discretie</div>
-            <div class="usp-item">Personalisatie</div>
-            <div class="usp-item">Soevereine Keuze</div>
+<!-- ===== VERPLAATSTE INTRO SECTIE (na de units, boven activiteiten) ===== -->
+<section id="pre-activities" class="section">
+    <div class="intro-grid-container">
+        <div class="intro-card">
+            <h3>Europees Vakmanschap & Anticiperende Service</h3>
+            <p>
+                Wij faciliteren lokale reserveringen en exclusieve faciliteiten met de finesse van een privé-conciërge. 
+                Van gastronomische tafels tot culturele ervaringen — wij regisseren elk detail, zodat u enkel hoeft te genieten.
+            </p>
+            <p style="font-style: italic; color: var(--champagne-gold);">
+                "Service is de kunst van het voorzien in behoeften die nog niet zijn uitgesproken."
+            </p>
+        </div>
+        <div class="intro-card">
+            <h3>Rust, Vrede & Avontuur</h3>
+            <p>
+                In onze eigen units vindt u de balans tussen serene rust en verfijnde avonturen. 
+                Voor wie volledige autonomie wenst, bieden wij de mogelijkheid om lokalen te huren in ons kantoor — 
+                ideaal voor privé-bijeenkomsten of exclusieve werkruimtes.
+            </p>
+            <div class="tag-container">
+                <span class="usp-tag">Absolute Discretie</span>
+                <span class="usp-tag">Personalisatie</span>
+                <span class="usp-tag">Soevereine Keuze</span>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- ACTIVITEITEN (id behouden) -->
+<!-- ACTIVITEITEN -->
 <section id="activiteiten" class="section">
     <h2 class="section-title">Activiteiten</h2>
     <div class="activities-grid">
@@ -567,7 +608,7 @@
     <p style="margin-top: 2rem; color: #6a6a6a;">[Hier komt later het volledige menu]</p>
 </section>
 
-<!-- BOEKINGSFORMULIER (ongewijzigde functionaliteit, alleen luxe styling) -->
+<!-- BOEKINGSFORMULIER -->
 <section id="booking" class="section">
     <h2 class="section-title">Boek nu</h2>
     <div class="booking-card">
@@ -649,7 +690,7 @@
     </div>
 </section>
 
-<!-- MODAL (ongewijzigd) -->
+<!-- MODAL -->
 <div id="infoModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeInfo()">&times;</span>
@@ -660,7 +701,7 @@
 </div>
 
 <script>
-    // ========== ALLE JAVASCRIPT FUNCTIONALITEIT BLIJFT IDENTIEK ==========
+    // ========== ALLE JAVASCRIPT (ongewijzigd) ==========
     const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
