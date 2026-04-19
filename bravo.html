@@ -5,41 +5,222 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horizon C2 | Team Bravo - Bootcamp Pakketten</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #e9eef5 100%); min-height: 100vh; padding: 2rem; color: #0f172a; }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { font-size: 1.75rem; font-weight: 800; background: linear-gradient(135deg, #1e293b, #3b4a6e); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .realtime-active { background: #10b981; color: white; padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+        .realtime-active::before { content: "●"; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .card { background: white; border-radius: 1.5rem; padding: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1); border: 1px solid rgba(226, 237, 242, 0.8); transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { box-shadow: 0 25px 40px -15px rgba(0,0,0,0.15); }
+        .tb-form { background: linear-gradient(125deg, #fffbeb 0%, #fef7e0 100%); border-left: 5px solid #eab308; border-radius: 1.5rem; }
+        h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.25rem; color: #92400e; display: flex; align-items: center; gap: 0.5rem; }
+        label { font-weight: 500; font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0.25rem; display: block; color: #334155; }
+        input, select, textarea { width: 100%; padding: 0.75rem 1rem; margin-bottom: 0.25rem; border-radius: 14px; border: 1px solid #e2e8f0; font-family: inherit; font-size: 0.9rem; transition: all 0.2s; background: white; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #eab308; box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1); }
+        textarea { min-height: 80px; resize: vertical; }
+        .checkbox-wrapper { background: #fef9c3; padding: 0.75rem 1rem; border-radius: 14px; margin: 0.75rem 0; border: 1px solid #fde047; }
+        .checkbox-wrapper label { margin: 0; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: #854d0e; }
+        .checkbox-wrapper input { width: auto; margin: 0; transform: scale(1.1); }
+        .price-input { background: #fef3c7 !important; font-weight: 700; font-size: 1.1rem; color: #b45309; border-color: #fcd34d; text-align: center; }
+        button { width: 100%; background: linear-gradient(95deg, #eab308, #ca8a04); border: none; color: white; font-weight: 700; padding: 0.9rem; border-radius: 40px; cursor: pointer; font-size: 1rem; transition: all 0.2s; margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.3); }
+        button:hover { background: linear-gradient(95deg, #ca8a04, #b45309); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(234, 179, 8, 0.4); }
+        .package-badge { display: inline-block; background: #eab30820; color: #b45309; font-size: 0.7rem; border-radius: 40px; padding: 0.2rem 0.7rem; margin-left: 0.5rem; font-weight: 500; }
+        hr { margin: 1rem 0; border: none; border-top: 1px solid #fde68a; }
+        .subtext { font-size: 0.7rem; color: #78716c; text-align: center; margin-top: 1rem; }
+        @media (max-width: 640px) { body { padding: 1rem; } .card { padding: 1.25rem; } h1 { font-size: 1.35rem; } }
+    </style>
 </head>
 <body>
 <div class="container">
     <h1>🏷️ HORIZON C2 — Team Bravo <span class="realtime-active">🔴 Realtime actief</span></h1>
-    <p style="margin-bottom: 2rem;">Bootcamp Pakketten · Team Bravo</p>
+    <p style="margin-bottom: 1.5rem; color: #475569;">Bootcamp Pakketten · Team Bravo</p>
 
     <div class="card tb-form">
-        <h3>🟡 Team Bravo — Bootcamp Pakketten</h3>
-        <label>🎁 Kies pakket:</label>
+        <h3>🟡 Team Bravo — Bootcamp Pakketten <span class="package-badge">exclusieve woestijnervaring</span></h3>
+        
+        <label>🎁 Kies jouw beleving:</label>
         <select id="tbPackageSelect">
             <option value="P1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="250" data-type="Wellness">TB-P1 - Essence of Orient (€250)</option>
             <option value="P2" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="450" data-type="Cultuur">TB-P2 - Souk & Soul (€450)</option>
             <option value="P3" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="750" data-type="Luxe">TB-P3 - Arabian Nights (€750)</option>
             <option value="P4" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="1250" data-type="Premium">TB-P4 - Royal Caravan (€1250)</option>
+            <option value="P5" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="150" data-type="Single">✨ TB-P5 - Single overnachting (€150 p/nacht)</option>
         </select>
+
         <label>👤 Gastnaam:</label>
         <input type="text" id="tbGuestName" placeholder="Volledige naam">
-        <label>📧 Email:</label>
+
+        <label>📧 Emailadres:</label>
         <input type="email" id="tbGuestEmail" placeholder="naam@voorbeeld.com">
+
         <label>📞 GSM nummer:</label>
         <input type="text" id="tbGuestPhone" placeholder="+212 ...">
-        <label>📅 Check-in datum:</label>
-        <input type="date" id="tbCheckIn">
-        <label>📅 Check-out datum:</label>
-        <input type="date" id="tbCheckOut">
-        <div><label><input type="checkbox" id="tbTransfer"> 🚗 Transfer</label></div>
-        <textarea id="tbSpeciaal" placeholder="Speciale verzoeken"></textarea>
-        <label>💰 Pakketprijs:</label>
-        <input type="number" id="tbTotaalprijs" readonly style="background:#e2e8f0;">
-        <button id="tbBookBtn" style="background:#eab308;">📌 TB - Bevestig reservatie</button>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+                <label>📅 Check-in datum:</label>
+                <input type="date" id="tbCheckIn">
+            </div>
+            <div>
+                <label>📅 Check-out datum:</label>
+                <input type="date" id="tbCheckOut">
+            </div>
+        </div>
+
+        <div class="checkbox-wrapper">
+            <label>
+                <input type="checkbox" id="tbTransfer"> 🚗 Transfer van/naar luchthaven (optioneel)
+            </label>
+        </div>
+
+        <label>💬 Speciale wensen / verzoeken:</label>
+        <textarea id="tbSpeciaal" placeholder="Dieetwensen, allergieën, viering, extra service ..."></textarea>
+
+        <hr>
+
+        <label>💰 Totaalprijs (pakket):</label>
+        <input type="number" id="tbTotaalprijs" readonly class="price-input" step="1" value="250">
+
+        <button id="tbBookBtn">📌 Bevestig reservatie — Team Bravo</button>
+        <div class="subtext">🔒 Je boeking is realtime zichtbaar voor onze gastheer</div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
+<script>
+    // ========== CONFIGURATIE ==========
+    const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
+
+    let supabaseClient = null;
+
+    // ========== INITIALISATIE ==========
+    if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+        console.log("✅ Supabase client geïnitialiseerd");
+        initBravoPage();
+    } else {
+        console.error("❌ Supabase library niet gevonden");
+        alert("Fout: Kan geen verbinding maken met de database.");
+    }
+
+    // ========== BRAVO PAGINA INIT ==========
+    function initBravoPage() {
+        setMinDatesBravo();
+        updateBravoPrice();
+        
+        document.getElementById('tbPackageSelect')?.addEventListener('change', updateBravoPrice);
+        document.getElementById('tbBookBtn')?.addEventListener('click', handleBravoBooking);
+        
+        // Optioneel: bij datums wijzigen niets met prijs (vast pakket)
+        console.log("✅ Team Bravo formulier klaar voor gebruik");
+    }
+
+    // ========== DATUMBEPERKING ==========
+    function setMinDatesBravo() {
+        const vandaag = new Date().toISOString().split('T')[0];
+        const checkIn = document.getElementById('tbCheckIn');
+        const checkOut = document.getElementById('tbCheckOut');
+        if (checkIn) checkIn.setAttribute('min', vandaag);
+        if (checkOut) checkOut.setAttribute('min', vandaag);
+    }
+
+    // ========== PRIJS WERKT OP BASIS VAN HET GEKOZEN PAKKET ==========
+    function updateBravoPrice() {
+        const tbSelect = document.getElementById('tbPackageSelect');
+        if (tbSelect && tbSelect.selectedOptions[0]) {
+            const price = parseFloat(tbSelect.selectedOptions[0].dataset.price);
+            const priceField = document.getElementById('tbTotaalprijs');
+            if (priceField) {
+                priceField.value = price.toFixed(2);
+            }
+        }
+    }
+
+    // ========== BOEKING VERZENDEN NAAR SUPABASE ==========
+    async function handleBravoBooking() {
+        const checkIn = document.getElementById('tbCheckIn')?.value;
+        const checkOut = document.getElementById('tbCheckOut')?.value;
+        
+        if (!checkIn || !checkOut) {
+            alert("❌ Selecteer zowel check-in als check-out datum.");
+            return;
+        }
+        if (new Date(checkIn) >= new Date(checkOut)) {
+            alert("❌ Check-out datum moet na de check-in datum vallen.");
+            return;
+        }
+        
+        const tbSelect = document.getElementById('tbPackageSelect');
+        const selectedOption = tbSelect.selectedOptions[0];
+        if (!selectedOption) {
+            alert("❌ Selecteer een geldig pakket.");
+            return;
+        }
+        
+        const gastNaam = document.getElementById('tbGuestName')?.value.trim();
+        if (!gastNaam) {
+            alert("❌ Gelieve uw volledige naam in te vullen.");
+            return;
+        }
+        
+        const gastEmail = document.getElementById('tbGuestEmail')?.value.trim();
+        if (!gastEmail) {
+            alert("❌ Gelieve uw e-mailadres in te vullen.");
+            return;
+        }
+        
+        const record = {
+            team: "TB",
+            unit_code: selectedOption.value,
+            resource_id: selectedOption.dataset.resource,
+            gast_naam: gastNaam,
+            gast_contact: {
+                email: gastEmail,
+                telefoon: document.getElementById('tbGuestPhone')?.value || ''
+            },
+            check_in: checkIn,
+            check_out: checkOut,
+            metadata: {
+                transfer: document.getElementById('tbTransfer')?.checked || false,
+                speciaal: document.getElementById('tbSpeciaal')?.value || '',
+                woning_type: selectedOption.dataset.type || "Onbekend"
+            },
+            totaalprijs: parseFloat(document.getElementById('tbTotaalprijs')?.value) || 0,
+            status: "NIEUW"
+        };
+        
+        console.log("📤 Versturen boeking:", record);
+        
+        if (!supabaseClient) {
+            alert("❌ Geen verbinding met database. Probeer later opnieuw.");
+            return;
+        }
+        
+        const { error } = await supabaseClient.from('boekingen').insert([record]);
+        if (error) {
+            console.error("Supabase fout:", error);
+            alert("❌ Boeking mislukt: " + error.message);
+        } else {
+            alert("✅ Boeking succesvol! Je ontvangt een bevestiging per e-mail.");
+            // Reset formulier optioneel
+            document.getElementById('tbGuestName').value = '';
+            document.getElementById('tbGuestEmail').value = '';
+            document.getElementById('tbGuestPhone').value = '';
+            document.getElementById('tbSpeciaal').value = '';
+            document.getElementById('tbTransfer').checked = false;
+            // Datums leegmaken
+            document.getElementById('tbCheckIn').value = '';
+            document.getElementById('tbCheckOut').value = '';
+            // Prijs weer instellen op eerste pakket (P1)
+            document.getElementById('tbPackageSelect').value = 'P1';
+            updateBravoPrice();
+            setMinDatesBravo();
+        }
+    }
+</script>
 </body>
 </html>
