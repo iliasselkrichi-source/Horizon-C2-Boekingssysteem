@@ -27,7 +27,7 @@
             font-weight: 400;
             background-color: var(--champagne-bg);
             color: var(--deep-anthracite);
-            line-height: 1.7;
+            line-height: 1.6;
         }
 
         h1, h2, h3, .logo, .category-title, .section-title, .main-title, .usp-item, .total-amount {
@@ -45,24 +45,24 @@
         .section-title {
             font-size: 1.8rem;
             letter-spacing: 4px;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             color: var(--deep-anthracite);
         }
 
         .category-title {
             font-size: 1.3rem;
             letter-spacing: 3px;
-            margin: 2rem 0 1.2rem 0;
+            margin: 1.5rem 0 1rem 0;
         }
 
-        /* Glass header */
+        /* Header (sticky) */
         .header {
             position: sticky;
             top: 0;
             background: rgba(253, 252, 251, 0.92);
             backdrop-filter: blur(12px);
             z-index: 100;
-            padding: 1rem 2rem;
+            padding: 0.8rem 2rem;
             border-bottom: 1px solid var(--border-soft);
         }
         .nav-container {
@@ -72,13 +72,13 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.8rem;
         }
         .logo {
             font-family: 'Cinzel', serif;
             letter-spacing: 2px;
             text-transform: uppercase;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 600;
             background: linear-gradient(135deg, var(--deep-anthracite), var(--champagne-gold));
             -webkit-background-clip: text;
@@ -87,7 +87,7 @@
         }
         .nav-links {
             display: flex;
-            gap: 1.8rem;
+            gap: 1.5rem;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -95,7 +95,7 @@
             text-decoration: none;
             color: var(--deep-anthracite);
             font-weight: 500;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             transition: color 0.2s;
@@ -107,9 +107,8 @@
         .nav-links .dropdown > a {
             background: var(--champagne-gold);
             color: #121212;
-            padding: 0.4rem 1rem;
+            padding: 0.3rem 1rem;
             border-radius: 30px;
-            transition: all 0.2s;
         }
         .nav-links .dropdown > a:hover {
             background: var(--gold-light);
@@ -119,14 +118,11 @@
         /* Hero afbeelding */
         .header-hero {
             width: 100%;
-            height: 45vh;
+            height: 40vh;
             background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), 
                         url('https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1920&q=80') no-repeat center center;
             background-size: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         /* Dropdown */
@@ -138,27 +134,20 @@
             display: none;
             position: absolute;
             background: var(--card-bg);
-            min-width: 200px;
+            min-width: 180px;
             box-shadow: var(--shadow-soft);
             z-index: 101;
             top: 100%;
             left: 0;
-            margin-top: 0.5rem;
+            margin-top: 0.3rem;
             border: 1px solid var(--border-soft);
         }
         .dropdown-content a {
-            padding: 0.6rem 1rem;
+            padding: 0.5rem 0.8rem;
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             letter-spacing: 1px;
-            text-transform: none;
             border-bottom: 1px solid var(--border-soft);
-            background: white;
-            color: var(--deep-anthracite);
-        }
-        .dropdown-content a:hover {
-            background: var(--champagne-bg);
-            color: var(--champagne-gold);
         }
         .dropdown.active .dropdown-content {
             display: block;
@@ -168,88 +157,86 @@
         .section {
             max-width: 1280px;
             margin: 0 auto;
-            padding: 5rem 2rem;
-            scroll-margin-top: 90px;
+            padding: 3rem 2rem;
+            scroll-margin-top: 80px;
         }
-        .section + .section {
-            padding-top: 3rem;
+        /* Filosofie minder padding onder */
+        #filosofie {
+            padding-bottom: 1rem;
+        }
+        #hubs {
+            padding-top: 0;
         }
 
         /* Filosofie tekst */
         .philosophy-text {
-            font-size: 1rem;
-            line-height: 1.7;
+            font-size: 0.95rem;
+            line-height: 1.6;
             color: #3a3a3a;
             max-width: 800px;
-            margin: 1rem auto;
+            margin: 0.8rem auto;
             text-align: center;
         }
 
         /* Introductiekaarten */
         .intro-grid-container {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             justify-content: center;
             flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
+            margin: 1rem 0 0.5rem;
         }
         .intro-card {
             flex: 1;
-            min-width: 280px;
+            min-width: 260px;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             background: var(--card-bg);
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 20px;
             border: 1px solid var(--border-soft);
             box-shadow: var(--shadow-soft);
         }
         .intro-card h3 {
             color: var(--champagne-gold);
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
         }
         .intro-card p {
-            font-size: 0.9rem;
-            color: #4a4a4a;
-            line-height: 1.6;
-            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 0.8rem;
         }
         .tag-container {
             display: flex;
-            gap: 0.6rem;
+            gap: 0.5rem;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 0.8rem;
+            margin-top: 0.5rem;
         }
         .usp-tag {
             font-family: 'Cinzel', serif;
-            font-size: 0.6rem;
-            letter-spacing: 1px;
+            font-size: 0.55rem;
             background: #F9F6F2;
             color: var(--champagne-gold);
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 20px;
-            text-transform: uppercase;
         }
 
         /* Units grid */
         .unit-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
             width: 100%;
         }
-        /* Al Houara centreren (Longvinity Hub – 1 unit) */
-        .unit-grid:first-of-type {
-            justify-items: center;
+        /* Al Houara centreren */
+        .longvinity-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
         }
-        .unit-grid:first-of-type .unit-card {
-            max-width: 500px;
+        .longvinity-wrapper .unit-card {
+            max-width: 450px;
             width: 100%;
         }
         .unit-card {
@@ -269,65 +256,56 @@
         }
         .unit-card img {
             width: 100%;
-            height: 220px;
+            height: 200px;
             object-fit: cover;
             transition: transform 0.4s ease;
             filter: sepia(8%) contrast(105%);
         }
         .unit-card:hover img {
             transform: scale(1.05);
-            filter: sepia(5%) contrast(108%);
         }
         .unit-info {
-            padding: 1.5rem 1.2rem 1.5rem;
+            padding: 1rem;
             text-align: center;
         }
         .unit-info h4 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
         }
         .info-btn, .book-now-trigger {
             background: transparent;
             border: 1px solid var(--champagne-gold);
             color: var(--champagne-gold);
-            padding: 0.4rem 1.2rem;
-            font-size: 0.65rem;
+            padding: 0.3rem 1rem;
+            font-size: 0.6rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
         }
         .info-btn:hover, .book-now-trigger:hover {
             background: var(--champagne-gold);
             color: white;
         }
 
-        /* Activiteiten & menu – vaste afbeeldingshoogte */
+        /* Activiteiten & menu grids */
         .activities-grid, .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
         }
         .activity-card, .menu-card {
             background: var(--card-bg);
-            padding: 1.5rem;
+            padding: 1rem;
             text-align: center;
             border: 1px solid var(--border-soft);
-            transition: transform 0.2s;
-        }
-        .activity-card:hover, .menu-card:hover {
-            transform: translateY(-3px);
         }
         .activity-card img, .menu-card img {
             width: 100%;
-            height: 140px;
+            height: 120px;
             object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
         }
 
         /* Modal */
@@ -339,143 +317,97 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(0,0,0,0.4);
             backdrop-filter: blur(6px);
         }
         .modal-content {
             background: var(--card-bg);
             margin: 10% auto;
-            padding: 1.8rem;
-            max-width: 400px;
+            padding: 1.2rem;
+            max-width: 380px;
             width: 90%;
             text-align: center;
             position: relative;
-            border: 1px solid var(--border-soft);
+            border-radius: 20px;
         }
         .close {
             position: absolute;
-            top: 0.5rem;
-            right: 1rem;
-            font-size: 1.6rem;
+            top: 0.3rem;
+            right: 0.8rem;
+            font-size: 1.4rem;
             cursor: pointer;
-            color: #888;
         }
 
         /* Boekingsformulier – compacter */
         .booking-card {
             background: var(--card-bg);
-            max-width: 520px;
+            max-width: 480px;
             width: 100%;
-            padding: 1.8rem;
+            padding: 1.2rem;
             margin: 0 auto;
             border: 1px solid var(--border-soft);
             box-shadow: var(--shadow-soft);
         }
         h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
             letter-spacing: 3px;
-            text-align: center;
-            margin-bottom: 1.5rem;
         }
         label {
-            display: block;
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            margin-bottom: 0.3rem;
-            color: #6a6a6a;
-            text-transform: uppercase;
+            font-size: 0.65rem;
+            margin-bottom: 0.2rem;
+            letter-spacing: 1px;
         }
         input, select, textarea {
-            width: 100%;
-            padding: 0.7rem;
-            margin-bottom: 0.8rem;
-            border: 1px solid var(--border-soft);
-            background: var(--input-bg);
-            font-family: 'Montserrat', 'Inter', sans-serif;
-            font-size: 0.85rem;
-            transition: border 0.2s;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--champagne-gold);
+            padding: 0.5rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.8rem;
         }
         .row-2 {
             display: flex;
-            gap: 0.8rem;
+            gap: 0.6rem;
         }
-        .row-2 > div { flex: 1; }
-        
-        /* Checkboxes – twee horizontale rijen van 4 */
+        /* Checkboxes in 2 rijen van 4 kolommen */
         .checkbox-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin: 0.8rem 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin: 0.5rem 0;
         }
         .check-item {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 0.8rem;
-            cursor: pointer;
+            justify-content: center;
+            gap: 0.3rem;
+            font-size: 0.7rem;
             background: var(--input-bg);
-            padding: 0.4rem 0.8rem;
-            border-radius: 30px;
+            padding: 0.3rem 0.2rem;
+            border-radius: 20px;
             border: 1px solid var(--border-soft);
+            cursor: pointer;
         }
         .check-item input {
             width: auto;
             margin: 0;
         }
         .price-summary {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-top: 1.2rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-soft);
-        }
-        .total-label {
-            font-size: 0.7rem;
-            letter-spacing: 2px;
+            margin-top: 1rem;
+            padding-top: 0.8rem;
         }
         .total-amount {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--champagne-gold);
-            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
         }
         button#taBookBtn {
-            width: 100%;
-            background: transparent;
-            border: 1px solid var(--champagne-gold);
-            color: var(--champagne-gold);
-            padding: 0.8rem;
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 1.2rem;
-        }
-        button#taBookBtn:hover {
-            background: var(--champagne-gold);
-            color: white;
+            padding: 0.6rem;
+            font-size: 0.7rem;
+            margin-top: 1rem;
         }
 
         @media (max-width: 700px) {
-            .nav-container { flex-direction: column; gap: 0.5rem; }
-            .nav-links { justify-content: center; gap: 1rem; }
-            .section { padding: 3rem 1rem; }
-            .unit-grid { gap: 1.2rem; }
-            .row-2 { flex-direction: column; gap: 0; }
-            .intro-card { padding: 1.5rem; }
-            .header-hero { height: 30vh; }
-            .checkbox-row { gap: 0.6rem; }
-            .check-item { font-size: 0.7rem; padding: 0.3rem 0.6rem; }
+            .section { padding: 2rem 1rem; }
+            .checkbox-row { grid-template-columns: repeat(2, 1fr); }
+            .booking-card { max-width: 95%; }
+            .unit-grid { gap: 1rem; }
         }
     </style>
 </head>
@@ -509,13 +441,13 @@
     </div>
 </div>
 
-<!-- HERO AFBEELDING -->
+<!-- HERO -->
 <div class="header-hero"></div>
 
-<!-- FILOSOFIE SECTIE -->
+<!-- FILOSOFIE -->
 <section id="filosofie" class="section">
     <h2 class="section-title">Onze Filosofie</h2>
-    <div style="background: transparent; border: none; padding: 0;">
+    <div>
         <p class="philosophy-text">
             Gedreven door een diepgewortelde <strong>Belgische etiquette</strong> en een gedeelde visie op gastvrijheid, beheren wij onze eigen units met een onderscheidende klasse.
         </p>
@@ -529,8 +461,9 @@
 <section id="hubs" class="section">
     <h2 class="section-title">Hubs</h2>
     
+    <!-- Longvinity Hub – 1 unit, gecentreerd -->
     <h3 class="category-title">Longvinity Hub</h3>
-    <div class="unit-grid">
+    <div class="longvinity-wrapper">
         <div class="unit-card" onclick="openInfo('U1', 'Al Houara: Sovereign Sanctuary', 'Betreed een wereld van 500 m² pure sereniteit. Deze villa is een ode aan het licht en de natuur, met een panoramisch uitzicht op de azuurblauwe zee.\n\nHet pronkstuk is de Super Suite, een oase van rust direct tegenover de zee met een eigen private dressing en adembenemend uitzicht over het natuurdomein. De suite beschikt over een eigen badkamer met dubbele wasbakken, douche en badkuip.\n\nDe villa biedt daarnaast een grote guest room met zeezicht en twee tweepersoonsbedden, bediend door een tweede badkamer met sanitair, wasbak en douche. De royale living, uitgerust met veel natuurlijk licht, gaat over in een open ruimte keuken voorzien van alle apparatuur. Geniet van een dakterras met een ongeëvenaard 360-graden panorama. Uiteraard voorzien van wifi, airconditioning en videobewaking.')">
             <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80" alt="U1 Al Houara"></div>
             <div class="unit-info"><h4>Al Houara Villa</h4><button class="info-btn">Meer info</button></div>
@@ -548,75 +481,66 @@
             <div class="unit-info"><h4>Al Bahar</h4><button class="info-btn">Meer info</button></div>
         </div>
         <div class="unit-card" onclick="openInfo('U4', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1527142879192-3c3e80d8f8a1?auto=format&fit=crop&w=800&q=80" alt="U4 Le Rocher"></div>
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=800&q=80" alt="U4 Le Rocher"></div>
             <div class="unit-info"><h4>Le Rocher</h4><button class="info-btn">Meer info</button></div>
         </div>
     </div>
 
     <h3 class="category-title">Marrakech Urban</h3>
     <div class="unit-grid">
-        <div class="unit-card" onclick="openInfo('U5', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1549294413-26f195200c16?auto=format&fit=crop&w=800&q=80" alt="U5 L'Essence Suite"></div>
+        <div class="unit-card" onclick="openInfo('U5', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1549294413-26f195200c16?auto=format&fit=crop&w=800&q=80" alt="U5"></div>
             <div class="unit-info"><h4>L'Essence Suite</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U6', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80" alt="U6 Oasis de Paix"></div>
+        <div class="unit-card" onclick="openInfo('U6', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80" alt="U6"></div>
             <div class="unit-info"><h4>Oasis de Paix</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U7', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80" alt="U7 Le Refuge"></div>
+        <div class="unit-card" onclick="openInfo('U7', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80" alt="U7"></div>
             <div class="unit-info"><h4>Le Refuge</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U8', 'Marrakech: City Refinement (2 slaapkamers)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 2 slaapkamers, elk met een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80" alt="U8 Imperial Duplex"></div>
+        <div class="unit-card" onclick="openInfo('U8', 'Marrakech: City Refinement (2 slaapkamers)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 2 slaapkamers, elk met een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80" alt="U8"></div>
             <div class="unit-info"><h4>Imperial Duplex</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U9', 'Marrakech: City Refinement (2 slaapkamers)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 2 slaapkamers, elk met een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" alt="U9 Palmeraie Royale"></div>
+        <div class="unit-card" onclick="openInfo('U9', 'Marrakech: City Refinement (2 slaapkamers)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 2 slaapkamers, elk met een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" alt="U9"></div>
             <div class="unit-info"><h4>Palmeraie Royale</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U10', 'Marrakech: City Refinement (2 slaapkamers)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 2 slaapkamers, elk met een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80" alt="U10 Sovereign Skyline"></div>
+        <div class="unit-card" onclick="openInfo('U10', 'Marrakech: City Refinement (2 slaapkamers)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 2 slaapkamers, elk met een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80" alt="U10"></div>
             <div class="unit-info"><h4>Sovereign Skyline</h4><button class="info-btn">Meer info</button></div>
         </div>
     </div>
 </section>
 
-<!-- INTRO SECTIE (na units, boven activiteiten) -->
-<section id="pre-activities" class="section" style="padding-bottom: 0;">
-    <div class="intro-grid-container">
-        <div class="intro-card">
-            <h3>Europees Vakmanschap & Anticiperende Service</h3>
-            <p>
-                Wij faciliteren lokale reserveringen en exclusieve faciliteiten met de finesse van een privé-conciërge. 
-                Van gastronomische tafels tot culturele ervaringen — wij regisseren elk detail, zodat u enkel hoeft te genieten.
-            </p>
-            <p style="font-style: italic; color: var(--champagne-gold);">
-                "Service is de kunst van het voorzien in behoeften die nog niet zijn uitgesproken."
-            </p>
-        </div>
-        <div class="intro-card">
-            <h3>Rust, Vrede & Avontuur</h3>
-            <p>
-                In onze eigen units vindt u de balans tussen serene rust en verfijnde avonturen. 
-                Voor wie volledige autonomie wenst, bieden wij de mogelijkheid om lokalen te huren in ons kantoor — 
-                ideaal voor privé-bijeenkomsten of exclusieve werkruimtes.
-            </p>
-            <div class="tag-container">
-                <span class="usp-tag">Absolute Discretie</span>
-                <span class="usp-tag">Personalisatie</span>
-                <span class="usp-tag">Soevereine Keuze</span>
-            </div>
+<!-- VERPLAATSTE SECTIETITEL "Activiteiten" (onder Marrakech Urban, boven intro-cards) -->
+<h2 class="section-title" style="margin-top: 0; padding-top: 1rem;">Activiteiten</h2>
+
+<!-- INTRO KAARTEN -->
+<div class="intro-grid-container">
+    <div class="intro-card">
+        <h3>Europees Vakmanschap & Anticiperende Service</h3>
+        <p>Wij faciliteren lokale reserveringen en exclusieve faciliteiten met de finesse van een privé-conciërge. Van gastronomische tafels tot culturele ervaringen — wij regisseren elk detail.</p>
+        <p style="font-style: italic; color: var(--champagne-gold);">"Service is de kunst van het voorzien in behoeften die nog niet zijn uitgesproken."</p>
+    </div>
+    <div class="intro-card">
+        <h3>Rust, Vrede & Avontuur</h3>
+        <p>In onze eigen units vindt u de balans tussen serene rust en verfijnde avonturen. Voor wie volledige autonomie wenst, bieden wij de mogelijkheid om lokalen te huren in ons kantoor — ideaal voor privé-bijeenkomsten of exclusieve werkruimtes.</p>
+        <div class="tag-container">
+            <span class="usp-tag">Absolute Discretie</span>
+            <span class="usp-tag">Personalisatie</span>
+            <span class="usp-tag">Soevereine Keuze</span>
         </div>
     </div>
-</section>
+</div>
 
-<!-- ACTIVITEITEN – met vervangen afbeeldingen -->
-<section id="activiteiten" class="section" style="padding-top: 1rem;">
-    <h2 class="section-title">Activiteiten</h2>
+<!-- ACTIVITEITEN GRID (4 kaarten) -->
+<section id="activiteiten" class="section" style="padding-top: 0.5rem;">
     <div class="activities-grid">
         <div class="activity-card">
-            <img src="https://images.unsplash.com/photo-1598911515539-ec787168670c?auto=format&fit=crop&w=400&q=80" alt="Strand Paardrijden">
+            <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=400&q=80" alt="Strand Paardrijden">
             <h3>Strand Paardrijden</h3>
             <p>Rit langs de kustlijn</p>
         </div>
@@ -636,10 +560,10 @@
             <p>Spa & yoga</p>
         </div>
     </div>
-    <p style="margin-top: 1.5rem; color: #6a6a6a; text-align: center;">[Hier komt later uitgebreide tekst over activiteiten]</p>
+    <p style="margin-top: 1rem; color: #6a6a6a; text-align: center;">[Hier komt later uitgebreide tekst over activiteiten]</p>
 </section>
 
-<!-- MENU – met vervangen ontbijt afbeelding -->
+<!-- MENU -->
 <section id="menu" class="section">
     <h2 class="section-title">Menu</h2>
     <div class="menu-grid">
@@ -664,10 +588,10 @@
             <p>Wijn, cocktail, thee</p>
         </div>
     </div>
-    <p style="margin-top: 1.5rem; color: #6a6a6a; text-align: center;">[Hier komt later het volledige menu]</p>
+    <p style="margin-top: 1rem; color: #6a6a6a; text-align: center;">[Hier komt later het volledige menu]</p>
 </section>
 
-<!-- BOEKINGSFORMULIER (compacter, checkboxes in twee rijen) -->
+<!-- BOEKINGSFORMULIER (compacter, checkboxes in 2 rijen van 4) -->
 <section id="booking" class="section">
     <h2 class="section-title">Boek nu</h2>
     <div class="booking-card">
@@ -714,20 +638,16 @@
             <option value="PayPal">PayPal</option>
         </select>
 
-        <h3 style="font-family:'Cinzel'; letter-spacing:2px; margin:1rem 0 0.5rem;">Extra Diensten</h3>
-        
-        <!-- Rij 1: Diensten (met prijzen) -->
+        <h3 style="font-family:'Cinzel'; font-size:0.8rem; margin:0.5rem 0;">Extra Diensten</h3>
+
+        <!-- Checkboxes: 2 rijen van 4 (eerste 4 hebben data-price, laatste 4 zijn activiteiten zonder prijs) -->
         <div class="checkbox-row">
-            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="50" value="Housekeeping"> Housekeeping (€50)</label>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Cleaning"> Schoonmaak (€25)</label>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Breakfast"> Ontbijt (€25)</label>
-            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="20" value="Chef"> Privé Kok (€20)</label>
-        </div>
-        
-        <!-- Rij 2: Activiteiten (alleen offerte) -->
-        <div class="checkbox-row">
-            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Strand Paardrijden"> Paardrijden</label>
-            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Quad Tour"> Quad Tour</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="50" value="Housekeeping"> Housek.</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Cleaning"> Schoonm.</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Breakfast"> Ontbijt</label>
+            <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="20" value="Chef"> Chef</label>
+            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Strand Paardrijden"> Paard</label>
+            <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Quad Tour"> Quad</label>
             <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Gids"> Gids</label>
             <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Wellness"> Wellness</label>
         </div>
@@ -736,9 +656,9 @@
         <textarea id="taZorgWensen" rows="2" placeholder="Medische zorg, dieetwensen..."></textarea>
         <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen (optioneel)"></textarea>
 
-        <div style="display: flex; align-items: center; gap: 12px; margin: 0.8rem 0;">
-            <input type="checkbox" id="taTransfer" style="width: 20px; margin: 0;">
-            <label for="taTransfer" style="margin: 0;">Luchthaven Transfer</label>
+        <div style="display: flex; align-items: center; gap: 8px; margin: 0.5rem 0;">
+            <input type="checkbox" id="taTransfer" style="width: 18px;">
+            <label for="taTransfer" style="margin:0;">Luchthaven Transfer</label>
         </div>
 
         <div class="price-summary">
@@ -756,13 +676,13 @@
     <div class="modal-content">
         <span class="close" onclick="closeInfo()">&times;</span>
         <h2 id="modalTitle">Unit Naam</h2>
-        <p id="modalDescription" style="margin:1rem 0;">Beschrijving...</p>
+        <p id="modalDescription" style="margin:0.5rem 0;">Beschrijving...</p>
         <button class="book-now-trigger" onclick="goToBooking()">BOEK NU</button>
     </div>
 </div>
 
 <script>
-    // ========== ALLE JAVASCRIPT (ongewijzigd) ==========
+    // ========== ALLE JAVASCRIPT (ONGEwijzigd, behalve event listeners voor nieuwe checkbox-classes) ==========
     const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
@@ -770,13 +690,11 @@
     let tempUnitId = "";
 
     function toggleDropdown() {
-        const dd = document.getElementById('bookingDropdown');
-        dd.classList.toggle('active');
+        document.getElementById('bookingDropdown').classList.toggle('active');
     }
     window.onclick = function(e) {
         if (!e.target.closest('.dropdown')) {
-            const dd = document.getElementById('bookingDropdown');
-            if (dd) dd.classList.remove('active');
+            document.getElementById('bookingDropdown')?.classList.remove('active');
         }
         const modal = document.getElementById('infoModal');
         if (e.target == modal) closeInfo();
