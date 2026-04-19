@@ -36,7 +36,6 @@
             font-weight: 500;
         }
 
-        /* Gecentreerde sectietitels */
         .section-title, .category-title {
             text-align: center;
             border-left: none;
@@ -186,7 +185,7 @@
             text-align: center;
         }
 
-        /* Introductiekaarten (worden verplaatst) */
+        /* Introductiekaarten */
         .intro-grid-container {
             display: flex;
             gap: 2.5rem;
@@ -298,7 +297,7 @@
             color: white;
         }
 
-        /* Activiteiten & menu */
+        /* Activiteiten & menu – vaste afbeeldingshoogte */
         .activities-grid, .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -314,6 +313,13 @@
         }
         .activity-card:hover, .menu-card:hover {
             transform: translateY(-3px);
+        }
+        .activity-card img, .menu-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 1rem;
         }
 
         /* Modal */
@@ -498,7 +504,7 @@
     </div>
 </section>
 
-<!-- HUBS (units) -->
+<!-- HUBS (units) – nieuwe afbeeldingen -->
 <section id="hubs" class="section">
     <h2 class="section-title">Hubs</h2>
     
@@ -512,15 +518,15 @@
 
     <h3 class="category-title">Achakar Trinity</h3>
     <div class="unit-grid">
-        <div class="unit-card" onclick="openInfo('U2', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1590716209351-4f7f6f57879e?auto=format&fit=crop&w=800&q=80" alt="U2 La Perla"></div>
+        <div class="unit-card" onclick="openInfo('U2', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie ist volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" alt="U2 La Perla"></div>
             <div class="unit-info"><h4>La Perla</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U3', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" alt="U3 Al Bahar"></div>
+        <div class="unit-card" onclick="openInfo('U3', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie ist volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="U3 Al Bahar"></div>
             <div class="unit-info"><h4>Al Bahar</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U4', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
+        <div class="unit-card" onclick="openInfo('U4', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie ist volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
             <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1527142879192-3c3e80d8f8a1?auto=format&fit=crop&w=800&q=80" alt="U4 Le Rocher"></div>
             <div class="unit-info"><h4>Le Rocher</h4><button class="info-btn">Meer info</button></div>
         </div>
@@ -533,7 +539,7 @@
             <div class="unit-info"><h4>L'Essence Suite</h4><button class="info-btn">Meer info</button></div>
         </div>
         <div class="unit-card" onclick="openInfo('U6', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1613977257363-707ba934f246?auto=format&fit=crop&w=800&q=80" alt="U6 Oasis de Paix"></div>
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80" alt="U6 Oasis de Paix"></div>
             <div class="unit-info"><h4>Oasis de Paix</h4><button class="info-btn">Meer info</button></div>
         </div>
         <div class="unit-card" onclick="openInfo('U7', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking. Een ideale uitvalsbasis waar luxe en stedelijk comfort samenkomen.')">
@@ -555,7 +561,7 @@
     </div>
 </section>
 
-<!-- ===== VERPLAATSTE INTRO SECTIE (na de units, boven activiteiten) ===== -->
+<!-- INTRO SECTIE (na units, boven activiteiten) -->
 <section id="pre-activities" class="section">
     <div class="intro-grid-container">
         <div class="intro-card">
@@ -584,31 +590,63 @@
     </div>
 </section>
 
-<!-- ACTIVITEITEN -->
+<!-- ACTIVITEITEN – met afbeeldingen -->
 <section id="activiteiten" class="section">
     <h2 class="section-title">Activiteiten</h2>
     <div class="activities-grid">
-        <div class="activity-card"><h3>Strand Paardrijden</h3><p>Rit langs de kustlijn</p></div>
-        <div class="activity-card"><h3>Quad Tour</h3><p>Verken de duinen</p></div>
-        <div class="activity-card"><h3>Gids</h3><p>Culturele wandelingen</p></div>
-        <div class="activity-card"><h3>Wellness</h3><p>Spa & yoga</p></div>
+        <div class="activity-card">
+            <img src="https://images.unsplash.com/photo-1598911515539-ec787168670c?auto=format&fit=crop&w=400&q=80" alt="Strand Paardrijden">
+            <h3>Strand Paardrijden</h3>
+            <p>Rit langs de kustlijn</p>
+        </div>
+        <div class="activity-card">
+            <img src="https://images.unsplash.com/photo-1531733108149-5a4604f9979c?auto=format&fit=crop&w=400&q=80" alt="Quad Tour">
+            <h3>Quad Tour</h3>
+            <p>Verken de duinen</p>
+        </div>
+        <div class="activity-card">
+            <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?auto=format&fit=crop&w=400&q=80" alt="Gids">
+            <h3>Gids</h3>
+            <p>Culturele wandelingen</p>
+        </div>
+        <div class="activity-card">
+            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=400&q=80" alt="Wellness">
+            <h3>Wellness</h3>
+            <p>Spa & yoga</p>
+        </div>
     </div>
     <p style="margin-top: 2rem; color: #6a6a6a;">[Hier komt later uitgebreide tekst over activiteiten]</p>
 </section>
 
-<!-- MENU -->
+<!-- MENU – met afbeeldingen -->
 <section id="menu" class="section">
     <h2 class="section-title">Menu</h2>
     <div class="menu-grid">
-        <div class="menu-card"><h3>Ontbijt</h3><p>Vers brood, lokale producten</p></div>
-        <div class="menu-card"><h3>Lunch</h3><p>Mediterrane gerechten</p></div>
-        <div class="menu-card"><h3>Diner</h3><p>Chef's special</p></div>
-        <div class="menu-card"><h3>Dranken</h3><p>Wijn, cocktail, thee</p></div>
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=400&q=80" alt="Ontbijt">
+            <h3>Ontbijt</h3>
+            <p>Vers brood, lokale producten</p>
+        </div>
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=400&q=80" alt="Lunch">
+            <h3>Lunch</h3>
+            <p>Mediterrane gerechten</p>
+        </div>
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=400&q=80" alt="Diner">
+            <h3>Diner</h3>
+            <p>Chef's special</p>
+        </div>
+        <div class="menu-card">
+            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=400&q=80" alt="Dranken">
+            <h3>Dranken</h3>
+            <p>Wijn, cocktail, thee</p>
+        </div>
     </div>
     <p style="margin-top: 2rem; color: #6a6a6a;">[Hier komt later het volledige menu]</p>
 </section>
 
-<!-- BOEKINGSFORMULIER -->
+<!-- BOEKINGSFORMULIER (ongewijzigd) -->
 <section id="booking" class="section">
     <h2 class="section-title">Boek nu</h2>
     <div class="booking-card">
@@ -631,7 +669,7 @@
                 <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge</option>
                 <option value="U8" data-resource="7454d0ef-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
                 <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-3584650d6cd5" data-price="195" data-type="Villa">Palmeraie Royale</option>
-                <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7ef4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
+                <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7ef4d1cc6d" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
             </optgroup>
         </select>
 
