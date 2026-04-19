@@ -43,27 +43,55 @@
             padding-left: 0;
         }
 
-        /* Aangepaste sectietitel: kleinere marges */
+        /* Algemene sectietitel (geldt voor alle behalve filosofie en de titel na hubs) */
         .section-title {
             font-size: 2.2rem;
             letter-spacing: 6px;
-            margin: 4rem 0 3rem 0; /* was 6rem 0 4rem 0 */
+            margin: 4rem 0 3rem 0;
             text-align: center;
             width: 100%;
             display: block;
             color: var(--deep-anthracite);
         }
 
-        /* Aangepaste categorie-titel: minder bovenruimte */
+        /* Categorie-titel (Hubs) */
         .category-title {
             font-size: 1.6rem;
             letter-spacing: 5px;
-            margin-top: 4rem; /* was 8rem */
-            margin-bottom: 3rem; /* iets minder onderruimte voor balans */
+            margin-top: 4rem;
+            margin-bottom: 3rem;
             text-align: center;
             width: 100%;
             color: var(--champagne-gold);
             text-transform: uppercase;
+        }
+
+        /* Filosofie: dichter bij hero */
+        #filosofie {
+            padding-top: 1rem;  /* was 6rem via .section */
+        }
+        #filosofie .section-title {
+            margin-top: 0.5rem; /* was 4rem */
+        }
+
+        /* Verminder witruimte boven activiteiten */
+        #hubs .marrakech-grid:last-child {
+            margin-bottom: 1rem; /* was 6rem */
+        }
+        #hubs + .section-title {
+            margin-top: 1rem; /* was 4rem */
+        }
+        .intro-grid-container {
+            margin-top: 1rem; /* overschrijft eerdere margin: 4rem auto 8rem auto */
+        }
+
+        /* Activiteiten grid: 4 kolommen naast elkaar op desktop */
+        @media (min-width: 900px) {
+            .activities-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+                padding: 0;
+            }
         }
 
         .unit-grid, .marrakech-grid, .longvinity-wrapper {
@@ -262,14 +290,13 @@
             display: block;
         }
 
-        /* Hero header - margin-bottom verkleind naar 0.5rem */
         .header-hero {
             width: 100%;
             height: 70vh;
             background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), 
                         url('https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1920&q=80') no-repeat center center;
             background-size: cover;
-            margin-bottom: 0.5rem; /* was 1rem, nu de helft */
+            margin-bottom: 0.5rem;
         }
 
         .section {
