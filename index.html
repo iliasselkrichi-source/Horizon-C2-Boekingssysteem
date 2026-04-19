@@ -153,16 +153,15 @@
             display: block;
         }
 
-        /* Secties – minder witruimte */
+        /* Secties – meer witruimte (padding 6rem) */
         .section {
             max-width: 1280px;
             margin: 0 auto;
-            padding: 3rem 2rem;
+            padding: 6rem 2rem;
             scroll-margin-top: 80px;
         }
-        /* Filosofie minder padding onder */
         #filosofie {
-            padding-bottom: 1rem;
+            padding-bottom: 4rem;
         }
         #hubs {
             padding-top: 0;
@@ -178,47 +177,49 @@
             text-align: center;
         }
 
-        /* Introductiekaarten */
+        /* Introductiekaarten – grotere gap, links uitgelijnd */
         .intro-grid-container {
             display: flex;
-            gap: 1.5rem;
+            gap: 3rem;
             justify-content: center;
             flex-wrap: wrap;
-            margin: 1rem 0 0.5rem;
+            margin: 2rem 0 1rem;
         }
         .intro-card {
             flex: 1;
-            min-width: 260px;
-            text-align: center;
+            min-width: 280px;
+            text-align: left;
             background: var(--card-bg);
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 20px;
             border: 1px solid var(--border-soft);
             box-shadow: var(--shadow-soft);
         }
         .intro-card h3 {
             color: var(--champagne-gold);
-            margin-bottom: 0.8rem;
-            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            text-align: left;
         }
         .intro-card p {
-            font-size: 0.85rem;
-            line-height: 1.5;
-            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            text-align: left;
         }
         .tag-container {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: flex-start;
             margin-top: 0.5rem;
         }
         .usp-tag {
             font-family: 'Cinzel', serif;
-            font-size: 0.55rem;
+            font-size: 0.6rem;
             background: #F9F6F2;
             color: var(--champagne-gold);
-            padding: 3px 10px;
+            padding: 3px 12px;
             border-radius: 20px;
         }
 
@@ -226,7 +227,7 @@
         .unit-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
+            gap: 2rem;
             width: 100%;
         }
         /* Al Houara centreren */
@@ -236,8 +237,14 @@
             margin-bottom: 1rem;
         }
         .longvinity-wrapper .unit-card {
-            max-width: 450px;
+            max-width: 500px;
             width: 100%;
+        }
+        /* Marrakech Urban: exact 3 kolommen */
+        .marrakech-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
         }
         .unit-card {
             background: var(--card-bg);
@@ -256,7 +263,7 @@
         }
         .unit-card img {
             width: 100%;
-            height: 200px;
+            height: 220px;
             object-fit: cover;
             transition: transform 0.4s ease;
             filter: sepia(8%) contrast(105%);
@@ -265,19 +272,19 @@
             transform: scale(1.05);
         }
         .unit-info {
-            padding: 1rem;
+            padding: 1.2rem;
             text-align: center;
         }
         .unit-info h4 {
-            font-size: 1rem;
+            font-size: 1.1rem;
             margin-bottom: 0.5rem;
         }
         .info-btn, .book-now-trigger {
             background: transparent;
             border: 1px solid var(--champagne-gold);
             color: var(--champagne-gold);
-            padding: 0.3rem 1rem;
-            font-size: 0.6rem;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.65rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
@@ -290,19 +297,19 @@
         /* Activiteiten & menu grids */
         .activities-grid, .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.2rem;
-            margin-top: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
         }
         .activity-card, .menu-card {
             background: var(--card-bg);
-            padding: 1rem;
+            padding: 1.2rem;
             text-align: center;
             border: 1px solid var(--border-soft);
         }
         .activity-card img, .menu-card img {
             width: 100%;
-            height: 120px;
+            height: 140px;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 0.8rem;
@@ -323,8 +330,8 @@
         .modal-content {
             background: var(--card-bg);
             margin: 10% auto;
-            padding: 1.2rem;
-            max-width: 380px;
+            padding: 1.5rem;
+            max-width: 400px;
             width: 90%;
             text-align: center;
             position: relative;
@@ -332,57 +339,57 @@
         }
         .close {
             position: absolute;
-            top: 0.3rem;
-            right: 0.8rem;
+            top: 0.5rem;
+            right: 1rem;
             font-size: 1.4rem;
             cursor: pointer;
         }
 
-        /* Boekingsformulier – compacter */
+        /* Boekingsformulier – breder (700px), meer padding, ruimere velden */
         .booking-card {
             background: var(--card-bg);
-            max-width: 480px;
+            max-width: 700px;
             width: 100%;
-            padding: 1.2rem;
+            padding: 2rem;
             margin: 0 auto;
             border: 1px solid var(--border-soft);
             box-shadow: var(--shadow-soft);
         }
         h1 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
             letter-spacing: 3px;
         }
         label {
-            font-size: 0.65rem;
-            margin-bottom: 0.2rem;
+            font-size: 0.7rem;
+            margin-bottom: 0.3rem;
             letter-spacing: 1px;
         }
         input, select, textarea {
-            padding: 0.5rem;
-            margin-bottom: 0.6rem;
-            font-size: 0.8rem;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
         }
         .row-2 {
             display: flex;
-            gap: 0.6rem;
+            gap: 1rem;
         }
         /* Checkboxes in 2 rijen van 4 kolommen */
         .checkbox-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 0.5rem;
-            margin: 0.5rem 0;
+            gap: 0.8rem;
+            margin: 1rem 0;
         }
         .check-item {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.3rem;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             background: var(--input-bg);
-            padding: 0.3rem 0.2rem;
-            border-radius: 20px;
+            padding: 0.4rem 0.2rem;
+            border-radius: 30px;
             border: 1px solid var(--border-soft);
             cursor: pointer;
         }
@@ -391,23 +398,40 @@
             margin: 0;
         }
         .price-summary {
-            margin-top: 1rem;
-            padding-top: 0.8rem;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
         }
         .total-amount {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
         }
         button#taBookBtn {
-            padding: 0.6rem;
-            font-size: 0.7rem;
-            margin-top: 1rem;
+            padding: 0.8rem;
+            font-size: 0.8rem;
+            margin-top: 1.2rem;
         }
 
+        @media (max-width: 900px) {
+            .marrakech-grid {
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            }
+            .checkbox-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .booking-card {
+                max-width: 95%;
+                padding: 1.2rem;
+            }
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
         @media (max-width: 700px) {
-            .section { padding: 2rem 1rem; }
-            .checkbox-row { grid-template-columns: repeat(2, 1fr); }
-            .booking-card { max-width: 95%; }
-            .unit-grid { gap: 1rem; }
+            .intro-grid-container {
+                gap: 1.5rem;
+            }
+            .marrakech-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -472,22 +496,23 @@
 
     <h3 class="category-title">Achakar Trinity</h3>
     <div class="unit-grid">
-        <div class="unit-card" onclick="openInfo('U2', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
+        <div class="unit-card" onclick="openInfo('U2', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan.')">
             <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" alt="U2 La Perla"></div>
             <div class="unit-info"><h4>La Perla</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U3', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
+        <div class="unit-card" onclick="openInfo('U3', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan.')">
             <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="U3 Al Bahar"></div>
             <div class="unit-info"><h4>Al Bahar</h4><button class="info-btn">Meer info</button></div>
         </div>
-        <div class="unit-card" onclick="openInfo('U4', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan. Uiteraard voorzien van de modernste faciliteiten zoals airconditioning, videobewaking en razendsnelle wifi.')">
-            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=800&q=80" alt="U4 Le Rocher"></div>
+        <div class="unit-card" onclick="openInfo('U4', 'Achakar: Oasis of Wellness', 'Ervaar de perfecte harmonie tussen moderne luxe en Marokkaanse gastvrijheid in onze luxe 3-gevel villa''s. Elke unit is ontworpen als een privé-retraite met 3 slaapkamers en een privé garagebox.\n\nDeze locatie is volledig gewijd aan uw welzijn, met een exclusief zwembad, buitendouche, en een eigen stoom- en hamamcabine voor ultieme ontspanning. Het dakterras biedt u een ongeëvenaard 360-graden blik op de oceaan.')">
+            <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="U4 Le Rocher"></div>
             <div class="unit-info"><h4>Le Rocher</h4><button class="info-btn">Meer info</button></div>
         </div>
     </div>
 
     <h3 class="category-title">Marrakech Urban</h3>
-    <div class="unit-grid">
+    <!-- Marrakech grid: exact 3 kolommen -->
+    <div class="marrakech-grid">
         <div class="unit-card" onclick="openInfo('U5', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking.')">
             <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1549294413-26f195200c16?auto=format&fit=crop&w=800&q=80" alt="U5"></div>
             <div class="unit-info"><h4>L'Essence Suite</h4><button class="info-btn">Meer info</button></div>
@@ -518,7 +543,7 @@
 <!-- VERPLAATSTE SECTIETITEL "Activiteiten" (onder Marrakech Urban, boven intro-cards) -->
 <h2 class="section-title" style="margin-top: 0; padding-top: 1rem;">Activiteiten</h2>
 
-<!-- INTRO KAARTEN -->
+<!-- INTRO KAARTEN (links uitgelijnd, gap 3rem) -->
 <div class="intro-grid-container">
     <div class="intro-card">
         <h3>Europees Vakmanschap & Anticiperende Service</h3>
@@ -545,7 +570,7 @@
             <p>Rit langs de kustlijn</p>
         </div>
         <div class="activity-card">
-            <img src="https://images.unsplash.com/photo-1531733108149-5a4604f9979c?auto=format&fit=crop&w=400&q=80" alt="Quad Tour">
+            <img src="https://images.unsplash.com/photo-1547432020-9430bc275217?auto=format&fit=crop&w=400&q=80" alt="Quad Tour">
             <h3>Quad Tour</h3>
             <p>Verken de duinen</p>
         </div>
@@ -591,7 +616,7 @@
     <p style="margin-top: 1rem; color: #6a6a6a; text-align: center;">[Hier komt later het volledige menu]</p>
 </section>
 
-<!-- BOEKINGSFORMULIER (compacter, checkboxes in 2 rijen van 4) -->
+<!-- BOEKINGSFORMULIER (breder, ruimere padding) -->
 <section id="booking" class="section">
     <h2 class="section-title">Boek nu</h2>
     <div class="booking-card">
@@ -638,7 +663,7 @@
             <option value="PayPal">PayPal</option>
         </select>
 
-        <h3 style="font-family:'Cinzel'; font-size:0.8rem; margin:0.5rem 0;">Extra Diensten</h3>
+        <h3 style="font-family:'Cinzel'; font-size:0.85rem; margin:0.8rem 0;">Extra Diensten</h3>
 
         <!-- Checkboxes: 2 rijen van 4 (eerste 4 hebben data-price, laatste 4 zijn activiteiten zonder prijs) -->
         <div class="checkbox-row">
@@ -656,7 +681,7 @@
         <textarea id="taZorgWensen" rows="2" placeholder="Medische zorg, dieetwensen..."></textarea>
         <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen (optioneel)"></textarea>
 
-        <div style="display: flex; align-items: center; gap: 8px; margin: 0.5rem 0;">
+        <div style="display: flex; align-items: center; gap: 8px; margin: 0.8rem 0;">
             <input type="checkbox" id="taTransfer" style="width: 18px;">
             <label for="taTransfer" style="margin:0;">Luchthaven Transfer</label>
         </div>
@@ -682,7 +707,7 @@
 </div>
 
 <script>
-    // ========== ALLE JAVASCRIPT (ONGEwijzigd, behalve event listeners voor nieuwe checkbox-classes) ==========
+    // ========== ALLE JAVASCRIPT (ONGEwijzigd) ==========
     const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
