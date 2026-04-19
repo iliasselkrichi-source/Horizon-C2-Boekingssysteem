@@ -28,6 +28,7 @@
             background-color: var(--champagne-bg);
             color: var(--deep-anthracite);
             line-height: 1.6;
+            font-size: 18px; /* globale lettergrootte */
         }
 
         h1, h2, h3, .logo, .category-title, .section-title, .main-title, .usp-item, .total-amount {
@@ -153,16 +154,16 @@
             display: block;
         }
 
-        /* Secties – meer witruimte (padding 8rem 2rem) */
+        /* Secties – maximale witruimte (padding 10rem 2rem) */
         .section {
             max-width: 1280px;
             margin: 0 auto;
-            padding: 8rem 2rem;
+            padding: 10rem 2rem;
             scroll-margin-top: 80px;
         }
         /* Filosofie specifiek (iets minder onder) */
         #filosofie {
-            padding-bottom: 6rem;
+            padding-bottom: 8rem;
         }
         #hubs {
             padding-top: 0;
@@ -170,7 +171,7 @@
 
         /* Filosofie tekst */
         .philosophy-text {
-            font-size: 0.95rem;
+            font-size: 1rem;
             line-height: 1.6;
             color: #3a3a3a;
             max-width: 800px;
@@ -178,7 +179,7 @@
             text-align: center;
         }
 
-        /* Introductiekaarten – gap 4rem, padding 3.5rem, links uitgelijnd */
+        /* Introductiekaarten – max-width 500px, min-height 450px, flex centreren, links uitgelijnd */
         .intro-grid-container {
             display: flex;
             gap: 4rem;
@@ -188,13 +189,17 @@
         }
         .intro-card {
             flex: 1;
-            min-width: 300px;
+            max-width: 500px;
+            min-height: 450px;
             text-align: left;
             background: var(--card-bg);
-            padding: 3.5rem;
+            padding: 3rem;
             border-radius: 20px;
             border: 1px solid var(--border-soft);
             box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .intro-card h3 {
             color: var(--champagne-gold);
@@ -203,8 +208,8 @@
             text-align: left;
         }
         .intro-card p {
-            font-size: 0.9rem;
-            line-height: 1.6;
+            font-size: 0.95rem;
+            line-height: 1.8;
             margin-bottom: 1rem;
             text-align: left;
         }
@@ -224,12 +229,14 @@
             border-radius: 20px;
         }
 
-        /* Units grid – basis */
+        /* Units grids – gecentreerd, max-width 1250px */
         .unit-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
             width: 100%;
+            max-width: 1250px;
+            margin: 0 auto;
         }
         /* Al Houara centreren (Longvinity Hub) */
         .longvinity-wrapper {
@@ -241,11 +248,13 @@
             max-width: 500px;
             width: 100%;
         }
-        /* Marrakech Urban: exact 3 kolommen, gap 2.5rem */
+        /* Marrakech Urban: exact 3 kolommen, gap 3rem, max-width 1250px, gecentreerd */
         .marrakech-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2.5rem;
+            gap: 3rem;
+            max-width: 1250px;
+            margin: 0 auto;
         }
         .unit-card {
             background: var(--card-bg);
@@ -295,12 +304,12 @@
             color: white;
         }
 
-        /* Activiteiten & menu grids (ongewijzigd) */
+        /* Activiteiten & menu grids – meer afstand tussen intro en activiteitenkaarten */
         .activities-grid, .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 1.5rem;
-            margin-top: 1.5rem;
+            margin-top: 8rem; /* vergrote afstand */
         }
         .activity-card, .menu-card {
             background: var(--card-bg);
@@ -310,7 +319,7 @@
         }
         .activity-card img, .menu-card img {
             width: 100%;
-            height: 140px;
+            height: 160px; /* 15% groter (was 140px) */
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 0.8rem;
@@ -346,7 +355,7 @@
             cursor: pointer;
         }
 
-        /* Boekingsformulier – breder (750px), meer padding, grotere inputs */
+        /* Boekingsformulier (ongewijzigd) */
         .booking-card {
             background: var(--card-bg);
             max-width: 750px;
@@ -375,7 +384,6 @@
             display: flex;
             gap: 1.2rem;
         }
-        /* Checkboxes in 4 kolommen met gap 1.5rem */
         .checkbox-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -413,7 +421,8 @@
 
         @media (max-width: 900px) {
             .marrakech-grid {
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 1.5rem;
             }
             .checkbox-row {
                 grid-template-columns: repeat(2, 1fr);
@@ -423,13 +432,14 @@
                 padding: 1.5rem;
             }
             .section {
-                padding: 4rem 1rem;
+                padding: 5rem 1rem;
             }
             .intro-card {
                 padding: 2rem;
+                min-height: auto;
             }
-            .intro-grid-container {
-                gap: 2rem;
+            .activities-grid {
+                margin-top: 4rem;
             }
         }
         @media (max-width: 700px) {
@@ -485,7 +495,7 @@
     </div>
 </section>
 
-<!-- HUBS (units) – structuur ongewijzigd, alleen CSS voor grid aangepast -->
+<!-- HUBS (units) – structuur ongewijzigd, alleen CSS voor grids aangepast -->
 <section id="hubs" class="section">
     <h2 class="section-title">Hubs</h2>
     
@@ -515,7 +525,7 @@
     </div>
 
     <h3 class="category-title">Marrakech Urban</h3>
-    <!-- Marrakech grid: exact 3 kolommen, gap 2.5rem -->
+    <!-- Marrakech grid: exact 3 kolommen, gap 3rem, gecentreerd via max-width -->
     <div class="marrakech-grid">
         <div class="unit-card" onclick="openInfo('U5', 'Marrakech: City Refinement (1 slaapkamer)', 'Ontdek een stijlvol toevluchtsoord in het hart van Marrakech. Deze unit is een stijlvol appartement met 1 slaapkamer, voorzien van een verfijnde afwerking.\n\nHet appartement biedt een perfecte mix van luxe en stedelijk comfort met een volledig uitgeruste keuken, high-speed wifi, perfecte klimaatbeheersing en 24/7 videobewaking.')">
             <div class="unit-card-img"><img src="https://images.unsplash.com/photo-1549294413-26f195200c16?auto=format&fit=crop&w=800&q=80" alt="U5"></div>
@@ -547,7 +557,7 @@
 <!-- VERPLAATSTE SECTIETITEL "Activiteiten" (onder Marrakech Urban, boven intro-cards) -->
 <h2 class="section-title" style="margin-top: 0; padding-top: 1rem;">Activiteiten</h2>
 
-<!-- INTRO KAARTEN (links uitgelijnd, gap 4rem, padding 3.5rem) -->
+<!-- INTRO KAARTEN -->
 <div class="intro-grid-container">
     <div class="intro-card">
         <h3>Europees Vakmanschap & Anticiperende Service</h3>
@@ -565,7 +575,7 @@
     </div>
 </div>
 
-<!-- ACTIVITEITEN GRID (4 kaarten) -->
+<!-- ACTIVITEITEN GRID (4 kaarten) – vergrote afstand (margin-top: 8rem) -->
 <section id="activiteiten" class="section" style="padding-top: 0.5rem;">
     <div class="activities-grid">
         <div class="activity-card">
@@ -620,7 +630,7 @@
     <p style="margin-top: 1rem; color: #6a6a6a; text-align: center;">[Hier komt later het volledige menu]</p>
 </section>
 
-<!-- BOEKINGSFORMULIER (breder, ruimere padding, checkboxes in 4 kolommen) -->
+<!-- BOEKINGSFORMULIER (ongewijzigd) -->
 <section id="booking" class="section">
     <h2 class="section-title">Boek nu</h2>
     <div class="booking-card">
@@ -669,7 +679,6 @@
 
         <h3 style="font-family:'Cinzel'; font-size:0.85rem; margin:1rem 0;">Extra Diensten</h3>
 
-        <!-- Checkboxes in 4 kolommen -->
         <div class="checkbox-row">
             <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="50" value="Housekeeping"> Housek.</label>
             <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Cleaning"> Schoonm.</label>
