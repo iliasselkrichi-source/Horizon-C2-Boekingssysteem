@@ -275,7 +275,7 @@ async function handleBooking(prefix) {
     }
 }
 
-// ========== BOEKING VERZENDEN (BRAVO) ==========
+// ========== BOEKING VERZENDEN (BRAVO) - AANGEPAST MET DIENSTEN & ACTIVITEITEN ==========
 async function handleBravoBooking() {
     const checkIn = document.getElementById('tbCheckIn')?.value;
     const checkOut = document.getElementById('tbCheckOut')?.value;
@@ -292,6 +292,11 @@ async function handleBravoBooking() {
     const tbSelect = document.getElementById('tbPackageSelect');
     const selectedOption = tbSelect.selectedOptions[0];
     
+    // Geselecteerde diensten en activiteiten ophalen uit de multivenster variabelen (HTML)
+    // Deze variabelen worden in de HTML gedefinieerd door het multivenster script
+    const geselecteerdeDiensten = window.geselecteerdeDiensten || [];
+    const geselecteerdeActiviteiten = window.geselecteerdeActiviteiten || [];
+    
     const record = {
         team: "TB",
         unit_code: selectedOption.value,
@@ -306,19 +311,21 @@ async function handleBravoBooking() {
         metadata: {
             transfer: document.getElementById('tbTransfer')?.checked || false,
             speciaal: document.getElementById('tbSpeciaal')?.value || '',
-            woning_type: selectedOption.dataset.type || "Onbekend"
+            woning_type: selectedOption.dataset.type || "Onbekend",
+            diensten: geselecteerdeDiensten,
+            activiteiten: geselecteerdeActiviteiten
         },
         totaalprijs: parseFloat(document.getElementById('tbTotaalprijs')?.value) || 0,
         status: "NIEUW"
     };
     
-    console.log("📤 Boeking:", record);
+    console.log("📤 Boeking met diensten en activiteiten:", record);
     
     const { error } = await supabaseClient.from('boekingen').insert([record]);
     if (error) {
         alert("❌ Fout: " + error.message);
     } else {
-        alert("✅ Boeking succesvol!");
+        alert("✅ Boeking succesvol! Uw geselecteerde diensten en activiteiten zijn geregistreerd.");
         location.reload();
     }
 }
