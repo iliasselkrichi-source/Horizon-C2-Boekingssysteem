@@ -6,7 +6,7 @@
     <title>Horizon Of Infinity | Team Bravo - Tanger Riad</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== NIEUW KLEURENPALET - MODERN OOSTERS ========== */
+        /* ========== KLEURENPALET - MODERN OOSTERS ========== */
         :root {
             --dust-grey: #F4F4F2;
             --espresso: #4E342E;
@@ -33,7 +33,6 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--dust-grey);
-            /* Zellij patroon - duidelijk zichtbaar */
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" opacity="0.85"><path fill="none" stroke="%23A8A8A6" stroke-width="1.2" d="M60,10 L65,25 L80,30 L65,35 L60,50 L55,35 L40,30 L55,25 Z M60,70 L65,85 L80,90 L65,95 L60,110 L55,95 L40,90 L55,85 Z"/><path fill="none" stroke="%23A8A8A6" stroke-width="1" d="M10,60 L25,55 L30,40 L35,55 L50,60 L35,65 L30,80 L25,65 Z M70,60 L85,55 L90,40 L95,55 L110,60 L95,65 L90,80 L85,65 Z"/><circle cx="60" cy="60" r="5" fill="none" stroke="%23A8A8A6" stroke-width="1"/><circle cx="30" cy="30" r="4" fill="none" stroke="%23A8A8A6" stroke-width="0.8"/><circle cx="90" cy="30" r="4" fill="none" stroke="%23A8A8A6" stroke-width="0.8"/><circle cx="30" cy="90" r="4" fill="none" stroke="%23A8A8A6" stroke-width="0.8"/><circle cx="90" cy="90" r="4" fill="none" stroke="%23A8A8A6" stroke-width="0.8"/><path fill="none" stroke="%23A8A8A6" stroke-width="0.8" d="M15,15 L25,10 L35,15 L25,20 Z M45,15 L55,10 L65,15 L55,20 Z M75,15 L85,10 L95,15 L85,20 Z M15,45 L25,40 L35,45 L25,50 Z M45,45 L55,40 L65,45 L55,50 Z M75,45 L85,40 L95,45 L85,50 Z M15,75 L25,70 L35,75 L25,80 Z M45,75 L55,70 L65,75 L55,80 Z M75,75 L85,70 L95,75 L85,80 Z"/></svg>');
             background-repeat: repeat;
             background-size: 120px 120px;
@@ -46,7 +45,6 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* ========== TITELS ========== */
         .section-title {
             text-align: center;
             font-size: 2.2rem;
@@ -59,7 +57,7 @@
             align-items: center;
             justify-content: center;
             gap: 2rem;
-            margin-bottom: 5rem;
+            margin-bottom: 3rem;
         }
         .section-title::before,
         .section-title::after {
@@ -67,27 +65,18 @@
             color: var(--turquoise);
             font-weight: normal;
         }
-        .section-title::before {
-            content: "❦";
-        }
-        .section-title::after {
-            content: "❦";
-        }
+        .section-title::before { content: "❦"; }
+        .section-title::after { content: "❦"; }
 
-        /* ========== SCHEIDINGSLIJN ========== */
         .arabesk-divider {
             text-align: center;
-            margin: 3rem auto;
+            margin: 2rem auto;
             font-size: 1rem;
             color: var(--turquoise);
             letter-spacing: 10px;
         }
-        .arabesk-divider span {
-            display: inline-block;
-            font-size: 0.9rem;
-        }
 
-        /* ========== HERO SECTIE - ALLEEN TEKST, GEEN BLOK ========== */
+        /* Hero */
         .hero {
             height: 85vh;
             position: relative;
@@ -137,7 +126,7 @@
             margin: 0 auto;
         }
 
-        /* ========== STICKY MENU - ONDER DE HERO ========== */
+        /* Sticky Menu */
         .sticky-menu {
             position: sticky;
             top: 0;
@@ -160,9 +149,7 @@
             color: var(--espresso);
             letter-spacing: 3px;
         }
-        .logo span {
-            color: var(--turquoise);
-        }
+        .logo span { color: var(--turquoise); }
         .nav-links {
             display: flex;
             gap: 2.5rem;
@@ -179,9 +166,7 @@
             letter-spacing: 2.5px;
             text-transform: uppercase;
         }
-        .nav-links a:hover {
-            color: var(--turquoise);
-        }
+        .nav-links a:hover { color: var(--turquoise); }
         .book-btn {
             background: var(--turquoise);
             color: white !important;
@@ -197,14 +182,14 @@
             transform: translateY(-2px);
         }
 
-        /* ========== SECTIES ========== */
+        /* Sections - padding onderaan boekingsformulier wordt 0 */
         .section {
-            padding: 120px 5% 100px;
+            padding: 60px 5% 0;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* ========== HOST STYLING ========== */
+        /* Host Styling */
         .host-container {
             display: flex;
             align-items: center;
@@ -234,9 +219,7 @@
             box-shadow: var(--shadow-espresso);
             transition: var(--transition-luxury);
         }
-        .host-image:hover {
-            transform: scale(1.03);
-        }
+        .host-image:hover { transform: scale(1.03); }
         .host-image-wrapper::before {
             content: "";
             position: absolute;
@@ -250,9 +233,7 @@
             opacity: 0.5;
             transition: var(--transition-luxury);
         }
-        .host-image-wrapper:hover::before {
-            opacity: 0.8;
-        }
+        .host-image-wrapper:hover::before { opacity: 0.8; }
         .host-text {
             flex: 1;
             min-width: 300px;
@@ -300,12 +281,12 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* ========== WONING STYLING ========== */
+        /* Woning */
         .woning-container {
             display: flex;
             align-items: center;
             gap: 5rem;
-            margin-bottom: 8rem;
+            margin-bottom: 5rem;
             flex-wrap: wrap;
         }
         .woning-image-wrapper {
@@ -324,9 +305,7 @@
             transition: var(--transition-luxury);
             box-shadow: var(--shadow-espresso);
         }
-        .woning-image-wrapper:hover .woning-img {
-            transform: scale(1.03);
-        }
+        .woning-image-wrapper:hover .woning-img { transform: scale(1.03); }
         .woning-text {
             flex: 1;
             min-width: 300px;
@@ -354,13 +333,13 @@
             color: var(--espresso);
         }
 
-        /* ========== PAKKETTEN ========== */
+        /* Pakketten */
         .pakket-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 3rem;
-            margin-top: 4rem;
+            margin-top: 3rem;
             max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
@@ -411,167 +390,7 @@
             margin-top: 1.2rem;
         }
 
-        /* ========== ACTIVITEITEN - MASONRY GRID ========== */
-        #activiteiten {
-            background: transparent;
-            padding: 100px 5%;
-            margin: 0 auto 100px;
-            max-width: 1300px;
-        }
-        .experience-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 40px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .experience-item {
-            background-size: cover;
-            background-position: center;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition-luxury);
-            position: relative;
-            box-shadow: var(--shadow-espresso-light);
-            min-height: 320px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            overflow: hidden;
-            border-radius: var(--border-radius-soft);
-        }
-        .experience-item:nth-child(1) {
-            grid-column: 1 / 2;
-            min-height: 480px;
-        }
-        .experience-item:nth-child(2) {
-            grid-column: 2 / 3;
-            min-height: 380px;
-        }
-        .experience-item:nth-child(3) {
-            grid-column: 1 / 2;
-            min-height: 420px;
-        }
-        .experience-item:nth-child(4) {
-            grid-column: 2 / 3;
-            min-height: 500px;
-        }
-        .experience-item::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.45);
-            transition: var(--transition-luxury);
-            z-index: 0;
-        }
-        .experience-item:hover::before {
-            background: rgba(0,0,0,0.3);
-        }
-        .experience-item:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-espresso);
-        }
-        .experience-item > * {
-            position: relative;
-            z-index: 1;
-            color: white;
-        }
-        .experience-item h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 0.8rem;
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 2px;
-        }
-        .experience-item p {
-            font-size: 0.9rem;
-            line-height: 1.7;
-            max-width: 80%;
-            margin: 0 auto;
-        }
-
-        /* Activiteit specifieke achtergronden */
-        .experience-item[data-activiteit="paardrijden"] {
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1534777367038-9404f45b869a?auto=format&fit=crop&q=80&w=800');
-        }
-        .experience-item[data-activiteit="quad"] {
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80&w=800');
-        }
-        .experience-item[data-activiteit="gids"] {
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1532372576444-dda954194ad4?auto=format&fit=crop&q=80&w=800');
-        }
-        .experience-item[data-activiteit="wellness"] {
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80&w=800');
-        }
-
-        /* ========== MODAL ========== */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(78, 52, 46, 0.95);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-        }
-        .modal-content {
-            background: var(--frosted-bg);
-            backdrop-filter: blur(20px);
-            padding: 3rem;
-            max-width: 500px;
-            width: 90%;
-            border-radius: var(--border-radius-soft);
-            text-align: center;
-            border: 1px solid var(--frosted-border);
-            position: relative;
-            box-shadow: var(--shadow-espresso);
-        }
-        .modal-content::before {
-            content: "❦";
-            position: absolute;
-            top: -18px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--frosted-bg);
-            padding: 0 12px;
-            color: var(--turquoise);
-            font-size: 1rem;
-            border-radius: 30px;
-        }
-        .modal-content h3 {
-            color: var(--turquoise);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 2px;
-        }
-        .modal-content p {
-            color: var(--espresso-light);
-            line-height: 1.8;
-        }
-        .modal-content button {
-            margin-top: 2rem;
-            padding: 0.8rem 2.5rem;
-            background: var(--turquoise);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition-luxury);
-            letter-spacing: 1px;
-        }
-        .modal-content button:hover {
-            background: var(--turquoise-dark);
-            transform: scale(1.02);
-        }
-
-        /* ========== BOEKINGSFORMULIER ========== */
+        /* ========== BOEKINGSFORMULIER - WITTE FROSTED GLASS ========== */
         .form-container {
             background: var(--frosted-bg);
             backdrop-filter: blur(20px);
@@ -612,6 +431,155 @@
             flex: 2;
             min-width: 300px;
         }
+
+        /* Multivenster knop */
+        .multivenster-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--turquoise);
+            color: var(--turquoise);
+            padding: 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-luxury);
+            margin: 0.5rem 0 1rem 0;
+            font-size: 0.9rem;
+        }
+        .multivenster-btn:hover {
+            background: var(--turquoise);
+            color: white;
+        }
+
+        /* Geselecteerde diensten weergave */
+        .geselecteerde-diensten {
+            background: rgba(59, 169, 177, 0.1);
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin: 0.5rem 0 1rem 0;
+            font-size: 0.85rem;
+            color: var(--espresso-light);
+            border-left: 3px solid var(--turquoise);
+        }
+        .geselecteerde-diensten span {
+            font-weight: 600;
+            color: var(--turquoise);
+        }
+
+        /* Modal (Multivenster) - LICHTE ZANDKLEUR */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(245, 240, 230, 0.92);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+        .modal-content {
+            background: var(--frosted-bg);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            max-width: 550px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: var(--border-radius-soft);
+            border: 1px solid var(--frosted-border);
+            position: relative;
+            box-shadow: var(--shadow-espresso);
+        }
+        .modal-content::before {
+            content: "❦";
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--frosted-bg);
+            padding: 0 12px;
+            color: var(--turquoise);
+            font-size: 1rem;
+            border-radius: 30px;
+        }
+        .modal-content h3 {
+            color: var(--turquoise);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        .modal-categorie {
+            margin-bottom: 1.5rem;
+        }
+        .modal-categorie h4 {
+            color: var(--espresso);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--turquoise);
+            padding-bottom: 0.3rem;
+        }
+        .modal-checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+        .modal-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+        .modal-checkbox-item input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--turquoise);
+        }
+        .modal-checkbox-item label {
+            margin: 0;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: var(--espresso);
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--frosted-border);
+        }
+        .modal-buttons button {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition-luxury);
+        }
+        .modal-save {
+            background: var(--turquoise);
+            color: white;
+        }
+        .modal-save:hover {
+            background: var(--turquoise-dark);
+        }
+        .modal-cancel {
+            background: transparent;
+            border: 1px solid var(--turquoise);
+            color: var(--turquoise);
+        }
+        .modal-cancel:hover {
+            background: rgba(59, 169, 177, 0.1);
+        }
+
         .form-row-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -702,11 +670,11 @@
             letter-spacing: 1px;
         }
 
-        /* ========== FOOTER STYLING - TURQUOISE ACHTERGROND ========== */
+        /* Footer - direct aansluitend onder formulier */
         .footer {
             background: var(--turquoise);
-            padding: 4rem 5% 2rem;
-            margin-top: 4rem;
+            padding: 3rem 5% 2rem;
+            margin-top: 0;
         }
         .footer-container {
             max-width: 1200px;
@@ -771,17 +739,8 @@
             line-height: 1.4;
             opacity: 0.9;
         }
-        .social-links {
-            display: flex;
-            gap: 1.2rem;
-            margin-top: 1rem;
-        }
-        /* Partner sectie */
-        .partner-section {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
+        .social-links { display: flex; gap: 1.2rem; margin-top: 1rem; }
+        .partner-section { display: flex; flex-direction: column; gap: 1rem; }
         .brand-link {
             font-family: 'Playfair Display', serif;
             font-size: 1rem;
@@ -799,8 +758,8 @@
         }
         .footer-bottom {
             text-align: center;
-            padding-top: 3rem;
-            margin-top: 3rem;
+            padding-top: 2rem;
+            margin-top: 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
             font-size: 0.7rem;
             color: white;
@@ -813,37 +772,31 @@
             50% { opacity: 0.5; }
         }
 
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 900px) {
             .sticky-menu { flex-direction: column; text-align: center; gap: 1rem; }
             .nav-links { justify-content: center; gap: 1.5rem; }
             .host-container { flex-direction: column; }
-            .experience-grid { grid-template-columns: 1fr; gap: 2rem; }
-            .experience-item:nth-child(1),
-            .experience-item:nth-child(2),
-            .experience-item:nth-child(3),
-            .experience-item:nth-child(4) {
-                grid-column: auto;
-                min-height: 320px;
-            }
             .pakket-grid { gap: 1.5rem; }
             .pakket-card { flex: 0 1 260px; min-height: 400px; }
             .hero-content { padding: 0 1.5rem; }
-            .section-title { font-size: 1.4rem; gap: 1rem; letter-spacing: 0.3em; }
+            .section-title { font-size: 1.4rem; gap: 1rem; letter-spacing: 0.3em; margin-bottom: 2rem; }
             .form-row-2 { grid-template-columns: 1fr; gap: 1rem; }
-            .woning-container { gap: 2rem; }
-            .section { padding: 80px 1.5rem 60px; }
+            .form-grid { flex-direction: column; }
+            .woning-container { gap: 2rem; margin-bottom: 3rem; }
+            .section { padding: 40px 1.5rem 0; }
+            .modal-checkbox-group { grid-template-columns: 1fr; }
             .footer-container { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
             .footer-section h4::after { left: 50%; transform: translateX(-50%); }
             .footer-contact-item { justify-content: center; }
             .social-links { justify-content: center; }
             .partner-section { align-items: center; }
+            .arabesk-divider { margin: 1rem auto; }
         }
     </style>
 </head>
 <body>
 
-<!-- HERO SECTIE - ALLEEN TEKST OP AFBEELDING (GEEN BLOK) -->
+<!-- HERO SECTIE -->
 <section id="slogan" class="hero">
     <div class="hero-content">
         <div class="hero-subtitle">Tanger - Witte Stad</div>
@@ -852,7 +805,7 @@
     </div>
 </section>
 
-<!-- STICKY MENU - ONDER DE HERO AFBEELDING -->
+<!-- STICKY MENU -->
 <div class="sticky-menu">
     <div class="logo">HORIZON <span>OF INFINITY</span></div>
     <div class="nav-links">
@@ -860,15 +813,13 @@
         <a href="#filosofie">Filosofie</a>
         <a href="#woning">Woning</a>
         <a href="#pakketten">Pakketten</a>
-        <a href="#activiteiten">Activiteiten</a>
         <a href="#boekingsformulier" class="book-btn">Boek nu</a>
     </div>
 </div>
 
-<!-- ARABESK SCHEIDINGSLIJN -->
 <div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
 
-<!-- SECTIE: HOST FILOSOFIE -->
+<!-- HOST FILOSOFIE -->
 <section id="filosofie" class="section">
     <h2 class="section-title">Ontmoet je gastheer</h2>
     <div class="host-container">
@@ -889,20 +840,16 @@
                 <li>✅ Lokale tips, souk, cultuur</li>
                 <li>✅ Uitstapjes naar Chefchaouen, Asilah, Fes, woestijn</li>
             </ul>
-            <div class="host-quote">
-                "Je komt niet naar een anoniem hotel. Je komt naar mijn thuis."
-            </div>
+            <div class="host-quote">"Je komt niet naar een anoniem hotel. Je komt naar mijn thuis."</div>
         </div>
     </div>
 </section>
 
-<!-- ARABESK SCHEIDINGSLIJN -->
 <div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
 
-<!-- SECTIE: WONING -->
+<!-- WONING -->
 <section id="woning" class="section">
     <h2 class="section-title">Architecture of the Soul</h2>
-
     <div class="woning-container">
         <div class="woning-image-wrapper">
             <img src="https://images.unsplash.com/photo-1548013146-72479768bbaa?auto=format&fit=crop&q=80&w=1200" class="woning-img" alt="Marokkaanse Riad patio met fontein">
@@ -913,7 +860,6 @@
             <p>Betreed een traditionele Marokkaanse patio met centrale fontein, omringd door Zellij-tegels en Moorse bogen. De perfecte plek om te ontspannen na een dag in de Medina.</p>
         </div>
     </div>
-
     <div class="woning-container" style="flex-direction: row-reverse; flex-wrap: wrap;">
         <div class="woning-image-wrapper">
             <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=1200" class="woning-img" alt="Luxe suite met Moorse bogen">
@@ -926,10 +872,9 @@
     </div>
 </section>
 
-<!-- ARABESK SCHEIDINGSLIJN -->
 <div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
 
-<!-- SECTIE: PAKKETTEN -->
+<!-- PAKKETTEN -->
 <section id="pakketten" class="section">
     <h2 class="section-title">Onze pakketten</h2>
     <div class="pakket-grid">
@@ -941,45 +886,9 @@
     </div>
 </section>
 
-<!-- ARABESK SCHEIDINGSLIJN -->
 <div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
 
-<!-- SECTIE: ACTIVITEITEN - MASONRY GRID -->
-<section id="activiteiten">
-    <h2 class="section-title">The Experience Collection</h2>
-    <div class="experience-grid">
-        <div class="experience-item" data-activiteit="paardrijden" onclick="openModal('Strand Paardrijden')">
-            <h3>Strand Paardrijden</h3>
-            <p>Galoppeer langs de branding van de Atlantische kust bij zonsondergang.</p>
-        </div>
-        <div class="experience-item" data-activiteit="quad" onclick="openModal('Quad Tour')">
-            <h3>Quad Tour</h3>
-            <p>Verken de heuvels rond Tanger met een opwindende quadtocht.</p>
-        </div>
-        <div class="experience-item" data-activiteit="gids" onclick="openModal('Gids & Cultuur')">
-            <h3>Privé Gids</h3>
-            <p>Verken de verborgen schatten van de Tanger Medina met onze privé conciërge.</p>
-        </div>
-        <div class="experience-item" data-activiteit="wellness" onclick="openModal('Wellness & Spa')">
-            <h3>Wellness & Spa</h3>
-            <p>Een eeuwenoude hammam reiniging van lichaam en geest met lokale natuurlijke oliën.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ARABESK SCHEIDINGSLIJN -->
-<div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
-
-<!-- MODAL POP-UP -->
-<div id="activiteitModal" class="modal">
-    <div class="modal-content">
-        <h3 id="modalTitel">Strand Paardrijden</h3>
-        <p id="modalText">Een onvergetelijke ervaring wacht op je.</p>
-        <button onclick="closeModal()">Sluiten</button>
-    </div>
-</div>
-
-<!-- SECTIE: BOEKINGSFORMULIER -->
+<!-- BOEKINGSFORMULIER MET MULTIVENSTER -->
 <section id="boekingsformulier" class="section">
     <div class="form-container">
         <div class="form-grid">
@@ -991,51 +900,70 @@
                     <p>📧 info@horizoninfinity.com</p>
                 </div>
             </div>
-
             <div class="form-fields">
+                <!-- 1. KALENDER (Check-in / Check-out) BOVENAAN -->
                 <div class="form-row-2">
                     <div>
-                        <label>Kies pakket</label>
-                        <select id="tbPackageSelect">
-                            <option value="P1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="250" data-type="Wellness">TB-P1 - Essence of Orient (€250)</option>
-                            <option value="P2" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="450" data-type="Cultuur">TB-P2 - Souk & Soul (€450)</option>
-                            <option value="P3" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="750" data-type="Luxe">TB-P3 - Arabian Nights (€750)</option>
-                            <option value="P4" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="1250" data-type="Premium">TB-P4 - Royal Caravan (€1250)</option>
-                            <option value="P5" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="150" data-type="Single">✨ TB-P5 - Single overnachting (€150 p/nacht)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Gastnaam</label>
-                        <input type="text" id="tbGuestName" placeholder="Volledige naam">
-                    </div>
-                    <div>
-                        <label>Email</label>
-                        <input type="email" id="tbGuestEmail" placeholder="naam@voorbeeld.com">
-                    </div>
-                    <div>
-                        <label>GSM</label>
-                        <input type="text" id="tbGuestPhone" placeholder="+212 ...">
-                    </div>
-                    <div>
-                        <label>Check-in</label>
+                        <label>📅 Check-in datum</label>
                         <input type="date" id="tbCheckIn">
                     </div>
                     <div>
-                        <label>Check-out</label>
+                        <label>📅 Check-out datum</label>
                         <input type="date" id="tbCheckOut">
                     </div>
                 </div>
 
+                <!-- 2. KIES PAKKET -->
+                <div>
+                    <label>🎁 Kies pakket</label>
+                    <select id="tbPackageSelect">
+                        <option value="P1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="250" data-type="Wellness">TB-P1 - Essence of Orient (€250)</option>
+                        <option value="P2" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="450" data-type="Cultuur">TB-P2 - Souk & Soul (€450)</option>
+                        <option value="P3" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="750" data-type="Luxe">TB-P3 - Arabian Nights (€750)</option>
+                        <option value="P4" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="1250" data-type="Premium">TB-P4 - Royal Caravan (€1250)</option>
+                        <option value="P5" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="150" data-type="Single">✨ TB-P5 - Single overnachting (€150 p/nacht)</option>
+                    </select>
+                </div>
+
+                <!-- 3. DIENSTEN & ACTIVITEITEN - MULTIVENSTER -->
+                <div style="margin: 1rem 0;">
+                    <label>⭐ Diensten & Activiteiten</label>
+                    <button type="button" class="multivenster-btn" id="openModalBtn">
+                        🧭 Kies uw diensten en activiteiten
+                    </button>
+                    <div id="geselecteerdeWeergave" class="geselecteerde-diensten">
+                        <span>Nog geen selecties</span>
+                    </div>
+                </div>
+
+                <!-- 4. GASTGEGEVENS -->
+                <div class="form-row-2">
+                    <div>
+                        <label>👤 Gastnaam</label>
+                        <input type="text" id="tbGuestName" placeholder="Volledige naam">
+                    </div>
+                    <div>
+                        <label>📧 Email</label>
+                        <input type="email" id="tbGuestEmail" placeholder="naam@voorbeeld.com">
+                    </div>
+                    <div>
+                        <label>📞 GSM</label>
+                        <input type="text" id="tbGuestPhone" placeholder="+212 ...">
+                    </div>
+                </div>
+
+                <!-- 5. EXTRA OPTIES -->
                 <div class="checkbox-custom">
                     <input type="checkbox" id="tbTransfer">
                     <label>🚗 Transfer van/naar luchthaven</label>
                 </div>
 
                 <div>
-                    <label>Speciale wensen</label>
+                    <label>💬 Speciale wensen</label>
                     <textarea id="tbSpeciaal" rows="2" placeholder="Dieetwensen, allergieën, viering ..."></textarea>
                 </div>
 
+                <!-- 6. PRIJS & BEVESTIG KNOP -->
                 <div class="price-bar">
                     <div>
                         <div class="price-label">Totaalprijs</div>
@@ -1049,66 +977,38 @@
     </div>
 </section>
 
-<!-- ========== FOOTER - TURQUOISE ACHTERGROND ========== -->
+<!-- FOOTER - DIRECT ONDER FORMULIER (GEEN WITRUIMTE) -->
 <footer class="footer">
     <div class="footer-container">
-        <!-- Contact sectie -->
         <div class="footer-section">
             <h4>Contact</h4>
             <div class="footer-contact-item">
                 <div class="footer-icon-wrapper">
-                    <svg class="footer-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 6.68629 5.68629 4 9 4C10.5913 4 12.5 5 12 7C13.5 5 15.4087 4 17 4C20.3137 4 23 6.68629 23 10Z" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                        <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                    </svg>
+                    <svg class="footer-icon" viewBox="0 0 24 24"><path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 6.68629 5.68629 4 9 4C10.5913 4 12.5 5 12 7C13.5 5 15.4087 4 17 4C20.3137 4 23 6.68629 23 10Z" stroke="currentColor" stroke-width="1.2" fill="none"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
                 </div>
                 <span>Tanger / Houara Coast, Marokko</span>
             </div>
             <div class="footer-contact-item">
                 <div class="footer-icon-wrapper">
-                    <svg class="footer-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                        <path d="M22 7L12 13L2 7" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                    </svg>
+                    <svg class="footer-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M22 7L12 13L2 7" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
                 </div>
                 <span>info@horizoninfinity.com</span>
             </div>
             <div class="footer-contact-item">
                 <div class="footer-icon-wrapper">
-                    <svg class="footer-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22 16.92V20C22.0011 20.5933 21.8144 21.1711 21.4718 21.647C21.1292 22.1229 20.6509 22.4718 20.103 22.6422C19.5551 22.8125 18.9679 22.795 18.43 22.592C15.4059 21.5221 12.6944 19.6949 10.4998 17.5C8.30489 15.3052 6.47796 12.5938 5.408 9.57C5.20497 9.0321 5.18754 8.44485 5.35795 7.89699C5.52836 7.34913 5.87731 6.87081 6.35321 6.52827C6.82911 6.18573 7.40696 5.99903 8.0002 6H11.08C11.3576 5.99996 11.6267 6.1036 11.8355 6.29053C12.0443 6.47745 12.1777 6.73464 12.21 7.01398C12.2476 7.33347 12.3154 7.64863 12.41 7.95598C12.5554 8.41598 12.7531 8.85744 12.99 9.27C13.1523 9.55707 13.2315 9.8874 13.2167 10.2203C13.2019 10.5532 13.0941 10.8742 12.91 11.144L12 12.5C13.6381 15.1048 15.8952 17.3619 18.5 19L19.856 18.09C20.1258 17.9059 20.4468 17.7981 20.7797 17.7833C21.1126 17.7685 21.4429 17.8477 21.73 18.01C22.1426 18.2469 22.584 18.4446 23.044 18.59C23.3514 18.6846 23.6665 18.7524 23.986 18.79C24.2654 18.8223 24.5226 18.9557 24.7095 19.1645C24.8964 19.3733 25 19.6424 25 19.92Z" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                    </svg>
+                    <svg class="footer-icon" viewBox="0 0 24 24"><path d="M22 16.92V20C22.0011 20.5933 21.8144 21.1711 21.4718 21.647C21.1292 22.1229 20.6509 22.4718 20.103 22.6422C19.5551 22.8125 18.9679 22.795 18.43 22.592C15.4059 21.5221 12.6944 19.6949 10.4998 17.5C8.30489 15.3052 6.47796 12.5938 5.408 9.57C5.20497 9.0321 5.18754 8.44485 5.35795 7.89699C5.52836 7.34913 5.87731 6.87081 6.35321 6.52827C6.82911 6.18573 7.40696 5.99903 8.0002 6H11.08C11.3576 5.99996 11.6267 6.1036 11.8355 6.29053C12.0443 6.47745 12.1777 6.73464 12.21 7.01398C12.2476 7.33347 12.3154 7.64863 12.41 7.95598C12.5554 8.41598 12.7531 8.85744 12.99 9.27C13.1523 9.55707 13.2315 9.8874 13.2167 10.2203C13.2019 10.5532 13.0941 10.8742 12.91 11.144L12 12.5C13.6381 15.1048 15.8952 17.3619 18.5 19L19.856 18.09C20.1258 17.9059 20.4468 17.7981 20.7797 17.7833C21.1126 17.7685 21.4429 17.8477 21.73 18.01C22.1426 18.2469 22.584 18.4446 23.044 18.59C23.3514 18.6846 23.6665 18.7524 23.986 18.79C24.2654 18.8223 24.5226 18.9557 24.7095 19.1645C24.8964 19.3733 25 19.6424 25 19.92Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
                 </div>
                 <span>+212 6 1234 5678</span>
             </div>
         </div>
-
-        <!-- Social Media sectie -->
         <div class="footer-section">
             <h4>Connect</h4>
             <div class="social-links">
-                <div class="footer-icon-wrapper">
-                    <svg class="footer-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                    </svg>
-                </div>
-                <div class="footer-icon-wrapper">
-                    <svg class="footer-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22 4L15 11M22 20L13 11M22 4L15 11M22 4H17M22 4V9M2 4L9 11M2 20L11 11M2 4H7M2 4V9M2 20L9 11M2 20H7M2 20V15M13 11L11 13" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                    </svg>
-                </div>
-                <div class="footer-icon-wrapper">
-                    <svg class="footer-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 8C18.2091 8 20 9.79086 20 12C20 14.2091 18.2091 16 16 16C13.7909 16 12 14.2091 12 12" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                        <path d="M12 22C13.5 22 16 20 16 16C16 12 13.5 10 12 10C10.5 10 8 12 8 16C8 20 10.5 22 12 22Z" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                    </svg>
-                </div>
+                <div class="footer-icon-wrapper"><svg class="footer-icon" viewBox="0 0 24 24"><path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg></div>
+                <div class="footer-icon-wrapper"><svg class="footer-icon" viewBox="0 0 24 24"><path d="M22 4L15 11M22 20L13 11M22 4L15 11M22 4H17M22 4V9M2 4L9 11M2 20L11 11M2 4H7M2 4V9M2 20L9 11M2 20H7M2 20V15M13 11L11 13" stroke="currentColor" stroke-width="1.2" fill="none"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.2" fill="none"/></svg></div>
+                <div class="footer-icon-wrapper"><svg class="footer-icon" viewBox="0 0 24 24"><path d="M16 8C18.2091 8 20 9.79086 20 12C20 14.2091 18.2091 16 16 16C13.7909 16 12 14.2091 12 12" stroke="currentColor" stroke-width="1.2" fill="none"/><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M12 22C13.5 22 16 20 16 16C16 12 13.5 10 12 10C10.5 10 8 12 8 16C8 20 10.5 22 12 22Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg></div>
             </div>
         </div>
-
-        <!-- Partner sectie -->
         <div class="footer-section">
             <h4>Partners</h4>
             <div class="partner-section">
@@ -1117,8 +1017,6 @@
                 <a href="#" class="brand-link">FLEETCONNECT</a>
             </div>
         </div>
-
-        <!-- Navigatie -->
         <div class="footer-section">
             <h4>Navigatie</h4>
             <div class="partner-section">
@@ -1126,7 +1024,6 @@
                 <a href="#filosofie" class="brand-link">Filosofie</a>
                 <a href="#woning" class="brand-link">Woning</a>
                 <a href="#pakketten" class="brand-link">Pakketten</a>
-                <a href="#activiteiten" class="brand-link">Activiteiten</a>
                 <a href="#boekingsformulier" class="brand-link">Boek nu</a>
             </div>
         </div>
@@ -1140,16 +1037,14 @@
 <script src="script.js"></script>
 
 <script>
-    // Soepele scroll voor menu links
+    // Soepele scroll
     document.querySelectorAll('.nav-links a, .footer-section a.brand-link').forEach(link => {
         link.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
             if (targetId && targetId.startsWith('#')) {
                 e.preventDefault();
                 const target = document.querySelector(targetId);
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
             }
         });
     });
@@ -1158,7 +1053,6 @@
     const tbSelect = document.getElementById('tbPackageSelect');
     const priceDisplay = document.getElementById('tbTotaalprijsDisplay');
     const priceHidden = document.getElementById('tbTotaalprijs');
-
     function updatePriceDisplay() {
         if (!tbSelect) return;
         const selectedOption = tbSelect.selectedOptions[0];
@@ -1168,52 +1062,89 @@
             if (priceHidden) priceHidden.value = price;
         }
     }
-
     if (tbSelect) {
         tbSelect.addEventListener('change', updatePriceDisplay);
         updatePriceDisplay();
     }
 
-    // MODAL FUNCTIES
-    function openModal(activiteit) {
-        const modal = document.getElementById('activiteitModal');
-        const titel = document.getElementById('modalTitel');
-        const tekstElement = document.getElementById('modalText');
-        let tekst = '';
-        
-        switch(activiteit) {
-            case 'Strand Paardrijden':
-                titel.innerHTML = 'Strand Paardrijden';
-                tekst = 'Ervaar de vrijheid van paardrijden op het strand. Geschikt voor alle niveaus, begeleiding inbegrepen. Duur: 2 uur.';
-                break;
-            case 'Quad Tour':
-                titel.innerHTML = 'Quad Tour';
-                tekst = 'Een adrenalinekick door de heuvels rond Tanger. 2 uur off-road avontuur met gids.';
-                break;
-            case 'Gids & Cultuur':
-                titel.innerHTML = 'Gids & Cultuur';
-                tekst = 'Verken de medina met een privé gids. Ontdek verborgen pleinen, souks en lokale verhalen. Duur: 3 uur.';
-                break;
-            case 'Wellness & Spa':
-                titel.innerHTML = 'Wellness & Spa';
-                tekst = 'Geniet van een traditionele hammam, massage en lichaamsbehandeling. Pure ontspanning. Duur: 2 uur.';
-                break;
-            default:
-                titel.innerHTML = activiteit;
-                tekst = 'Een onvergetelijke ervaring wacht op je.';
-        }
-        
-        if (tekstElement) tekstElement.innerHTML = tekst;
-        if (modal) modal.style.display = 'flex';
+    // ========== MULTIVENSTER LOGICA ==========
+    let geselecteerdeDiensten = [];
+    let geselecteerdeActiviteiten = [];
+
+    const modal = document.getElementById('dienstenModal');
+    const openBtn = document.getElementById('openModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const saveBtn = document.getElementById('saveModalBtn');
+    const weergaveDiv = document.getElementById('geselecteerdeWeergave');
+
+    const dienstCheckboxes = {
+        host: document.getElementById('modalHost'),
+        housekeeping: document.getElementById('modalHousekeeping'),
+        breakfast: document.getElementById('modalBreakfast'),
+        chef: document.getElementById('modalChef')
+    };
+    const activiteitCheckboxes = {
+        paardrijden: document.getElementById('modalPaardrijden'),
+        quad: document.getElementById('modalQuad'),
+        gids: document.getElementById('modalGids'),
+        wellness: document.getElementById('modalWellness')
+    };
+
+    if (openBtn) {
+        openBtn.addEventListener('click', function() {
+            if (geselecteerdeDiensten.includes('Host')) dienstCheckboxes.host.checked = true;
+            if (geselecteerdeDiensten.includes('Housekeeping')) dienstCheckboxes.housekeeping.checked = true;
+            if (geselecteerdeDiensten.includes('Breakfast')) dienstCheckboxes.breakfast.checked = true;
+            if (geselecteerdeDiensten.includes('Chef')) dienstCheckboxes.chef.checked = true;
+            if (geselecteerdeActiviteiten.includes('Strand Paardrijden')) activiteitCheckboxes.paardrijden.checked = true;
+            if (geselecteerdeActiviteiten.includes('Quad Tour')) activiteitCheckboxes.quad.checked = true;
+            if (geselecteerdeActiviteiten.includes('Privé Gids')) activiteitCheckboxes.gids.checked = true;
+            if (geselecteerdeActiviteiten.includes('Wellness & Spa')) activiteitCheckboxes.wellness.checked = true;
+            modal.style.display = 'flex';
+        });
     }
 
-    function closeModal() {
-        const modal = document.getElementById('activiteitModal');
-        if (modal) modal.style.display = 'none';
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+    }
+
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            geselecteerdeDiensten = [];
+            if (dienstCheckboxes.host.checked) geselecteerdeDiensten.push('Host');
+            if (dienstCheckboxes.housekeeping.checked) geselecteerdeDiensten.push('Housekeeping');
+            if (dienstCheckboxes.breakfast.checked) geselecteerdeDiensten.push('Breakfast');
+            if (dienstCheckboxes.chef.checked) geselecteerdeDiensten.push('Chef');
+
+            geselecteerdeActiviteiten = [];
+            if (activiteitCheckboxes.paardrijden.checked) geselecteerdeActiviteiten.push('Strand Paardrijden');
+            if (activiteitCheckboxes.quad.checked) geselecteerdeActiviteiten.push('Quad Tour');
+            if (activiteitCheckboxes.gids.checked) geselecteerdeActiviteiten.push('Privé Gids');
+            if (activiteitCheckboxes.wellness.checked) geselecteerdeActiviteiten.push('Wellness & Spa');
+
+            updateWeergave();
+            modal.style.display = 'none';
+        });
+    }
+
+    function updateWeergave() {
+        if (!weergaveDiv) return;
+        let html = '';
+        if (geselecteerdeDiensten.length > 0) {
+            html += `<span>🛎️ Diensten:</span> ${geselecteerdeDiensten.join(', ')}<br>`;
+        }
+        if (geselecteerdeActiviteiten.length > 0) {
+            html += `<span>🏇 Activiteiten:</span> ${geselecteerdeActiviteiten.join(', ')}`;
+        }
+        if (geselecteerdeDiensten.length === 0 && geselecteerdeActiviteiten.length === 0) {
+            html = '<span>Nog geen selecties</span>';
+        }
+        weergaveDiv.innerHTML = html;
     }
 
     window.onclick = function(event) {
-        const modal = document.getElementById('activiteitModal');
         if (event.target === modal) {
             modal.style.display = 'none';
         }
