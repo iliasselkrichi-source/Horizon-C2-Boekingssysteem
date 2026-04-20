@@ -45,6 +45,17 @@
             font-family: 'Playfair Display', serif;
         }
 
+        /* Luxe Icoon Styles */
+        .icon-svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--turquoise);
+            stroke-width: 1.5;
+            fill: none;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
         .section-title {
             text-align: center;
             font-size: 2.2rem;
@@ -182,7 +193,7 @@
             transform: translateY(-2px);
         }
 
-        /* Sections - padding onderaan boekingsformulier wordt 0 */
+        /* Sections */
         .section {
             padding: 60px 5% 0;
             max-width: 1400px;
@@ -390,7 +401,7 @@
             margin-top: 1.2rem;
         }
 
-        /* ========== BOEKINGSFORMULIER - WITTE FROSTED GLASS ========== */
+        /* ========== BOEKINGSFORMULIER ========== */
         .form-container {
             background: var(--frosted-bg);
             backdrop-filter: blur(20px);
@@ -466,7 +477,7 @@
             color: var(--turquoise);
         }
 
-        /* Modal (Multivenster) - LICHTE ZANDKLEUR */
+        /* Modal (Multivenster) */
         .modal {
             display: none;
             position: fixed;
@@ -587,13 +598,14 @@
             margin-bottom: 1.5rem;
         }
         label {
-            display: block;
+            display: flex;
+            align-items: center;
             font-size: 0.7rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
             color: var(--espresso-light);
-            letter-spacing: 3px;
+            letter-spacing: 2px;
         }
         input, select, textarea {
             width: 100%;
@@ -670,7 +682,7 @@
             letter-spacing: 1px;
         }
 
-        /* Footer - direct aansluitend onder formulier */
+        /* ========== NIEUWE FOOTER STYLING ========== */
         .footer {
             background: var(--turquoise);
             padding: 3rem 5% 2rem;
@@ -680,13 +692,13 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 3rem;
         }
         .footer-section h4 {
             color: white;
             font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
+            font-size: 1rem;
             letter-spacing: 3px;
             text-transform: uppercase;
             margin-bottom: 1.5rem;
@@ -701,60 +713,66 @@
             height: 2px;
             background: white;
         }
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: white;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
         .footer-icon-wrapper {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 44px;
-            height: 44px;
+            width: 32px;
+            height: 32px;
             background: rgba(255, 255, 255, 0.15);
             border-radius: 50%;
-            margin-right: 1rem;
+            margin-right: 12px;
             transition: var(--transition-luxury);
         }
         .footer-icon {
-            width: 22px;
-            height: 22px;
+            width: 16px;
+            height: 16px;
             stroke: white;
-            stroke-width: 1.2;
+            stroke-width: 1.5;
             fill: none;
-            transition: var(--transition-luxury);
         }
         .footer-icon-wrapper:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: scale(1.05);
         }
-        .footer-icon-wrapper:hover .footer-icon {
-            stroke: white;
-            filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
-        }
-        .footer-contact-item {
+        .partner-list {
             display: flex;
-            align-items: center;
-            margin-bottom: 1.2rem;
+            flex-direction: column;
+            gap: 12px;
         }
-        .footer-contact-item span {
-            color: white;
-            font-size: 0.85rem;
-            line-height: 1.4;
-            opacity: 0.9;
-        }
-        .social-links { display: flex; gap: 1.2rem; margin-top: 1rem; }
-        .partner-section { display: flex; flex-direction: column; gap: 1rem; }
         .brand-link {
             font-family: 'Playfair Display', serif;
             font-size: 1rem;
-            letter-spacing: 2px;
             color: white;
             text-decoration: none;
+            letter-spacing: 2px;
             transition: var(--transition-luxury);
-            display: inline-block;
-            opacity: 0.9;
+            opacity: 0.85;
+            display: flex;
+            align-items: center;
+        }
+        .brand-link span {
+            font-size: 0.7rem;
+            margin-right: 10px;
+            color: white;
+            opacity: 0.7;
         }
         .brand-link:hover {
-            color: white;
-            transform: translateX(5px);
             opacity: 1;
+            transform: translateX(5px);
+        }
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
         }
         .footer-bottom {
             text-align: center;
@@ -789,7 +807,7 @@
             .footer-section h4::after { left: 50%; transform: translateX(-50%); }
             .footer-contact-item { justify-content: center; }
             .social-links { justify-content: center; }
-            .partner-section { align-items: center; }
+            .partner-list { align-items: center; }
             .arabesk-divider { margin: 1rem auto; }
         }
     </style>
@@ -896,26 +914,41 @@
                 <h3>Boek uw verblijf</h3>
                 <p>Horizon of Infinity biedt meer dan alleen een dak; wij bieden een op maat gemaakte ervaring in het hart van Tanger.</p>
                 <div style="margin-top: 2rem; font-size: 0.85rem; opacity: 0.7;">
-                    <p>📍 Tanger / Houara Coast</p>
-                    <p>📧 info@horizoninfinity.com</p>
+                    <p>
+                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        Tanger / Houara Coast, Marokko
+                    </p>
+                    <p>
+                        <svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="22,7 12,13 2,7"></polyline></svg>
+                        info@horizoninfinity.com
+                    </p>
                 </div>
             </div>
             <div class="form-fields">
                 <!-- 1. KALENDER (Check-in / Check-out) BOVENAAN -->
                 <div class="form-row-2">
                     <div>
-                        <label>📅 Check-in datum</label>
+                        <label>
+                            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            Check-in datum
+                        </label>
                         <input type="date" id="tbCheckIn">
                     </div>
                     <div>
-                        <label>📅 Check-out datum</label>
+                        <label>
+                            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            Check-out datum
+                        </label>
                         <input type="date" id="tbCheckOut">
                     </div>
                 </div>
 
                 <!-- 2. KIES PAKKET -->
                 <div>
-                    <label>🎁 Kies pakket</label>
+                    <label>
+                        <svg class="icon-svg" viewBox="0 0 24 24"><polygon points="12 2 22 7 22 17 12 22 2 17 2 7 12 2"></polygon><line x1="12" y1="22" x2="12" y2="12"></line><polyline points="22 7 12 12 2 7"></polyline></svg>
+                        Kies pakket
+                    </label>
                     <select id="tbPackageSelect">
                         <option value="P1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="250" data-type="Wellness">TB-P1 - Essence of Orient (€250)</option>
                         <option value="P2" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="450" data-type="Cultuur">TB-P2 - Souk & Soul (€450)</option>
@@ -927,9 +960,12 @@
 
                 <!-- 3. DIENSTEN & ACTIVITEITEN - MULTIVENSTER -->
                 <div style="margin: 1rem 0;">
-                    <label>⭐ Diensten & Activiteiten</label>
+                    <label>
+                        <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                        Diensten & Activiteiten
+                    </label>
                     <button type="button" class="multivenster-btn" id="openModalBtn">
-                        🧭 Kies uw diensten en activiteiten
+                        Kies uw diensten en activiteiten
                     </button>
                     <div id="geselecteerdeWeergave" class="geselecteerde-diensten">
                         <span>Nog geen selecties</span>
@@ -939,15 +975,24 @@
                 <!-- 4. GASTGEGEVENS -->
                 <div class="form-row-2">
                     <div>
-                        <label>👤 Gastnaam</label>
+                        <label>
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Gastnaam
+                        </label>
                         <input type="text" id="tbGuestName" placeholder="Volledige naam">
                     </div>
                     <div>
-                        <label>📧 Email</label>
+                        <label>
+                            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="22,7 12,13 2,7"></polyline></svg>
+                            Email
+                        </label>
                         <input type="email" id="tbGuestEmail" placeholder="naam@voorbeeld.com">
                     </div>
                     <div>
-                        <label>📞 GSM</label>
+                        <label>
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            GSM
+                        </label>
                         <input type="text" id="tbGuestPhone" placeholder="+212 ...">
                     </div>
                 </div>
@@ -955,11 +1000,17 @@
                 <!-- 5. EXTRA OPTIES -->
                 <div class="checkbox-custom">
                     <input type="checkbox" id="tbTransfer">
-                    <label>🚗 Transfer van/naar luchthaven</label>
+                    <label>
+                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        Transfer van/naar luchthaven
+                    </label>
                 </div>
 
                 <div>
-                    <label>💬 Speciale wensen</label>
+                    <label>
+                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        Speciale wensen
+                    </label>
                     <textarea id="tbSpeciaal" rows="2" placeholder="Dieetwensen, allergieën, viering ..."></textarea>
                 </div>
 
@@ -977,59 +1028,55 @@
     </div>
 </section>
 
-<!-- FOOTER - DIRECT ONDER FORMULIER (GEEN WITRUIMTE) -->
+<!-- ========== NIEUWE FOOTER - PROFESSIONEEL ========== -->
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-section">
             <h4>Contact</h4>
             <div class="footer-contact-item">
-                <div class="footer-icon-wrapper">
-                    <svg class="footer-icon" viewBox="0 0 24 24"><path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 6.68629 5.68629 4 9 4C10.5913 4 12.5 5 12 7C13.5 5 15.4087 4 17 4C20.3137 4 23 6.68629 23 10Z" stroke="currentColor" stroke-width="1.2" fill="none"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
-                </div>
-                <span>Tanger / Houara Coast, Marokko</span>
-            </div>
-            <div class="footer-contact-item">
-                <div class="footer-icon-wrapper">
-                    <svg class="footer-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M22 7L12 13L2 7" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
-                </div>
+                <span class="footer-icon-wrapper">
+                    <svg class="footer-icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="22,7 12,13 2,7"></polyline></svg>
+                </span>
                 <span>info@horizoninfinity.com</span>
             </div>
             <div class="footer-contact-item">
-                <div class="footer-icon-wrapper">
-                    <svg class="footer-icon" viewBox="0 0 24 24"><path d="M22 16.92V20C22.0011 20.5933 21.8144 21.1711 21.4718 21.647C21.1292 22.1229 20.6509 22.4718 20.103 22.6422C19.5551 22.8125 18.9679 22.795 18.43 22.592C15.4059 21.5221 12.6944 19.6949 10.4998 17.5C8.30489 15.3052 6.47796 12.5938 5.408 9.57C5.20497 9.0321 5.18754 8.44485 5.35795 7.89699C5.52836 7.34913 5.87731 6.87081 6.35321 6.52827C6.82911 6.18573 7.40696 5.99903 8.0002 6H11.08C11.3576 5.99996 11.6267 6.1036 11.8355 6.29053C12.0443 6.47745 12.1777 6.73464 12.21 7.01398C12.2476 7.33347 12.3154 7.64863 12.41 7.95598C12.5554 8.41598 12.7531 8.85744 12.99 9.27C13.1523 9.55707 13.2315 9.8874 13.2167 10.2203C13.2019 10.5532 13.0941 10.8742 12.91 11.144L12 12.5C13.6381 15.1048 15.8952 17.3619 18.5 19L19.856 18.09C20.1258 17.9059 20.4468 17.7981 20.7797 17.7833C21.1126 17.7685 21.4429 17.8477 21.73 18.01C22.1426 18.2469 22.584 18.4446 23.044 18.59C23.3514 18.6846 23.6665 18.7524 23.986 18.79C24.2654 18.8223 24.5226 18.9557 24.7095 19.1645C24.8964 19.3733 25 19.6424 25 19.92Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
-                </div>
-                <span>+212 6 1234 5678</span>
+                <span class="footer-icon-wrapper">
+                    <svg class="footer-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                </span>
+                <span>+212 (0) 6XX XXX XXX</span>
+            </div>
+            <div class="footer-contact-item">
+                <span class="footer-icon-wrapper">
+                    <svg class="footer-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                </span>
+                <span>Tanger / Houara Coast, Marokko</span>
             </div>
         </div>
+
         <div class="footer-section">
-            <h4>Connect</h4>
+            <h4>Exclusieve Partners</h4>
+            <div class="partner-list">
+                <a href="#" class="brand-link"><span>01</span> AZIRIS</a>
+                <a href="#" class="brand-link"><span>02</span> KMS7</a>
+                <a href="#" class="brand-link"><span>03</span> FLEETCONNECT</a>
+            </div>
+        </div>
+
+        <div class="footer-section">
+            <h4>Volg de Horizon</h4>
             <div class="social-links">
-                <div class="footer-icon-wrapper"><svg class="footer-icon" viewBox="0 0 24 24"><path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg></div>
-                <div class="footer-icon-wrapper"><svg class="footer-icon" viewBox="0 0 24 24"><path d="M22 4L15 11M22 20L13 11M22 4L15 11M22 4H17M22 4V9M2 4L9 11M2 20L11 11M2 4H7M2 4V9M2 20L9 11M2 20H7M2 20V15M13 11L11 13" stroke="currentColor" stroke-width="1.2" fill="none"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.2" fill="none"/></svg></div>
-                <div class="footer-icon-wrapper"><svg class="footer-icon" viewBox="0 0 24 24"><path d="M16 8C18.2091 8 20 9.79086 20 12C20 14.2091 18.2091 16 16 16C13.7909 16 12 14.2091 12 12" stroke="currentColor" stroke-width="1.2" fill="none"/><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M12 22C13.5 22 16 20 16 16C16 12 13.5 10 12 10C10.5 10 8 12 8 16C8 20 10.5 22 12 22Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg></div>
-            </div>
-        </div>
-        <div class="footer-section">
-            <h4>Partners</h4>
-            <div class="partner-section">
-                <a href="#" class="brand-link">AZIRIS</a>
-                <a href="#" class="brand-link">KMS7</a>
-                <a href="#" class="brand-link">FLEETCONNECT</a>
-            </div>
-        </div>
-        <div class="footer-section">
-            <h4>Navigatie</h4>
-            <div class="partner-section">
-                <a href="#slogan" class="brand-link">Home</a>
-                <a href="#filosofie" class="brand-link">Filosofie</a>
-                <a href="#woning" class="brand-link">Woning</a>
-                <a href="#pakketten" class="brand-link">Pakketten</a>
-                <a href="#boekingsformulier" class="brand-link">Boek nu</a>
+                <a href="#" class="footer-icon-wrapper">
+                    <svg class="footer-icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <a href="#" class="footer-icon-wrapper">
+                    <svg class="footer-icon" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                </a>
             </div>
         </div>
     </div>
+    
     <div class="footer-bottom">
-        <p>© 2026 Horizon Of Infinity — Alle rechten voorbehouden. Luxe verblijven in Tanger.</p>
+        © 2026 HORIZON OF INFINITY | LUXURY TRAVEL EXPERIENCE
     </div>
 </footer>
 
@@ -1038,7 +1085,7 @@
 
 <script>
     // Soepele scroll
-    document.querySelectorAll('.nav-links a, .footer-section a.brand-link').forEach(link => {
+    document.querySelectorAll('.nav-links a, .footer-section a.brand-link, .footer-section a.footer-icon-wrapper').forEach(link => {
         link.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
             if (targetId && targetId.startsWith('#')) {
@@ -1090,6 +1137,10 @@
         wellness: document.getElementById('modalWellness')
     };
 
+    // Expose variabelen aan window zodat script.js ze kan lezen
+    window.geselecteerdeDiensten = geselecteerdeDiensten;
+    window.geselecteerdeActiviteiten = geselecteerdeActiviteiten;
+
     if (openBtn) {
         openBtn.addEventListener('click', function() {
             if (geselecteerdeDiensten.includes('Host')) dienstCheckboxes.host.checked = true;
@@ -1123,6 +1174,10 @@
             if (activiteitCheckboxes.quad.checked) geselecteerdeActiviteiten.push('Quad Tour');
             if (activiteitCheckboxes.gids.checked) geselecteerdeActiviteiten.push('Privé Gids');
             if (activiteitCheckboxes.wellness.checked) geselecteerdeActiviteiten.push('Wellness & Spa');
+
+            // Update window variabelen voor script.js
+            window.geselecteerdeDiensten = geselecteerdeDiensten;
+            window.geselecteerdeActiviteiten = geselecteerdeActiviteiten;
 
             updateWeergave();
             modal.style.display = 'none';
