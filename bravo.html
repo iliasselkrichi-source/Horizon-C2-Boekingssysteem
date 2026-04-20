@@ -6,24 +6,23 @@
     <title>Horizon Of Infinity | Team Bravo - Tanger Riad</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ========== KONINKLIJK MUNT & PAREL - SALIEGROEN PALET ========== */
+        /* ========== ORIENTAL WARM PALETTE (Sand & Terracotta) ========== */
         :root {
-            --mint-green: #E8F1ED;
-            --mint-dark: #D4E4DC;
+            --sand-bg: #F4EBD0;
+            --sand-light: #FCF8EC;
+            --terracotta: #B35C44;
+            --terracotta-light: #D48C70;
             --saffron-amber: #D97706;
-            --saffron-light: #F59E0B;
             --silver-pearl: #E2E8F0;
-            --silver-dark: #CBD5E1;
             --charcoal-blue: #1E293B;
             --charcoal-light: #475569;
             --white-soft: #FFFFFF;
             --copper: #B87333;
             --copper-light: #DA8A67;
-            --shadow-royal: 0 25px 50px rgba(0,0,0,0.08);
+            --shadow-royal: 0 25px 50px rgba(0,0,0,0.12);
             --border-radius-arab: 60px 8px 60px 8px;
-            --border-radius-arch: 100px 12px 100px 12px;
-            --frosted-bg: rgba(255, 255, 255, 0.85);
-            --frosted-blur: blur(10px);
+            --border-radius-arch: 150px 150px 0 0;
+            --frosted-glass: rgba(255, 255, 255, 0.85);
         }
 
         * {
@@ -34,28 +33,36 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--mint-green);
-            /* Verbeterde Zellij-mozaïek achtergrond - scherper en hogere opacity */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.65"><path fill="none" stroke="%23FFFFFF" stroke-width="1.2" d="M10,10 L20,5 L30,10 L20,15 Z M40,20 L50,15 L60,20 L50,25 Z M70,10 L80,5 L90,10 L80,15 Z M25,40 L35,35 L45,40 L35,45 Z M55,50 L65,45 L75,50 L65,55 Z M10,70 L20,65 L30,70 L20,75 Z M70,70 L80,65 L90,70 L80,75 Z M40,80 L50,75 L60,80 L50,85 Z"/><polygon points="50,30 55,38 50,46 45,38" fill="none" stroke="%23FFFFFF" stroke-width="1"/><rect x="80" y="40" width="8" height="8" transform="rotate(45 84 44)" fill="none" stroke="%23FFFFFF" stroke-width="1"/></svg>');
+            background-color: var(--sand-bg);
+            /* ZELLIJ MOZAIEK ACHTERGROND - White-on-Sand, 100% sharp, opacity 0.7 */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><g fill="none" stroke="%23FFFFFF" stroke-width="1.5" opacity="0.7"><path d="M50 0 L50 100 M0 50 L100 50 M0 0 L100 100 M100 0 L0 100"/><rect x="25" y="25" width="50" height="50" transform="rotate(45 50 50)"/><rect x="32" y="32" width="36" height="36"/></g></svg>');
             background-repeat: repeat;
-            background-size: 150px 150px;
             color: var(--charcoal-blue);
             font-size: 1rem;
             line-height: 1.7;
+            overflow-x: hidden;
+            /* Performance optimization */
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         h1, h2, h3, .logo {
             font-family: 'Playfair Display', serif;
         }
 
-        /* ========== TITELS MET AMBER ACCENT & GLOED ========== */
+        /* ========== PERFORMANCE ACCELERATION ========== */
+        .sticky-menu, .hero, .host-image, .woning-img, .pakket-card, .experience-item, .modal-content {
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        /* ========== TITELS MET GLOEIENDE ICONEN ========== */
         .section-title {
             text-align: center;
             font-size: 2.8rem;
             font-weight: 700;
             color: var(--charcoal-blue);
-            letter-spacing: 0.2em; /* Vergrote letter-spacing */
-            position: relative;
+            letter-spacing: 0.2em;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -64,24 +71,18 @@
         }
         .section-title::before,
         .section-title::after {
-            font-size: 1.3rem;
-            color: var(--saffron-amber);
-            font-weight: normal;
-            text-shadow: 0 0 10px var(--saffron-amber); /* Gloed effect */
-        }
-        .section-title::before {
             content: "❦";
-        }
-        .section-title::after {
-            content: "❦";
+            font-size: 1.5rem;
+            color: var(--terracotta);
+            text-shadow: 0 0 10px var(--terracotta);
         }
 
         /* ========== ARABESK SCHEIDINGSLIJN ========== */
         .arabesk-divider {
             text-align: center;
-            margin: 2rem auto;
+            margin: 4rem auto;
             font-size: 1.2rem;
-            color: var(--saffron-amber);
+            color: var(--terracotta);
             letter-spacing: 8px;
         }
         .arabesk-divider span {
@@ -95,15 +96,14 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-            background: rgba(232, 241, 237, 0.96);
+            background: rgba(244, 235, 208, 0.96);
             backdrop-filter: blur(12px);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 5%;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.04);
-            flex-wrap: wrap;
-            border-bottom: 1px solid var(--silver-pearl);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            border-bottom: 1px solid var(--terracotta-light);
         }
         .logo {
             font-size: 1.4rem;
@@ -112,13 +112,12 @@
             letter-spacing: 2px;
         }
         .logo span {
-            color: var(--saffron-amber);
+            color: var(--terracotta);
         }
         .nav-links {
             display: flex;
             gap: 2.2rem;
             align-items: center;
-            flex-wrap: wrap;
         }
         .nav-links a {
             text-decoration: none;
@@ -131,44 +130,37 @@
             text-transform: uppercase;
         }
         .nav-links a:hover {
-            color: var(--saffron-amber);
+            color: var(--terracotta);
         }
         .book-btn {
-            background: var(--saffron-amber);
+            background: var(--terracotta);
             color: white !important;
             padding: 0.6rem 1.6rem;
             border-radius: 40px;
             font-weight: 700 !important;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .book-btn:hover {
-            background: var(--copper);
-            transform: translateY(-2px);
         }
 
-        /* ========== HERO SECTIE - FROSTED GLASS EFFECT ========== */
+        /* ========== HERO SECTIE ========== */
         .hero {
             height: 85vh;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url('https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg');
+            background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1539020140153-e479b8c22e70?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             margin-top: 75px;
         }
         .hero-content {
             text-align: center;
-            color: var(--charcoal-blue);
+            color: white;
             max-width: 800px;
-            padding: 3rem;
+            padding: 2.5rem;
             position: relative;
-            background: var(--frosted-bg);
-            backdrop-filter: var(--frosted-blur);
-            border-radius: var(--border-radius-arab);
-            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
         }
         .hero-content::before {
             content: "❦";
@@ -177,18 +169,18 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 2rem;
-            color: var(--saffron-amber);
-            text-shadow: 0 0 15px var(--saffron-amber);
+            color: var(--terracotta);
+            text-shadow: 0 0 10px var(--terracotta);
         }
         .hero-subtitle {
             text-transform: uppercase;
             letter-spacing: 10px;
             font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--saffron-amber);
+            font-weight: 500;
+            color: var(--terracotta-light);
         }
         .hero-title {
-            font-size: clamp(2.8rem, 7vw, 4rem);
+            font-size: clamp(2.8rem, 7vw, 5rem);
             font-family: 'Playfair Display', serif;
             font-weight: 800;
             margin: 1rem 0;
@@ -196,7 +188,7 @@
             letter-spacing: 3px;
         }
         .hero-text {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.92;
             max-width: 550px;
             margin: 0 auto;
@@ -209,78 +201,74 @@
             margin: 0 auto;
         }
 
-        /* ========== HOST STYLING - KOPEREN NIS & OVERLAP ========== */
+        /* ========== HOST STYLING - COPPER NICHE ========== */
         .host-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0; /* Gap naar 0 voor overlap */
+            position: relative;
             flex-wrap: wrap;
-            background: transparent;
-            padding: 2rem;
+            gap: 0;
         }
         .host-image-wrapper {
             position: relative;
-            flex: 0 0 400px;
-            display: flex;
-            justify-content: center;
-            z-index: 1;
+            flex-shrink: 0;
+            z-index: 2;
         }
         .host-dome {
             position: absolute;
-            top: -50px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            width: 450px;
-            height: 450px;
-            background: radial-gradient(circle, rgba(217, 119, 6, 0.4) 0%, rgba(217, 119, 6, 0) 70%);
-            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            width: 480px;
+            height: 480px;
+            background: radial-gradient(circle, var(--terracotta-light) 0%, transparent 75%);
+            opacity: 0.5;
             z-index: 0;
+            border-radius: 50%;
         }
         .host-image {
-            width: 320px;
-            height: 320px;
+            width: 360px;
+            height: 360px;
             object-fit: cover;
             border-radius: 50%;
             position: relative;
             z-index: 2;
-            border: 8px solid var(--copper);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            border: 12px solid var(--copper);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
         }
         .host-text {
             flex: 1;
-            background: var(--frosted-bg);
-            backdrop-filter: var(--frosted-blur);
-            padding: 3.5rem;
+            background: var(--frosted-glass);
+            backdrop-filter: blur(10px);
+            padding: 3.5rem 4.5rem;
             border-radius: var(--border-radius-arab);
-            position: relative;
-            color: var(--charcoal-blue);
-            margin-left: -50px; /* Overlap effect */
-            z-index: 3;
-            border: 1px solid rgba(255,255,255,0.3);
+            margin-left: -80px;
+            z-index: 1;
             box-shadow: var(--shadow-royal);
+            min-width: 350px;
+            color: var(--charcoal-blue);
         }
         .host-text h3 {
-            color: var(--saffron-amber);
+            color: var(--terracotta);
             margin-bottom: 1.5rem;
             font-size: 1.9rem;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
         .taal-badge {
             display: inline-block;
-            background: linear-gradient(135deg, var(--copper), var(--copper-light));
+            background: linear-gradient(135deg, var(--terracotta), var(--terracotta-light));
             padding: 0.5rem 1rem;
             margin: 0.4rem;
             font-size: 0.8rem;
             font-weight: 600;
             color: white;
             border-radius: 50%;
-            width: 70px;
-            height: 70px;
+            width: 65px;
+            height: 65px;
             text-align: center;
-            line-height: 60px;
-            letter-spacing: 0.5px;
+            line-height: 55px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .host-quote {
@@ -288,12 +276,12 @@
             font-size: 1.1rem;
             margin-top: 2rem;
             padding-top: 1.2rem;
-            border-top: 2px solid var(--saffron-amber);
+            border-top: 2px solid var(--terracotta);
             color: var(--charcoal-light);
             font-family: 'Playfair Display', serif;
         }
 
-        /* ========== WONING STYLING - FROSTED TEXT BOXES ========== */
+        /* ========== WONING STYLING ========== */
         .woning-container {
             display: flex;
             align-items: center;
@@ -311,8 +299,7 @@
             height: 420px;
             object-fit: cover;
             border-radius: 20px;
-            transition: 0.5s;
-            border: 2px solid var(--silver-pearl);
+            border: 2px solid var(--terracotta-light);
         }
         .woning-border {
             position: absolute;
@@ -320,22 +307,21 @@
             left: -15px;
             right: 15px;
             bottom: 25px;
-            border: 3px solid var(--saffron-amber);
+            border: 3px solid var(--terracotta);
             border-radius: 120px 20px 120px 20px;
             pointer-events: none;
         }
         .woning-text {
             flex: 1;
             min-width: 300px;
-            background: var(--frosted-bg);
-            backdrop-filter: var(--frosted-blur);
+            background: var(--frosted-glass);
+            backdrop-filter: blur(10px);
             padding: 3rem;
-            border-radius: var(--border-radius-arab);
-            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 30px;
             box-shadow: var(--shadow-royal);
         }
         .woning-label {
-            color: var(--saffron-amber);
+            color: var(--terracotta);
             font-weight: 700;
             letter-spacing: 5px;
             font-size: 0.7rem;
@@ -347,129 +333,267 @@
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            letter-spacing: 1.5px;
             color: var(--charcoal-blue);
         }
 
-        /* ========== PAKKETTEN - SLANKE MOORSE BOGEN ========== */
+        /* ========== PAKKETTEN - SLANKE BOOG-KAARTEN ========== */
         .pakket-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 2rem;
-            margin-top: 3rem;
-            max-width: 900px; /* Gecentreerd 900px */
-            margin-left: auto;
-            margin-right: auto;
+            gap: 3rem;
+            margin: 4rem auto 0;
+            max-width: 900px;
             padding: 0 20px;
         }
         .pakket-card {
-            flex: 0 1 220px; /* Slankere kaarten */
-            min-height: 480px; /* Extra lang */
-            background: var(--frosted-bg);
-            backdrop-filter: var(--frosted-blur);
-            padding: 3.5rem 1.5rem;
+            flex: 0 1 220px;
+            min-height: 480px;
+            background: var(--frosted-glass);
+            backdrop-filter: blur(10px);
+            padding: 4.5rem 1.8rem;
             text-align: center;
-            border-radius: 150px 150px 0 0; /* Moorse boogvorm */
+            border-radius: var(--border-radius-arch);
             transition: all 0.4s ease;
-            border: 1px solid var(--silver-pearl);
+            border: 1px solid var(--terracotta-light);
             position: relative;
             box-shadow: var(--shadow-royal);
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: center; /* Vertically centered */
+            align-items: center;
         }
         .pakket-card::before {
             content: "✦";
             position: absolute;
-            top: 40px;
+            top: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 1.2rem;
-            color: var(--saffron-amber);
+            font-size: 1.5rem;
+            color: var(--terracotta);
+            text-shadow: 0 0 8px var(--terracotta);
         }
         .pakket-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--saffron-amber);
-            box-shadow: 0 30px 45px rgba(0,0,0,0.1);
+            transform: translateY(-15px);
+            border-color: var(--terracotta);
+            box-shadow: 0 35px 60px rgba(0,0,0,0.15);
         }
         .pakket-card strong {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: var(--charcoal-blue);
             font-family: 'Playfair Display', serif;
             letter-spacing: 1px;
-            margin-bottom: 0.5rem;
             display: block;
+            margin-bottom: 0.5rem;
+        }
+        .pakket-card p {
+            margin-bottom: 2rem;
+            color: var(--charcoal-light);
         }
         .pakket-prijs {
             display: block;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 800;
-            color: var(--saffron-amber);
-            margin-top: 1.5rem;
+            color: var(--terracotta);
+            margin-top: 1rem;
         }
 
         /* ========== ACTIVITEITEN - ZIGZAG PATROON ========== */
         #activiteiten {
-            background: transparent;
-            padding: 100px 5%;
-            margin: 0 auto 80px;
-            max-width: 1200px;
+            padding: 100px 5% 120px;
         }
         .experience-grid {
             display: flex;
             flex-direction: column;
             gap: 0;
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
         }
         .experience-item {
-            background: var(--frosted-bg);
-            backdrop-filter: var(--frosted-blur);
-            padding: 3rem;
+            background-size: cover;
+            background-position: center;
+            padding: 0;
             text-align: center;
             cursor: pointer;
             transition: 0.4s;
             border-radius: var(--border-radius-arab);
-            border: 1px solid rgba(255,255,255,0.3);
-            position: relative;
+            border: 1px solid var(--terracotta-light);
             box-shadow: var(--shadow-royal);
             width: 80%;
-            margin-bottom: 4rem; /* Spatiëring tussen items */
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .experience-overlay {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 2.5rem 3rem;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: 0.4s;
         }
         .experience-item:nth-child(odd) {
             align-self: flex-start;
-            transform: translateX(-10%); /* 10% naar links */
+            margin-left: 10%;
         }
         .experience-item:nth-child(even) {
             align-self: flex-end;
-            transform: translateX(10%); /* 10% naar rechts */
+            margin-right: 10%;
         }
         .experience-item:hover {
-            transform: translateX(0) translateY(-8px);
-            border-color: var(--saffron-amber);
-            box-shadow: 0 25px 40px rgba(0,0,0,0.1);
-            z-index: 10;
+            transform: scale(1.02);
+            border-color: var(--terracotta);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.15);
         }
         .experience-icon {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
+            font-size: 3rem;
+            margin-bottom: 1.2rem;
         }
         .experience-item h3 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 0.8rem;
             font-family: 'Playfair Display', serif;
-            letter-spacing: 1px;
             color: var(--charcoal-blue);
         }
         .experience-item p {
-            font-size: 1rem;
-            line-height: 1.6;
+            font-size: 1.1rem;
             color: var(--charcoal-light);
+            max-width: 400px;
         }
 
-        /* ========== MODAL - FROSTED ========== */
+        /* ========== BOEKINGSFORMULIER - RECHTE LIJNEN ========== */
+        .form-container {
+            background: var(--frosted-glass);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius-arab);
+            overflow: hidden;
+            box-shadow: var(--shadow-royal);
+            border: 1px solid var(--terracotta-light);
+        }
+        .form-grid {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .form-info {
+            background: rgba(179, 92, 68, 0.08);
+            color: var(--charcoal-blue);
+            padding: 4rem;
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+        .form-info::before {
+            content: "✧";
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            font-size: 1.5rem;
+            color: var(--terracotta);
+            text-shadow: 0 0 8px var(--terracotta);
+        }
+        .form-info h3 {
+            color: var(--terracotta);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .form-fields {
+            padding: 4rem;
+            flex: 2;
+            min-width: 320px;
+        }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            color: var(--charcoal-light);
+            letter-spacing: 2.5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 1rem 0;
+            border: none;
+            border-bottom: 2px solid var(--terracotta-light);
+            border-radius: 0px !important;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: 0.3s;
+            background: transparent;
+            color: var(--charcoal-blue);
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-bottom-color: var(--terracotta);
+        }
+        .checkbox-custom {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+            padding: 1.2rem;
+            background: rgba(179, 92, 68, 0.05);
+            border-radius: 12px;
+        }
+        .checkbox-custom input {
+            width: auto;
+            margin: 0;
+            border-bottom: none;
+        }
+        .checkbox-custom label {
+            margin: 0;
+            text-transform: none;
+            letter-spacing: normal;
+            font-size: 0.95rem;
+        }
+        .price-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--terracotta);
+        }
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--terracotta);
+        }
+        .submit-btn {
+            background: var(--terracotta);
+            color: white;
+            padding: 1.2rem 2.8rem;
+            border: none;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .submit-btn:hover {
+            background: var(--charcoal-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* ========== MODAL ========== */
         .modal {
             display: none;
             position: fixed;
@@ -481,202 +605,94 @@
             padding: 20px;
         }
         .modal-content {
-            background: var(--frosted-bg);
-            backdrop-filter: var(--frosted-blur);
-            padding: 3.5rem;
-            max-width: 500px;
+            background: white;
+            padding: 4rem;
+            max-width: 550px;
             width: 90%;
-            border-radius: 80px 8px 80px 8px;
+            border-radius: 100px 15px 100px 15px;
             text-align: center;
-            border: 2px solid var(--saffron-amber);
+            border: 3px solid var(--terracotta);
             position: relative;
             box-shadow: var(--shadow-royal);
         }
         .modal-content::before {
             content: "❦";
             position: absolute;
-            top: -18px;
+            top: -22px;
             left: 50%;
             transform: translateX(-50%);
             background: white;
-            padding: 0 12px;
-            color: var(--saffron-amber);
-            font-size: 1.2rem;
+            padding: 0 15px;
+            color: var(--terracotta);
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px var(--terracotta);
         }
         .modal-content h3 {
-            color: var(--saffron-amber);
-            margin-bottom: 1rem;
-            font-size: 1.7rem;
+            color: var(--terracotta);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
             font-family: 'Playfair Display', serif;
         }
         .modal-content p {
             color: var(--charcoal-light);
-            line-height: 1.7;
+            line-height: 1.8;
+            margin-bottom: 2rem;
         }
         .modal-content button {
-            margin-top: 2rem;
-            padding: 0.8rem 2.2rem;
-            background: var(--saffron-amber);
+            padding: 1rem 3rem;
+            background: var(--terracotta);
             color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-        .modal-content button:hover {
-            background: var(--copper);
-        }
-
-        /* ========== BOEKINGSFORMULIER - FROSTED & RECHTE LIJNEN ========== */
-        .form-container {
-            background: var(--frosted-bg);
-            backdrop-filter: var(--frosted-blur);
-            border-radius: var(--border-radius-arab);
-            overflow: hidden;
-            box-shadow: var(--shadow-royal);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .form-grid {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .form-info {
-            background: rgba(217, 119, 6, 0.08);
-            color: var(--charcoal-blue);
-            padding: 3.5rem;
-            flex: 1;
-            min-width: 280px;
-            position: relative;
-        }
-        .form-info::before {
-            content: "✧";
-            position: absolute;
-            top: 25px;
-            right: 30px;
-            font-size: 1.5rem;
-            color: var(--saffron-amber);
-            text-shadow: 0 0 10px var(--saffron-amber);
-        }
-        .form-info h3 {
-            color: var(--saffron-amber);
-            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            transition: 0.3s;
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
-        .form-fields {
-            padding: 3.5rem;
-            flex: 2;
-            min-width: 300px;
-        }
-        .form-row-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-bottom: 0.6rem;
-            text-transform: uppercase;
-            color: var(--charcoal-light);
-            letter-spacing: 2px;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 1.1rem;
-            border: none;
-            border-bottom: 2px solid var(--silver-pearl); /* Strakke rechte lijn */
-            border-radius: 0px; /* Geen afgeronde hoeken */
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: 0.3s;
-            background: rgba(232, 241, 237, 0.5);
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-bottom-color: var(--saffron-amber);
-            background: rgba(232, 241, 237, 0.8);
-        }
-        .checkbox-custom {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 1.5rem 0;
-            padding: 1.2rem;
-            background: rgba(217, 119, 6, 0.05);
-            border-radius: 8px;
-        }
-        .checkbox-custom input {
-            width: auto;
-            margin: 0;
-            border-bottom: none;
-        }
-        .checkbox-custom label {
-            margin: 0;
-            text-transform: none;
-            letter-spacing: normal;
-        }
-        .price-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 2.5rem;
-            padding-top: 2rem;
-            border-top: 2px solid var(--saffron-amber);
-        }
-        .price-amount {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--saffron-amber);
-        }
-        .submit-btn {
-            background: var(--saffron-amber);
-            color: white;
-            padding: 1.2rem 2.8rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-        .submit-btn:hover {
-            background: var(--copper);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(184, 115, 51, 0.3);
-        }
-        .realtime-active {
-            background: #10b981;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .modal-content button:hover {
+            background: var(--charcoal-blue);
         }
 
         /* ========== RESPONSIVE ========== */
-        @media (max-width: 900px) {
-            .host-image-wrapper { flex: 0 0 100%; }
-            .host-text { margin-left: 0; margin-top: -30px; text-align: center; }
-            .experience-item { width: 100%; transform: none !important; }
-            .pakket-grid { gap: 1.5rem; }
-            .pakket-card { flex: 0 1 260px; min-height: 400px; }
-            .hero-content { padding: 2rem; }
-            .section-title { font-size: 2rem; gap: 1rem; letter-spacing: 0.1em; }
-            .form-row-2 { grid-template-columns: 1fr; }
+        @media (max-width: 1000px) {
+            .host-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .host-text {
+                margin-left: 0;
+                margin-top: -60px;
+                padding: 3rem;
+                min-width: 100%;
+            }
+            .host-dome {
+                width: 350px;
+                height: 350px;
+            }
+            .host-image {
+                width: 300px;
+                height: 300px;
+            }
+            .experience-item {
+                width: 100%;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                height: 300px;
+            }
+            .form-grid {
+                flex-direction: column;
+            }
+            .form-row-2 {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+            .section-title {
+                font-size: 2.2rem;
+                gap: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -695,7 +711,7 @@
     </div>
 </div>
 
-<!-- HERO SECTIE - TANGER KUSTLIJN -->
+<!-- HERO SECTIE -->
 <section id="slogan" class="hero">
     <div class="hero-content">
         <div class="hero-subtitle">Tanger - Witte Stad</div>
@@ -707,13 +723,13 @@
 <!-- ARABESK SCHEIDINGSLIJN -->
 <div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
 
-<!-- SECTIE: HOST FILOSOFIE - RONDE KOPEREN NIS -->
+<!-- SECTIE: HOST FILOSOFIE - COPPER NICHE -->
 <section id="filosofie" class="section">
     <h2 class="section-title">Ontmoet je gastheer</h2>
     <div class="host-container">
         <div class="host-image-wrapper">
             <div class="host-dome"></div>
-            <img src="https://images.pexels.com/photos/3184402/pexels-photo-3184402.jpeg" class="host-image" alt="Gastheer serveert muntthee in Tanger Riad">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop" class="host-image" alt="Gastheer Horizon Of Infinity">
         </div>
         <div class="host-text">
             <h3>Geboren en getogen in België,<br>al jaren thuis in Tanger.</h3>
@@ -721,7 +737,7 @@
                 <span class="taal-badge">🇳🇱</span>
                 <span class="taal-badge">🇫🇷</span>
                 <span class="taal-badge">🇬🇧</span>
-                <span class="taal-badge">🇸🇦</span>
+                <span class="taal-badge">🇲🇦</span>
             </div>
             <ul style="margin: 1.5rem 0 0 1.2rem; color: var(--charcoal-light); line-height: 1.9;">
                 <li>✅ 24/7 aanwezig in de villa – vertrouwd gezicht</li>
@@ -739,14 +755,14 @@
 <!-- ARABESK SCHEIDINGSLIJN -->
 <div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
 
-<!-- SECTIE: WONING - RIAD PATIO MET FONTEIN & MOORSE BOOG -->
+<!-- SECTIE: WONING -->
 <section id="woning" class="section">
     <h2 class="section-title">Architecture of the Soul</h2>
 
     <div class="woning-container">
         <div class="woning-image-wrapper">
             <div class="woning-border"></div>
-            <img src="https://images.pexels.com/photos/258196/pexels-photo-258196.jpeg" class="woning-img" alt="Marokkaanse Riad patio met fontein en Zellij tegels - Tanger">
+            <img src="https://images.unsplash.com/photo-1590073844006-33379778ae09?q=80&w=1500&auto=format&fit=crop" class="woning-img" alt="Marokkaanse Riad patio">
         </div>
         <div class="woning-text">
             <div class="woning-label">✦ PATIO & FONTEIN ✦</div>
@@ -755,10 +771,10 @@
         </div>
     </div>
 
-    <div class="woning-container" style="flex-direction: row-reverse; flex-wrap: wrap;">
+    <div class="woning-container" style="flex-direction: row-reverse;">
         <div class="woning-image-wrapper">
             <div class="woning-border" style="top: 20px; left: 20px; right: -20px; bottom: -20px;"></div>
-            <img src="https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg" class="woning-img" alt="Luxe Super Suite in Tanger Riad met uitzicht">
+            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1500&auto=format&fit=crop" class="woning-img" alt="Luxe Super Suite">
         </div>
         <div class="woning-text">
             <div class="woning-label">✦ SUPER SUITE ✦</div>
@@ -771,15 +787,35 @@
 <!-- ARABESK SCHEIDINGSLIJN -->
 <div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
 
-<!-- SECTIE: PAKKETTEN - SLANKE VERTICALE BOGEN, CENTRAAL -->
+<!-- SECTIE: PAKKETTEN - SLANKE VERTICALE BOGEN -->
 <section id="pakketten" class="section">
     <h2 class="section-title">Onze pakketten</h2>
     <div class="pakket-grid">
-        <div class="pakket-card"><strong>TB-P1</strong>Essence of Orient<span class="pakket-prijs">€250</span></div>
-        <div class="pakket-card"><strong>TB-P2</strong>Souk & Soul<span class="pakket-prijs">€450</span></div>
-        <div class="pakket-card"><strong>TB-P3</strong>Arabian Nights<span class="pakket-prijs">€750</span></div>
-        <div class="pakket-card"><strong>TB-P4</strong>Royal Caravan<span class="pakket-prijs">€1250</span></div>
-        <div class="pakket-card"><strong>TB-P5</strong>Single overnachting<span class="pakket-prijs">€150 p/n</span></div>
+        <div class="pakket-card">
+            <strong>TB-P1</strong>
+            <p>Essence of Orient</p>
+            <span class="pakket-prijs">€250</span>
+        </div>
+        <div class="pakket-card">
+            <strong>TB-P2</strong>
+            <p>Souk & Soul</p>
+            <span class="pakket-prijs">€450</span>
+        </div>
+        <div class="pakket-card">
+            <strong>TB-P3</strong>
+            <p>Arabian Nights</p>
+            <span class="pakket-prijs">€750</span>
+        </div>
+        <div class="pakket-card">
+            <strong>TB-P4</strong>
+            <p>Royal Caravan</p>
+            <span class="pakket-prijs">€1250</span>
+        </div>
+        <div class="pakket-card">
+            <strong>TB-P5</strong>
+            <p>Single overnachting</p>
+            <span class="pakket-prijs">€150 p/n</span>
+        </div>
     </div>
 </section>
 
@@ -790,25 +826,33 @@
 <section id="activiteiten">
     <h2 class="section-title">The Experience Collection</h2>
     <div class="experience-grid">
-        <div class="experience-item" onclick="openModal('Strand Paardrijden')">
-            <div class="experience-icon">🐎</div>
-            <h3>Strand Paardrijden</h3>
-            <p>Galoppeer langs de branding van de Atlantische kust bij zonsondergang.</p>
+        <div class="experience-item" style="background-image: url('https://images.unsplash.com/photo-1598974357801-cbca100e65d3?q=80&w=1000&auto=format&fit=crop')" onclick="openModal('Strand Paardrijden')">
+            <div class="experience-overlay">
+                <div class="experience-icon">🐎</div>
+                <h3>Strand Paardrijden</h3>
+                <p>Galoppeer langs de branding van de Atlantische kust bij zonsondergang.</p>
+            </div>
         </div>
-        <div class="experience-item" onclick="openModal('Quad Tour')">
-            <div class="experience-icon">🏍️</div>
-            <h3>Quad Tour</h3>
-            <p>Verken de heuvels rond Tanger met een opwindende quadtocht.</p>
+        <div class="experience-item" style="background-image: url('https://images.unsplash.com/photo-1531737212413-667205e1cda7?q=80&w=1000&auto=format&fit=crop')" onclick="openModal('Quad Tour')">
+            <div class="experience-overlay">
+                <div class="experience-icon">🏍️</div>
+                <h3>Quad Tour</h3>
+                <p>Verken de heuvels rond Tanger met een opwindende quadtocht.</p>
+            </div>
         </div>
-        <div class="experience-item" onclick="openModal('Gids & Cultuur')">
-            <div class="experience-icon">🗺️</div>
-            <h3>Privé Gids</h3>
-            <p>Verken de verborgen schatten van de Tanger Medina met onze privé conciërge.</p>
+        <div class="experience-item" style="background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1000&auto=format&fit=crop')" onclick="openModal('Gids & Cultuur')">
+            <div class="experience-overlay">
+                <div class="experience-icon">🗺️</div>
+                <h3>Privé Gids</h3>
+                <p>Verken de verborgen schatten van de Tanger Medina met onze privé conciërge.</p>
+            </div>
         </div>
-        <div class="experience-item" onclick="openModal('Wellness & Spa')">
-            <div class="experience-icon">💆</div>
-            <h3>Wellness & Spa</h3>
-            <p>Een eeuwenoude hammam reiniging van lichaam en geest met lokale natuurlijke oliën.</p>
+        <div class="experience-item" style="background-image: url('https://images.unsplash.com/photo-1544161515-4af6b1d462c2?q=80&w=1000&auto=format&fit=crop')" onclick="openModal('Wellness & Spa')">
+            <div class="experience-overlay">
+                <div class="experience-icon">💆</div>
+                <h3>Wellness & Spa</h3>
+                <p>Een eeuwenoude hammam reiniging van lichaam en geest met lokale natuurlijke oliën.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -831,9 +875,9 @@
         <div class="form-grid">
             <div class="form-info">
                 <h3>Boek uw verblijf</h3>
-                <p>Horizon of Infinity biedt meer dan alleen een dak; wij bieden een op maat gemaakte ervaring in het hart van Tanger.</p>
-                <div style="margin-top: 2rem; font-size: 0.85rem; opacity: 0.8;">
-                    <p>📍 Tanger / Houara Coast</p>
+                <p>Horizon of Infinity biedt meer dan alleen een roof; wij bieden een op maat gemaakte ervaring in het hart van Tanger.</p>
+                <div style="margin-top: 2.5rem; font-size: 0.85rem; opacity: 0.9;">
+                    <p style="margin-bottom: 0.5rem;">📍 Tanger / Houara Coast</p>
                     <p>📧 info@horizoninfinity.com</p>
                 </div>
             </div>
@@ -884,7 +928,7 @@
 
                 <div class="price-bar">
                     <div>
-                        <div class="price-label">Totaalprijs</div>
+                        <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: var(--charcoal-light); margin-bottom: 5px;">Totaalprijs</div>
                         <div class="price-amount">€ <span id="tbTotaalprijsDisplay">250</span></div>
                         <input type="hidden" id="tbTotaalprijs" value="250">
                     </div>
@@ -896,31 +940,19 @@
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
-
 <script>
-    // Soepele scroll voor menu links
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            const targetId = this.getAttribute('href');
-            if (targetId && targetId.startsWith('#')) {
-                e.preventDefault();
-                const target = document.querySelector(targetId);
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        });
-    });
+    // ========== INLINE SUPABASE CONFIG & LOGIC ==========
+    const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
+    const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    // Sync zichtbare prijs met verborgen input veld (voor script.js)
+    // Sync visible price
     const tbSelect = document.getElementById('tbPackageSelect');
     const priceDisplay = document.getElementById('tbTotaalprijsDisplay');
     const priceHidden = document.getElementById('tbTotaalprijs');
 
     function updatePriceDisplay() {
-        if (!tbSelect) return;
-        const selectedOption = tbSelect.selectedOptions[0];
+        const selectedOption = tbSelect?.selectedOptions[0];
         if (selectedOption) {
             const price = selectedOption.dataset.price;
             if (priceDisplay) priceDisplay.innerText = price;
@@ -933,13 +965,79 @@
         updatePriceDisplay();
     }
 
-    // MODAL FUNCTIES
+    // Date restrictions
+    const vandaag = new Date().toISOString().split('T')[0];
+    document.getElementById('tbCheckIn')?.setAttribute('min', vandaag);
+    document.getElementById('tbCheckOut')?.setAttribute('min', vandaag);
+
+    // Booking handler
+    async function handleBravoBooking() {
+        const checkIn = document.getElementById('tbCheckIn')?.value;
+        const checkOut = document.getElementById('tbCheckOut')?.value;
+
+        if (!checkIn || !checkOut) {
+            alert("❌ Selecteer beide datums.");
+            return;
+        }
+        if (new Date(checkIn) >= new Date(checkOut)) {
+            alert("❌ Check-out moet na check-in liggen.");
+            return;
+        }
+
+        const selectedOption = tbSelect.selectedOptions[0];
+        const btn = document.getElementById('tbBookBtn');
+        btn.disabled = true;
+        btn.innerText = "BEZIG...";
+
+        const record = {
+            team: "TB",
+            unit_code: selectedOption.value,
+            resource_id: selectedOption.dataset.resource,
+            gast_naam: document.getElementById('tbGuestName')?.value || '',
+            gast_contact: {
+                email: document.getElementById('tbGuestEmail')?.value || '',
+                telefoon: document.getElementById('tbGuestPhone')?.value || ''
+            },
+            check_in: checkIn,
+            check_out: checkOut,
+            metadata: {
+                transfer: document.getElementById('tbTransfer')?.checked || false,
+                speciaal: document.getElementById('tbSpeciaal')?.value || '',
+                woning_type: selectedOption.dataset.type || "Onbekend"
+            },
+            totaalprijs: parseFloat(priceHidden?.value) || 0,
+            status: "NIEUW"
+        };
+
+        const { error } = await supabaseClient.from('boekingen').insert([record]);
+        if (error) {
+            alert("❌ Fout: " + error.message);
+            btn.disabled = false;
+            btn.innerText = "BEVESTIG RESERVATIE";
+        } else {
+            alert("✅ Boeking succesvol!");
+            location.reload();
+        }
+    }
+    document.getElementById('tbBookBtn')?.addEventListener('click', handleBravoBooking);
+
+    // Smooth scroll
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if (targetId && targetId.startsWith('#')) {
+                e.preventDefault();
+                document.querySelector(targetId)?.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+
+    // MODAL FUNCTIONS
     function openModal(activiteit) {
         const modal = document.getElementById('activiteitModal');
         const titel = document.getElementById('modalTitel');
-        const tekstElement = document.getElementById('modalText');
         let tekst = '';
-        
+
         switch(activiteit) {
             case 'Strand Paardrijden':
                 titel.innerHTML = '🐎 Strand Paardrijden';
@@ -961,8 +1059,8 @@
                 titel.innerHTML = activiteit;
                 tekst = 'Een onvergetelijke ervaring wacht op je.';
         }
-        
-        if (tekstElement) tekstElement.innerHTML = tekst;
+
+        document.getElementById('modalText').innerHTML = tekst;
         if (modal) modal.style.display = 'flex';
     }
 
