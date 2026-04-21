@@ -435,17 +435,112 @@
             background: var(--champagne-gold);
             color: white;
         }
+
+        /* ========== NIEUWE STIJLEN VOOR STICKY LINKERBLOK ========== */
+        .booking-two-columns {
+            display: flex;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        /* Linker blok - sticky */
+        .booking-sticky-left {
+            flex: 0 0 320px;
+            position: sticky;
+            top: 100px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .booking-sticky-left h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--champagne-gold);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .booking-sticky-left p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .sticky-contact {
+            margin: 1rem 0;
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--border-soft);
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        .sticky-contact p {
+            margin: 0.3rem 0;
+            font-size: 0.8rem;
+        }
+
+        .sticky-selected-package {
+            background: #fdfaf5;
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .sticky-price-box {
+            background: linear-gradient(135deg, var(--deep-anthracite), #1a1a1a);
+            color: var(--champagne-gold);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .sticky-price-box .price-label {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #aaa;
+        }
+
+        .sticky-price-box .price-amount {
+            font-size: 1.6rem;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Rechter blok - het originele formulier */
+        .booking-right-form {
+            flex: 1;
+            min-width: 0;
+        }
+
         .booking-card {
             background: var(--card-bg);
-            max-width: 650px;
             width: 100%;
             padding: 2rem;
-            margin: 0 auto;
             border: 1px solid var(--border-soft);
             box-shadow: var(--shadow-soft);
             position: relative;
         }
-        h1 {
+
+        @media (max-width: 900px) {
+            .booking-two-columns {
+                flex-direction: column;
+            }
+            .booking-sticky-left {
+                position: static;
+                width: 100%;
+                margin-bottom: 2rem;
+            }
+        }
+
+        .booking-card h1 {
             font-size: 1.4rem;
             margin-bottom: 1.5rem;
             letter-spacing: 3px;
@@ -770,15 +865,15 @@
     </div>
 </section>
 
-<!-- MENU SECTIE (2 blokken gecentreerd, ruime gap) -->
+<!-- MENU SECTIE (2 blokken gecentreerd) -->
 <section id="menu" class="section" style="padding: 80px 0; background-color: #fdfdfd;">
     <h2 class="section-title" style="text-align: center; margin-bottom: 50px;">Menu</h2>
     
     <div class="menu-grid" style="display: flex; justify-content: center; gap: 100px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
         
-        <div class="menu-card" style="flex: 0 1 380px; background: white; box-shadow: var(--shadow-soft); border: 1px solid var(--border-soft); cursor: pointer;" onclick="openPopup('Ontbijt', 'Een luxe start van de dag.', 'https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=800&q=80')">
+        <div class="menu-card" style="flex: 0 1 380px; background: white; box-shadow: var(--shadow-soft); border: 1px solid var(--border-soft); cursor: pointer;" onclick="openPopup('Ontbijt', 'Een luxe start van de dag.', 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800')">
             <div style="width: 100%; height: 250px; overflow: hidden;">
-                <img src="https://images.unsplash.com/photo-1496044534964-704e492e5ea3?auto=format&fit=crop&w=800&q=80" alt="Ontbijt" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Ontbijt" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div style="padding: 30px; text-align: center;">
                 <h3 style="font-family: 'Cinzel'; letter-spacing: 2px;">Ontbijt</h3>
@@ -799,84 +894,112 @@
     </div>
 </section>
 
-<!-- BOEKINGSFORMULIER (onveranderd) -->
+<!-- BOEKINGSFORMULIER (twee kolommen: sticky links + formulier rechts) -->
 <section id="booking" class="section">
     <h2 class="section-title">Boek nu</h2>
-    <div class="booking-card">
-        <h1>Réservation</h1>
-
-        <label>Accommodatie</label>
-        <select id="taUnitSelect" required>
-            <option value="">Selecteer uw verblijf</option>
-            <optgroup label="Longvinity Hub">
-                <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa</option>
-            </optgroup>
-            <optgroup label="Achakar Trinity">
-                <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf670618" data-price="400" data-type="Villa">La Perla</option>
-                <option value="U3" data-resource="90285810-ae69-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar</option>
-                <option value="U4" data-resource="72168b2d-a348-457b-8092-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
-            </optgroup>
-            <optgroup label="Marrakech Urban">
-                <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82ceda52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
-                <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix</option>
-                <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge</option>
-                <option value="U8" data-resource="7454d0ef-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
-                <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-3584650d6cd5" data-price="195" data-type="Villa">Palmeraie Royale</option>
-                <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7e1f4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
-            </optgroup>
-        </select>
-
-        <div class="row-2">
-            <div><label>Check-in</label><input type="date" id="taCheckIn" required></div>
-            <div><label>Check-out</label><input type="date" id="taCheckOut" required></div>
-        </div>
-
-        <label>Gastgegevens</label>
-        <input type="text" id="taGuestName" placeholder="Volledige naam" required>
-        <div class="row-2">
-            <div><input type="email" id="taGuestEmail" placeholder="Emailadres" required></div>
-            <div><input type="tel" id="taGuestPhone" placeholder="Telefoonnummer" required></div>
-        </div>
-
-        <label>Betaalmethode</label>
-        <select id="taPaymentMethod" required>
-            <option value="">Kies methode</option>
-            <option value="Cash">Contant</option>
-            <option value="Kaart">Creditcard</option>
-            <option value="PayPal">PayPal</option>
-        </select>
-
-        <button type="button" class="open-services-btn" onclick="openServicesModal()">➕ Extra diensten & activiteiten</button>
-
-        <div id="originalCheckboxRow" style="display: none;">
-            <div class="checkbox-row">
-                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="50" value="Housekeeping"> Housekeeping (€50)</label>
-                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Cleaning"> Schoonmaak (€25)</label>
-                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Breakfast"> Ontbijt (€25)</label>
-                <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="20" value="Chef"> Privé Kok (€20)</label>
-                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Strand Paardrijden"> Paardrijden</label>
-                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Quad Tour"> Quad Tour</label>
-                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Gids"> Gids</label>
-                <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Wellness"> Wellness</label>
+    
+    <div class="booking-two-columns">
+        <!-- LINKER STICKY BLOK -->
+        <div class="booking-sticky-left">
+            <h3>📍 Boek uw verblijf</h3>
+            <p>Horizon of Infinity biedt meer dan alleen een dak; wij bieden een op maat gemaakte ervaring in het hart van Tanger.</p>
+            
+            <div class="sticky-contact">
+                <p>📍 Tanger / Houara Coast</p>
+                <p>✉️ info@horizoninfinity.com</p>
+            </div>
+            
+            <div class="sticky-selected-package" id="stickySelectedPackage">
+                <span style="font-size: 0.7rem; letter-spacing: 1px;">GESELECTEERD VERBLIJF</span>
+                <p id="stickyPackageName" style="font-weight: bold; margin: 0.5rem 0 0 0; font-size: 0.85rem;">-</p>
+            </div>
+            
+            <div class="sticky-price-box">
+                <div class="price-label">TOTAALPRIJS</div>
+                <div class="price-amount" id="stickyTotalPrice">€ 0,00</div>
+                <div class="price-label" style="font-size: 0.6rem; margin-top: 0.3rem;">incl. alle extra's</div>
             </div>
         </div>
+        
+        <!-- RECHTER BLOK - ORIGINEEL FORMULIER (onaangetast) -->
+        <div class="booking-right-form">
+            <div class="booking-card">
+                <h1>Réservation</h1>
 
-        <label>Wensen & Assistentie</label>
-        <textarea id="taZorgWensen" rows="2" placeholder="Medische zorg, dieetwensen..."></textarea>
-        <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen (optioneel)"></textarea>
+                <label>Accommodatie</label>
+                <select id="taUnitSelect" required>
+                    <option value="">Selecteer uw verblijf</option>
+                    <optgroup label="Longvinity Hub">
+                        <option value="U1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="500" data-type="Villa">Al Houara Villa</option>
+                    </optgroup>
+                    <optgroup label="Achakar Trinity">
+                        <option value="U2" data-resource="6a586aba-b69b-4c2c-857f-d3cecf670618" data-price="400" data-type="Villa">La Perla</option>
+                        <option value="U3" data-resource="90285810-ae69-4686-9827-c40406e05897" data-price="400" data-type="Villa">Al Bahar</option>
+                        <option value="U4" data-resource="72168b2d-a348-457b-8092-64dcedf44f25" data-price="400" data-type="Villa">Le Rocher</option>
+                    </optgroup>
+                    <optgroup label="Marrakech Urban">
+                        <option value="U5" data-resource="c69bb2ab-bd43-4995-8455-82ceda52189f" data-price="150" data-type="Suite">L'Essence Suite</option>
+                        <option value="U6" data-resource="2d4a4e97-9534-47cc-8136-407699740421" data-price="150" data-type="Appartement">Oasis de Paix</option>
+                        <option value="U7" data-resource="c29ef1b5-7f73-40ce-be9c-e47ac98f93cd" data-price="150" data-type="Studio">Le Refuge</option>
+                        <option value="U8" data-resource="7454d0ef-620d-4ad6-8b5e-6a8bb996b94a" data-price="195" data-type="Duplex">Imperial Duplex</option>
+                        <option value="U9" data-resource="b003b989-2e9f-465a-9cc5-3584650d6cd5" data-price="195" data-type="Villa">Palmeraie Royale</option>
+                        <option value="U10" data-resource="f859bd8a-b28f-474f-9d76-de7e1f4d1cc6" data-price="195" data-type="Penthouse">Sovereign Skyline</option>
+                    </optgroup>
+                </select>
 
-        <div style="display: flex; align-items: center; gap: 8px; margin: 1rem 0;">
-            <input type="checkbox" id="taTransfer" style="width: 18px;">
-            <label for="taTransfer" style="margin:0;">Luchthaven Transfer</label>
+                <div class="row-2">
+                    <div><label>Check-in</label><input type="date" id="taCheckIn" required></div>
+                    <div><label>Check-out</label><input type="date" id="taCheckOut" required></div>
+                </div>
+
+                <label>Gastgegevens</label>
+                <input type="text" id="taGuestName" placeholder="Volledige naam" required>
+                <div class="row-2">
+                    <div><input type="email" id="taGuestEmail" placeholder="Emailadres" required></div>
+                    <div><input type="tel" id="taGuestPhone" placeholder="Telefoonnummer" required></div>
+                </div>
+
+                <label>Betaalmethode</label>
+                <select id="taPaymentMethod" required>
+                    <option value="">Kies methode</option>
+                    <option value="Cash">Contant</option>
+                    <option value="Kaart">Creditcard</option>
+                    <option value="PayPal">PayPal</option>
+                </select>
+
+                <button type="button" class="open-services-btn" onclick="openServicesModal()">➕ Extra diensten & activiteiten</button>
+
+                <div id="originalCheckboxRow" style="display: none;">
+                    <div class="checkbox-row">
+                        <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="50" value="Housekeeping"> Housekeeping (€50)</label>
+                        <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Cleaning"> Schoonmaak (€25)</label>
+                        <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="25" value="Breakfast"> Ontbijt (€25)</label>
+                        <label class="check-item"><input type="checkbox" class="ta-dienst" data-price="20" value="Chef"> Privé Kok (€20)</label>
+                        <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Strand Paardrijden"> Paardrijden</label>
+                        <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Quad Tour"> Quad Tour</label>
+                        <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Gids"> Gids</label>
+                        <label class="check-item"><input type="checkbox" class="ta-activiteit" value="Wellness"> Wellness</label>
+                    </div>
+                </div>
+
+                <label>Wensen & Assistentie</label>
+                <textarea id="taZorgWensen" rows="2" placeholder="Medische zorg, dieetwensen..."></textarea>
+                <textarea id="taSpeciaal" rows="2" placeholder="Overige wensen (optioneel)"></textarea>
+
+                <div style="display: flex; align-items: center; gap: 8px; margin: 1rem 0;">
+                    <input type="checkbox" id="taTransfer" style="width: 18px;">
+                    <label for="taTransfer" style="margin:0;">Luchthaven Transfer</label>
+                </div>
+
+                <div class="price-summary">
+                    <span class="total-label">TOTAAL</span>
+                    <span class="total-amount" id="displayTotaal">€ 0,00</span>
+                    <input type="hidden" id="taTotaalprijs">
+                </div>
+
+                <button id="taBookBtn">BEVESTIG RESERVATIE</button>
+            </div>
         </div>
-
-        <div class="price-summary">
-            <span class="total-label">TOTAAL</span>
-            <span class="total-amount" id="displayTotaal">€ 0,00</span>
-            <input type="hidden" id="taTotaalprijs">
-        </div>
-
-        <button id="taBookBtn">BEVESTIG RESERVATIE</button>
     </div>
 </section>
 
@@ -945,7 +1068,7 @@
 </footer>
 
 <script>
-    // ========== ALLE JAVASCRIPT (onaangetast) ==========
+    // ========== ALLE JAVASCRIPT (onaangetast, met extra synchronisatie voor sticky blok) ==========
     const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
     const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
@@ -1069,21 +1192,42 @@
         document.body.style.overflow = 'auto';
     }
 
+    // ========== ORIGINELE updatePrices (aangevuld met sticky synchronisatie) ==========
     function updatePrices() {
         let totaal = 0;
         const select = document.getElementById('taUnitSelect');
         const checkIn = document.getElementById('taCheckIn').value;
         const checkOut = document.getElementById('taCheckOut').value;
+        
         if (select.value && checkIn && checkOut) {
             const nachten = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
             const prijs = parseFloat(select.selectedOptions[0]?.dataset.price || 0);
             if (nachten > 0) totaal += nachten * prijs;
         }
+        
         document.querySelectorAll('.ta-dienst:checked').forEach(cb => {
             totaal += parseFloat(cb.dataset.price) || 0;
         });
+        
+        // Originele prijsweergave
         document.getElementById('displayTotaal').innerText = `€ ${totaal.toFixed(2)}`;
         document.getElementById('taTotaalprijs').value = totaal.toFixed(2);
+        
+        // ========== EXTRA: SYNCHRONISATIE NAAR HET STICKY LINKER BLOK ==========
+        // 1. Prijs updaten in sticky blok
+        const stickyPriceEl = document.getElementById('stickyTotalPrice');
+        if (stickyPriceEl) {
+            stickyPriceEl.innerText = `€ ${totaal.toFixed(2)}`;
+        }
+        
+        // 2. Geselecteerde accommodatie naam tonen in sticky blok
+        const stickyPackageNameEl = document.getElementById('stickyPackageName');
+        if (stickyPackageNameEl && select.selectedOptions[0]) {
+            const unitText = select.selectedOptions[0].text;
+            stickyPackageNameEl.innerText = unitText;
+        } else if (stickyPackageNameEl) {
+            stickyPackageNameEl.innerText = '-';
+        }
     }
 
     async function handleBooking() {
@@ -1143,6 +1287,7 @@
         }
     }
 
+    // Event listeners (onaangetast)
     document.getElementById('taCheckIn').addEventListener('change', updatePrices);
     document.getElementById('taCheckOut').addEventListener('change', updatePrices);
     document.getElementById('taUnitSelect').addEventListener('change', updatePrices);
