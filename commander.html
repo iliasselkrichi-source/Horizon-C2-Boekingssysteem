@@ -2,47 +2,314 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Horizon C2 | Team Commander - Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f4f7fc; color: #0f172a; min-height: 100vh; }
+        .app-container { display: flex; min-height: 100vh; }
+        
+        /* ========== LINKER MENUBALK ========== */
+        .sidebar { width: 260px; background: white; border-right: 1px solid #e2edf2; padding: 1.5rem 1rem; display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
+        .sidebar-logo { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e2edf2; }
+        .sidebar-logo h2 { font-size: 1.2rem; letter-spacing: 2px; color: #C5A059; }
+        .sidebar-logo p { font-size: 0.7rem; color: #64748b; margin-top: 0.3rem; }
+        .sidebar-menu { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
+        .menu-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.8rem; border-radius: 10px; cursor: pointer; transition: all 0.2s; color: #475569; font-weight: 500; font-size: 0.8rem; }
+        .menu-item:hover { background: #f1f5f9; }
+        .menu-item.active { background: #C5A059; color: white; }
+        .menu-badge { background: #e2e8f0; padding: 0.1rem 0.4rem; border-radius: 20px; font-size: 0.6rem; font-weight: 600; margin-left: auto; color: #475569; }
+        .menu-item.active .menu-badge { background: white; color: #C5A059; }
+        
+        /* RECHTER CONTENT */
+        .main-content { flex: 1; overflow-y: auto; padding: 1.5rem; }
+        .header { margin-bottom: 1.5rem; }
+        .header h1 { font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .realtime-active { background: #10b981; color: white; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.65rem; font-weight: 500; }
+        
+        /* STATISTIEKEN */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .stat-card { background: white; border-radius: 1rem; padding: 0.8rem; border: 1px solid #e2edf2; text-align: center; }
+        .stat-number { font-size: 1.5rem; font-weight: 700; color: #C5A059; }
+        .stat-label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* ZOEKBALK */
+        .search-bar { background: white; border-radius: 1rem; padding: 0.6rem 1rem; margin-bottom: 1rem; border: 1px solid #e2edf2; display: flex; align-items: center; gap: 0.8rem; }
+        .search-bar input { flex: 1; border: none; padding: 0.4rem; font-size: 0.8rem; outline: none; background: transparent; }
+        .export-btn { background: #10b981; margin-left: auto; padding: 0.3rem 0.8rem; font-size: 0.65rem; }
+        
+        /* TABEL */
+        .card { background: white; border-radius: 1rem; padding: 1.2rem; margin-bottom: 1.5rem; border: 1px solid #e2edf2; }
+        .card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.8rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+        .table-container { max-height: 400px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.6rem; text-align: left; border-bottom: 1px solid #e2edf2; font-size: 0.75rem; }
+        th { background: #f8fafc; font-weight: 600; position: sticky; top: 0; }
+        .booking-number { font-family: monospace; font-weight: 600; background: #f1f5f9; padding: 0.15rem 0.3rem; border-radius: 4px; font-size: 0.65rem; }
+        .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.6rem; font-weight: 600; }
+        .badge-nieuw { background: #fef3c7; color: #d97706; }
+        .badge-bevestigd { background: #d1fae5; color: #059669; }
+        .badge-uitgevoerd { background: #e2e8f0; color: #475569; }
+        .badge-ta { background: #dbeafe; color: #2563eb; }
+        .badge-tb { background: #fef3c7; color: #d97706; }
+        .deadline-green { background: #d1fae5; color: #059669; }
+        .deadline-orange { background: #fed7aa; color: #c2410c; }
+        .deadline-red { background: #fee2e2; color: #dc2626; font-weight: bold; }
+        
+        button { background: #C5A059; border: none; color: white; padding: 0.25rem 0.7rem; border-radius: 20px; cursor: pointer; font-size: 0.65rem; transition: all 0.2s; }
+        button:hover { background: #a8883e; }
+        .action-btn { background: #3b82f6; }
+        .action-btn:hover { background: #2563eb; }
+        .btn-add { background: #10b981; margin-bottom: 1rem; }
+        
+        /* AGENDA KALENDER */
+        .agenda-calendar { background: white; border-radius: 1rem; padding: 1rem; margin-bottom: 1.5rem; border: 1px solid #e2edf2; }
+        .month-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .month-nav button { background: none; border: 1px solid #e2edf2; color: #475569; padding: 0.3rem 0.8rem; }
+        .month-nav h3 { font-size: 1rem; color: #C5A059; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+        .cal-day { background: #f9fafb; border-radius: 8px; padding: 0.5rem; font-size: 0.7rem; border: 1px solid #e2e8f0; min-height: 80px; cursor: pointer; transition: all 0.2s; }
+        .cal-day:hover { background: #e2edf2; transform: scale(1.02); }
+        .cal-day.is-bezet { background: #fee2e2; border-color: #dc2626; }
+        .cal-day.has-booking { background: #dbeafe; border-color: #2563eb; }
+        .cal-day.has-onderhoud { background: #fed7aa; border-color: #c2410c; }
+        .cal-day.has-herstelling { background: #fef3c7; border-color: #d97706; }
+        .cal-day.has-interne { background: #e0e7ff; border-color: #4f46e5; }
+        .cal-day-header { text-align: center; font-weight: 600; padding: 0.3rem; font-size: 0.7rem; }
+        .cal-day strong { display: block; font-size: 0.8rem; }
+        .agenda-list { margin-top: 1rem; max-height: 300px; overflow-y: auto; }
+        .agenda-item { padding: 0.6rem; border-radius: 8px; margin-bottom: 0.5rem; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; background: #f8fafc; border-left: 3px solid; }
+        .agenda-item:hover { background: #e2edf2; transform: translateX(3px); }
+        .agenda-item.type-bezet { border-left-color: #dc2626; }
+        .agenda-item.type-onderhoud { border-left-color: #c2410c; }
+        .agenda-item.type-herstelling { border-left-color: #d97706; }
+        .agenda-item.type-interne_afspraak { border-left-color: #4f46e5; }
+        .agenda-item.type-booking { border-left-color: #10b981; }
+        .agenda-time { font-size: 0.6rem; color: #64748b; }
+        .agenda-title { font-weight: 600; margin-top: 0.2rem; }
+        
+        /* MODALS */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: white; border-radius: 1rem; max-width: 550px; width: 90%; max-height: 85vh; overflow-y: auto; padding: 1.2rem; }
+        .modal-content h3 { margin-bottom: 1rem; color: #C5A059; font-size: 1rem; }
+        .modal-content input, .modal-content select, .modal-content textarea { width: 100%; padding: 0.4rem; margin-bottom: 0.8rem; border: 1px solid #e2edf2; border-radius: 8px; font-size: 0.75rem; font-family: inherit; }
+        .modal-buttons { display: flex; gap: 0.8rem; justify-content: flex-end; margin-top: 1rem; }
+        .task-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border-bottom: 1px solid #e2edf2; }
+        .task-name { font-weight: 500; font-size: 0.75rem; flex: 1; }
+        .task-select { width: 180px; padding: 0.3rem; font-size: 0.7rem; border-radius: 6px; border: 1px solid #e2edf2; }
+        .info-box { background: #fef3c7; padding: 0.6rem; border-radius: 8px; margin-bottom: 0.8rem; font-size: 0.7rem; }
+        .hidden { display: none !important; }
+        
+        /* FINANCE */
+        .finance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+        .finance-card { background: white; border-radius: 1rem; padding: 1rem; border: 1px solid #e2edf2; }
+        .finance-stats { display: flex; justify-content: space-around; text-align: center; margin-bottom: 0.8rem; }
+        .finance-stat-value { font-size: 1.2rem; font-weight: 700; color: #C5A059; }
+        .finance-stat-label { font-size: 0.6rem; color: #64748b; }
+        canvas { max-height: 200px; width: 100%; }
+        .filter-buttons { display: flex; gap: 0.3rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+        .filter-btn { background: #e2e8f0; color: #475569; font-size: 0.65rem; }
+        .filter-btn.active { background: #C5A059; color: white; }
+        
+        /* WIKI */
+        .wiki-content { line-height: 1.6; font-size: 0.75rem; }
+        .wiki-section { margin-bottom: 1.2rem; }
+        .wiki-section h4 { color: #C5A059; margin-bottom: 0.5rem; font-size: 0.85rem; }
+        .workflow-step { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.6rem; padding: 0.5rem; background: #f8fafc; border-radius: 10px; }
+        .workflow-number { width: 26px; height: 26px; background: #C5A059; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.7rem; }
+        .dataflow-diagram { background: #1a1a2e; color: #eee; padding: 0.8rem; border-radius: 10px; font-family: monospace; font-size: 0.6rem; overflow-x: auto; }
+        
+        /* TEAM */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.8rem; margin-top: 0.8rem; }
+        .team-card { background: #f8fafc; border-radius: 1rem; padding: 0.8rem; border: 1px solid #e2edf2; display: flex; justify-content: space-between; align-items: center; }
+        .team-info h4 { font-size: 0.85rem; font-weight: 600; }
+        .team-info p { font-size: 0.65rem; color: #64748b; }
+        .team-functions { display: flex; flex-wrap: wrap; gap: 0.2rem; margin-top: 0.2rem; }
+        .team-function-badge { background: #C5A05920; color: #C5A059; padding: 0.1rem 0.3rem; border-radius: 10px; font-size: 0.55rem; }
+        .function-checkboxes { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.8rem; }
+        
+        @media (max-width: 1000px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .team-grid { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>🖥️ HORIZON C2 — Team Commander <span class="realtime-active">🔴 LIVE</span></h1>
-    <p style="margin-bottom: 2rem;">Besturingspaneel & Universele Agenda</p>
+<div class="app-container">
+    <!-- LINKER MENUBALK -->
+    <div class="sidebar">
+        <div class="sidebar-logo"><h2>🏛️ HORIZON C2</h2><p>Commander Console</p></div>
+        <div class="sidebar-menu">
+            <div class="menu-item active" data-view="aanvragen" id="menuAanvragen"><span>📋</span><span>Aanvragen</span><span class="menu-badge" id="badgeAanvragen">0</span></div>
+            <div class="menu-item" data-view="bevestigd" id="menuBevestigd"><span>✅</span><span>Bevestigd</span><span class="menu-badge" id="badgeBevestigd">0</span></div>
+            <div class="menu-item" data-view="uitgevoerd" id="menuUitgevoerd"><span>📦</span><span>Uitgevoerd</span><span class="menu-badge" id="badgeUitgevoerd">0</span></div>
+            <div class="menu-item" data-view="agenda" id="menuAgenda"><span>📅</span><span>Agenda</span></div>
+            <div class="menu-item" data-view="finance" id="menuFinance"><span>📊</span><span>Finance</span></div>
+            <div class="menu-item" data-view="wiki" id="menuWiki"><span>📖</span><span>Wiki</span></div>
+            <div class="menu-item" data-view="team" id="menuTeam"><span>👥</span><span>Team</span></div>
+        </div>
+    </div>
 
-    <div class="dashboard-row">
-        <div class="card">
-            <h3>📋 Besturingspaneel</h3>
-            <div class="table-container">
-                <table style="width:100%">
-                    <thead>
-                        <tr><th>Boekingsnr</th><th>Gast</th><th>Check-in</th><th>Transfer</th><th>Prijs</th><th>Status</th><th>Actie</th></tr>
-                    </thead>
-                    <tbody id="bookingTable"></tbody>
-                </table>
+    <!-- RECHTER CONTENT -->
+    <div class="main-content">
+        <div class="header"><h1>🖥️ HORIZON C2 — Team Commander <span class="realtime-active">🔴 LIVE</span></h1><p style="color:#64748b;margin-top:0.2rem;font-size:0.75rem;">Besturingspaneel & Taakverdeling</p></div>
+        
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-number" id="statAanvragen">0</div><div class="stat-label">Aanvragen</div></div>
+            <div class="stat-card"><div class="stat-number" id="statBevestigd">0</div><div class="stat-label">Bevestigd</div></div>
+            <div class="stat-card"><div class="stat-number" id="statUitgevoerd">0</div><div class="stat-label">Uitgevoerd</div></div>
+            <div class="stat-card"><div class="stat-number" id="statOmzet">€0</div><div class="stat-label">Omzet</div></div>
+        </div>
+        
+        <!-- SECTIE: AANVRAGEN (met Bekijk knop) -->
+        <div id="section-aanvragen"><div class="search-bar"><span>🔍</span><input type="text" id="searchAanvragen" placeholder="Zoek op boekingsnummer, gastnaam..."></div><div class="card"><h3>📋 Nieuwe boekingen</h3><div class="table-container"><table><thead><tr><th>Boekingsnr</th><th>Gast</th><th>Check-in</th><th>Team</th><th>Prijs</th><th>Status</th><th>Actie</th></tr></thead><tbody id="aanvragenTable"></tbody></table></div></div></div>
+        
+        <!-- SECTIE: BEVESTIGD -->
+        <div id="section-bevestigd" style="display:none;"><div class="search-bar"><span>🔍</span><input type="text" id="searchBevestigd" placeholder="Zoek op boekingsnummer, gastnaam..."></div><div class="card"><h3>✅ Bevestigde boekingen</h3><div class="table-container"><table><thead><tr><th>Boekingsnr</th><th>Gast</th><th>Check-in</th><th>Team</th><th>Prijs</th><th>Status</th><th>Deadline</th><th>Actie</th></tr></thead><tbody id="bevestigdTable"></tbody></table></div></div></div>
+        
+        <!-- SECTIE: UITGEVOERD -->
+        <div id="section-uitgevoerd" style="display:none;"><div class="search-bar"><span>🔍</span><input type="text" id="searchUitgevoerd" placeholder="Zoek op boekingsnummer, gastnaam..."><button class="export-btn" id="exportCsvBtn">📥 Export CSV</button></div><div class="card"><h3>📦 Uitgevoerde boekingen</h3><div class="table-container"></table><thead><tr><th>Boekingsnr</th><th>Gast</th><th>Check-in</th><th>Check-out</th><th>Team</th><th>Prijs</th><th>Status</th></tr></thead><tbody id="uitgevoerdTable"></tbody></table></div></div></div>
+        
+        <!-- SECTIE: AGENDA -->
+        <div id="section-agenda" style="display:none;">
+            <div class="agenda-calendar">
+                <div class="month-nav"><button id="prevMonthBtn">◀ Vorige</button><h3 id="currentMonthYear"></h3><button id="nextMonthBtn">Volgende ▶</button></div>
+                <div id="agendaCalendarGrid" class="calendar-grid"></div>
+                <button id="addEventBtn" style="margin-top: 0.8rem; width: auto;">+ Nieuwe afspraak</button>
             </div>
-            <div class="realtime-badge">🔴 Realtime actief - Nieuwe boekingen verschijnen direct</div>
+            <div class="card"><h3>📋 Afspraken voor geselecteerde dag</h3><div id="dailyAgendaList" class="agenda-list"></div></div>
         </div>
-
-        <div class="card">
-            <h3>📅 Universele Agenda</h3>
-            <div id="calendar" class="calendar-grid"></div>
-            <p class="badge">🔵 TA = blauw | 🟡 TB = goud | 🚗 = transfer</p>
-        </div>
+        
+        <!-- SECTIE: FINANCE -->
+        <div id="section-finance" style="display:none;"><div class="filter-buttons"><button class="filter-btn active" data-period="month">Deze maand</button><button class="filter-btn" data-period="quarter">Kwartaal</button><button class="filter-btn" data-period="year">Jaar</button><button class="filter-btn" data-period="all">Alle</button></div><div class="finance-grid"><div class="finance-card"><h3>💰 Omzet per team</h3><div class="finance-stats"><div><div class="finance-stat-value" id="financeOmzetTA">€0</div><div class="finance-stat-label">Team Alpha</div></div><div><div class="finance-stat-value" id="financeOmzetTB">€0</div><div class="finance-stat-label">Team Bravo</div></div><div><div class="finance-stat-value" id="financeOmzetTotaal">€0</div><div class="finance-stat-label">Totaal</div></div></div><canvas id="omzetChart"></canvas></div><div class="finance-card"><h3>📊 Aantal boekingen</h3><div class="finance-stats"><div><div class="finance-stat-value" id="financeAantalTA">0</div><div class="finance-stat-label">Team Alpha</div></div><div><div class="finance-stat-value" id="financeAantalTB">0</div><div class="finance-stat-label">Team Bravo</div></div><div><div class="finance-stat-value" id="financeAantalTotaal">0</div><div class="finance-stat-label">Totaal</div></div></div><canvas id="aantalChart"></canvas></div></div><div class="card"><h3>📈 Maandelijkse omzet</h3><canvas id="maandelijkseOmzetChart"></canvas></div></div>
+        
+        <!-- SECTIE: WIKI -->
+        <div id="section-wiki" style="display:none;"><div class="card"><h3>📖 Workflow & Datastroom</h3><div class="wiki-content"><div class="wiki-section"><h4>🔄 Gang van zaken</h4><div class="workflow-step"><div class="workflow-number">1</div><div><strong>Boeking ontvangen</strong><br>Klant boekt → status NIEUW</div></div><div class="workflow-step"><div class="workflow-number">2</div><div><strong>Bevestigen</strong><br>Klik "Bevestig" → status BEVESTIGD</div></div><div class="workflow-step"><div class="workflow-number">3</div><div><strong>Taakverdeling</strong><br>Wijs teamleden toe aan diensten/activiteiten</div></div><div class="workflow-step"><div class="workflow-number">4</div><div><strong>Deadline monitoring</strong><br>🟢 Groen=taken ingedeeld, 🟠 Oranje=geen taken, 🔴 Rood=dringend</div></div><div class="workflow-step"><div class="workflow-number">5</div><div><strong>Uitvoering</strong><br>Na check-out → Uitgevoerd + CSV export</div></div></div><div class="wiki-section"><h4>🗄️ Datastroom</h4><div class="dataflow-diagram"><pre style="margin:0;">Alpha/Bravo → Supabase (boekingen) → Commander Dashboard ↓<br>Kalender afspraken → Supabase (kalender_afspraken) → Agenda</pre></div></div><div class="wiki-section"><h4>🎨 Kleuren legenda</h4><div style="display:flex;flex-wrap:wrap;gap:0.8rem;"><div><span class="badge badge-nieuw">NIEUW</span> = Aanvraag</div><div><span class="badge badge-bevestigd">BEVESTIGD</span> = Bevestigd</div><div><span class="badge badge-uitgevoerd">UITGEVOERD</span> = Voorbij</div><div><span class="deadline-green">🟢 Groen</span> = Taken ingedeeld</div><div><span class="deadline-orange">🟠 Oranje</span> = Geen taken</div><div><span class="deadline-red">🔴 Rood</span> = Dringend</div></div></div></div></div></div>
+        
+        <!-- SECTIE: TEAM -->
+        <div id="section-team" style="display:none;"><button class="btn-add" id="addTeamBtn">+ Nieuw teamlid</button><div id="teamGrid" class="team-grid"></div></div>
     </div>
 </div>
 
+<!-- MODAL: AFSPRAAK -->
+<div id="eventModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <h3 id="eventModalTitle">➕ Nieuwe afspraak</h3>
+        <input type="text" id="eventTitle" placeholder="Titel (bv. Onderhoud tuin)">
+        <div style="display:flex; gap:0.5rem;"><input type="datetime-local" id="eventStart" style="flex:1"><input type="datetime-local" id="eventEnd" style="flex:1"></div>
+        <select id="eventType">
+            <option value="bezet">🔴 Bezet</option>
+            <option value="onderhoud">🟠 Onderhoud</option>
+            <option value="herstelling">🟡 Herstelling</option>
+            <option value="interne_afspraak">🔵 Interne afspraak</option>
+        </select>
+        <textarea id="eventMemo" rows="2" placeholder="Memo..."></textarea>
+        <div class="modal-buttons"><button id="closeEventModal">Annuleer</button><button id="deleteEventBtn" class="hidden" style="background:#dc2626;">🗑️ Verwijderen</button><button id="saveEventBtn">💾 Opslaan</button></div>
+    </div>
+</div>
+
+<!-- MODAL: FICHE (voor zowel Aanvragen als Bevestigd) -->
 <div id="ficheModal" class="modal-overlay hidden">
-    <div class="fiche-modal">
-        <h3>📄 Universele boekingsfiche</h3>
-        <div id="modalContent"></div>
-        <button id="closeModal">Sluiten</button>
+    <div class="modal-content">
+        <h3 id="ficheModalTitle">📄 Boekingsfiche</h3>
+        <div id="ficheModalContent"></div>
+        <div id="ficheZorgWensen" class="info-box"></div>
+        <div class="modal-buttons">
+            <button id="closeFicheModal">Sluiten</button>
+            <button id="ficheConfirmBtn" style="background:#059669;">✅ Bevestig boeking</button>
+            <button id="ficheTaskBtn" class="action-btn hidden">📋 Taken verdelen</button>
+        </div>
     </div>
 </div>
+
+<!-- MODAL: TEAMLID -->
+<div id="teamModal" class="modal-overlay hidden"><div class="modal-content"><h3 id="teamModalTitle">👤 Nieuw teamlid</h3><input type="text" id="teamName" placeholder="Naam"><input type="text" id="teamPhone" placeholder="GSM"><input type="email" id="teamEmail" placeholder="Email"><label>Functies:</label><div class="function-checkboxes" id="functionCheckboxes"><label><input type="checkbox" value="Host"> Host</label><label><input type="checkbox" value="Concierge"> Concierge</label><label><input type="checkbox" value="Housekeeping"> Housekeeping</label><label><input type="checkbox" value="Driver"> Driver</label><label><input type="checkbox" value="DBoy"> DBoy</label></div><div class="modal-buttons"><button id="closeTeamModal">Annuleer</button><button id="deleteTeamBtn" class="hidden" style="background:#dc2626;">🗑️ Verwijderen</button><button id="saveTeamBtn">💾 Opslaan</button></div></div></div>
+
+<!-- MODAL: TAKENVERDELING -->
+<div id="taakModal" class="modal-overlay hidden"><div class="modal-content"><h3 id="taakModalTitle">📋 Taakverdeling</h3><div id="taakModalContent"></div><div id="zorgWensenContainer" class="info-box"></div><div><label>📝 Interne memo</label><textarea id="interneMemo" rows="2" placeholder="Notities..."></textarea></div><div id="takenContainer"></div><div class="modal-buttons"><button id="closeTaakModal">Annuleer</button><button id="saveTakenBtn">💾 Opslaan</button></div></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
+<script>
+    const SB_URL = "https://orgbdqaxxkwtpvaxxuep.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yZ2JkcWF4eGt3dHB2YXh4dWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTU0NzksImV4cCI6MjA5MTIzMTQ3OX0.TY6hWwzG3q_waVDJhxvuLfFFg5qy0HOxMjcTM0YcJ3Q";
+    let supabaseClient = null, bookingsDB = [], teamledenDB = [], takenDB = [], kalenderAfsprakenDB = [], currentEventId = null, currentBookingId = null, currentTeamId = null, currentFinancePeriod = 'month', currentCalendarDate = new Date(), selectedDate = new Date();
+    let omzetChart, aantalChart, maandelijkseOmzetChart;
+    
+    if (typeof supabase !== 'undefined') { supabaseClient = supabase.createClient(SB_URL, SB_KEY); loadAllData(); setupRealtimeListener(); }
+    
+    async function loadAllData() { await loadBookings(); await loadTeamleden(); await loadTaken(); await loadKalenderAfspraken(); refreshAll(); }
+    async function loadBookings() { const { data } = await supabaseClient.from('boekingen').select('*').order('created_at', { ascending: false }); if (data) bookingsDB = data; }
+    async function loadTeamleden() { const { data } = await supabaseClient.from('teamleden').select('*').order('naam'); if (data) teamledenDB = data; renderTeamGrid(); }
+    async function loadTaken() { const { data } = await supabaseClient.from('boekingen_taken').select('*'); if (data) takenDB = data; }
+    async function loadKalenderAfspraken() { const { data } = await supabaseClient.from('kalender_afspraken').select('*').order('start_datum'); if (data) kalenderAfsprakenDB = data; renderAgendaCalendar(); }
+    
+    function setupRealtimeListener() { if (!supabaseClient) return; supabaseClient.channel('all').on('postgres_changes', { event: '*', schema: 'public', table: 'boekingen' }, () => loadBookings()).on('postgres_changes', { event: '*', schema: 'public', table: 'teamleden' }, () => loadTeamleden()).on('postgres_changes', { event: '*', schema: 'public', table: 'boekingen_taken' }, () => loadTaken()).on('postgres_changes', { event: '*', schema: 'public', table: 'kalender_afspraken' }, () => loadKalenderAfspraken()).subscribe(); }
+    
+    function refreshAll() { updateStats(); renderAanvragenTable(); renderBevestigdTable(); renderUitgevoerdTable(); renderAgendaCalendar(); if (document.getElementById('section-finance').style.display !== 'none') updateFinanceCharts(); }
+    
+    function updateStats() { const vandaag = new Date().toISOString().split('T')[0]; const aanvragen = bookingsDB.filter(b => (b.status === 'NIEUW' || !b.status) && b.check_in >= vandaag).length; const bevestigd = bookingsDB.filter(b => b.status === 'BEVESTIGD' && b.check_in >= vandaag).length; const uitgevoerd = bookingsDB.filter(b => b.check_out && b.check_out < vandaag).length; const omzet = bookingsDB.reduce((s,b) => s + (b.totaalprijs || 0), 0); document.getElementById('statAanvragen').innerText = aanvragen; document.getElementById('statBevestigd').innerText = bevestigd; document.getElementById('statUitgevoerd').innerText = uitgevoerd; document.getElementById('statOmzet').innerHTML = `€${omzet.toLocaleString()}`; document.getElementById('badgeAanvragen').innerText = aanvragen; document.getElementById('badgeBevestigd').innerText = bevestigd; }
+    
+    function filterBookings(bookings, term) { if (!term) return bookings; const t = term.toLowerCase(); return bookings.filter(b => (b.boekingsnummer && b.boekingsnummer.toLowerCase().includes(t)) || (b.gast_naam && b.gast_naam.toLowerCase().includes(t))); }
+    
+    // ========== AANVRAGEN TABLE (met Bekijk knop) ==========
+    function renderAanvragenTable() { const tbody = document.getElementById('aanvragenTable'); const term = document.getElementById('searchAanvragen')?.value || ''; const vandaag = new Date().toISOString().split('T')[0]; let base = bookingsDB.filter(b => (b.status === 'NIEUW' || !b.status) && b.check_in >= vandaag); const res = filterBookings(base, term); if (!tbody) return; if (res.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">✨ Geen nieuwe aanvragen</td></tr>'; return; } tbody.innerHTML = res.map(b => `<tr><td><strong class="booking-number">${b.boekingsnummer || 'Geen'}</strong></td><td>${b.gast_naam || '-'}</td><td>${b.check_in || '-'}</td><td><span class="badge ${b.team === 'TA' ? 'badge-ta' : 'badge-tb'}">${b.team || '-'}</span></td><td>€${b.totaalprijs || 0}</td><td><span class="badge badge-nieuw">${b.status || 'NIEUW'}</span></td><td><button onclick="openFiche('${b.id}')" style="background:#3b82f6;">📄 Bekijk</button> <button onclick="bevestigBoeking('${b.id}')">✅ Bevestig</button></td></tr>`).join(''); }
+    
+    // ========== BEVESTIGD TABLE ==========
+    function getDeadlineStatus(b) { const hasTasks = takenDB.some(t => t.booking_id === b.id); if (!hasTasks) { const days = Math.ceil((new Date(b.check_in) - new Date()) / 86400000); if (days < 7 && days >= 0) return { class: 'deadline-red', text: '🔴 DRINGEND' }; return { class: 'deadline-orange', text: '🟠 Aandacht' }; } return { class: 'deadline-green', text: '🟢 Taken ingedeeld' }; }
+    function renderBevestigdTable() { const tbody = document.getElementById('bevestigdTable'); const term = document.getElementById('searchBevestigd')?.value || ''; const vandaag = new Date().toISOString().split('T')[0]; let base = bookingsDB.filter(b => b.status === 'BEVESTIGD' && b.check_in >= vandaag); const res = filterBookings(base, term); if (!tbody) return; if (res.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">✅ Geen bevestigde boekingen</td></tr>'; return; } tbody.innerHTML = res.map(b => { const d = getDeadlineStatus(b); return `<tr><td><strong class="booking-number">${b.boekingsnummer || 'Geen'}</strong></td><td>${b.gast_naam || '-'}</td><td>${b.check_in || '-'}</td><td><span class="badge ${b.team === 'TA' ? 'badge-ta' : 'badge-tb'}">${b.team || '-'}</span></td><td>€${b.totaalprijs || 0}</td><td><span class="badge badge-bevestigd">BEVESTIGD</span></td><td><span class="badge ${d.class}">${d.text}</span></td><td><button class="action-btn" onclick="openTaakModal('${b.id}')">📋 Taken</button></td></tr>`; }).join(''); }
+    
+    function renderUitgevoerdTable() { const tbody = document.getElementById('uitgevoerdTable'); const term = document.getElementById('searchUitgevoerd')?.value || ''; const vandaag = new Date().toISOString().split('T')[0]; let base = bookingsDB.filter(b => b.check_out && b.check_out < vandaag); const res = filterBookings(base, term); if (!tbody) return; if (res.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">📦 Geen uitgevoerde boekingen</td></tr>'; return; } tbody.innerHTML = res.map(b => `<tr><td><strong class="booking-number">${b.boekingsnummer || 'Geen'}</strong></td><td>${b.gast_naam || '-'}</td><td>${b.check_in || '-'}</td><td>${b.check_out || '-'}</td><td><span class="badge ${b.team === 'TA' ? 'badge-ta' : 'badge-tb'}">${b.team || '-'}</span></td><td>€${b.totaalprijs || 0}</td><td><span class="badge badge-uitgevoerd">UITGEVOERD</span></td></tr>`).join(''); }
+    
+    document.getElementById('exportCsvBtn')?.addEventListener('click', () => { const vandaag = new Date().toISOString().split('T')[0]; const uitgevoerd = bookingsDB.filter(b => b.check_out && b.check_out < vandaag); if (uitgevoerd.length === 0) { alert("Geen uitgevoerde boekingen"); return; } let csv = [["Boekingsnummer","Gast","Email","Telefoon","Check-in","Check-out","Team","Unit","Prijs","Status","Memo"]]; for (const b of uitgevoerd) csv.push([b.boekingsnummer||'', b.gast_naam||'', b.gast_contact?.email||'', b.gast_contact?.telefoon||'', b.check_in||'', b.check_out||'', b.team||'', b.unit_code||'', b.totaalprijs||0, b.status||'', b.interne_memo||'']); const blob = new Blob(["\uFEFF" + csv.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n")], {type:"text/csv"}); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `uitgevoerd_${new Date().toISOString().split('T')[0]}.csv`; link.click(); URL.revokeObjectURL(link.href); });
+    
+    // ========== FICHE MODAL (voor Aanvragen - alleen bekijken) ==========
+    window.openFiche = async (id) => { currentBookingId = id; const b = bookingsDB.find(x => x.id === id); if (!b) return; const m = b.metadata || {}; document.getElementById('ficheModalTitle').innerHTML = `📄 Boekingsfiche — ${b.boekingsnummer || 'Boeking'}`; document.getElementById('ficheModalContent').innerHTML = `<p><strong>👤 Gast:</strong> ${b.gast_naam}</p><p><strong>📅 Verblijf:</strong> ${b.check_in} tot ${b.check_out}</p><p><strong>🏠 Team/Unit:</strong> ${b.team} - ${b.unit_code}</p><p><strong>💰 Prijs:</strong> €${b.totaalprijs}</p>`; document.getElementById('ficheZorgWensen').innerHTML = `<strong>📝 Zorg & Wensen</strong><br>🩺 Zorgwensen: ${m.zorg_wensen || 'Geen'}<br>🎁 Speciaal: ${m.speciaal || 'Geen'}`; const confirmBtn = document.getElementById('ficheConfirmBtn'); const taskBtn = document.getElementById('ficheTaskBtn'); if (b.status === 'BEVESTIGD') { confirmBtn.style.display = 'none'; taskBtn.classList.remove('hidden'); taskBtn.onclick = () => { document.getElementById('ficheModal').classList.add('hidden'); openTaakModal(id); }; } else { confirmBtn.style.display = 'block'; confirmBtn.onclick = () => { document.getElementById('ficheModal').classList.add('hidden'); bevestigBoeking(id); }; taskBtn.classList.add('hidden'); } document.getElementById('ficheModal').classList.remove('hidden'); };
+    document.getElementById('closeFicheModal')?.addEventListener('click', () => document.getElementById('ficheModal').classList.add('hidden'));
+    
+    // ========== AGENDA FUNCTIES ==========
+    function getTypeClass(type) { return { 'bezet':'has-bezet', 'onderhoud':'has-onderhoud', 'herstelling':'has-herstelling', 'interne_afspraak':'has-interne' }[type] || ''; }
+    function getTypeName(type) { return { 'bezet':'🔴 Bezet', 'onderhoud':'🟠 Onderhoud', 'herstelling':'🟡 Herstelling', 'interne_afspraak':'🔵 Interne afspraak' }[type] || type; }
+    
+    function renderAgendaCalendar() { const container = document.getElementById('agendaCalendarGrid'); if (!container) return; const year = currentCalendarDate.getFullYear(); const month = currentCalendarDate.getMonth(); const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate(); const today = new Date().toISOString().split('T')[0]; document.getElementById('currentMonthYear').innerText = `${new Date(year, month).toLocaleString('nl', { month: 'long', year: 'numeric' })}`; let html = ''; const dagen = ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za']; for (let i = 0; i < 7; i++) html += `<div class="cal-day-header">${dagen[i]}</div>`; for (let i = 0; i < firstDay; i++) html += '<div class="cal-day empty"></div>'; for (let d = 1; d <= daysInMonth; d++) { const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; const isToday = dateStr === today; const bookingsOnDay = bookingsDB.filter(b => dateStr >= b.check_in && dateStr <= b.check_out).length; const afsprakenOnDay = kalenderAfsprakenDB.filter(a => { const aStart = a.start_datum.split('T')[0]; const aEnd = a.eind_datum.split('T')[0]; return dateStr >= aStart && dateStr <= aEnd; }); let extraClass = ''; if (bookingsOnDay > 0) extraClass = 'has-booking'; else if (afsprakenOnDay.length > 0) extraClass = getTypeClass(afsprakenOnDay[0].type); html += `<div class="cal-day ${isToday ? 'is-bezet' : ''} ${extraClass}" data-date="${dateStr}"><strong>${d}</strong></div>`; } container.innerHTML = html; document.querySelectorAll('.cal-day[data-date]').forEach(el => el.addEventListener('click', () => { selectedDate = new Date(el.dataset.date); renderDailyAgenda(); })); renderDailyAgenda(); }
+    
+    function renderDailyAgenda() { const container = document.getElementById('dailyAgendaList'); if (!container) return; const dateStr = selectedDate.toISOString().split('T')[0]; const bookingsOnDay = bookingsDB.filter(b => dateStr >= b.check_in && dateStr <= b.check_out); const afsprakenOnDay = kalenderAfsprakenDB.filter(a => { const aStart = a.start_datum.split('T')[0]; const aEnd = a.eind_datum.split('T')[0]; return dateStr >= aStart && dateStr <= aEnd; }); if (bookingsOnDay.length === 0 && afsprakenOnDay.length === 0) { container.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:1rem;">Geen afspraken op deze dag</div>'; return; } let html = ''; for (const a of afsprakenOnDay) { const start = new Date(a.start_datum).toLocaleTimeString('nl', {hour:'2-digit',minute:'2-digit'}); const end = new Date(a.eind_datum).toLocaleTimeString('nl', {hour:'2-digit',minute:'2-digit'}); html += `<div class="agenda-item type-${a.type}" onclick="openEventModal('${a.id}')"><div class="agenda-time">${start} - ${end}</div><div class="agenda-title">${getTypeName(a.type)}: ${a.titel}</div><div class="agenda-time">${a.memo ? '📝 ' + a.memo.substring(0,50) : ''}</div></div>`; } for (const b of bookingsOnDay) { html += `<div class="agenda-item type-booking" onclick="openFiche('${b.id}')"><div class="agenda-title">🟢 Boeking: ${b.gast_naam} (${b.boekingsnummer || 'Geen'})</div><div class="agenda-time">${b.check_in} tot ${b.check_out}</div></div>`; } container.innerHTML = html; }
+    
+    window.openEventModal = async (id=null) => { currentEventId = id; const modal = document.getElementById('eventModal'); const title = document.getElementById('eventModalTitle'); const delBtn = document.getElementById('deleteEventBtn'); if (id) { const event = kalenderAfsprakenDB.find(e => e.id === id); if (event) { title.innerText = `✏️ ${event.titel}`; document.getElementById('eventTitle').value = event.titel; document.getElementById('eventStart').value = event.start_datum.slice(0,16); document.getElementById('eventEnd').value = event.eind_datum.slice(0,16); document.getElementById('eventType').value = event.type; document.getElementById('eventMemo').value = event.memo || ''; delBtn.classList.remove('hidden'); } } else { title.innerText = '➕ Nieuwe afspraak'; document.getElementById('eventTitle').value = ''; const now = new Date(); now.setHours(9,0,0,0); const later = new Date(now); later.setHours(10,0,0,0); document.getElementById('eventStart').value = now.toISOString().slice(0,16); document.getElementById('eventEnd').value = later.toISOString().slice(0,16); document.getElementById('eventType').value = 'onderhoud'; document.getElementById('eventMemo').value = ''; delBtn.classList.add('hidden'); } modal.classList.remove('hidden'); };
+    
+    document.getElementById('saveEventBtn')?.addEventListener('click', async () => { const titel = document.getElementById('eventTitle').value.trim(); if (!titel) { alert("Titel is verplicht"); return; } const data = { titel, start_datum: document.getElementById('eventStart').value, eind_datum: document.getElementById('eventEnd').value, type: document.getElementById('eventType').value, memo: document.getElementById('eventMemo').value }; if (currentEventId) await supabaseClient.from('kalender_afspraken').update(data).eq('id', currentEventId); else await supabaseClient.from('kalender_afspraken').insert([data]); document.getElementById('eventModal').classList.add('hidden'); await loadKalenderAfspraken(); });
+    document.getElementById('deleteEventBtn')?.addEventListener('click', async () => { if (currentEventId && confirm("Verwijder deze afspraak?")) { await supabaseClient.from('kalender_afspraken').delete().eq('id', currentEventId); document.getElementById('eventModal').classList.add('hidden'); await loadKalenderAfspraken(); } });
+    document.getElementById('closeEventModal')?.addEventListener('click', () => document.getElementById('eventModal').classList.add('hidden'));
+    document.getElementById('addEventBtn')?.addEventListener('click', () => openEventModal());
+    document.getElementById('prevMonthBtn')?.addEventListener('click', () => { currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1); renderAgendaCalendar(); });
+    document.getElementById('nextMonthBtn')?.addEventListener('click', () => { currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1); renderAgendaCalendar(); });
+    
+    // ========== FINANCE ==========
+    function getFilteredByPeriod(period) { const now = new Date(); let start; if (period === 'month') start = new Date(now.getFullYear(), now.getMonth(), 1); else if (period === 'quarter') start = new Date(now.getFullYear(), Math.floor(now.getMonth()/3)*3, 1); else if (period === 'year') start = new Date(now.getFullYear(), 0, 1); else start = new Date(2020,0,1); return bookingsDB.filter(b => new Date(b.check_in) >= start && b.status === 'BEVESTIGD'); }
+    function updateFinanceCharts() { const filtered = getFilteredByPeriod(currentFinancePeriod); const ta = filtered.filter(b => b.team === 'TA'); const tb = filtered.filter(b => b.team === 'TB'); const omzetTA = ta.reduce((s,b) => s + (b.totaalprijs||0),0); const omzetTB = tb.reduce((s,b) => s + (b.totaalprijs||0),0); document.getElementById('financeOmzetTA').innerHTML = `€${omzetTA.toLocaleString()}`; document.getElementById('financeOmzetTB').innerHTML = `€${omzetTB.toLocaleString()}`; document.getElementById('financeOmzetTotaal').innerHTML = `€${(omzetTA+omzetTB).toLocaleString()}`; document.getElementById('financeAantalTA').innerText = ta.length; document.getElementById('financeAantalTB').innerText = tb.length; document.getElementById('financeAantalTotaal').innerText = ta.length + tb.length; if (omzetChart) omzetChart.destroy(); if (aantalChart) aantalChart.destroy(); omzetChart = new Chart(document.getElementById('omzetChart').getContext('2d'), { type: 'bar', data: { labels: ['Team Alpha', 'Team Bravo'], datasets: [{ label: 'Omzet (€)', data: [omzetTA, omzetTB], backgroundColor: ['#2563eb', '#d97706'], borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: true } }); aantalChart = new Chart(document.getElementById('aantalChart').getContext('2d'), { type: 'bar', data: { labels: ['Team Alpha', 'Team Bravo'], datasets: [{ label: 'Aantal', data: [ta.length, tb.length], backgroundColor: ['#2563eb', '#d97706'], borderRadius: 8 }] }, options: { responsive: true, maintainAspectRatio: true } }); const maandData = {}; filtered.forEach(b => { const m = new Date(b.check_in).toLocaleString('nl', { month: 'short', year: 'numeric' }); maandData[m] = (maandData[m] || 0) + (b.totaalprijs || 0); }); if (maandelijkseOmzetChart) maandelijkseOmzetChart.destroy(); maandelijkseOmzetChart = new Chart(document.getElementById('maandelijkseOmzetChart').getContext('2d'), { type: 'line', data: { labels: Object.keys(maandData), datasets: [{ label: 'Omzet (€)', data: Object.values(maandData), borderColor: '#C5A059', fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: true } }); }
+    document.querySelectorAll('.filter-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentFinancePeriod = btn.dataset.period; updateFinanceCharts(); }); });
+    
+    // ========== BOEKING ACTIES ==========
+    window.bevestigBoeking = async (id) => { if (confirm("Bevestig deze boeking?")) { await supabaseClient.from('boekingen').update({ status: 'BEVESTIGD' }).eq('id', id); await loadBookings(); alert("✅ Bevestigd!"); } };
+    window.openTaakModal = async (id) => { currentBookingId = id; const b = bookingsDB.find(x => x.id === id); if (!b) return; const m = b.metadata || {}; const diensten = m.extra_diensten || m.diensten || []; const act = m.activiteiten || []; const transfer = m.transfer ? ['Luchthaven Transfer'] : []; const alleTaken = [...diensten.map(d => ({ naam: d })), ...act.map(a => ({ naam: a })), ...transfer.map(t => ({ naam: t }))]; const bestaand = takenDB.filter(t => t.booking_id === id); document.getElementById('taakModalTitle').innerHTML = `📋 Taakverdeling — ${b.boekingsnummer || 'Boeking'}`; document.getElementById('taakModalContent').innerHTML = `<p><strong>👤 Gast:</strong> ${b.gast_naam}</p><p><strong>📅 Verblijf:</strong> ${b.check_in} tot ${b.check_out}</p><p><strong>🏠 Team/Unit:</strong> ${b.team} - ${b.unit_code}</p>`; document.getElementById('zorgWensenContainer').innerHTML = `<strong>📝 Zorg & Wensen</strong><br>🩺 Zorgwensen: ${m.zorg_wensen || 'Geen'}<br>🎁 Speciaal: ${m.speciaal || 'Geen'}`; document.getElementById('interneMemo').value = b.interne_memo || ''; document.getElementById('takenContainer').innerHTML = alleTaken.map(taak => { const ex = bestaand.find(t => t.taak_naam === taak.naam); return `<div class="task-row"><div class="task-name">${taak.naam}</div><select class="task-select" data-taak="${taak.naam}"><option value="">-- Niet toegewezen --</option>${teamledenDB.map(t => `<option value="${t.id}" ${ex?.team_lid_id === t.id ? 'selected' : ''}>${t.naam} (${t.functies?.join(', ')})</option>`).join('')}</select></div>`; }).join('') || '<p>Geen diensten of activiteiten.</p>'; document.getElementById('taakModal').classList.remove('hidden'); };
+    document.getElementById('saveTakenBtn')?.addEventListener('click', async () => { if (!currentBookingId) return; for (const sel of document.querySelectorAll('.task-select')) { const taak = sel.dataset.taak; const lid = sel.value; if (lid) { const ex = takenDB.find(t => t.booking_id === currentBookingId && t.taak_naam === taak); if (ex) await supabaseClient.from('boekingen_taken').update({ team_lid_id: lid }).eq('id', ex.id); else await supabaseClient.from('boekingen_taken').insert([{ booking_id: currentBookingId, taak_naam: taak, team_lid_id: lid }]); } } await supabaseClient.from('boekingen').update({ interne_memo: document.getElementById('interneMemo').value }).eq('id', currentBookingId); document.getElementById('taakModal').classList.add('hidden'); await loadAllData(); alert("✅ Opgeslagen!"); });
+    document.getElementById('closeTaakModal')?.addEventListener('click', () => document.getElementById('taakModal').classList.add('hidden'));
+    
+    // ========== TEAM LEDEN ==========
+    function renderTeamGrid() { const c = document.getElementById('teamGrid'); if (!c) return; if (teamledenDB.length === 0) { c.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:2rem;">Geen teamleden. Klik op "+ Nieuw teamlid"</div>'; return; } c.innerHTML = teamledenDB.map(t => `<div class="team-card"><div class="team-info"><h4>${escapeHtml(t.naam)}</h4><p>📞 ${t.telefoon || 'Geen'} | ✉️ ${t.email || 'Geen'}</p><div class="team-functions">${t.functies?.map(f => `<span class="team-function-badge">${f}</span>`).join('') || '-'}</div></div><div><button onclick="openTeamModal('${t.id}')">✏️</button></div></div>`).join(''); }
+    window.openTeamModal = (id=null) => { currentTeamId = id; const m = document.getElementById('teamModal'); const t = document.getElementById('teamModalTitle'); const del = document.getElementById('deleteTeamBtn'); if (id) { const team = teamledenDB.find(x => x.id === id); if (team) { t.innerText = `✏️ ${team.naam}`; document.getElementById('teamName').value = team.naam; document.getElementById('teamPhone').value = team.telefoon || ''; document.getElementById('teamEmail').value = team.email || ''; document.querySelectorAll('#functionCheckboxes input').forEach(cb => cb.checked = team.functies?.includes(cb.value) || false); del.classList.remove('hidden'); } } else { t.innerText = '➕ Nieuw teamlid'; document.getElementById('teamName').value = ''; document.getElementById('teamPhone').value = ''; document.getElementById('teamEmail').value = ''; document.querySelectorAll('#functionCheckboxes input').forEach(cb => cb.checked = false); del.classList.add('hidden'); } m.classList.remove('hidden'); };
+    document.getElementById('closeTeamModal')?.addEventListener('click', () => document.getElementById('teamModal').classList.add('hidden'));
+    document.getElementById('saveTeamBtn')?.addEventListener('click', async () => { const naam = document.getElementById('teamName').value.trim(); if (!naam) { alert("Naam is verplicht"); return; } const functies = Array.from(document.querySelectorAll('#functionCheckboxes input:checked')).map(cb => cb.value); const data = { naam, telefoon: document.getElementById('teamPhone').value, email: document.getElementById('teamEmail').value, functies }; if (currentTeamId) await supabaseClient.from('teamleden').update(data).eq('id', currentTeamId); else await supabaseClient.from('teamleden').insert([data]); document.getElementById('teamModal').classList.add('hidden'); await loadTeamleden(); });
+    document.getElementById('deleteTeamBtn')?.addEventListener('click', async () => { if (currentTeamId && confirm("Verwijderen?")) { await supabaseClient.from('teamleden').delete().eq('id', currentTeamId); document.getElementById('teamModal').classList.add('hidden'); await loadTeamleden(); } });
+    document.getElementById('addTeamBtn')?.addEventListener('click', () => openTeamModal());
+    
+    // ========== ZOEK & MENU ==========
+    document.getElementById('searchAanvragen')?.addEventListener('keyup', () => renderAanvragenTable());
+    document.getElementById('searchBevestigd')?.addEventListener('keyup', () => renderBevestigdTable());
+    document.getElementById('searchUitgevoerd')?.addEventListener('keyup', () => renderUitgevoerdTable());
+    
+    function setView(view) { document.getElementById('section-aanvragen').style.display = view === 'aanvragen' ? 'block' : 'none'; document.getElementById('section-bevestigd').style.display = view === 'bevestigd' ? 'block' : 'none'; document.getElementById('section-uitgevoerd').style.display = view === 'uitgevoerd' ? 'block' : 'none'; document.getElementById('section-agenda').style.display = view === 'agenda' ? 'block' : 'none'; document.getElementById('section-finance').style.display = view === 'finance' ? 'block' : 'none'; document.getElementById('section-wiki').style.display = view === 'wiki' ? 'block' : 'none'; document.getElementById('section-team').style.display = view === 'team' ? 'block' : 'none'; document.getElementById('menuAanvragen').classList.toggle('active', view === 'aanvragen'); document.getElementById('menuBevestigd').classList.toggle('active', view === 'bevestigd'); document.getElementById('menuUitgevoerd').classList.toggle('active', view === 'uitgevoerd'); document.getElementById('menuAgenda').classList.toggle('active', view === 'agenda'); document.getElementById('menuFinance').classList.toggle('active', view === 'finance'); document.getElementById('menuWiki').classList.toggle('active', view === 'wiki'); document.getElementById('menuTeam').classList.toggle('active', view === 'team'); if (view === 'team') renderTeamGrid(); if (view === 'finance') updateFinanceCharts(); if (view === 'agenda') { renderAgendaCalendar(); } }
+    document.getElementById('menuAanvragen').addEventListener('click', () => setView('aanvragen')); document.getElementById('menuBevestigd').addEventListener('click', () => setView('bevestigd')); document.getElementById('menuUitgevoerd').addEventListener('click', () => setView('uitgevoerd')); document.getElementById('menuAgenda').addEventListener('click', () => setView('agenda')); document.getElementById('menuFinance').addEventListener('click', () => setView('finance')); document.getElementById('menuWiki').addEventListener('click', () => setView('wiki')); document.getElementById('menuTeam').addEventListener('click', () => setView('team'));
+    function escapeHtml(s) { if (!s) return ''; return s.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+    setView('aanvragen');
+</script>
 </body>
 </html>
