@@ -401,7 +401,106 @@
             margin-top: 1.2rem;
         }
 
-        /* ========== BOEKINGSFORMULIER ========== */
+        /* ========== NIEUWE STIJLEN VOOR STICKY LINKERBLOK (2 KOLOMMEN) ========== */
+        .booking-two-columns {
+            display: flex;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+
+        .booking-sticky-left {
+            flex: 0 0 320px;
+            position: sticky;
+            top: 100px;
+            background: var(--frosted-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-soft);
+            border: 1px solid var(--frosted-border);
+            padding: 1.8rem;
+            box-shadow: var(--shadow-espresso-light);
+        }
+
+        .booking-sticky-left h3 {
+            color: var(--turquoise);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .booking-sticky-left p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--espresso-light);
+            margin-bottom: 1rem;
+        }
+
+        .sticky-contact {
+            margin: 1rem 0;
+            padding: 0.8rem 0;
+            border-top: 1px solid var(--frosted-border);
+            border-bottom: 1px solid var(--frosted-border);
+        }
+
+        .sticky-contact p {
+            margin: 0.3rem 0;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sticky-selected-package {
+            background: rgba(59, 169, 177, 0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .sticky-selected-package .label {
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--turquoise);
+        }
+
+        .sticky-selected-package .package-name {
+            font-weight: bold;
+            margin: 0.5rem 0 0 0;
+            font-size: 0.9rem;
+            color: var(--espresso);
+        }
+
+        .sticky-price-box {
+            background: linear-gradient(135deg, var(--turquoise), var(--turquoise-dark));
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .sticky-price-box .price-label {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .sticky-price-box .price-amount {
+            font-size: 1.6rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .booking-right-form {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* ========== ORIGINELE FORMULIER STIJLEN (onaangetast) ========== */
         .form-container {
             background: var(--frosted-bg);
             backdrop-filter: blur(20px);
@@ -682,7 +781,7 @@
             letter-spacing: 1px;
         }
 
-        /* ========== NIEUWE FOOTER STYLING ========== */
+        /* Footer */
         .footer {
             background: var(--turquoise);
             padding: 3rem 5% 2rem;
@@ -809,6 +908,15 @@
             .social-links { justify-content: center; }
             .partner-list { align-items: center; }
             .arabesk-divider { margin: 1rem auto; }
+            /* Nieuwe responsive voor 2 kolommen */
+            .booking-two-columns {
+                flex-direction: column;
+            }
+            .booking-sticky-left {
+                position: static;
+                width: 100%;
+                margin-bottom: 2rem;
+            }
         }
     </style>
 </head>
@@ -906,127 +1014,183 @@
 
 <div class="arabesk-divider"><span>❦ ❧ ✦ ❧ ❦</span></div>
 
-<!-- BOEKINGSFORMULIER MET MULTIVENSTER -->
+<!-- BOEKINGSFORMULIER MET STICKY LINKERBLOK (2 KOLOMMEN) -->
 <section id="boekingsformulier" class="section">
-    <div class="form-container">
-        <div class="form-grid">
-            <div class="form-info">
-                <h3>Boek uw verblijf</h3>
-                <p>Horizon of Infinity biedt meer dan alleen een dak; wij bieden een op maat gemaakte ervaring in het hart van Tanger.</p>
-                <div style="margin-top: 2rem; font-size: 0.85rem; opacity: 0.7;">
-                    <p>
-                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Tanger / Houara Coast, Marokko
-                    </p>
-                    <p>
-                        <svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="22,7 12,13 2,7"></polyline></svg>
-                        info@horizoninfinity.com
-                    </p>
-                </div>
+    <div class="booking-two-columns">
+        <!-- LINKER STICKY BLOK -->
+        <div class="booking-sticky-left">
+            <h3>📌 Boek uw verblijf</h3>
+            <p>Horizon of Infinity biedt meer dan alleen een dak; wij bieden een op maat gemaakte ervaring in het hart van Tanger.</p>
+            
+            <div class="sticky-contact">
+                <p>📍 Tanger / Houara Coast, Marokko</p>
+                <p>✉️ info@horizoninfinity.com</p>
             </div>
-            <div class="form-fields">
-                <!-- 1. KALENDER (Check-in / Check-out) BOVENAAN -->
-                <div class="form-row-2">
-                    <div>
-                        <label>
-                            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            Check-in datum
-                        </label>
-                        <input type="date" id="tbCheckIn">
+            
+            <div class="sticky-selected-package">
+                <div class="label">GESELECTEERD PAKKET</div>
+                <div class="package-name" id="stickyPackageName">TB-P1 - Essence of Orient</div>
+            </div>
+            
+            <div class="sticky-price-box">
+                <div class="price-label">TOTAALPRIJS</div>
+                <div class="price-amount" id="stickyTotalPrice">€ 250</div>
+                <div class="price-label" style="font-size: 0.6rem; margin-top: 0.3rem;">incl. alle extra's</div>
+            </div>
+        </div>
+        
+        <!-- RECHTER BLOK - ORIGINEEL FORMULIER (onaangetast) -->
+        <div class="booking-right-form">
+            <div class="form-container">
+                <div class="form-grid">
+                    <div class="form-info">
+                        <h3>Boek uw verblijf</h3>
+                        <p>Horizon of Infinity biedt meer dan alleen een dak; wij bieden een op maat gemaakte ervaring in het hart van Tanger.</p>
+                        <div style="margin-top: 2rem; font-size: 0.85rem; opacity: 0.7;">
+                            <p>
+                                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                Tanger / Houara Coast, Marokko
+                            </p>
+                            <p>
+                                <svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="22,7 12,13 2,7"></polyline></svg>
+                                info@horizoninfinity.com
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <label>
-                            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            Check-out datum
-                        </label>
-                        <input type="date" id="tbCheckOut">
-                    </div>
-                </div>
+                    <div class="form-fields">
+                        <!-- 1. KALENDER (Check-in / Check-out) BOVENAAN -->
+                        <div class="form-row-2">
+                            <div>
+                                <label>
+                                    <svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    Check-in datum
+                                </label>
+                                <input type="date" id="tbCheckIn">
+                            </div>
+                            <div>
+                                <label>
+                                    <svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    Check-out datum
+                                </label>
+                                <input type="date" id="tbCheckOut">
+                            </div>
+                        </div>
 
-                <!-- 2. KIES PAKKET -->
-                <div>
-                    <label>
-                        <svg class="icon-svg" viewBox="0 0 24 24"><polygon points="12 2 22 7 22 17 12 22 2 17 2 7 12 2"></polygon><line x1="12" y1="22" x2="12" y2="12"></line><polyline points="22 7 12 12 2 7"></polyline></svg>
-                        Kies pakket
-                    </label>
-                    <select id="tbPackageSelect">
-                        <option value="P1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="250" data-type="Wellness">TB-P1 - Essence of Orient (€250)</option>
-                        <option value="P2" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="450" data-type="Cultuur">TB-P2 - Souk & Soul (€450)</option>
-                        <option value="P3" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="750" data-type="Luxe">TB-P3 - Arabian Nights (€750)</option>
-                        <option value="P4" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="1250" data-type="Premium">TB-P4 - Royal Caravan (€1250)</option>
-                        <option value="P5" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="150" data-type="Single">✨ TB-P5 - Single overnachting (€150 p/nacht)</option>
-                    </select>
-                </div>
+                        <!-- 2. KIES PAKKET -->
+                        <div>
+                            <label>
+                                <svg class="icon-svg" viewBox="0 0 24 24"><polygon points="12 2 22 7 22 17 12 22 2 17 2 7 12 2"></polygon><line x1="12" y1="22" x2="12" y2="12"></line><polyline points="22 7 12 12 2 7"></polyline></svg>
+                                Kies pakket
+                            </label>
+                            <select id="tbPackageSelect">
+                                <option value="P1" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="250" data-type="Wellness">TB-P1 - Essence of Orient (€250)</option>
+                                <option value="P2" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="450" data-type="Cultuur">TB-P2 - Souk & Soul (€450)</option>
+                                <option value="P3" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="750" data-type="Luxe">TB-P3 - Arabian Nights (€750)</option>
+                                <option value="P4" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="1250" data-type="Premium">TB-P4 - Royal Caravan (€1250)</option>
+                                <option value="P5" data-resource="e63df0cc-938b-4f8b-a4c5-bb544679b91f" data-price="150" data-type="Single">✨ TB-P5 - Single overnachting (€150 p/nacht)</option>
+                            </select>
+                        </div>
 
-                <!-- 3. DIENSTEN & ACTIVITEITEN - MULTIVENSTER -->
-                <div style="margin: 1rem 0;">
-                    <label>
-                        <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
-                        Diensten & Activiteiten
-                    </label>
-                    <button type="button" class="multivenster-btn" id="openModalBtn">
-                        Kies uw diensten en activiteiten
-                    </button>
-                    <div id="geselecteerdeWeergave" class="geselecteerde-diensten">
-                        <span>Nog geen selecties</span>
-                    </div>
-                </div>
+                        <!-- 3. DIENSTEN & ACTIVITEITEN - MULTIVENSTER -->
+                        <div style="margin: 1rem 0;">
+                            <label>
+                                <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                                Diensten & Activiteiten
+                            </label>
+                            <button type="button" class="multivenster-btn" id="openModalBtn">
+                                Kies uw diensten en activiteiten
+                            </button>
+                            <div id="geselecteerdeWeergave" class="geselecteerde-diensten">
+                                <span>Nog geen selecties</span>
+                            </div>
+                        </div>
 
-                <!-- 4. GASTGEGEVENS -->
-                <div class="form-row-2">
-                    <div>
-                        <label>
-                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                            Gastnaam
-                        </label>
-                        <input type="text" id="tbGuestName" placeholder="Volledige naam">
-                    </div>
-                    <div>
-                        <label>
-                            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="22,7 12,13 2,7"></polyline></svg>
-                            Email
-                        </label>
-                        <input type="email" id="tbGuestEmail" placeholder="naam@voorbeeld.com">
-                    </div>
-                    <div>
-                        <label>
-                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                            GSM
-                        </label>
-                        <input type="text" id="tbGuestPhone" placeholder="+212 ...">
-                    </div>
-                </div>
+                        <!-- 4. GASTGEGEVENS -->
+                        <div class="form-row-2">
+                            <div>
+                                <label>
+                                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    Gastnaam
+                                </label>
+                                <input type="text" id="tbGuestName" placeholder="Volledige naam">
+                            </div>
+                            <div>
+                                <label>
+                                    <svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><polyline points="22,7 12,13 2,7"></polyline></svg>
+                                    Email
+                                </label>
+                                <input type="email" id="tbGuestEmail" placeholder="naam@voorbeeld.com">
+                            </div>
+                            <div>
+                                <label>
+                                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                    GSM
+                                </label>
+                                <input type="text" id="tbGuestPhone" placeholder="+212 ...">
+                            </div>
+                        </div>
 
-                <!-- 5. EXTRA OPTIES -->
-                <div class="checkbox-custom">
-                    <input type="checkbox" id="tbTransfer">
-                    <label>
-                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                        Transfer van/naar luchthaven
-                    </label>
-                </div>
+                        <!-- 5. EXTRA OPTIES -->
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="tbTransfer">
+                            <label>
+                                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                Transfer van/naar luchthaven
+                            </label>
+                        </div>
 
-                <div>
-                    <label>
-                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                        Speciale wensen
-                    </label>
-                    <textarea id="tbSpeciaal" rows="2" placeholder="Dieetwensen, allergieën, viering ..."></textarea>
-                </div>
+                        <div>
+                            <label>
+                                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                                Speciale wensen
+                            </label>
+                            <textarea id="tbSpeciaal" rows="2" placeholder="Dieetwensen, allergieën, viering ..."></textarea>
+                        </div>
 
-                <!-- 6. PRIJS & BEVESTIG KNOP -->
-                <div class="price-bar">
-                    <div>
-                        <div class="price-label">Totaalprijs</div>
-                        <div class="price-amount">€ <span id="tbTotaalprijsDisplay">250</span></div>
-                        <input type="hidden" id="tbTotaalprijs" value="250">
+                        <!-- 6. PRIJS & BEVESTIG KNOP -->
+                        <div class="price-bar">
+                            <div>
+                                <div class="price-label">Totaalprijs</div>
+                                <div class="price-amount">€ <span id="tbTotaalprijsDisplay">250</span></div>
+                                <input type="hidden" id="tbTotaalprijs" value="250">
+                            </div>
+                            <button id="tbBookBtn" class="submit-btn">Bevestig reservatie</button>
+                        </div>
                     </div>
-                    <button id="tbBookBtn" class="submit-btn">Bevestig reservatie</button>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- MULTIVENSTER MODAL (DIENSTEN & ACTIVITEITEN) -->
+<div id="dienstenModal" class="modal">
+    <div class="modal-content">
+        <h3>Kies uw extra's</h3>
+        <div class="modal-categorie">
+            <h4>🛎️ Premium Diensten (tegen meerprijs)</h4>
+            <div class="modal-checkbox-group">
+                <label class="modal-checkbox-item"><input type="checkbox" id="modalHost"> Host aanwezig</label>
+                <label class="modal-checkbox-item"><input type="checkbox" id="modalHousekeeping"> Housekeeping (€45/dag)</label>
+                <label class="modal-checkbox-item"><input type="checkbox" id="modalBreakfast"> Ontbijt (€25/dag)</label>
+                <label class="modal-checkbox-item"><input type="checkbox" id="modalChef"> Privé chef (€35/maaltijd)</label>
+            </div>
+        </div>
+        <div class="modal-categorie">
+            <h4>🏇 Activiteiten (offerte op maat)</h4>
+            <div class="modal-checkbox-group">
+                <label class="modal-checkbox-item"><input type="checkbox" id="modalPaardrijden"> Strand paardrijden</label>
+                <label class="modal-checkbox-item"><input type="checkbox" id="modalQuad"> Quad tour</label>
+                <label class="modal-checkbox-item"><input type="checkbox" id="modalGids"> Privé gids</label>
+                <label class="modal-checkbox-item"><input type="checkbox" id="modalWellness"> Wellness & spa</label>
+            </div>
+        </div>
+        <div class="modal-buttons">
+            <button class="modal-cancel" id="closeModalBtn">Annuleer</button>
+            <button class="modal-save" id="saveModalBtn">Opslaan</button>
+        </div>
+    </div>
+</div>
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -1096,17 +1260,23 @@
         });
     });
 
-    // Sync zichtbare prijs met verborgen input veld (voor script.js)
+    // Sync zichtbare prijs met verborgen input veld (voor script.js) + sticky blok synchronisatie
     const tbSelect = document.getElementById('tbPackageSelect');
     const priceDisplay = document.getElementById('tbTotaalprijsDisplay');
     const priceHidden = document.getElementById('tbTotaalprijs');
+    const stickyPrice = document.getElementById('stickyTotalPrice');
+    const stickyPackageName = document.getElementById('stickyPackageName');
+    
     function updatePriceDisplay() {
         if (!tbSelect) return;
         const selectedOption = tbSelect.selectedOptions[0];
         if (selectedOption) {
             const price = selectedOption.dataset.price;
+            const packageText = selectedOption.text;
             if (priceDisplay) priceDisplay.innerText = price;
             if (priceHidden) priceHidden.value = price;
+            if (stickyPrice) stickyPrice.innerText = `€ ${price}`;
+            if (stickyPackageName) stickyPackageName.innerText = packageText;
         }
     }
     if (tbSelect) {
