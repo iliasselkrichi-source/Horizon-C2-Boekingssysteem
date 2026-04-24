@@ -12,97 +12,116 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary: #c9a03d;
-            --primary-hover: #b08d35;
-            --bg-dark: #0a1a2f;
-            --glass-bg: rgba(10, 26, 47, 0.85);
-            --card-bg: rgba(255, 255, 255, 0.05);
+            --primary: #c9a03d; /* Gold */
+            --primary-hover: #b08a30;
+            --bg-dark: #0a1a2f; /* Dark Blue */
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(201, 160, 61, 0.2);
+            --shadow-premium: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
-            color: #f8fafc;
+            color: #f1f5f9;
+            scroll-behavior: smooth;
         }
 
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
         }
 
+        /* Glass-morphism effecten */
         .glass-card {
-            background: var(--glass-bg);
+            background: rgba(15, 33, 58, 0.8);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(201, 160, 61, 0.2);
-            border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            box-shadow: var(--shadow-premium);
         }
 
-        .dark-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(201, 160, 61, 0.3);
-            color: white;
-            border-radius: 0; /* Sharp corners for luxury feel as per memory instructions sometimes but here it says 24px border radius for glass morphism. Actually general requirements said 24px. */
-            border-radius: 8px;
+        .header-transparent {
+            background: transparent;
+            transition: all 0.3s ease;
         }
 
-        .dark-input:focus {
-            border-color: var(--primary);
-            outline: none;
+        .header-fixed {
+            background: rgba(10, 26, 47, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
         #map {
             height: 500px;
             width: 100%;
-            z-index: 10;
+            border-radius: 32px;
+            z-index: 1;
+            filter: grayscale(1) invert(0.9) hue-rotate(180deg) brightness(0.8);
         }
 
         .step-indicator {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 0;
         }
 
         .step {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: #1e293b;
+            border: 2px solid rgba(255,255,255,0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            transition: all 0.3s;
-            color: #94a3b8;
-            border: 1px solid rgba(201, 160, 61, 0.3);
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .step.active {
             background-color: var(--primary);
             color: var(--bg-dark);
-            box-shadow: 0 0 15px rgba(201, 160, 61, 0.5);
             border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(201, 160, 61, 0.4);
         }
 
         .step.completed {
             background-color: #10b981;
-            color: white;
             border-color: #10b981;
+            color: white;
         }
 
         .vehicle-card {
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.03);
         }
 
         .vehicle-card.selected {
             border-color: var(--primary);
-            background-color: rgba(201, 160, 61, 0.1);
+            background: rgba(201, 160, 61, 0.1);
+            transform: scale(1.02);
         }
 
         .suggestion-list {
@@ -112,53 +131,74 @@
             width: 100%;
             max-height: 200px;
             overflow-y: auto;
-            border: 1px solid var(--primary);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            margin-top: 5px;
         }
 
         .suggestion-item {
-            padding: 0.5rem 1rem;
+            padding: 12px 16px;
             cursor: pointer;
-            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .suggestion-item:hover {
-            background-color: var(--primary);
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .premium-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: white;
+            padding: 1rem 1.25rem;
+            width: 100%;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .premium-input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(201, 160, 61, 0.1);
+        }
+
+        .payment-radio:checked + label {
+            border-color: var(--primary);
+            background-color: rgba(201, 160, 61, 0.1);
+        }
+
+        .total-price-badge {
+            background: linear-gradient(135deg, var(--primary), #b08a30);
             color: var(--bg-dark);
-        }
-
-        .hero-overlay {
-            background: linear-gradient(to bottom, rgba(10, 26, 47, 0.5), rgba(10, 26, 47, 1));
-        }
-
-        header.scrolled {
-            background: var(--bg-dark);
-            border-bottom: 1px solid rgba(201, 160, 61, 0.3);
+            padding: 1.5rem;
+            border-radius: 24px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
     <!-- HEADER SECTIE -->
-    <header id="main-header" class="fixed top-0 w-full z-50 transition-all duration-300">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <i class="fas fa-crown text-2xl text-[#c9a03d]"></i>
-                <span class="text-2xl font-bold tracking-widest text-white uppercase">PremiumLimo</span>
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 header-transparent">
+        <div class="container mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-crown text-3xl text-[#c9a03d]"></i>
+                <span class="text-2xl font-bold tracking-widest uppercase">PremiumRide</span>
             </div>
 
-            <nav class="hidden md:flex space-x-8">
-                <a href="#hero" class="text-white hover:text-[#c9a03d] transition uppercase text-sm tracking-widest" data-i18n="nav_home">Home</a>
-                <a href="#booking-section" class="text-white hover:text-[#c9a03d] transition uppercase text-sm tracking-widest" data-i18n="nav_book">Boeken</a>
-                <a href="#services" class="text-white hover:text-[#c9a03d] transition uppercase text-sm tracking-widest" data-i18n="nav_services">Diensten</a>
-                <a href="#about" class="text-white hover:text-[#c9a03d] transition uppercase text-sm tracking-widest" data-i18n="nav_about">Over Ons</a>
+            <nav class="hidden lg:flex space-x-10 text-sm font-bold uppercase tracking-widest">
+                <a href="#hero" class="hover:text-[#c9a03d] transition" data-i18n="nav_home">Home</a>
+                <a href="#booking-section" class="hover:text-[#c9a03d] transition" data-i18n="nav_book">Boeken</a>
+                <a href="#services" class="hover:text-[#c9a03d] transition" data-i18n="nav_services">Diensten</a>
+                <a href="#about" class="hover:text-[#c9a03d] transition" data-i18n="nav_about">Over Ons</a>
             </nav>
 
-            <div class="flex items-center gap-4">
-                <div class="flex gap-2">
-                    <button onclick="setLanguage('nl')" class="px-2 py-1 text-xs border border-[#c9a03d] rounded text-[#c9a03d] hover:bg-[#c9a03d] hover:text-white transition">NL</button>
-                    <button onclick="setLanguage('fr')" class="px-2 py-1 text-xs border border-[#c9a03d] rounded text-[#c9a03d] hover:bg-[#c9a03d] hover:text-white transition">FR</button>
-                    <button onclick="setLanguage('en')" class="px-2 py-1 text-xs border border-[#c9a03d] rounded text-[#c9a03d] hover:bg-[#c9a03d] hover:text-white transition">EN</button>
+            <div class="flex items-center gap-6">
+                <div class="flex gap-3">
+                    <button onclick="setLanguage('nl')" class="w-8 h-8 flex items-center justify-center text-xs border border-white/20 rounded-full hover:bg-white/10">NL</button>
+                    <button onclick="setLanguage('fr')" class="w-8 h-8 flex items-center justify-center text-xs border border-white/20 rounded-full hover:bg-white/10">FR</button>
+                    <button onclick="setLanguage('en')" class="w-8 h-8 flex items-center justify-center text-xs border border-white/20 rounded-full hover:bg-white/10">EN</button>
                 </div>
             </div>
         </div>
@@ -166,211 +206,300 @@
 
     <main>
         <!-- HERO SECTIE -->
-        <section id="hero" class="relative h-screen flex items-center justify-center text-center overflow-hidden">
-            <div class="absolute inset-0">
-                <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1920&q=80" alt="Limo Hero" class="w-full h-full object-cover">
-                <div class="absolute inset-0 hero-overlay"></div>
+        <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://placehold.co/1920x1080?text=Premium+Limo+Experience" alt="Hero" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-b from-[#0a1a2f]/80 via-[#0a1a2f]/60 to-[#0a1a2f]"></div>
             </div>
-            <div class="container mx-auto px-4 relative z-10">
-                <h1 class="text-5xl md:text-7xl mb-6 text-white uppercase tracking-tighter" data-i18n="hero_title">Uitmuntendheid in Elke Reis</h1>
-                <p class="text-xl md:text-2xl mb-10 text-gray-300 max-w-3xl mx-auto italic font-light" data-i18n="hero_subtitle">Ervaar de ultieme luxe en discretie met onze premium chauffeursdienst.</p>
-                <a href="#booking-section" class="border-2 border-[#c9a03d] text-[#c9a03d] hover:bg-[#c9a03d] hover:text-white px-10 py-4 rounded-full font-bold transition-all duration-300 uppercase tracking-widest" data-i18n="hero_button">Reserveer Nu</a>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h1 class="text-6xl md:text-8xl mb-8 font-extrabold text-white leading-tight" data-i18n="hero_title">Exclusief Vervoer in Stijl</h1>
+                <p class="text-xl md:text-2xl mb-12 max-w-3xl mx-auto text-gray-300 font-light tracking-wide" data-i18n="hero_subtitle">Ervaar de ultieme luxe en discretie met onze premium chauffeursdienst.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <a href="#booking-section" class="bg-[#c9a03d] hover:bg-[#b08a30] text-[#0a1a2f] px-12 py-5 rounded-full font-bold text-lg shadow-2xl transition transform hover:-translate-y-1" data-i18n="hero_button">Reserveer Nu</a>
+                    <a href="#services" class="border border-white/30 hover:border-white/60 text-white px-12 py-5 rounded-full font-bold text-lg backdrop-blur-sm transition" data-i18n="nav_services">Ontdek Services</a>
+                </div>
+            </div>
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+                <i class="fas fa-chevron-down text-white/30 text-2xl"></i>
             </div>
         </section>
 
         <!-- BOOKING SECTIE -->
-        <section id="booking-section" class="relative py-20 bg-[#0a1a2f]">
-            <!-- Kaart Full-Width -->
-            <div id="map" class="mb-12 shadow-2xl opacity-80 grayscale invert contrast-75 brightness-50"></div>
+        <section id="booking-section" class="py-32 relative">
+            <!-- Kaart Full-width Achtergrond -->
+            <div class="absolute inset-0 h-[600px] z-0 opacity-20">
+                <div id="map"></div>
+            </div>
 
-            <div class="container mx-auto px-4 -mt-32 relative z-20">
-                <div class="max-w-4xl mx-auto">
-                    <div class="glass-card p-8 md:p-12">
-                        <div class="step-indicator max-w-md mx-auto">
-                            <div class="step active" id="indicator-1">1</div>
-                            <div class="step" id="indicator-2">2</div>
-                            <div class="step" id="indicator-3">3</div>
-                            <div class="step" id="indicator-4">4</div>
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="max-w-4xl mx-auto glass-card p-12 mt-[200px]">
+                    <div class="step-indicator">
+                        <div class="step active" id="indicator-1">1</div>
+                        <div class="step" id="indicator-2">2</div>
+                        <div class="step" id="indicator-3">3</div>
+                        <div class="step" id="indicator-4">4</div>
+                    </div>
+
+                    <!-- Stap 1: Route -->
+                    <div id="step-1" class="booking-step">
+                        <h3 class="text-4xl mb-10 text-center font-bold text-[#c9a03d]" data-i18n="step1_title">Plan Uw Reis</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <div class="relative">
+                                <label class="block text-xs font-bold mb-3 uppercase tracking-[0.2em] text-gray-400" data-i18n="label_pickup">Ophaallocatie</label>
+                                <input type="text" id="pickup" class="premium-input" placeholder="Ophaaladres..." data-i18n="pickup_placeholder" oninput="searchAddress(this.value, 'pickup')">
+                                <div id="pickup-suggestions" class="suggestion-list hidden"></div>
+                            </div>
+                            <div class="relative">
+                                <label class="block text-xs font-bold mb-3 uppercase tracking-[0.2em] text-gray-400" data-i18n="label_destination">Bestemming</label>
+                                <input type="text" id="destination" class="premium-input" placeholder="Bestemming..." data-i18n="destination_placeholder" oninput="searchAddress(this.value, 'destination')">
+                                <div id="destination-suggestions" class="suggestion-list hidden"></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                            <div>
+                                <label class="block text-xs font-bold mb-3 uppercase tracking-[0.2em] text-gray-400" data-i18n="label_date">Datum</label>
+                                <input type="date" id="booking-date" class="premium-input" onchange="checkFormCompletion()">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-3 uppercase tracking-[0.2em] text-gray-400" data-i18n="label_time">Tijd</label>
+                                <input type="time" id="booking-time" class="premium-input" onchange="checkFormCompletion()">
+                            </div>
+                            <div class="flex items-end pb-4">
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <input type="checkbox" id="return-trip" class="hidden">
+                                    <div class="w-6 h-6 border-2 border-white/20 rounded-md flex items-center justify-center group-hover:border-[#c9a03d] transition">
+                                        <i class="fas fa-check text-[#c9a03d] hidden"></i>
+                                    </div>
+                                    <span class="font-bold text-gray-300 group-hover:text-white transition" data-i18n="return_trip">Retourrit</span>
+                                </label>
+                            </div>
                         </div>
 
-                        <!-- Stap 1: Route -->
-                        <div id="step-1" class="booking-step">
-                            <h3 class="text-3xl mb-8 text-center gold-gradient text-[#c9a03d]" data-i18n="step1_title">Plan Uw Exclusieve Reis</h3>
-                            <div class="space-y-6">
-                                <div class="relative">
-                                    <label class="block text-xs uppercase tracking-widest text-[#c9a03d] mb-2" data-i18n="label_pickup">Ophaallocatie</label>
-                                    <div class="flex items-center border-b border-[#c9a03d]/30 focus-within:border-[#c9a03d] transition-all py-2">
-                                        <span class="px-3 text-[#c9a03d]"><i class="fas fa-map-marker-alt"></i></span>
-                                        <input type="text" id="pickup" class="w-full bg-transparent outline-none text-white placeholder-gray-500" placeholder="Luxe ophaaladres..." oninput="searchAddress(this.value, 'pickup')">
-                                    </div>
-                                    <div id="pickup-suggestions" class="suggestion-list hidden"></div>
+                        <div class="mb-10">
+                            <label class="block text-xs font-bold mb-4 uppercase tracking-[0.2em] text-gray-400 text-center" data-i18n="payment_label">Betaalmethode</label>
+                            <div class="grid grid-cols-3 gap-6 max-w-lg mx-auto">
+                                <input type="radio" name="payment-method" id="pay-cash-1" value="cash" class="hidden payment-radio" checked onchange="syncPaymentMethod(this.value)">
+                                <label for="pay-cash-1" class="border border-white/10 p-5 rounded-2xl text-center cursor-pointer hover:border-[#c9a03d]/50 transition block bg-white/5">
+                                    <i class="fas fa-coins mb-2 text-2xl text-[#c9a03d]"></i>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest" data-i18n="payment_cash">Cash</p>
+                                </label>
+
+                                <input type="radio" name="payment-method" id="pay-card-1" value="card" class="hidden payment-radio" onchange="syncPaymentMethod(this.value)">
+                                <label for="pay-card-1" class="border border-white/10 p-5 rounded-2xl text-center cursor-pointer hover:border-[#c9a03d]/50 transition block bg-white/5">
+                                    <i class="fas fa-credit-card mb-2 text-2xl text-[#c9a03d]"></i>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest" data-i18n="payment_card">Kaart</p>
+                                </label>
+
+                                <input type="radio" name="payment-method" id="pay-online-1" value="online" class="hidden payment-radio" onchange="syncPaymentMethod(this.value)">
+                                <label for="pay-online-1" class="border border-white/10 p-5 rounded-2xl text-center cursor-pointer hover:border-[#c9a03d]/50 transition block bg-white/5">
+                                    <i class="fas fa-globe-europe mb-2 text-2xl text-[#c9a03d]"></i>
+                                    <p class="text-[10px] font-bold uppercase tracking-widest" data-i18n="payment_online">Online</p>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button onclick="goToStep(2)" id="to-step-2" class="w-full bg-[#c9a03d] text-[#0a1a2f] py-6 rounded-2xl font-bold text-xl disabled:opacity-30 disabled:cursor-not-allowed shadow-2xl transition hover:bg-[#b08a30]" disabled data-i18n="btn_next">Volgende Stap</button>
+                    </div>
+
+                    <!-- Stap 2: Voertuig -->
+                    <div id="step-2" class="booking-step hidden">
+                        <h3 class="text-4xl mb-10 text-center font-bold text-[#c9a03d]" data-i18n="step2_title">Selecteer Uw Vloot</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="vehicle-list">
+                            <!-- Voertuigen worden hier gegenereerd -->
+                        </div>
+                        <div class="flex gap-8 mt-12">
+                            <button onclick="goToStep(1)" class="w-1/3 border border-white/20 py-5 rounded-2xl font-bold text-gray-400 hover:text-white transition" data-i18n="btn_prev">Vorige</button>
+                            <button onclick="goToStep(3)" class="w-2/3 bg-[#c9a03d] text-[#0a1a2f] py-5 rounded-2xl font-bold text-xl shadow-2xl transition hover:bg-[#b08a30]" data-i18n="btn_next">Doorgaan</button>
+                        </div>
+                    </div>
+
+                    <!-- Stap 3: Extras -->
+                    <div id="step-3" class="booking-step hidden">
+                        <h3 class="text-4xl mb-10 text-center font-bold text-[#c9a03d]" data-i18n="step3_title">Luxe Opties</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="p-6 border border-white/10 rounded-2xl bg-white/5 flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <i class="fas fa-user-friends text-xl text-[#c9a03d]"></i>
+                                    <span class="font-bold text-gray-200" data-i18n="passengers_label">Aantal Passagiers</span>
                                 </div>
-                                <div class="relative">
-                                    <label class="block text-xs uppercase tracking-widest text-[#c9a03d] mb-2" data-i18n="label_destination">Bestemming</label>
-                                    <div class="flex items-center border-b border-[#c9a03d]/30 focus-within:border-[#c9a03d] transition-all py-2">
-                                        <span class="px-3 text-[#c9a03d]"><i class="fas fa-star"></i></span>
-                                        <input type="text" id="destination" class="w-full bg-transparent outline-none text-white placeholder-gray-500" placeholder="Exclusieve bestemming..." oninput="searchAddress(this.value, 'destination')">
-                                    </div>
-                                    <div id="destination-suggestions" class="suggestion-list hidden"></div>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <input type="number" id="passengers" min="1" max="8" value="1" class="w-16 bg-transparent border-b-2 border-[#c9a03d] text-center font-bold outline-none">
+                            </div>
+
+                            <div class="p-6 border border-white/10 rounded-2xl bg-white/5 flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <i class="fas fa-baby-carriage text-xl text-[#c9a03d]"></i>
                                     <div>
-                                        <label class="block text-xs uppercase tracking-widest text-[#c9a03d] mb-2" data-i18n="label_date">Datum</label>
-                                        <input type="date" id="booking-date" class="w-full bg-transparent border-b border-[#c9a03d]/30 text-white p-2 outline-none focus:border-[#c9a03d]">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs uppercase tracking-widest text-[#c9a03d] mb-2" data-i18n="label_time">Tijd</label>
-                                        <input type="time" id="booking-time" class="w-full bg-transparent border-b border-[#c9a03d]/30 text-white p-2 outline-none focus:border-[#c9a03d]">
+                                        <span class="font-bold text-gray-200 block" data-i18n="child_seat_label">Kinderzitje</span>
+                                        <span class="text-[10px] text-[#c9a03d] font-bold uppercase tracking-wider">+ €5,00 / stuk</span>
                                     </div>
                                 </div>
-                                <button onclick="goToStep(2)" id="to-step-2" class="w-full border border-[#c9a03d] text-[#c9a03d] hover:bg-[#c9a03d] hover:text-white py-4 rounded-full font-bold mt-10 transition-all uppercase tracking-widest disabled:opacity-30" disabled data-i18n="btn_next">Verder naar voertuig</button>
+                                <input type="number" id="child-seats" min="0" max="4" value="0" class="w-16 bg-transparent border-b-2 border-[#c9a03d] text-center font-bold outline-none" onchange="updatePrice()">
+                            </div>
+
+                            <div class="p-6 border border-white/10 rounded-2xl bg-white/5 flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <i class="fas fa-wifi text-xl text-[#c9a03d]"></i>
+                                    <div>
+                                        <span class="font-bold text-gray-200 block" data-i18n="wifi_label">Premium WiFi</span>
+                                        <span class="text-[10px] text-[#c9a03d] font-bold uppercase tracking-wider">+ €5,00</span>
+                                    </div>
+                                </div>
+                                <input type="checkbox" id="wifi-opt" class="w-6 h-6 accent-[#c9a03d]" onchange="updatePrice()">
+                            </div>
+
+                            <div class="p-6 border border-white/10 rounded-2xl bg-white/5 flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <i class="fas fa-champagne-glasses text-xl text-[#c9a03d]"></i>
+                                    <div>
+                                        <span class="font-bold text-gray-200 block" data-i18n="water_label">Water & Snacks</span>
+                                        <span class="text-[10px] text-[#c9a03d] font-bold uppercase tracking-wider">+ €3,00 / pers</span>
+                                    </div>
+                                </div>
+                                <input type="number" id="water-bottles" min="0" max="10" value="0" class="w-16 bg-transparent border-b-2 border-[#c9a03d] text-center font-bold outline-none" onchange="updatePrice()">
                             </div>
                         </div>
 
-                        <!-- Stap 2: Voertuig -->
-                        <div id="step-2" class="booking-step hidden">
-                            <h3 class="text-3xl mb-8 text-center text-[#c9a03d]" data-i18n="step2_title">Selecteer Uw Voertuig</h3>
-                            <div class="grid md:grid-cols-2 gap-6" id="vehicle-list">
-                                <!-- Voertuigen worden hier gegenereerd -->
-                            </div>
-                            <div class="flex gap-6 mt-12">
-                                <button onclick="goToStep(1)" class="w-1/3 border border-gray-600 text-gray-400 py-4 rounded-full font-bold uppercase tracking-widest text-xs" data-i18n="btn_prev">Terug</button>
-                                <button onclick="goToStep(3)" class="w-2/3 bg-[#c9a03d] text-[#0a1a2f] py-4 rounded-full font-bold uppercase tracking-widest" data-i18n="btn_next">Verder naar opties</button>
-                            </div>
+                        <div class="mt-8">
+                            <label class="block text-xs font-bold mb-3 uppercase tracking-widest text-gray-400" data-i18n="special_requests_label">Speciale Instructies</label>
+                            <textarea id="special-requests" rows="3" class="premium-input" placeholder="..." data-i18n="special_requests_placeholder"></textarea>
                         </div>
 
-                        <!-- Stap 3: Extras -->
-                        <div id="step-3" class="booking-step hidden">
-                            <h3 class="text-3xl mb-8 text-center text-[#c9a03d]" data-i18n="step3_title">Luxe Voorzieningen</h3>
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <label class="flex items-center justify-between p-6 border border-[#c9a03d]/20 rounded-2xl cursor-pointer hover:bg-white/5 transition">
-                                    <div class="flex items-center gap-4">
-                                        <i class="fas fa-wine-glass text-2xl text-[#c9a03d]"></i>
-                                        <div>
-                                            <p class="font-bold text-white" data-i18n="extra_champagne">Champagne Service</p>
-                                            <p class="text-xs text-[#c9a03d]">+ €75,00</p>
-                                        </div>
-                                    </div>
-                                    <input type="checkbox" class="w-6 h-6 accent-[#c9a03d]" onchange="updatePrice()" data-extra="champagne" value="75">
-                                </label>
-                                <label class="flex items-center justify-between p-6 border border-[#c9a03d]/20 rounded-2xl cursor-pointer hover:bg-white/5 transition">
-                                    <div class="flex items-center gap-4">
-                                        <i class="fas fa-lightbulb text-2xl text-[#c9a03d]"></i>
-                                        <div>
-                                            <p class="font-bold text-white" data-i18n="extra_lighting">Sfeerverlichting</p>
-                                            <p class="text-xs text-[#c9a03d]">+ €0,00</p>
-                                        </div>
-                                    </div>
-                                    <input type="checkbox" class="w-6 h-6 accent-[#c9a03d]" onchange="updatePrice()" data-extra="lighting" value="0">
-                                </label>
-                                <label class="flex items-center justify-between p-6 border border-[#c9a03d]/20 rounded-2xl cursor-pointer hover:bg-white/5 transition">
-                                    <div class="flex items-center gap-4">
-                                        <i class="fas fa-wifi text-2xl text-[#c9a03d]"></i>
-                                        <div>
-                                            <p class="font-bold text-white" data-i18n="extra_wifi">High-speed WiFi</p>
-                                            <p class="text-xs text-[#c9a03d]">+ €0,00</p>
-                                        </div>
-                                    </div>
-                                    <input type="checkbox" class="w-6 h-6 accent-[#c9a03d]" onchange="updatePrice()" data-extra="wifi" value="0">
-                                </label>
-                                <label class="flex items-center justify-between p-6 border border-[#c9a03d]/20 rounded-2xl cursor-pointer hover:bg-white/5 transition">
-                                    <div class="flex items-center gap-4">
-                                        <i class="fas fa-baby text-2xl text-[#c9a03d]"></i>
-                                        <div>
-                                            <p class="font-bold text-white" data-i18n="extra_child_seat">Premium Kinderzitje</p>
-                                            <p class="text-xs text-[#c9a03d]">+ €15,00</p>
-                                        </div>
-                                    </div>
-                                    <input type="checkbox" class="w-6 h-6 accent-[#c9a03d]" onchange="updatePrice()" data-extra="child_seat" value="15">
-                                </label>
-                            </div>
-                            <div class="flex gap-6 mt-12">
-                                <button onclick="goToStep(2)" class="w-1/3 border border-gray-600 text-gray-400 py-4 rounded-full font-bold uppercase tracking-widest text-xs" data-i18n="btn_prev">Terug</button>
-                                <button onclick="goToStep(4)" class="w-2/3 bg-[#c9a03d] text-[#0a1a2f] py-4 rounded-full font-bold uppercase tracking-widest" data-i18n="btn_next">Laatste stap</button>
-                            </div>
+                        <div class="mt-10 total-price-badge">
+                            <span class="text-sm font-bold uppercase tracking-widest opacity-70" data-i18n="total_price_label">Investering in comfort</span>
+                            <div class="text-5xl font-black total-price">€ 0.00</div>
                         </div>
 
-                        <!-- Stap 4: Gegevens -->
-                        <div id="step-4" class="booking-step hidden">
-                            <h3 class="text-3xl mb-8 text-center text-[#c9a03d]" data-i18n="step4_title">Persoonlijke Gegevens</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="md:col-span-2">
-                                    <label class="block text-xs uppercase tracking-widest text-[#c9a03d] mb-2" data-i18n="label_name">Naam</label>
-                                    <input type="text" id="guest-name" class="w-full bg-white/5 border border-[#c9a03d]/20 rounded-xl p-4 text-white outline-none focus:border-[#c9a03d]" placeholder="Uw volledige naam">
+                        <div class="flex gap-8 mt-12">
+                            <button onclick="goToStep(2)" class="w-1/3 border border-white/20 py-5 rounded-2xl font-bold text-gray-400 hover:text-white transition" data-i18n="btn_prev">Vorige</button>
+                            <button onclick="goToStep(4)" class="w-2/3 bg-[#c9a03d] text-[#0a1a2f] py-5 rounded-2xl font-bold text-xl shadow-2xl transition hover:bg-[#b08a30]" data-i18n="btn_next">Details</button>
+                        </div>
+                    </div>
+
+                    <!-- Stap 4: Gegevens -->
+                    <div id="step-4" class="booking-step hidden">
+                        <h3 class="text-4xl mb-10 text-center font-bold text-[#c9a03d]" data-i18n="step4_title">Persoonlijke Gegevens</h3>
+                        <div class="space-y-8">
+                            <div>
+                                <label class="block text-xs font-bold mb-3 uppercase tracking-widest text-gray-400" data-i18n="label_name">Naam</label>
+                                <input type="text" id="guest-name" class="premium-input" placeholder="Uw naam">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="block text-xs font-bold mb-3 uppercase tracking-widest text-gray-400" data-i18n="label_email">E-mail</label>
+                                    <input type="email" id="guest-email" class="premium-input" placeholder="luxe@ervaring.com">
                                 </div>
                                 <div>
-                                    <label class="block text-xs uppercase tracking-widest text-[#c9a03d] mb-2" data-i18n="label_email">Email</label>
-                                    <input type="email" id="guest-email" class="w-full bg-white/5 border border-[#c9a03d]/20 rounded-xl p-4 text-white outline-none focus:border-[#c9a03d]" placeholder="uw@email.com">
-                                </div>
-                                <div>
-                                    <label class="block text-xs uppercase tracking-widest text-[#c9a03d] mb-2" data-i18n="label_phone">Telefoon</label>
-                                    <input type="tel" id="guest-phone" class="w-full bg-white/5 border border-[#c9a03d]/20 rounded-xl p-4 text-white outline-none focus:border-[#c9a03d]" placeholder="+32...">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label class="block text-xs uppercase tracking-widest text-[#c9a03d] mb-2" data-i18n="label_payment">Voorkeursbetaling</label>
-                                    <select id="payment-method" class="w-full bg-[#1e293b] border border-[#c9a03d]/20 rounded-xl p-4 text-white outline-none focus:border-[#c9a03d]">
-                                        <option value="card" data-i18n="pay_card">Kaart (Terminal in voertuig)</option>
-                                        <option value="online" data-i18n="pay_online">Online Vooruitbetaling</option>
-                                        <option value="invoice" data-i18n="pay_invoice">Op Factuur</option>
-                                    </select>
+                                    <label class="block text-xs font-bold mb-3 uppercase tracking-widest text-gray-400" data-i18n="label_phone">Telefoon</label>
+                                    <input type="tel" id="guest-phone" class="premium-input" placeholder="+32...">
                                 </div>
                             </div>
 
-                            <div class="mt-10 p-8 bg-white/5 rounded-2xl border border-[#c9a03d]/30">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-400 uppercase tracking-widest text-sm" data-i18n="summary_total">Totaal Investering</span>
-                                    <span class="text-4xl font-bold text-[#c9a03d]" id="total-price">€ 0,00</span>
-                                </div>
-                            </div>
+                            <div class="pt-6">
+                                <label class="block text-xs font-bold mb-6 uppercase tracking-widest text-gray-400 text-center" data-i18n="label_payment_step4">Definitieve Betaalkeuze</label>
+                                <div class="grid grid-cols-3 gap-6 max-w-lg mx-auto">
+                                    <input type="radio" name="payment-method-step4" id="pay-cash-4" value="cash" class="hidden payment-radio" onchange="syncPaymentMethod(this.value)">
+                                    <label for="pay-cash-4" class="border border-white/10 p-5 rounded-2xl text-center cursor-pointer hover:border-[#c9a03d]/50 transition block bg-white/5">
+                                        <i class="fas fa-coins mb-2 text-2xl text-[#c9a03d]"></i>
+                                        <p class="text-[10px] font-bold uppercase tracking-widest" data-i18n="payment_cash">Cash</p>
+                                    </label>
 
-                            <div class="flex gap-6 mt-12">
-                                <button onclick="goToStep(3)" class="w-1/3 border border-gray-600 text-gray-400 py-4 rounded-full font-bold uppercase tracking-widest text-xs" data-i18n="btn_prev">Terug</button>
-                                <button onclick="submitBooking()" class="w-2/3 bg-[#c9a03d] text-[#0a1a2f] py-4 rounded-full font-bold uppercase tracking-widest hover:shadow-[0_0_20px_rgba(201,160,61,0.5)] transition" data-i18n="btn_submit">Bevestig Reservering</button>
+                                    <input type="radio" name="payment-method-step4" id="pay-card-4" value="card" class="hidden payment-radio" onchange="syncPaymentMethod(this.value)">
+                                    <label for="pay-card-4" class="border border-white/10 p-5 rounded-2xl text-center cursor-pointer hover:border-[#c9a03d]/50 transition block bg-white/5">
+                                        <i class="fas fa-credit-card mb-2 text-2xl text-[#c9a03d]"></i>
+                                        <p class="text-[10px] font-bold uppercase tracking-widest" data-i18n="payment_card">Kaart</p>
+                                    </label>
+
+                                    <input type="radio" name="payment-method-step4" id="pay-online-4" value="online" class="hidden payment-radio" onchange="syncPaymentMethod(this.value)">
+                                    <label for="pay-online-4" class="border border-white/10 p-5 rounded-2xl text-center cursor-pointer hover:border-[#c9a03d]/50 transition block bg-white/5">
+                                        <i class="fas fa-globe-europe mb-2 text-2xl text-[#c9a03d]"></i>
+                                        <p class="text-[10px] font-bold uppercase tracking-widest" data-i18n="payment_online">Online</p>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
+                        <div class="mt-12 text-center">
+                            <button onclick="submitBooking()" class="w-full max-w-md bg-gradient-to-r from-[#c9a03d] to-[#b08a30] text-[#0a1a2f] py-6 rounded-2xl font-black text-2xl shadow-[0_0_50px_rgba(201,160,61,0.3)] transition hover:scale-[1.02]" data-i18n="btn_submit">Bevestig Uw Reis</button>
+                        </div>
+                        <div class="mt-8 flex justify-between items-center px-4">
+                            <button onclick="goToStep(3)" class="text-gray-500 hover:text-white font-bold uppercase text-xs tracking-widest transition" data-i18n="btn_prev">Aanpassen</button>
+                            <span class="text-2xl font-black text-[#c9a03d] total-price">€ 0.00</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES SECTIE -->
+        <section id="services" class="py-32 bg-[#081526]">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-24">
+                    <h2 class="text-5xl md:text-6xl font-extrabold mb-6 text-white" data-i18n="services_title">Onze Elite Services</h2>
+                    <div class="w-24 h-1 bg-[#c9a03d] mx-auto"></div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-16">
+                    <div class="group">
+                        <div class="mb-10 overflow-hidden rounded-3xl h-64 relative">
+                            <img src="https://placehold.co/600x400?text=VIP+Lounge" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute inset-0 bg-[#0a1a2f]/40 flex items-center justify-center">
+                                <i class="fas fa-star text-4xl text-[#c9a03d]"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-3xl mb-4 font-bold text-white" data-i18n="service1_title">VIP Chauffeur</h3>
+                        <p class="text-gray-400 leading-relaxed text-lg">Hoogst getrainde chauffeurs voor een vlekkeloze ervaring van deur tot deur.</p>
+                    </div>
+                    <div class="group">
+                        <div class="mb-10 overflow-hidden rounded-3xl h-64 relative">
+                            <img src="https://placehold.co/600x400?text=Business+Jet+Connect" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute inset-0 bg-[#0a1a2f]/40 flex items-center justify-center">
+                                <i class="fas fa-briefcase text-4xl text-[#c9a03d]"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-3xl mb-4 font-bold text-white" data-i18n="service2_title">Corporate Hospitality</h3>
+                        <p class="text-gray-400 leading-relaxed text-lg">Professioneel vervoer voor uw belangrijkste zakelijke relaties en directie.</p>
+                    </div>
+                    <div class="group">
+                        <div class="mb-10 overflow-hidden rounded-3xl h-64 relative">
+                            <img src="https://placehold.co/600x400?text=Luxury+Transfer" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute inset-0 bg-[#0a1a2f]/40 flex items-center justify-center">
+                                <i class="fas fa-plane-arrival text-4xl text-[#c9a03d]"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-3xl mb-4 font-bold text-white" data-i18n="service3_title">Airport Concierge</h3>
+                        <p class="text-gray-400 leading-relaxed text-lg">Meet & greet service direct bij de gate of private jet terminal.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- GALLERY SECTIE -->
-        <section id="services" class="py-20 bg-[#07111d]">
+        <!-- GALLERY / OVER ONS -->
+        <section id="about" class="py-32">
             <div class="container mx-auto px-4">
-                <h2 class="text-4xl text-center mb-16 text-[#c9a03d] uppercase tracking-widest" data-i18n="gallery_title">Onze Exclusieve Vloot</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="h-64 overflow-hidden rounded-2xl group">
-                        <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80" alt="Limo 1" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                <div class="grid lg:grid-cols-2 gap-24 items-center">
+                    <div>
+                        <span class="text-[#c9a03d] font-bold uppercase tracking-[0.3em] mb-6 block" data-i18n="footer_about">De Traditie</span>
+                        <h2 class="text-5xl md:text-6xl mb-10 font-extrabold text-white leading-tight" data-i18n="about_title">Passie voor Perfectie</h2>
+                        <div class="space-y-8 text-xl text-gray-400 font-light leading-relaxed">
+                            <p>Bij PremiumRide draait alles om de details. Van het selecteren van de fijnste interieurs tot de meest discrete routes, wij zorgen ervoor dat uw reis even memorabel is als de bestemming.</p>
+                            <p>Onze vloot bestaat uitsluitend uit de nieuwste modellen, perfect onderhouden en voorzien van alle gemakken die u mag verwachten van een wereldklasse limousine service.</p>
+                        </div>
+                        <div class="mt-12 flex gap-10">
+                            <div class="text-center">
+                                <div class="text-4xl font-black text-white mb-2">15+</div>
+                                <div class="text-[10px] uppercase tracking-widest text-[#c9a03d]">Jaren Ervaring</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-4xl font-black text-white mb-2">100%</div>
+                                <div class="text-[10px] uppercase tracking-widest text-[#c9a03d]">Discretie</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="h-64 overflow-hidden rounded-2xl group">
-                        <img src="https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&w=800&q=80" alt="Limo 2" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                    </div>
-                    <div class="h-64 overflow-hidden rounded-2xl group">
-                        <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=800&q=80" alt="Limo 3" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                    </div>
-                    <div class="h-64 overflow-hidden rounded-2xl group">
-                        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80" alt="Limo 4" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- OVER ONS SECTIE -->
-        <section id="about" class="py-20 bg-[#0a1a2f]">
-            <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row items-center gap-16">
-                    <div class="md:w-1/2">
-                        <h2 class="text-4xl mb-8 text-[#c9a03d] uppercase tracking-widest" data-i18n="about_title">De Kunst van Vervoer</h2>
-                        <p class="text-gray-400 mb-8 leading-relaxed font-light">Wij geloven dat een reis meer is dan alleen van punt A naar punt B komen. Het is een ervaring die de toon zet voor uw dag of avond. Onze chauffeurs zijn getraind in de hoogste normen van etiquette en veiligheid.</p>
-                        <ul class="space-y-4 text-sm uppercase tracking-widest text-[#c9a03d]">
-                            <li><i class="fas fa-check mr-3"></i> 24/7 VIP Conciërge</li>
-                            <li><i class="fas fa-check mr-3"></i> Meertalige Chauffeurs</li>
-                            <li><i class="fas fa-check mr-3"></i> Absolute Discretie</li>
-                        </ul>
-                    </div>
-                    <div class="md:w-1/2 relative">
-                        <div class="absolute -inset-4 border border-[#c9a03d]/30 rounded-2xl"></div>
-                        <img src="https://images.unsplash.com/photo-1517400508447-f8dd518b86db?auto=format&fit=crop&w=800&q=80" alt="Driver" class="rounded-2xl shadow-2xl w-full relative z-10">
+                    <div class="grid grid-cols-2 gap-6">
+                        <img src="https://placehold.co/400x500?text=Interior" class="rounded-3xl shadow-2xl h-80 w-full object-cover mt-12">
+                        <img src="https://placehold.co/400x500?text=Fleet" class="rounded-3xl shadow-2xl h-80 w-full object-cover">
+                        <img src="https://placehold.co/400x500?text=Detail" class="rounded-3xl shadow-2xl h-80 w-full object-cover">
+                        <img src="https://placehold.co/400x500?text=Service" class="rounded-3xl shadow-2xl h-80 w-full object-cover -mt-12">
                     </div>
                 </div>
             </div>
@@ -378,27 +507,31 @@
     </main>
 
     <!-- FOOTER SECTIE -->
-    <footer id="main-footer" class="bg-black text-white py-16 border-t border-[#c9a03d]/20">
-        <div class="container mx-auto px-4 text-center">
-            <div class="mb-12">
-                <p class="text-[#c9a03d] font-bold tracking-[0.3em] uppercase mb-2">Operated by Fleetconnect</p>
-                <p class="text-gray-500 text-sm tracking-widest uppercase">Design by Ryzen Outsourcing</p>
-            </div>
+    <footer id="main-footer" class="bg-black text-white py-24 border-t border-white/5">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col items-center text-center">
+                <div class="flex items-center gap-3 mb-10">
+                    <i class="fas fa-crown text-4xl text-[#c9a03d]"></i>
+                    <span class="text-3xl font-bold tracking-[0.2em] uppercase">PremiumRide</span>
+                </div>
+                <p class="text-sm tracking-widest mb-2 text-gray-400">Operated by Fleetconnect</p>
+                <p class="text-sm tracking-widest mb-12 text-gray-400">Design by Ryzen Outsourcing</p>
 
-            <div class="flex flex-wrap justify-center gap-10 mb-12">
-                <a href="#" class="text-xs uppercase tracking-[0.2em] text-gray-400 hover:text-[#c9a03d] transition" data-i18n="footer_about">Wie zijn we</a>
-                <a href="#" class="text-xs uppercase tracking-[0.2em] text-gray-400 hover:text-[#c9a03d] transition" data-i18n="footer_services">Onze Vloot</a>
-                <a href="#" class="text-xs uppercase tracking-[0.2em] text-gray-400 hover:text-[#c9a03d] transition" data-i18n="footer_contact">Contact</a>
-                <a href="#" class="text-xs uppercase tracking-[0.2em] text-gray-400 hover:text-[#c9a03d] transition" data-i18n="footer_privacy">Privacy</a>
-            </div>
+                <div class="flex flex-wrap justify-center gap-12 mb-16 text-xs font-bold uppercase tracking-[0.2em]">
+                    <a href="#" class="hover:text-[#c9a03d] transition" data-i18n="footer_about">Wie zijn we</a>
+                    <a href="#" class="hover:text-[#c9a03d] transition" data-i18n="footer_services">Diensten</a>
+                    <a href="#" class="hover:text-[#c9a03d] transition" data-i18n="footer_contact">Contact</a>
+                    <a href="#" class="hover:text-[#c9a03d] transition" data-i18n="footer_privacy">Privacy</a>
+                </div>
 
-            <div class="flex justify-center space-x-8 mb-12">
-                <a href="#" class="text-gray-600 hover:text-[#c9a03d] transition text-xl"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="text-gray-600 hover:text-[#c9a03d] transition text-xl"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="text-gray-600 hover:text-[#c9a03d] transition text-xl"><i class="fab fa-linkedin"></i></a>
-            </div>
+                <div class="flex space-x-8 mb-16">
+                    <a href="#" class="text-white/40 hover:text-[#c9a03d] text-2xl transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white/40 hover:text-[#c9a03d] text-2xl transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white/40 hover:text-[#c9a03d] text-2xl transition"><i class="fab fa-linkedin-in"></i></a>
+                </div>
 
-            <p class="text-[10px] text-gray-700 tracking-[0.4em] uppercase">&copy; 2024 - Alle rechten voorbehouden</p>
+                <p class="text-[10px] text-gray-600 tracking-[0.3em] uppercase">&copy; 2024 - All Rights Reserved</p>
+            </div>
         </div>
     </footer>
 
@@ -406,49 +539,53 @@
         // ========== CONFIGURATIE & DATA ==========
         let map, pickupMarker, destinationMarker, routeLayer;
         let selectedVehicle = null;
+        let selectedPaymentMethod = 'cash';
         let currentStep = 1;
         let currentLang = 'nl';
 
         const vehicles = [
-            { id: 'sedan', name: 'Premium Sedan', price: 75, seats: 3, luggage: 2, image: 'https://placehold.co/400x200?text=Premium+Sedan' },
-            { id: 'limo', name: 'Luxe Limousine', price: 150, seats: 8, luggage: 4, image: 'https://placehold.co/400x200?text=Limousine' },
-            { id: 'vclass', name: 'Executive V-Class', price: 125, seats: 7, luggage: 6, image: 'https://placehold.co/400x200?text=V-Class' },
-            { id: 'suv', name: 'Range Rover VIP', price: 110, seats: 4, luggage: 3, image: 'https://placehold.co/400x200?text=Luxe+SUV' }
+            { id: 'sedan', name: 'Premium Sedan', nameFr: 'Berline Premium', nameEn: 'Premium Sedan', price: 45, seats: 4, luggage: 2, image: 'https://placehold.co/400x200?text=Premium+Sedan' },
+            { id: 'executive', name: 'Executive Limo', nameFr: 'Limousine Exécutive', nameEn: 'Executive Limo', price: 75, seats: 3, luggage: 2, image: 'https://placehold.co/400x200?text=Executive' },
+            { id: 'vclass', name: 'Royal V-Class', nameFr: 'Classe V Royale', nameEn: 'Royal V-Class', price: 95, seats: 7, luggage: 6, image: 'https://placehold.co/400x200?text=Royal+V' },
+            { id: 'suv', name: 'Majestic SUV', nameFr: 'SUV Majestueux', nameEn: 'Majestic SUV', price: 85, seats: 4, luggage: 4, image: 'https://placehold.co/400x200?text=Majestic+SUV' }
         ];
 
         const translations = {
             nl: {
                 nav_home: "Home", nav_book: "Boeken", nav_services: "Diensten", nav_about: "Over Ons",
-                hero_title: "Uitmuntendheid in Elke Reis", hero_subtitle: "Ervaar de ultieme luxe en discretie met onze premium chauffeursdienst.", hero_button: "Reserveer Nu",
-                step1_title: "Plan Uw Exclusieve Reis", label_pickup: "Ophaallocatie", label_destination: "Bestemming", label_date: "Datum", label_time: "Tijd",
-                step2_title: "Selecteer Uw Voertuig", step3_title: "Luxe Voorzieningen", step4_title: "Persoonlijke Gegevens",
-                extra_champagne: "Champagne Service", extra_lighting: "Sfeerverlichting", extra_wifi: "High-speed WiFi", extra_child_seat: "Premium Kinderzitje",
-                label_name: "Naam", label_email: "Email", label_phone: "Telefoon", label_payment: "Voorkeursbetaling",
-                pay_card: "Kaart (Terminal in voertuig)", pay_online: "Online Vooruitbetaling", pay_invoice: "Op Factuur",
-                summary_total: "Totaal Investering", btn_next: "Verder", btn_prev: "Terug", btn_submit: "Bevestig Reservering",
-                gallery_title: "Onze Exclusieve Vloot", about_title: "De Kunst van Vervoer", footer_about: "Wie zijn we", footer_services: "Onze Vloot", footer_contact: "Contact", footer_privacy: "Privacy"
+                hero_title: "Exclusief Vervoer in Stijl", hero_subtitle: "Ervaar de ultieme luxe en discretie met onze premium chauffeursdienst.", hero_button: "Reserveer Nu",
+                step1_title: "Plan Uw Reis", label_pickup: "Ophaallocatie", label_destination: "Bestemming", label_date: "Datum", label_time: "Tijd", return_trip: "Retourrit", payment_label: "Betaalmethode", payment_cash: "Cash", payment_card: "Kaart", payment_online: "Online", pickup_placeholder: "Privé-adres, Haven...", destination_placeholder: "Luchthaven, VIP terminal...",
+                step2_title: "Selecteer Uw Vloot",
+                step3_title: "Luxe Opties", passengers_label: "Aantal Passagiers", child_seat_label: "Kinderzitje", wifi_label: "Premium WiFi", water_label: "Water & Snacks", special_requests_label: "Speciale Instructies", special_requests_placeholder: "Specifieke wensen voor de rit...", total_price_label: "Investering in comfort",
+                step4_title: "Persoonlijke Gegevens", label_name: "Naam", label_email: "E-mail", label_phone: "Telefoon", label_payment_step4: "Definitieve Betaalkeuze",
+                btn_next: "Doorgaan", btn_prev: "Vorige", btn_submit: "Bevestig Uw Reis",
+                services_title: "Onze Elite Services", service1_title: "VIP Chauffeur", service2_title: "Corporate Hospitality", service3_title: "Airport Concierge",
+                about_title: "Passie voor Perfectie",
+                footer_about: "Wie zijn we", footer_services: "Diensten", footer_contact: "Contact", footer_privacy: "Privacy"
             },
             fr: {
                 nav_home: "Accueil", nav_book: "Réserver", nav_services: "Services", nav_about: "À Propos",
-                hero_title: "L'Excellence à Chaque Trajet", hero_subtitle: "Découvrez le luxe ultime et la discrétion avec notre service de chauffeur premium.", hero_button: "Réserver Maintenant",
-                step1_title: "Planifiez Votre Voyage Exclusif", label_pickup: "Lieu de prise en charge", label_destination: "Destination", label_date: "Date", label_time: "Heure",
-                step2_title: "Sélectionnez Votre Véhicule", step3_title: "Équipements de Luxe", step4_title: "Données Personnelles",
-                extra_champagne: "Service Champagne", extra_lighting: "Éclairage d'ambiance", extra_wifi: "WiFi haut débit", extra_child_seat: "Siège enfant premium",
-                label_name: "Nom", label_email: "Email", label_phone: "Téléphone", label_payment: "Paiement préféré",
-                pay_card: "Carte (Terminal dans le véhicule)", pay_online: "Prépaiement en ligne", pay_invoice: "Sur Facture",
-                summary_total: "Investissement Total", btn_next: "Suivant", btn_prev: "Retour", btn_submit: "Confirmer la Réservation",
-                gallery_title: "Notre Flotte Exclusive", about_title: "L'Art du Transport", footer_about: "Qui sommes-nous", footer_services: "Notre Flotte", footer_contact: "Contact", footer_privacy: "Confidentialité"
+                hero_title: "Transport Exclusif avec Style", hero_subtitle: "Découvrez le luxe ultime et la discrétion avec notre service de chauffeur premium.", hero_button: "Réserver Maintenant",
+                step1_title: "Planifiez Votre Voyage", label_pickup: "Lieu de prise en charge", label_destination: "Destination", label_date: "Date", label_time: "Heure", return_trip: "Trajet retour", payment_label: "Mode de paiement", payment_cash: "Espèces", payment_card: "Carte", payment_online: "En ligne", pickup_placeholder: "Adresse privée, Port...", destination_placeholder: "Aéroport, terminal VIP...",
+                step2_title: "Sélectionnez Votre Flotte",
+                step3_title: "Options de Luxe", passengers_label: "Nombre de Passagers", child_seat_label: "Siège enfant", wifi_label: "WiFi Premium", water_label: "Eau & Snacks", special_requests_label: "Instructions Spéciales", special_requests_placeholder: "Souhaits spécifiques pour le trajet...", total_price_label: "Investissement confort",
+                step4_title: "Coordonnées Personnelles", label_name: "Nom", label_email: "E-mail", label_phone: "Téléphone", label_payment_step4: "Choix de Paiement Final",
+                btn_next: "Continuer", btn_prev: "Précédent", btn_submit: "Confirmez Votre Voyage",
+                services_title: "Nos Services Élite", service1_title: "Chauffeur VIP", service2_title: "Hospitalité Corporate", service3_title: "Conciergerie Aéroport",
+                about_title: "La Passion de la Perfection",
+                footer_about: "Qui sommes-nous", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Confidentialité"
             },
             en: {
                 nav_home: "Home", nav_book: "Book", nav_services: "Services", nav_about: "About Us",
-                hero_title: "Excellence in Every Journey", hero_subtitle: "Experience ultimate luxury and discretion with our premium chauffeur service.", hero_button: "Reserve Now",
-                step1_title: "Plan Your Exclusive Journey", label_pickup: "Pickup Location", label_destination: "Destination", label_date: "Date", label_time: "Time",
-                step2_title: "Select Your Vehicle", step3_title: "Luxury Amenities", step4_title: "Personal Details",
-                extra_champagne: "Champagne Service", extra_lighting: "Mood Lighting", extra_wifi: "High-speed WiFi", extra_child_seat: "Premium Child Seat",
-                label_name: "Name", label_email: "Email", label_phone: "Phone", label_payment: "Preferred Payment",
-                pay_card: "Card (Terminal in vehicle)", pay_online: "Online Prepayment", pay_invoice: "On Invoice",
-                summary_total: "Total Investment", btn_next: "Next", btn_prev: "Back", btn_submit: "Confirm Reservation",
-                gallery_title: "Our Exclusive Fleet", about_title: "The Art of Transport", footer_about: "Who we are", footer_services: "Our Fleet", footer_contact: "Contact", footer_privacy: "Privacy"
+                hero_title: "Exclusive Travel in Style", hero_subtitle: "Experience ultimate luxury and discretion with our premium chauffeur service.", hero_button: "Reserve Now",
+                step1_title: "Plan Your Journey", label_pickup: "Pickup Location", label_destination: "Destination", label_date: "Date", label_time: "Time", return_trip: "Return trip", payment_label: "Payment Method", payment_cash: "Cash", payment_card: "Card", payment_online: "Online", pickup_placeholder: "Private address, Port...", destination_placeholder: "Airport, VIP terminal...",
+                step2_title: "Select Your Fleet",
+                step3_title: "Luxury Options", passengers_label: "Number of Passengers", child_seat_label: "Child Seat", wifi_label: "Premium WiFi", water_label: "Water & Snacks", special_requests_label: "Special Instructions", special_requests_placeholder: "Specific requests for the ride...", total_price_label: "Investment in comfort",
+                step4_title: "Personal Details", label_name: "Name", label_email: "Email", label_phone: "Phone", label_payment_step4: "Final Payment Choice",
+                btn_next: "Continue", btn_prev: "Previous", btn_submit: "Confirm Your Journey",
+                services_title: "Our Elite Services", service1_title: "VIP Chauffeur", service2_title: "Corporate Hospitality", service3_title: "Airport Concierge",
+                about_title: "Passion for Perfection",
+                footer_about: "Who we are", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Privacy"
             }
         };
 
@@ -458,19 +595,17 @@
             renderVehicles();
             setLanguage('nl');
 
-            // Set min date for booking to today
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('booking-date').setAttribute('min', today);
 
-            // Header scroll effect
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('main-header');
                 if (window.scrollY > 50) {
-                    header.classList.add('scrolled', 'bg-[#0a1a2f]/95', 'py-2');
-                    header.classList.remove('py-4');
+                    header.classList.add('header-fixed');
+                    header.classList.remove('header-transparent');
                 } else {
-                    header.classList.remove('scrolled', 'bg-[#0a1a2f]/95', 'py-2');
-                    header.classList.add('py-4');
+                    header.classList.remove('header-fixed');
+                    header.classList.add('header-transparent');
                 }
             });
         });
@@ -478,7 +613,7 @@
         // ========== KAART FUNCTIES ==========
         function initMap() {
             map = L.map('map', {zoomControl: false}).setView([51.2194, 4.4025], 12);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
         }
@@ -500,10 +635,8 @@
                     data.features.forEach(feature => {
                         const div = document.createElement('div');
                         div.className = 'suggestion-item';
-                        const name = feature.properties.name || '';
-                        const city = feature.properties.city || '';
-                        const street = feature.properties.street || '';
-                        const label = `${name} ${street} ${city}`.trim();
+                        const p = feature.properties;
+                        const label = `${p.name || ''} ${p.street || ''} ${p.city || ''}`.trim();
                         div.innerText = label;
                         div.onclick = () => selectAddress(feature, type);
                         list.appendChild(div);
@@ -518,34 +651,25 @@
 
         function selectAddress(feature, type) {
             const [lon, lat] = feature.geometry.coordinates;
-            const name = feature.properties.name || '';
-            const city = feature.properties.city || '';
-            const street = feature.properties.street || '';
-            const label = `${name} ${street} ${city}`.trim();
+            const p = feature.properties;
+            const label = `${p.name || ''} ${p.street || ''} ${p.city || ''}`.trim();
 
             document.getElementById(type).value = label;
             document.getElementById(`${type}-suggestions`).classList.add('hidden');
 
-            const goldIcon = L.divIcon({
-                html: `<i class="fas fa-circle text-[#c9a03d] text-lg"></i>`,
-                className: 'custom-div-icon',
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            });
-
             if (type === 'pickup') {
                 if (pickupMarker) map.removeLayer(pickupMarker);
-                pickupMarker = L.marker([lat, lon], {icon: goldIcon}).addTo(map);
+                pickupMarker = L.marker([lat, lon]).addTo(map);
             } else {
                 if (destinationMarker) map.removeLayer(destinationMarker);
-                destinationMarker = L.marker([lat, lon], {icon: goldIcon}).addTo(map);
+                destinationMarker = L.marker([lat, lon]).addTo(map);
             }
 
             if (pickupMarker && destinationMarker) {
                 calculateRoute();
             }
 
-            map.flyTo([lat, lon], 14);
+            map.flyTo([lat, lon], 15);
             checkFormCompletion();
         }
 
@@ -562,7 +686,7 @@
                     if (routeLayer) map.removeLayer(routeLayer);
 
                     routeLayer = L.geoJSON(route.geometry, {
-                        style: { color: '#c9a03d', weight: 4, opacity: 0.8, dashArray: '10, 10' }
+                        style: { color: '#c9a03d', weight: 4, opacity: 0.6 }
                     }).addTo(map);
 
                     map.fitBounds(routeLayer.getBounds(), { padding: [100, 100] });
@@ -575,22 +699,24 @@
         // ========== BOEKING LOGICA ==========
         function renderVehicles() {
             const container = document.getElementById('vehicle-list');
-            container.innerHTML = vehicles.map(v => `
-                <div class="vehicle-card p-6 rounded-2xl flex flex-col gap-4 border border-white/10" id="v-${v.id}" onclick="selectVehicle('${v.id}')">
-                    <img src="${v.image}" class="w-full h-32 object-cover rounded-xl border border-[#c9a03d]/20" alt="${v.name}">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h4 class="font-bold text-white text-lg">${v.name}</h4>
-                            <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">
-                                <i class="fas fa-user-friends mr-1"></i> ${v.seats} Places
-                                <i class="fas fa-briefcase ml-3 mr-1"></i> ${v.luggage} Bags
-                            </p>
-                        </div>
-                        <p class="font-bold text-[#c9a03d] text-lg">€ ${v.price.toFixed(2)}</p>
+            container.innerHTML = vehicles.map(v => {
+                let name = v.name;
+                if (currentLang === 'fr') name = v.nameFr;
+                if (currentLang === 'en') name = v.nameEn;
+
+                return `
+                <div class="vehicle-card p-8 rounded-3xl text-center" id="v-${v.id}" onclick="selectVehicle('${v.id}')">
+                    <img src="${v.image}" class="w-full h-40 object-cover rounded-2xl mb-6 shadow-lg" alt="${name}">
+                    <h4 class="text-2xl font-bold mb-3 text-white">${name}</h4>
+                    <div class="flex justify-center gap-6 text-xs uppercase tracking-widest text-gray-500 mb-6 font-bold">
+                        <span><i class="fas fa-users mr-2 text-[#c9a03d]"></i> ${v.seats}</span>
+                        <span><i class="fas fa-suitcase mr-2 text-[#c9a03d]"></i> ${v.luggage}</span>
                     </div>
+                    <p class="text-3xl font-black text-[#c9a03d]">€ ${v.price.toFixed(2)}</p>
                 </div>
-            `).join('');
-            selectVehicle('sedan');
+                `;
+            }).join('');
+            if (selectedVehicle) selectVehicle(selectedVehicle.id);
         }
 
         function selectVehicle(id) {
@@ -601,21 +727,30 @@
         }
 
         function updatePrice() {
-            if (!selectedVehicle) return;
+            let total = selectedVehicle ? selectedVehicle.price : 0;
+            const childSeats = parseInt(document.getElementById('child-seats')?.value) || 0;
+            total += childSeats * 5;
+            if(document.getElementById('wifi-opt')?.checked) total += 5;
+            const waterBottles = parseInt(document.getElementById('water-bottles')?.value) || 0;
+            total += waterBottles * 3;
 
-            let total = selectedVehicle.price;
-            document.querySelectorAll('[data-extra]:checked').forEach(cb => {
-                total += parseFloat(cb.value);
+            document.querySelectorAll('.total-price').forEach(el => {
+                el.innerText = `€ ${total.toFixed(2)}`;
             });
+        }
 
-            document.getElementById('total-price').innerText = `€ ${total.toFixed(2)}`;
+        function syncPaymentMethod(value) {
+            selectedPaymentMethod = value;
+            const step1Radio = document.querySelector(`#step-1 input[name="payment-method"][value="${value}"]`);
+            const step4Radio = document.querySelector(`#step-4 input[name="payment-method-step4"][value="${value}"]`);
+            if (step1Radio) step1Radio.checked = true;
+            if (step4Radio) step4Radio.checked = true;
         }
 
         function goToStep(step) {
             document.querySelectorAll('.booking-step').forEach(el => el.classList.add('hidden'));
             document.getElementById(`step-${step}`).classList.remove('hidden');
 
-            // Indicators
             document.querySelectorAll('.step').forEach((el, index) => {
                 const stepNum = index + 1;
                 el.classList.remove('active', 'completed');
@@ -624,8 +759,7 @@
             });
 
             currentStep = step;
-            const target = document.getElementById('booking-section').offsetTop;
-            window.scrollTo({ top: target, behavior: 'smooth' });
+            window.scrollTo({ top: document.getElementById('booking-section').offsetTop - 50, behavior: 'smooth' });
         }
 
         function checkFormCompletion() {
@@ -638,16 +772,16 @@
             btn.disabled = !(pickup && dest && date && time);
         }
 
-        document.getElementById('booking-date').addEventListener('change', checkFormCompletion);
-        document.getElementById('booking-time').addEventListener('change', checkFormCompletion);
-
         function submitBooking() {
             const name = document.getElementById('guest-name').value;
-            if (!name) {
-                alert(currentLang === 'nl' ? "Vul alstublieft uw volledige naam in." : "Veuillez entrer votre nom complet.");
+            const email = document.getElementById('guest-email').value;
+            const phone = document.getElementById('guest-phone').value;
+
+            if (!name || !email || !phone) {
+                alert(currentLang === 'nl' ? "Vul alstublieft al uw gegevens in voor uw exclusieve ervaring." : "Veuillez remplir toutes vos coordonnées voor votre expérience exclusive.");
                 return;
             }
-            alert(currentLang === 'nl' ? "Uw exclusieve reservering is in behandeling. Onze conciërge neemt spoedig contact met u op." : "Votre réservation exclusive est en cours de traitement. Notre concierge vous contactera sous peu.");
+            alert(currentLang === 'nl' ? "Uw aanvraag is ontvangen. Onze conciërge neemt spoedig contact met u op." : "Votre demande a été reçue. Notre concierge vous contactera sous peu.");
             location.reload();
         }
 
@@ -664,6 +798,7 @@
                     }
                 }
             });
+            renderVehicles();
             updatePrice();
         }
     </script>

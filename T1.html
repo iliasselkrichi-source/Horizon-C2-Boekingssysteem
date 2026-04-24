@@ -12,20 +12,23 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --primary: #1e6f8c;
             --primary-hover: #165a72;
             --bg-light: #f8fafc;
-            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-bg: rgba(255, 255, 255, 0.88);
+            --glass-border: rgba(30, 111, 140, 0.3);
+            --shadow-premium: 0 30px 60px -12px rgba(10, 43, 62, 0.12);
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-light);
             color: #1e293b;
+            scroll-behavior: smooth;
         }
 
         h1, h2, h3 {
@@ -34,16 +37,27 @@
 
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            box-shadow: var(--shadow-premium);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
         }
 
         #map {
-            height: 400px;
+            height: 480px;
             border-radius: 24px;
-            z-index: 10;
+            z-index: 1;
+            border: 8px solid white;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .leaflet-routing-container {
+            display: none !important;
         }
 
         .step-indicator {
@@ -107,8 +121,17 @@
             background-color: #f1f5f9;
         }
 
-        [data-i18n] {
-            /* Handig voor debuggen van vertalingen */
+        .vehicle-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .payment-radio:checked + label {
+            border-color: var(--primary);
+            background-color: #f1f5f9;
         }
     </style>
 </head>
@@ -135,42 +158,50 @@
                     <button onclick="setLanguage('fr')" class="px-2 py-1 text-xs border rounded hover:bg-gray-100">FR</button>
                     <button onclick="setLanguage('en')" class="px-2 py-1 text-xs border rounded hover:bg-gray-100">EN</button>
                 </div>
-                <button class="md:hidden text-gray-600">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
             </div>
         </div>
     </header>
 
     <main>
         <!-- HERO SECTIE -->
-        <section id="hero" class="relative py-20 bg-slate-900 text-white overflow-hidden">
+        <section id="hero" class="relative py-24 bg-slate-900 text-white overflow-hidden">
             <div class="absolute inset-0 opacity-40">
-                <img src="https://placehold.co/1920x1080?text=Hero+Image" alt="Hero" class="w-full h-full object-cover">
+                <!-- AFBEELDING: /images/hero/hero-bg.jpg (1920x1080px) -->
+                <img src="https://placehold.co/1920x1080?text=Taxi+Service+Hero" alt="Hero" class="w-full h-full object-cover">
             </div>
             <div class="container mx-auto px-4 relative z-10 text-center">
-                <h1 class="text-4xl md:text-6xl mb-6" data-i18n="hero_title">Betrouwbaar Vervoer, Altijd en Overal</h1>
-                <p class="text-xl mb-8 max-w-2xl mx-auto" data-i18n="hero_subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Uw comfort is onze prioriteit.</p>
-                <a href="#booking-section" class="bg-[#1e6f8c] hover:bg-[#165a72] text-white px-8 py-4 rounded-full font-semibold transition inline-block" data-i18n="hero_button">Boek Nu</a>
+                <h1 class="text-5xl md:text-7xl mb-6 font-extrabold" data-i18n="hero_title">Betrouwbaar Vervoer, Altijd en Overal</h1>
+                <p class="text-xl md:text-2xl mb-10 max-w-2xl mx-auto opacity-90" data-i18n="hero_subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Uw comfort is onze prioriteit.</p>
+                <a href="#booking-section" class="bg-[#1e6f8c] hover:bg-[#165a72] text-white px-10 py-5 rounded-full font-bold text-lg shadow-lg transition transform hover:scale-105 inline-block" data-i18n="hero_button">Boek Nu</a>
             </div>
         </section>
 
         <!-- BOOKING SECTIE -->
-        <section id="booking-section" class="py-20">
+        <section id="booking-section" class="py-24">
             <div class="container mx-auto px-4">
-                <div class="flex flex-col lg:flex-row gap-12">
+                <div class="flex flex-col lg:flex-row gap-16">
 
                     <!-- Kaart Links (50%) -->
                     <div class="lg:w-1/2">
-                        <div id="map" class="shadow-xl"></div>
-                        <div id="route-info" class="mt-4 p-4 glass-card hidden">
-                            <p class="text-sm font-medium"><i class="fas fa-route mr-2"></i> <span id="route-distance">0 km</span> | <i class="fas fa-clock mr-2 ml-4"></i> <span id="route-duration">0 min</span></p>
+                        <div id="map"></div>
+                        <div id="route-info" class="mt-6 p-6 glass-card hidden">
+                            <div class="flex justify-around text-center">
+                                <div>
+                                    <p class="text-sm text-gray-500 uppercase tracking-wider mb-1">Afstand</p>
+                                    <p class="text-2xl font-bold text-[#1e6f8c]" id="route-distance">-</p>
+                                </div>
+                                <div class="w-px bg-gray-200"></div>
+                                <div>
+                                    <p class="text-sm text-gray-500 uppercase tracking-wider mb-1">Reistijd</p>
+                                    <p class="text-2xl font-bold text-[#1e6f8c]" id="route-duration">-</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Boekingsformulier Rechts (50%) -->
                     <div class="lg:w-1/2">
-                        <div class="glass-card p-8">
+                        <div class="glass-card p-10">
                             <div class="step-indicator">
                                 <div class="step active" id="indicator-1">1</div>
                                 <div class="step" id="indicator-2">2</div>
@@ -180,129 +211,196 @@
 
                             <!-- Stap 1: Route -->
                             <div id="step-1" class="booking-step">
-                                <h3 class="text-2xl mb-6" data-i18n="step1_title">Plan uw route</h3>
-                                <div class="space-y-4">
+                                <h3 class="text-3xl mb-8" data-i18n="step1_title">Plan uw route</h3>
+                                <div class="space-y-6">
                                     <div class="relative">
-                                        <label class="block text-sm font-medium mb-1" data-i18n="label_pickup">Ophaallocatie</label>
-                                        <div class="flex items-center border rounded-lg overflow-hidden bg-white">
-                                            <span class="px-3 text-gray-400"><i class="fas fa-location-dot"></i></span>
-                                            <input type="text" id="pickup" class="w-full py-3 pr-4 outline-none" placeholder="Voer ophaaladres in..." oninput="searchAddress(this.value, 'pickup')">
+                                        <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-600" data-i18n="label_pickup">Ophaallocatie</label>
+                                        <div class="flex items-center border-2 border-gray-100 rounded-2xl overflow-hidden bg-white focus-within:border-[#1e6f8c] transition">
+                                            <span class="px-4 text-gray-400"><i class="fas fa-map-marker-alt"></i></span>
+                                            <input type="text" id="pickup" class="w-full py-4 pr-4 outline-none font-medium" placeholder="Ophaaladres..." data-i18n="pickup_placeholder" oninput="searchAddress(this.value, 'pickup')">
                                         </div>
                                         <div id="pickup-suggestions" class="suggestion-list hidden"></div>
                                     </div>
                                     <div class="relative">
-                                        <label class="block text-sm font-medium mb-1" data-i18n="label_destination">Bestemming</label>
-                                        <div class="flex items-center border rounded-lg overflow-hidden bg-white">
-                                            <span class="px-3 text-gray-400"><i class="fas fa-flag-checkered"></i></span>
-                                            <input type="text" id="destination" class="w-full py-3 pr-4 outline-none" placeholder="Voer bestemming in..." oninput="searchAddress(this.value, 'destination')">
+                                        <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-600" data-i18n="label_destination">Bestemming</label>
+                                        <div class="flex items-center border-2 border-gray-100 rounded-2xl overflow-hidden bg-white focus-within:border-[#1e6f8c] transition">
+                                            <span class="px-4 text-gray-400"><i class="fas fa-flag-checkered"></i></span>
+                                            <input type="text" id="destination" class="w-full py-4 pr-4 outline-none font-medium" placeholder="Bestemming..." data-i18n="destination_placeholder" oninput="searchAddress(this.value, 'destination')">
                                         </div>
                                         <div id="destination-suggestions" class="suggestion-list hidden"></div>
                                     </div>
-                                    <div class="grid grid-cols-2 gap-4">
+                                    <div class="grid grid-cols-2 gap-6">
                                         <div>
-                                            <label class="block text-sm font-medium mb-1" data-i18n="label_date">Datum</label>
-                                            <input type="date" id="booking-date" class="w-full p-3 border rounded-lg outline-none">
+                                            <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-600" data-i18n="label_date">Datum</label>
+                                            <input type="date" id="booking-date" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-[#1e6f8c] transition font-medium" onchange="checkFormCompletion()">
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium mb-1" data-i18n="label_time">Tijd</label>
-                                            <input type="time" id="booking-time" class="w-full p-3 border rounded-lg outline-none">
+                                            <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-600" data-i18n="label_time">Tijd</label>
+                                            <input type="time" id="booking-time" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-[#1e6f8c] transition font-medium" onchange="checkFormCompletion()">
                                         </div>
                                     </div>
-                                    <button onclick="goToStep(2)" id="to-step-2" class="w-full bg-[#1e6f8c] text-white py-4 rounded-lg font-semibold mt-4 disabled:opacity-50 disabled:cursor-not-allowed" disabled data-i18n="btn_next">Volgende</button>
+
+                                    <div class="flex items-center gap-3 py-2">
+                                        <input type="checkbox" id="return-trip" class="w-5 h-5 accent-[#1e6f8c]">
+                                        <label for="return-trip" class="font-semibold text-gray-700" data-i18n="return_trip">Retourrit</label>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-bold mb-3 uppercase tracking-wide text-gray-600" data-i18n="payment_label">Betaalmethode</label>
+                                        <div class="grid grid-cols-3 gap-4">
+                                            <input type="radio" name="payment-method" id="pay-cash-1" value="cash" class="hidden payment-radio" checked onchange="syncPaymentMethod(this.value)">
+                                            <label for="pay-cash-1" class="border-2 border-gray-100 p-4 rounded-2xl text-center cursor-pointer hover:bg-gray-50 transition block">
+                                                <i class="fas fa-money-bill-wave mb-2 text-xl text-gray-600"></i>
+                                                <p class="text-xs font-bold uppercase" data-i18n="payment_cash">Contant</p>
+                                            </label>
+
+                                            <input type="radio" name="payment-method" id="pay-card-1" value="card" class="hidden payment-radio" onchange="syncPaymentMethod(this.value)">
+                                            <label for="pay-card-1" class="border-2 border-gray-100 p-4 rounded-2xl text-center cursor-pointer hover:bg-gray-50 transition block">
+                                                <i class="fas fa-credit-card mb-2 text-xl text-gray-600"></i>
+                                                <p class="text-xs font-bold uppercase" data-i18n="payment_card">Kaart</p>
+                                            </label>
+
+                                            <input type="radio" name="payment-method" id="pay-online-1" value="online" class="hidden payment-radio" onchange="syncPaymentMethod(this.value)">
+                                            <label for="pay-online-1" class="border-2 border-gray-100 p-4 rounded-2xl text-center cursor-pointer hover:bg-gray-50 transition block">
+                                                <i class="fas fa-globe mb-2 text-xl text-gray-600"></i>
+                                                <p class="text-xs font-bold uppercase" data-i18n="payment_online">Online</p>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <button onclick="goToStep(2)" id="to-step-2" class="w-full bg-[#1e6f8c] text-white py-5 rounded-2xl font-bold text-lg mt-4 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg transition" disabled data-i18n="btn_next">Volgende</button>
                                 </div>
                             </div>
 
                             <!-- Stap 2: Voertuig -->
                             <div id="step-2" class="booking-step hidden">
-                                <h3 class="text-2xl mb-6" data-i18n="step2_title">Kies uw voertuig</h3>
-                                <div class="grid gap-4" id="vehicle-list">
+                                <h3 class="text-3xl mb-8" data-i18n="step2_title">Kies uw voertuig</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="vehicle-list">
                                     <!-- Voertuigen worden hier gegenereerd -->
                                 </div>
-                                <div class="flex gap-4 mt-8">
-                                    <button onclick="goToStep(1)" class="w-1/3 border border-gray-300 py-4 rounded-lg font-semibold" data-i18n="btn_prev">Vorige</button>
-                                    <button onclick="goToStep(3)" class="w-2/3 bg-[#1e6f8c] text-white py-4 rounded-lg font-semibold" data-i18n="btn_next">Volgende</button>
+                                <div class="flex gap-6 mt-10">
+                                    <button onclick="goToStep(1)" class="w-1/3 border-2 border-gray-200 py-5 rounded-2xl font-bold text-gray-600 hover:bg-gray-50 transition" data-i18n="btn_prev">Vorige</button>
+                                    <button onclick="goToStep(3)" class="w-2/3 bg-[#1e6f8c] text-white py-5 rounded-2xl font-bold text-lg shadow-lg transition" data-i18n="btn_next">Volgende</button>
                                 </div>
                             </div>
 
                             <!-- Stap 3: Extras -->
                             <div id="step-3" class="booking-step hidden">
-                                <h3 class="text-2xl mb-6" data-i18n="step3_title">Extra opties</h3>
-                                <div class="space-y-4">
-                                    <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                <h3 class="text-3xl mb-8" data-i18n="step3_title">Extra opties</h3>
+                                <div class="space-y-6">
+                                    <div class="flex items-center justify-between p-6 border-2 border-gray-100 rounded-2xl bg-white/50">
                                         <div class="flex items-center gap-4">
-                                            <i class="fas fa-baby text-xl text-gray-500"></i>
+                                            <i class="fas fa-users text-2xl text-gray-400"></i>
+                                            <label class="font-bold text-gray-700" data-i18n="passengers_label">Passagiers</label>
+                                        </div>
+                                        <input type="number" id="passengers" min="1" max="8" value="1" class="w-20 p-3 border-2 border-gray-100 rounded-xl outline-none focus:border-[#1e6f8c] font-bold text-center">
+                                    </div>
+
+                                    <div class="flex items-center justify-between p-6 border-2 border-gray-100 rounded-2xl bg-white/50">
+                                        <div class="flex items-center gap-4">
+                                            <i class="fas fa-baby text-2xl text-gray-400"></i>
                                             <div>
-                                                <p class="font-medium" data-i18n="extra_child_seat">Kinderstoeltje</p>
-                                                <p class="text-sm text-gray-500">+ €5,00</p>
+                                                <label class="font-bold text-gray-700 block" data-i18n="child_seat_label">Kinderstoeltje</label>
+                                                <span class="text-xs font-bold text-[#1e6f8c]">+ €5,00 / stuk</span>
                                             </div>
                                         </div>
-                                        <input type="checkbox" class="w-5 h-5 accent-[#1e6f8c]" onchange="updatePrice()" data-extra="child_seat" value="5">
-                                    </label>
-                                    <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                        <input type="number" id="child-seats" min="0" max="4" value="0" class="w-20 p-3 border-2 border-gray-100 rounded-xl outline-none focus:border-[#1e6f8c] font-bold text-center" onchange="updatePrice()">
+                                    </div>
+
+                                    <div class="flex items-center justify-between p-6 border-2 border-gray-100 rounded-2xl bg-white/50">
                                         <div class="flex items-center gap-4">
-                                            <i class="fas fa-wifi text-xl text-gray-500"></i>
+                                            <i class="fas fa-wifi text-2xl text-gray-400"></i>
                                             <div>
-                                                <p class="font-medium" data-i18n="extra_wifi">WiFi aan boord</p>
-                                                <p class="text-sm text-gray-500">+ €5,00</p>
+                                                <label class="font-bold text-gray-700 block" data-i18n="wifi_label">WiFi</label>
+                                                <span class="text-xs font-bold text-[#1e6f8c]">+ €5,00</span>
                                             </div>
                                         </div>
-                                        <input type="checkbox" class="w-5 h-5 accent-[#1e6f8c]" onchange="updatePrice()" data-extra="wifi" value="5">
-                                    </label>
-                                    <label class="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                        <input type="checkbox" id="wifi-opt" class="w-6 h-6 accent-[#1e6f8c]" onchange="updatePrice()">
+                                    </div>
+
+                                    <div class="flex items-center justify-between p-6 border-2 border-gray-100 rounded-2xl bg-white/50">
                                         <div class="flex items-center gap-4">
-                                            <i class="fas fa-bottle-water text-xl text-gray-500"></i>
+                                            <i class="fas fa-bottle-water text-2xl text-gray-400"></i>
                                             <div>
-                                                <p class="font-medium" data-i18n="extra_water">Flesje water</p>
-                                                <p class="text-sm text-gray-500">+ €3,00</p>
+                                                <label class="font-bold text-gray-700 block" data-i18n="water_label">Waterflessen</label>
+                                                <span class="text-xs font-bold text-[#1e6f8c]">+ €3,00 / stuk</span>
                                             </div>
                                         </div>
-                                        <input type="checkbox" class="w-5 h-5 accent-[#1e6f8c]" onchange="updatePrice()" data-extra="water" value="3">
-                                    </label>
+                                        <input type="number" id="water-bottles" min="0" max="10" value="0" class="w-20 p-3 border-2 border-gray-100 rounded-xl outline-none focus:border-[#1e6f8c] font-bold text-center" onchange="updatePrice()">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-600" data-i18n="special_requests_label">Speciale Verzoeken</label>
+                                        <textarea id="special-requests" rows="3" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-[#1e6f8c] transition font-medium" placeholder="..." data-i18n="special_requests_placeholder"></textarea>
+                                    </div>
                                 </div>
-                                <div class="flex gap-4 mt-8">
-                                    <button onclick="goToStep(2)" class="w-1/3 border border-gray-300 py-4 rounded-lg font-semibold" data-i18n="btn_prev">Vorige</button>
-                                    <button onclick="goToStep(4)" class="w-2/3 bg-[#1e6f8c] text-white py-4 rounded-lg font-semibold" data-i18n="btn_next">Volgende</button>
+
+                                <div class="mt-8 p-6 bg-[#1e6f8c]/5 rounded-3xl border border-[#1e6f8c]/10">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-lg font-bold text-gray-600" data-i18n="total_price_label">Totaalprijs</span>
+                                        <span class="text-3xl font-black text-[#1e6f8c] total-price">€ 0.00</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-6 mt-10">
+                                    <button onclick="goToStep(2)" class="w-1/3 border-2 border-gray-200 py-5 rounded-2xl font-bold text-gray-600 hover:bg-gray-50 transition" data-i18n="btn_prev">Vorige</button>
+                                    <button onclick="goToStep(4)" class="w-2/3 bg-[#1e6f8c] text-white py-5 rounded-2xl font-bold text-lg shadow-lg transition" data-i18n="btn_next">Volgende</button>
                                 </div>
                             </div>
 
                             <!-- Stap 4: Gegevens -->
                             <div id="step-4" class="booking-step hidden">
-                                <h3 class="text-2xl mb-6" data-i18n="step4_title">Uw gegevens</h3>
-                                <div class="space-y-4">
+                                <h3 class="text-3xl mb-8" data-i18n="step4_title">Uw gegevens</h3>
+                                <div class="space-y-6">
                                     <div>
-                                        <label class="block text-sm font-medium mb-1" data-i18n="label_name">Naam</label>
-                                        <input type="text" id="guest-name" class="w-full p-3 border rounded-lg outline-none" placeholder="Uw naam">
+                                        <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-600" data-i18n="label_name">Naam</label>
+                                        <input type="text" id="guest-name" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-[#1e6f8c] transition font-medium" placeholder="Uw naam">
                                     </div>
-                                    <div class="grid grid-cols-2 gap-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label class="block text-sm font-medium mb-1" data-i18n="label_email">Email</label>
-                                            <input type="email" id="guest-email" class="w-full p-3 border rounded-lg outline-none" placeholder="uw@email.com">
+                                            <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-600" data-i18n="label_email">Email</label>
+                                            <input type="email" id="guest-email" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-[#1e6f8c] transition font-medium" placeholder="uw@email.com">
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-medium mb-1" data-i18n="label_phone">Telefoon</label>
-                                            <input type="tel" id="guest-phone" class="w-full p-3 border rounded-lg outline-none" placeholder="+32...">
+                                            <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-600" data-i18n="label_phone">Telefoon</label>
+                                            <input type="tel" id="guest-phone" class="w-full p-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-[#1e6f8c] transition font-medium" placeholder="+32...">
                                         </div>
                                     </div>
+
                                     <div>
-                                        <label class="block text-sm font-medium mb-1" data-i18n="label_payment">Betaalmethode</label>
-                                        <select id="payment-method" class="w-full p-3 border rounded-lg outline-none">
-                                            <option value="cash" data-i18n="pay_cash">Cash</option>
-                                            <option value="card" data-i18n="pay_card">Kaart bij chauffeur</option>
-                                            <option value="online" data-i18n="pay_online">Online betalen</option>
-                                        </select>
+                                        <label class="block text-sm font-bold mb-3 uppercase tracking-wide text-gray-600" data-i18n="label_payment_step4">Betaalmethode</label>
+                                        <div class="grid grid-cols-3 gap-4">
+                                            <input type="radio" name="payment-method-step4" id="pay-cash-4" value="cash" class="hidden payment-radio" onchange="syncPaymentMethod(this.value)">
+                                            <label for="pay-cash-4" class="border-2 border-gray-100 p-4 rounded-2xl text-center cursor-pointer hover:bg-gray-50 transition block">
+                                                <i class="fas fa-money-bill-wave mb-2 text-xl text-gray-600"></i>
+                                                <p class="text-xs font-bold uppercase" data-i18n="payment_cash">Contant</p>
+                                            </label>
+
+                                            <input type="radio" name="payment-method-step4" id="pay-card-4" value="card" class="hidden payment-radio" onchange="syncPaymentMethod(this.value)">
+                                            <label for="pay-card-4" class="border-2 border-gray-100 p-4 rounded-2xl text-center cursor-pointer hover:bg-gray-50 transition block">
+                                                <i class="fas fa-credit-card mb-2 text-xl text-gray-600"></i>
+                                                <p class="text-xs font-bold uppercase" data-i18n="payment_card">Kaart</p>
+                                            </label>
+
+                                            <input type="radio" name="payment-method-step4" id="pay-online-4" value="online" class="hidden payment-radio" onchange="syncPaymentMethod(this.value)">
+                                            <label for="pay-online-4" class="border-2 border-gray-100 p-4 rounded-2xl text-center cursor-pointer hover:bg-gray-50 transition block">
+                                                <i class="fas fa-globe mb-2 text-xl text-gray-600"></i>
+                                                <p class="text-xs font-bold uppercase" data-i18n="payment_online">Online</p>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="mt-8 p-4 bg-gray-50 rounded-lg">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <span class="text-gray-600" data-i18n="summary_total">Totaalprijs</span>
-                                        <span class="text-2xl font-bold text-[#1e6f8c]" id="total-price">€ 45,00</span>
+                                <div class="mt-8 p-6 bg-green-50 rounded-3xl border border-green-100">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-lg font-bold text-gray-600" data-i18n="total_price_label">Totaalprijs</span>
+                                        <span class="text-3xl font-black text-green-600 total-price">€ 0.00</span>
                                     </div>
                                 </div>
 
-                                <div class="flex gap-4 mt-8">
-                                    <button onclick="goToStep(3)" class="w-1/3 border border-gray-300 py-4 rounded-lg font-semibold" data-i18n="btn_prev">Vorige</button>
-                                    <button onclick="submitBooking()" class="w-2/3 bg-green-600 text-white py-4 rounded-lg font-semibold hover:bg-green-700 transition" data-i18n="btn_submit">Bevestig Boeking</button>
+                                <div class="flex gap-6 mt-10">
+                                    <button onclick="goToStep(3)" class="w-1/3 border-2 border-gray-200 py-5 rounded-2xl font-bold text-gray-600 hover:bg-gray-50 transition" data-i18n="btn_prev">Vorige</button>
+                                    <button onclick="submitBooking()" class="w-2/3 bg-green-600 text-white py-5 rounded-2xl font-bold text-lg shadow-lg hover:bg-green-700 transition" data-i18n="btn_submit">Bevestig Boeking</button>
                                 </div>
                             </div>
 
@@ -313,46 +411,49 @@
         </section>
 
         <!-- SERVICES SECTIE -->
-        <section id="services" class="py-20 bg-white">
+        <section id="services" class="py-24 bg-white">
             <div class="container mx-auto px-4">
-                <h2 class="text-3xl text-center mb-12" data-i18n="services_title">Onze Diensten</h2>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="p-8 glass-card text-center">
-                        <div class="w-16 h-16 bg-[#1e6f8c]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-taxi text-2xl text-[#1e6f8c]"></i>
+                <h2 class="text-4xl text-center mb-16 font-extrabold" data-i18n="services_title">Onze Diensten</h2>
+                <div class="grid md:grid-cols-3 gap-10">
+                    <div class="p-10 glass-card text-center">
+                        <div class="w-20 h-20 bg-[#1e6f8c]/10 rounded-3xl flex items-center justify-center mx-auto mb-8 transform rotate-3">
+                            <i class="fas fa-taxi text-3xl text-[#1e6f8c]"></i>
                         </div>
-                        <h3 class="text-xl mb-4" data-i18n="service1_title">Standaard Taxi</h3>
-                        <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id diam at arcu.</p>
+                        <h3 class="text-2xl mb-5 font-bold" data-i18n="service1_title">Standaard Taxi</h3>
+                        <p class="text-gray-600 leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id diam at arcu.</p>
                     </div>
-                    <div class="p-8 glass-card text-center border-t-4 border-[#1e6f8c]">
-                        <div class="w-16 h-16 bg-[#1e6f8c]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-briefcase text-2xl text-[#1e6f8c]"></i>
+                    <div class="p-10 glass-card text-center border-t-8 border-[#1e6f8c]">
+                        <div class="w-20 h-20 bg-[#1e6f8c]/10 rounded-3xl flex items-center justify-center mx-auto mb-8 transform -rotate-3">
+                            <i class="fas fa-briefcase text-3xl text-[#1e6f8c]"></i>
                         </div>
-                        <h3 class="text-xl mb-4" data-i18n="service2_title">Zakelijk Vervoer</h3>
-                        <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id diam at arcu.</p>
+                        <h3 class="text-2xl mb-5 font-bold" data-i18n="service2_title">Zakelijk Vervoer</h3>
+                        <p class="text-gray-600 leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id diam at arcu.</p>
                     </div>
-                    <div class="p-8 glass-card text-center">
-                        <div class="w-16 h-16 bg-[#1e6f8c]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-plane text-2xl text-[#1e6f8c]"></i>
+                    <div class="p-10 glass-card text-center">
+                        <div class="w-20 h-20 bg-[#1e6f8c]/10 rounded-3xl flex items-center justify-center mx-auto mb-8 transform rotate-6">
+                            <i class="fas fa-plane text-3xl text-[#1e6f8c]"></i>
                         </div>
-                        <h3 class="text-xl mb-4" data-i18n="service3_title">Luchthaven Vervoer</h3>
-                        <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id diam at arcu.</p>
+                        <h3 class="text-2xl mb-5 font-bold" data-i18n="service3_title">Luchthaven Vervoer</h3>
+                        <p class="text-gray-600 leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id diam at arcu.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- OVER ONS SECTIE -->
-        <section id="about" class="py-20">
+        <section id="about" class="py-24">
             <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row items-center gap-12">
-                    <div class="md:w-1/2">
-                        <h2 class="text-3xl mb-6" data-i18n="about_title">Over TaxiService</h2>
-                        <p class="text-gray-600 mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scelerisque enim ligula venenatis dolor.</p>
-                        <p class="text-gray-600">Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus neque quis tempor bibe ndum.</p>
+                <div class="flex flex-col lg:flex-row items-center gap-20">
+                    <div class="lg:w-1/2">
+                        <h2 class="text-4xl md:text-5xl mb-8 font-extrabold" data-i18n="about_title">Over TaxiService</h2>
+                        <div class="space-y-6 text-lg text-gray-600 leading-relaxed">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas vitae scelerisque enim ligula venenatis dolor.</p>
+                            <p>Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus neque quis tempor bibendum. Proin sed nulla ac ex finibus varius.</p>
+                        </div>
                     </div>
-                    <div class="md:w-1/2">
-                        <img src="https://placehold.co/600x400?text=Over+Ons" alt="Over ons" class="rounded-3xl shadow-lg w-full">
+                    <div class="lg:w-1/2">
+                        <!-- AFBEELDING: /images/about/about-us.jpg (600x400px) -->
+                        <img src="https://placehold.co/600x400?text=Onze+Passie+voor+Service" alt="Over ons" class="rounded-[40px] shadow-2xl w-full transform lg:rotate-2">
                     </div>
                 </div>
             </div>
@@ -360,23 +461,23 @@
     </main>
 
     <!-- FOOTER SECTIE -->
-    <footer id="main-footer" class="bg-gray-900 text-white py-12">
+    <footer id="main-footer" class="bg-gray-900 text-white py-16">
         <div class="container mx-auto px-4">
-            <div class="text-center mb-8">
-                <p class="text-sm mb-1">Operated by Fleetconnect</p>
-                <p class="text-sm mb-4">Design by Ryzen Outsourcing</p>
-                <div class="flex justify-center space-x-6 mb-8">
-                    <a href="#" class="text-gray-400 hover:text-white transition" data-i18n="footer_about">Wie zijn we</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition" data-i18n="footer_services">Diensten</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition" data-i18n="footer_contact">Contact</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition" data-i18n="footer_privacy">Privacy</a>
+            <div class="text-center mb-12">
+                <p class="text-base mb-2 font-medium">Operated by Fleetconnect</p>
+                <p class="text-base mb-8 font-medium">Design by Ryzen Outsourcing</p>
+                <div class="flex justify-center space-x-10 mb-10">
+                    <a href="#" class="text-gray-400 hover:text-white transition font-bold" data-i18n="footer_about">Wie zijn we</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition font-bold" data-i18n="footer_services">Diensten</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition font-bold" data-i18n="footer_contact">Contact</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition font-bold" data-i18n="footer_privacy">Privacy</a>
                 </div>
-                <div class="flex justify-center space-x-4 mb-8">
-                    <i class="fab fa-facebook text-2xl text-gray-400 hover:text-white cursor-pointer transition"></i>
-                    <i class="fab fa-instagram text-2xl text-gray-400 hover:text-white cursor-pointer transition"></i>
-                    <i class="fab fa-linkedin text-2xl text-gray-400 hover:text-white cursor-pointer transition"></i>
+                <div class="flex justify-center space-x-6 mb-10">
+                    <a href="#" class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#1e6f8c] transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#1e6f8c] transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#1e6f8c] transition"><i class="fab fa-linkedin-in"></i></a>
                 </div>
-                <p class="text-xs text-gray-500">&copy; 2024 - Alle rechten voorbehouden</p>
+                <p class="text-sm text-gray-500">&copy; 2024 - Alle rechten voorbehouden</p>
             </div>
         </div>
     </footer>
@@ -385,52 +486,53 @@
         // ========== CONFIGURATIE & DATA ==========
         let map, pickupMarker, destinationMarker, routeLayer;
         let selectedVehicle = null;
+        let selectedPaymentMethod = 'cash';
         let currentStep = 1;
         let currentLang = 'nl';
 
         const vehicles = [
-            { id: 'sedan', name: 'Standaard Sedan', price: 45, seats: 4, luggage: 2, image: 'https://placehold.co/400x200?text=Sedan' },
-            { id: 'executive', name: 'Executive', price: 75, seats: 3, luggage: 2, image: 'https://placehold.co/400x200?text=Executive' },
-            { id: 'vclass', name: 'Mercedes V-Class', price: 95, seats: 7, luggage: 6, image: 'https://placehold.co/400x200?text=V-Class' },
-            { id: 'suv', name: 'Luxe SUV', price: 85, seats: 4, luggage: 4, image: 'https://placehold.co/400x200?text=SUV' }
+            { id: 'sedan', name: 'Standaard Sedan', nameFr: 'Berline Standard', nameEn: 'Standard Sedan', price: 45, seats: 4, luggage: 2, image: 'https://placehold.co/400x200?text=Standaard+Sedan' },
+            { id: 'executive', name: 'Executive', nameFr: 'Limousine Exécutive', nameEn: 'Executive', price: 75, seats: 3, luggage: 2, image: 'https://placehold.co/400x200?text=Executive' },
+            { id: 'vclass', name: 'Mercedes V-Class', nameFr: 'Mercedes V-Class', nameEn: 'Mercedes V-Class', price: 95, seats: 7, luggage: 6, image: 'https://placehold.co/400x200?text=V-Class' },
+            { id: 'suv', name: 'Luxe SUV', nameFr: 'SUV de Luxe', nameEn: 'Luxury SUV', price: 85, seats: 4, luggage: 4, image: 'https://placehold.co/400x200?text=SUV' }
         ];
 
         const translations = {
             nl: {
                 nav_home: "Home", nav_book: "Boeken", nav_services: "Diensten", nav_about: "Over Ons",
                 hero_title: "Betrouwbaar Vervoer, Altijd en Overal", hero_subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Uw comfort is onze prioriteit.", hero_button: "Boek Nu",
-                step1_title: "Plan uw route", label_pickup: "Ophaallocatie", label_destination: "Bestemming", label_date: "Datum", label_time: "Tijd",
-                step2_title: "Kies uw voertuig", step3_title: "Extra opties", step4_title: "Uw gegevens",
-                extra_child_seat: "Kinderstoeltje", extra_wifi: "WiFi aan boord", extra_water: "Flesje water",
-                label_name: "Naam", label_email: "Email", label_phone: "Telefoon", label_payment: "Betaalmethode",
-                pay_cash: "Cash", pay_card: "Kaart bij chauffeur", pay_online: "Online betalen",
-                summary_total: "Totaalprijs", btn_next: "Volgende", btn_prev: "Vorige", btn_submit: "Bevestig Boeking",
+                step1_title: "Plan uw route", label_pickup: "Ophaallocatie", label_destination: "Bestemming", label_date: "Datum", label_time: "Tijd", return_trip: "Retourrit", payment_label: "Betaalmethode", payment_cash: "Contant", payment_card: "Kaart", payment_online: "Online", pickup_placeholder: "Haven van Antwerpen, Crew Center...", destination_placeholder: "Luchthaven, trainingscentrum, medische faciliteit...",
+                step2_title: "Kies uw voertuig",
+                step3_title: "Extra opties", passengers_label: "Passagiers", child_seat_label: "Kinderstoeltje", wifi_label: "WiFi", water_label: "Waterflessen", special_requests_label: "Speciale Verzoeken", special_requests_placeholder: "Douane-assistentie, medische behoeften, urgente documenten...", total_price_label: "Totaalprijs",
+                step4_title: "Uw gegevens", label_name: "Naam", label_email: "Email", label_phone: "Telefoon", label_payment_step4: "Betaalmethode",
+                btn_next: "Volgende", btn_prev: "Vorige", btn_submit: "Bevestig Boeking",
                 services_title: "Onze Diensten", service1_title: "Standaard Taxi", service2_title: "Zakelijk Vervoer", service3_title: "Luchthaven Vervoer",
-                about_title: "Over TaxiService", footer_about: "Wie zijn we", footer_services: "Diensten", footer_contact: "Contact", footer_privacy: "Privacy"
+                about_title: "Over TaxiService",
+                footer_about: "Wie zijn we", footer_services: "Diensten", footer_contact: "Contact", footer_privacy: "Privacy"
             },
             fr: {
                 nav_home: "Accueil", nav_book: "Réserver", nav_services: "Services", nav_about: "À Propos",
                 hero_title: "Transport Fiable, Partout et Toujours", hero_subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Votre confort est notre priorité.", hero_button: "Réserver Maintenant",
-                step1_title: "Planifiez votre route", label_pickup: "Lieu de prise en charge", label_destination: "Destination", label_date: "Date", label_time: "Heure",
-                step2_title: "Choisissez votre véhicule", step3_title: "Options supplémentaires", step4_title: "Vos coordonnées",
-                extra_child_seat: "Siège enfant", extra_wifi: "WiFi à bord", extra_water: "Bouteille d'eau",
-                label_name: "Nom", label_email: "Email", label_phone: "Téléphone", label_payment: "Mode de paiement",
-                pay_cash: "Espèces", pay_card: "Carte chez le chauffeur", pay_online: "Paiement en ligne",
-                summary_total: "Prix total", btn_next: "Suivant", btn_prev: "Précédent", btn_submit: "Confirmer la Réservation",
+                step1_title: "Planifiez votre route", label_pickup: "Lieu de prise en charge", label_destination: "Destination", label_date: "Date", label_time: "Heure", return_trip: "Trajet retour", payment_label: "Mode de paiement", payment_cash: "Espèces", payment_card: "Carte", payment_online: "En ligne", pickup_placeholder: "Port d'Anvers, Centre Crew...", destination_placeholder: "Aéroport, centre de formation, établissement médical...",
+                step2_title: "Choisissez votre véhicule",
+                step3_title: "Options supplémentaires", passengers_label: "Passagers", child_seat_label: "Siège enfant", wifi_label: "WiFi", water_label: "Bouteilles d'eau", special_requests_label: "Demandes Spéciales", special_requests_placeholder: "Assistance douanière, besoins médicaux, documents urgents...", total_price_label: "Prix total",
+                step4_title: "Vos coordonnées", label_name: "Nom", label_email: "Email", label_phone: "Téléphone", label_payment_step4: "Mode de paiement",
+                btn_next: "Suivant", btn_prev: "Précédent", btn_submit: "Confirmer la Réservation",
                 services_title: "Nos Services", service1_title: "Taxi Standard", service2_title: "Transport d'Affaires", service3_title: "Transfert Aéroport",
-                about_title: "À Propos de TaxiService", footer_about: "Qui sommes-nous", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Confidentialité"
+                about_title: "À Propos de TaxiService",
+                footer_about: "Qui sommes-nous", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Confidentialité"
             },
             en: {
                 nav_home: "Home", nav_book: "Book", nav_services: "Services", nav_about: "About Us",
                 hero_title: "Reliable Transport, Anytime, Anywhere", hero_subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Your comfort is our priority.", hero_button: "Book Now",
-                step1_title: "Plan your route", label_pickup: "Pickup Location", label_destination: "Destination", label_date: "Date", label_time: "Time",
-                step2_title: "Choose your vehicle", step3_title: "Extra options", step4_title: "Your details",
-                extra_child_seat: "Child seat", extra_wifi: "WiFi on board", extra_water: "Bottle of water",
-                label_name: "Name", label_email: "Email", label_phone: "Phone", label_payment: "Payment method",
-                pay_cash: "Cash", pay_card: "Card with driver", pay_online: "Pay online",
-                summary_total: "Total Price", btn_next: "Next", btn_prev: "Previous", btn_submit: "Confirm Booking",
+                step1_title: "Plan your route", label_pickup: "Pickup Location", label_destination: "Destination", label_date: "Date", label_time: "Time", return_trip: "Return trip", payment_label: "Payment Method", payment_cash: "Cash", payment_card: "Card", payment_online: "Online", pickup_placeholder: "Port of Antwerp, Crew Center...", destination_placeholder: "Airport, training center, medical facility...",
+                step2_title: "Choose your vehicle",
+                step3_title: "Extra options", passengers_label: "Passengers", child_seat_label: "Child seat", wifi_label: "WiFi", water_label: "Water bottles", special_requests_label: "Special Requests", special_requests_placeholder: "Customs assistance, medical needs, urgent documents...", total_price_label: "Total Price",
+                step4_title: "Your details", label_name: "Name", label_email: "Email", label_phone: "Phone", label_payment_step4: "Payment Method",
+                btn_next: "Next", btn_prev: "Previous", btn_submit: "Confirm Booking",
                 services_title: "Our Services", service1_title: "Standard Taxi", service2_title: "Business Transport", service3_title: "Airport Transfer",
-                about_title: "About TaxiService", footer_about: "Who we are", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Privacy"
+                about_title: "About TaxiService",
+                footer_about: "Who we are", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Privacy"
             }
         };
 
@@ -440,14 +542,13 @@
             renderVehicles();
             setLanguage('nl');
 
-            // Set min date for booking to today
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('booking-date').setAttribute('min', today);
         });
 
         // ========== KAART FUNCTIES ==========
         function initMap() {
-            map = L.map('map').setView([51.2194, 4.4025], 12); // Antwerpen
+            map = L.map('map').setView([51.2194, 4.4025], 12);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
@@ -470,10 +571,8 @@
                     data.features.forEach(feature => {
                         const div = document.createElement('div');
                         div.className = 'suggestion-item';
-                        const name = feature.properties.name || '';
-                        const city = feature.properties.city || '';
-                        const street = feature.properties.street || '';
-                        const label = `${name} ${street} ${city}`.trim();
+                        const p = feature.properties;
+                        const label = `${p.name || ''} ${p.street || ''} ${p.city || ''}`.trim();
                         div.innerText = label;
                         div.onclick = () => selectAddress(feature, type);
                         list.appendChild(div);
@@ -488,20 +587,18 @@
 
         function selectAddress(feature, type) {
             const [lon, lat] = feature.geometry.coordinates;
-            const name = feature.properties.name || '';
-            const city = feature.properties.city || '';
-            const street = feature.properties.street || '';
-            const label = `${name} ${street} ${city}`.trim();
+            const p = feature.properties;
+            const label = `${p.name || ''} ${p.street || ''} ${p.city || ''}`.trim();
 
             document.getElementById(type).value = label;
             document.getElementById(`${type}-suggestions`).classList.add('hidden');
 
             if (type === 'pickup') {
                 if (pickupMarker) map.removeLayer(pickupMarker);
-                pickupMarker = L.marker([lat, lon]).addTo(map).bindPopup("Ophaalpunt").openPopup();
+                pickupMarker = L.marker([lat, lon]).addTo(map);
             } else {
                 if (destinationMarker) map.removeLayer(destinationMarker);
-                destinationMarker = L.marker([lat, lon]).addTo(map).bindPopup("Bestemming");
+                destinationMarker = L.marker([lat, lon]).addTo(map);
             }
 
             if (pickupMarker && destinationMarker) {
@@ -525,7 +622,7 @@
                     if (routeLayer) map.removeLayer(routeLayer);
 
                     routeLayer = L.geoJSON(route.geometry, {
-                        style: { color: '#1e6f8c', weight: 5, opacity: 0.7 }
+                        style: { color: '#1e6f8c', weight: 6, opacity: 0.8 }
                     }).addTo(map);
 
                     map.fitBounds(routeLayer.getBounds(), { padding: [50, 50] });
@@ -542,22 +639,24 @@
         // ========== BOEKING LOGICA ==========
         function renderVehicles() {
             const container = document.getElementById('vehicle-list');
-            container.innerHTML = vehicles.map(v => `
-                <div class="vehicle-card p-4 glass-card flex items-center gap-4" id="v-${v.id}" onclick="selectVehicle('${v.id}')">
-                    <img src="${v.image}" class="w-24 h-12 object-cover rounded" alt="${v.name}">
-                    <div class="flex-grow">
-                        <h4 class="font-bold">${v.name}</h4>
-                        <p class="text-xs text-gray-500">
-                            <i class="fas fa-users mr-1"></i> ${v.seats}
-                            <i class="fas fa-suitcase ml-3 mr-1"></i> ${v.luggage}
-                        </p>
+            container.innerHTML = vehicles.map(v => {
+                let name = v.name;
+                if (currentLang === 'fr') name = v.nameFr;
+                if (currentLang === 'en') name = v.nameEn;
+
+                return `
+                <div class="vehicle-card p-6 glass-card text-center" id="v-${v.id}" onclick="selectVehicle('${v.id}')">
+                    <img src="${v.image}" class="vehicle-img" alt="${name}">
+                    <h4 class="text-xl font-bold mb-2">${name}</h4>
+                    <div class="flex justify-center gap-4 text-sm text-gray-500 mb-4">
+                        <span><i class="fas fa-users mr-1"></i> ${v.seats}</span>
+                        <span><i class="fas fa-suitcase mr-1"></i> ${v.luggage}</span>
                     </div>
-                    <div class="text-right">
-                        <p class="font-bold text-[#1e6f8c]">€ ${v.price.toFixed(2)}</p>
-                    </div>
+                    <p class="text-2xl font-black text-[#1e6f8c]">€ ${v.price.toFixed(2)}</p>
                 </div>
-            `).join('');
-            selectVehicle('sedan');
+                `;
+            }).join('');
+            if (selectedVehicle) selectVehicle(selectedVehicle.id);
         }
 
         function selectVehicle(id) {
@@ -568,21 +667,30 @@
         }
 
         function updatePrice() {
-            if (!selectedVehicle) return;
+            let total = selectedVehicle ? selectedVehicle.price : 0;
+            const childSeats = parseInt(document.getElementById('child-seats')?.value) || 0;
+            total += childSeats * 5;
+            if(document.getElementById('wifi-opt')?.checked) total += 5;
+            const waterBottles = parseInt(document.getElementById('water-bottles')?.value) || 0;
+            total += waterBottles * 3;
 
-            let total = selectedVehicle.price;
-            document.querySelectorAll('[data-extra]:checked').forEach(cb => {
-                total += parseFloat(cb.value);
+            document.querySelectorAll('.total-price').forEach(el => {
+                el.innerText = `€ ${total.toFixed(2)}`;
             });
+        }
 
-            document.getElementById('total-price').innerText = `€ ${total.toFixed(2)}`;
+        function syncPaymentMethod(value) {
+            selectedPaymentMethod = value;
+            const step1Radio = document.querySelector(`#step-1 input[name="payment-method"][value="${value}"]`);
+            const step4Radio = document.querySelector(`#step-4 input[name="payment-method-step4"][value="${value}"]`);
+            if (step1Radio) step1Radio.checked = true;
+            if (step4Radio) step4Radio.checked = true;
         }
 
         function goToStep(step) {
             document.querySelectorAll('.booking-step').forEach(el => el.classList.add('hidden'));
             document.getElementById(`step-${step}`).classList.remove('hidden');
 
-            // Indicators
             document.querySelectorAll('.step').forEach((el, index) => {
                 const stepNum = index + 1;
                 el.classList.remove('active', 'completed');
@@ -604,16 +712,16 @@
             btn.disabled = !(pickup && dest && date && time);
         }
 
-        document.getElementById('booking-date').addEventListener('change', checkFormCompletion);
-        document.getElementById('booking-time').addEventListener('change', checkFormCompletion);
-
         function submitBooking() {
             const name = document.getElementById('guest-name').value;
-            if (!name) {
-                alert(currentLang === 'nl' ? "Vul alstublieft uw naam in." : "Veuillez entrer votre nom.");
+            const email = document.getElementById('guest-email').value;
+            const phone = document.getElementById('guest-phone').value;
+
+            if (!name || !email || !phone) {
+                alert(currentLang === 'nl' ? "Vul alstublieft alle verplichte velden in." : "Veuillez remplir tous les champs obligatoires.");
                 return;
             }
-            alert(currentLang === 'nl' ? "Boeking succesvol ontvangen! We nemen zo snel mogelijk contact met u op." : "Réservation reçue avec succès ! Nous vous contacterons dès que possible.");
+            alert(currentLang === 'nl' ? "Boeking succesvol ontvangen!" : "Réservation reçue avec succès !");
             location.reload();
         }
 
@@ -630,8 +738,7 @@
                     }
                 }
             });
-
-            // Update vehicle texts if needed (optional)
+            renderVehicles();
             updatePrice();
         }
     </script>

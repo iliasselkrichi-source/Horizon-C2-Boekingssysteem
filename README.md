@@ -1,45 +1,32 @@
-# Taxi Booking Templates Overview
+# Taxi Booking Templates Suite
 
-Dit project bevat 5 verschillende taxi-boekingsjablonen, elk geoptimaliseerd voor een specifiek segment van de vervoersmarkt. Alle templates zijn volledig functioneel, responsive en maken gebruik van moderne webtechnologieën zonder de noodzaak voor externe bestanden (behalve CDN-links).
+Deze repository bevat 5 verschillende, zelfstandig werkende taxi boekings-templates (T1-T5). Elke template is ontworpen voor een specifieke niche en bevat een volledig functioneel boekingssysteem.
 
-## Overzicht van Templates
+## Overzicht van de Templates
 
-### 1. T1.html - Standaard Taxi Booking
-*   **Stijl:** Klassiek, schoon en vertrouwd.
-*   **Kleurpalet:** Blauw (#1e6f8c), wit en lichtgrijs.
-*   **Kenmerken:** 4-stappen flow, Leaflet kaart integratie, adressuggesties via Photon API, en routeberekening via OSRM.
-
-### 2. T2.html - Premium Taxi / Limousine
-*   **Stijl:** Luxe, elegant en exclusief.
-*   **Kleurpalet:** Donkerblauw (#0a1a2f) met goudaccenten (#c9a03d).
-*   **Kenmerken:** Full-screen hero, full-width kaart met glass-morphism formulier, luxe extra's zoals champagne service en sfeerverlichting.
-
-### 3. T3.html - Snelle Booking (Minimalistisch)
-*   **Stijl:** Zeer eenvoudig en direct.
-*   **Kleurpalet:** Wit en zacht zwart (#333333).
-*   **Kenmerken:** Geen stappenflow - alles op één pagina voor maximale snelheid. Grijswaarden kaart voor een strakke look.
-
-### 4. T4.html - Zakelijk / Corporate Taxi
-*   **Stijl:** Professioneel, strak en zakelijk.
-*   **Kleurpalet:** Marineblauw (#1e3a5f) en grijs (#4b5563).
-*   **Kenmerken:** Extra velden voor bedrijfsnaam, BTW-nummer en kostenplaats. Teamsectie voor accountmanagement.
-
-### 5. T5.html - Airport Transfer Specialist
-*   **Stijl:** Helder en betrouwbaar, gericht op reizigers.
-*   **Kleurpalet:** Lichtblauw (#e0f2fe) en donkerblauw (#0369a1).
-*   **Kenmerken:** Dropdown voor grote luchthavens, vluchtnummer tracking, instelbare wachttijden en automatische routeberekening vanaf de geselecteerde luchthaven.
+- **T1.html (Standaard Taxi Booking):** Klassieke stijl, schoon en vertrouwd. Focus op betrouwbaarheid.
+- **T2.html (Premium Taxi / Limousine):** Luxe, donkere elegante stijl met gouden accenten en full-screen hero.
+- **T3.html (Snelle Booking - Minimalistisch):** Zeer eenvoudig, één pagina zonder stappenflow. Alles direct zichtbaar.
+- **T4.html (Zakelijk / Corporate Taxi):** Professionele marineblauwe stijl met extra velden voor BTW, bedrijfsnaam en kostenplaatsen.
+- **T5.html (Airport Transfer Specialist):** Lichtblauwe stijl met focus op vluchtgegevens, bagage en automatische luchthavenselectie.
 
 ## Technische Specificaties
-*   **Framework:** Tailwind CSS (via CDN)
-*   **Icons:** Font Awesome 6.4.0
-*   **Kaarten:** Leaflet.js met OpenStreetMap data
-*   **Geocoding:** Photon API (Komoot)
-*   **Routing:** OSRM (Open Source Routing Machine)
-*   **Talen:** Volledige ondersteuning voor Nederlands (standaard), Frans en Engels.
 
-## Gebruiksinstructies
-Elk HTML-bestand is zelfstandig. Open een van de bestanden (`T1.html` t/m `T5.html`) direct in een moderne webbrowser om de functionaliteit te testen. Er is geen lokale server of build-stap vereist.
+- **Frameworks:** Tailwind CSS (via CDN)
+- **Maps & Routing:** Leaflet (OpenStreetMap), Photon API (Geocoding), OSRM (Routing).
+- **Iconen:** Font Awesome 6.4.0
+- **Fonts:** Inter & Playfair Display
+- **Talen:** Ondersteuning voor Nederlands (NL), Frans (FR) en Engels (EN).
+- **Responsive:** Werkt op mobiel, tablet en desktop.
+
+## Gebruik
+
+Elk bestand is volledig zelfstandig. Open een van de `.html` bestanden direct in een webbrowser om de template te bekijken en te gebruiken.
+
+## Disclaimer
+
+Alle afbeeldingen zijn placeholders (placehold.co). Het boekingssysteem toont een alert bij verzending; de backend aansluiting dient nog te gebeuren.
 
 ---
-*Operated by Fleetconnect*
-*Design by Ryzen Outsourcing*
+**Operated by Fleetconnect**
+**Design by Ryzen Outsourcing**
