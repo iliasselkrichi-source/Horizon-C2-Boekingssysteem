@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T5 - Airport Transfer Specialist</title>
+
+    <!-- Externe Bibliotheken -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0369a1;
+            --secondary: #e0f2fe;
+            --bg-light: #f0f9ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: #1e293b;
+        }
+
+        .card-airport {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 105, 161, 0.08);
+            border: 1px solid #e0f2fe;
+        }
+
+        .input-airport {
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-airport:focus {
+            border-color: var(--primary);
+        }
+
+        #map {
+            height: 400px;
+            border-radius: 16px;
+            z-index: 10;
+        }
+
+        .step-indicator {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .step-bar {
+            height: 6px;
+            flex-grow: 1;
+            background: #e2e8f0;
+            border-radius: 3px;
+        }
+
+        .step-bar.active {
+            background: var(--primary);
+        }
+
+        .vehicle-card {
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .vehicle-card.selected {
+            border-color: var(--primary);
+            background-color: var(--secondary);
+        }
+
+        .suggestion-list {
+            position: absolute;
+            z-index: 1000;
+            background: white;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .suggestion-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f1f5f9;
+        }
+
+        .airport-badge {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER SECTIE -->
+    <header id="main-header" class="bg-white border-b border-sky-100 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-plane-departure text-2xl text-[#0369a1]"></i>
+                <span class="text-xl font-bold text-[#0369a1]">AirportTrans</span>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="flex gap-1">
+                    <button onclick="setLanguage('nl')" class="px-2 py-1 text-xs font-bold hover:text-[#0369a1]">NL</button>
+                    <button onclick="setLanguage('fr')" class="px-2 py-1 text-xs font-bold hover:text-[#0369a1]">FR</button>
+                    <button onclick="setLanguage('en')" class="px-2 py-1 text-xs font-bold hover:text-[#0369a1]">EN</button>
+                </div>
+                <div class="hidden md:flex items-center gap-2 text-sm font-semibold text-gray-500">
+                    <i class="fas fa-headset"></i>
+                    <span>+32 000 00 00</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO SECTIE -->
+        <section id="hero" class="bg-white py-12">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4" data-i18n="hero_title">Airport Transfer</h1>
+                <p class="text-gray-500 max-w-xl mx-auto" data-i18n="hero_subtitle">Betrouwbaar vervoer van en naar alle grote luchthavens in de Benelux en daarbuiten.</p>
+            </div>
+        </section>
+
+        <!-- BOOKING SECTIE -->
+        <section id="booking-section" class="pb-20">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+                    <!-- Formulier -->
+                    <div class="card-airport p-6 md:p-10">
+                        <div class="step-indicator">
+                            <div class="step-bar active"></div>
+                            <div class="step-bar" id="bar-2"></div>
+                            <div class="step-bar" id="bar-3"></div>
+                            <div class="step-bar" id="bar-4"></div>
+                        </div>
+
+                        <!-- Stap 1: Luchthaven & Bestemming -->
+                        <div id="step-1" class="booking-step">
+                            <h3 class="text-xl font-bold mb-6" data-i18n="step1_title">Selecteer uw vluchtgegevens</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-600 mb-1" data-i18n="label_airport">Luchthaven</label>
+                                    <select id="airport-select" class="input-airport bg-white" onchange="selectAirport()">
+                                        <option value="" data-i18n="opt_select_airport">Selecteer een luchthaven...</option>
+                                        <option value="BRU" data-lat="50.9008" data-lon="4.4844">Brussel-Zaventem (BRU)</option>
+                                        <option value="CRL" data-lat="50.4592" data-lon="4.4538">Charleroi (CRL)</option>
+                                        <option value="ANR" data-lat="51.1894" data-lon="4.4603">Antwerpen (ANR)</option>
+                                        <option value="LGG" data-lat="50.6375" data-lon="5.4433">Luik (LGG)</option>
+                                        <option value="OST" data-lat="51.1989" data-lon="2.8622">Oostende (OST)</option>
+                                    </select>
+                                </div>
+                                <div class="relative">
+                                    <label class="block text-sm font-bold text-gray-600 mb-1" data-i18n="label_destination">Bestemming (Adres)</label>
+                                    <input type="text" id="destination" class="input-airport" placeholder="Voer bestemmingsadres in..." oninput="searchAddress(this.value, 'destination')">
+                                    <div id="destination-suggestions" class="suggestion-list hidden"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-bold text-gray-600 mb-1" data-i18n="label_date">Datum</label>
+                                        <input type="date" id="booking-date" class="input-airport">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-bold text-gray-600 mb-1" data-i18n="label_time">Tijd</label>
+                                        <input type="time" id="booking-time" class="input-airport">
+                                    </div>
+                                </div>
+                                <button onclick="goToStep(2)" id="to-step-2" class="w-full bg-[#0369a1] text-white py-4 rounded-xl font-bold mt-4 disabled:opacity-50" disabled data-i18n="btn_next">Volgende</button>
+                            </div>
+                        </div>
+
+                        <!-- Stap 2: Voertuig -->
+                        <div id="step-2" class="booking-step hidden">
+                            <h3 class="text-xl font-bold mb-6" data-i18n="step2_title">Kies uw voertuig</h3>
+                            <div class="grid gap-3" id="vehicle-list">
+                                <!-- JS -->
+                            </div>
+                            <div class="flex gap-4 mt-8">
+                                <button onclick="goToStep(1)" class="w-1/3 border-2 border-gray-100 py-3 rounded-xl font-bold text-gray-400" data-i18n="btn_prev">Terug</button>
+                                <button onclick="goToStep(3)" class="w-2/3 bg-[#0369a1] text-white py-3 rounded-xl font-bold" data-i18n="btn_next">Volgende</button>
+                            </div>
+                        </div>
+
+                        <!-- Stap 3: Extra Info (Vluchtnummer etc) -->
+                        <div id="step-3" class="booking-step hidden">
+                            <h3 class="text-xl font-bold mb-6" data-i18n="step3_title">Vluchtinformatie</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-600 mb-1" data-i18n="label_flight">Vluchtnummer</label>
+                                    <input type="text" id="flight-number" class="input-airport" placeholder="bijv. SN1234">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-600 mb-1" data-i18n="label_wait">Wachttijd (Meet & Greet)</label>
+                                    <select id="wait-time" class="input-airport bg-white">
+                                        <option value="15">15 minuten (Standaard)</option>
+                                        <option value="30">30 minuten (+ €10)</option>
+                                        <option value="45">45 minuten (+ €20)</option>
+                                        <option value="60">60 minuten (+ €30)</option>
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-bold text-gray-600 mb-1" data-i18n="label_luggage">Aantal bagage</label>
+                                        <input type="number" id="luggage-count" class="input-airport" value="1" min="0">
+                                    </div>
+                                    <div class="flex items-center gap-2 pt-6">
+                                        <input type="checkbox" id="child-seat" class="w-5 h-5 accent-[#0369a1]">
+                                        <label for="child-seat" class="text-sm font-bold text-gray-600" data-i18n="extra_child_seat">Kinderstoel</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 mt-8">
+                                <button onclick="goToStep(2)" class="w-1/3 border-2 border-gray-100 py-3 rounded-xl font-bold text-gray-400" data-i18n="btn_prev">Terug</button>
+                                <button onclick="goToStep(4)" class="w-2/3 bg-[#0369a1] text-white py-3 rounded-xl font-bold" data-i18n="btn_next">Volgende</button>
+                            </div>
+                        </div>
+
+                        <!-- Stap 4: Gegevens -->
+                        <div id="step-4" class="booking-step hidden">
+                            <h3 class="text-xl font-bold mb-6" data-i18n="step4_title">Persoonsgegevens</h3>
+                            <div class="space-y-4">
+                                <input type="text" id="guest-name" class="input-airport" placeholder="Uw Naam">
+                                <input type="email" id="guest-email" class="input-airport" placeholder="Email">
+                                <input type="tel" id="guest-phone" class="input-airport" placeholder="Telefoon">
+                            </div>
+
+                            <div class="mt-8 p-6 bg-sky-50 rounded-2xl">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-bold text-sky-700 uppercase" data-i18n="summary_total">Totaalprijs</span>
+                                    <span class="text-2xl font-black text-[#0369a1]" id="total-price">€ 0,00</span>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4 mt-8">
+                                <button onclick="goToStep(3)" class="w-1/3 border-2 border-gray-100 py-3 rounded-xl font-bold text-gray-400" data-i18n="btn_prev">Terug</button>
+                                <button onclick="submitBooking()" class="w-2/3 bg-[#0369a1] text-white py-3 rounded-xl font-bold hover:bg-[#025a8b] transition" data-i18n="btn_submit">Bevestig Transfer</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Kaart & Info -->
+                    <div class="space-y-6">
+                        <div id="map" class="shadow-lg border-4 border-white"></div>
+
+                        <div class="card-airport p-6">
+                            <h4 class="font-bold text-[#0369a1] mb-4 flex items-center gap-2">
+                                <i class="fas fa-info-circle"></i>
+                                <span data-i18n="info_title">Belangrijke Informatie</span>
+                            </h4>
+                            <div class="space-y-3 text-sm text-gray-600">
+                                <p><i class="fas fa-check text-green-500 mr-2"></i> Gratis annuleren tot 24 uur van tevoren.</p>
+                                <p><i class="fas fa-check text-green-500 mr-2"></i> Chauffeur houdt vlucht in de gaten.</p>
+                                <p><i class="fas fa-check text-green-500 mr-2"></i> Inclusief meet & greet in de aankomsthal.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER SECTIE -->
+    <footer id="main-footer" class="bg-white border-t border-sky-100 py-12">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-8">
+                <p class="text-sm font-bold text-gray-900">Operated by Fleetconnect</p>
+                <p class="text-sm text-gray-500">Design by Ryzen Outsourcing</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-8 mb-8 text-sm font-semibold text-gray-400">
+                <a href="#" class="hover:text-[#0369a1]" data-i18n="footer_about">Wie zijn we</a>
+                <a href="#" class="hover:text-[#0369a1]" data-i18n="footer_services">Luchthavens</a>
+                <a href="#" class="hover:text-[#0369a1]" data-i18n="footer_contact">Contact</a>
+                <a href="#" class="hover:text-[#0369a1]" data-i18n="footer_privacy">Privacy</a>
+            </div>
+
+            <div class="flex justify-center gap-4 mb-8">
+                <div class="w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center text-[#0369a1] hover:bg-[#0369a1] hover:text-white cursor-pointer transition"><i class="fab fa-facebook-f"></i></div>
+                <div class="w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center text-[#0369a1] hover:bg-[#0369a1] hover:text-white cursor-pointer transition"><i class="fab fa-instagram"></i></div>
+                <div class="w-10 h-10 rounded-full bg-sky-50 flex items-center justify-center text-[#0369a1] hover:bg-[#0369a1] hover:text-white cursor-pointer transition"><i class="fab fa-linkedin-in"></i></div>
+            </div>
+
+            <p class="text-xs text-gray-400">&copy; 2024 - Alle rechten voorbehouden</p>
+        </div>
+    </footer>
+
+    <script>
+        // ========== CONFIGURATIE & DATA ==========
+        let map, pickupMarker, destinationMarker, routeLayer;
+        let selectedVehicle = null;
+        let currentStep = 1;
+        let currentLang = 'nl';
+
+        const vehicles = [
+            { id: 'standard', name: 'Standard Transfer', price: 55, capacity: '4 Pers / 3 Bag' },
+            { id: 'premium', name: 'Premium Transfer', price: 85, capacity: '3 Pers / 2 Bag' },
+            { id: 'van', name: 'Airport Van', price: 110, capacity: '8 Pers / 8 Bag' }
+        ];
+
+        const translations = {
+            nl: {
+                hero_title: "Airport Transfer Specialist", hero_subtitle: "Betrouwbaar vervoer van en naar alle grote luchthavens.",
+                step1_title: "Selecteer uw vluchtgegevens", label_airport: "Luchthaven", label_destination: "Bestemming (Adres)", label_date: "Datum", label_time: "Tijd",
+                opt_select_airport: "Selecteer een luchthaven...",
+                step2_title: "Kies uw voertuig", step3_title: "Vluchtinformatie", step4_title: "Persoonsgegevens",
+                label_flight: "Vluchtnummer", label_wait: "Wachttijd (Meet & Greet)", label_luggage: "Aantal bagage", extra_child_seat: "Kinderstoel",
+                summary_total: "Totaalprijs", btn_next: "Volgende", btn_prev: "Terug", btn_submit: "Bevestig Transfer",
+                info_title: "Belangrijke Informatie", footer_about: "Wie zijn we", footer_services: "Luchthavens", footer_contact: "Contact", footer_privacy: "Privacy"
+            },
+            fr: {
+                hero_title: "Spécialiste Transfert Aéroport", hero_subtitle: "Transport fiable depuis et vers tous les grands aéroports.",
+                step1_title: "Sélectionnez vos détails de vol", label_airport: "Aéroport", label_destination: "Destination (Adresse)", label_date: "Date", label_time: "Heure",
+                opt_select_airport: "Sélectionnez un aéroport...",
+                step2_title: "Choisissez votre véhicule", step3_title: "Informations de vol", step4_title: "Données personnelles",
+                label_flight: "Numéro de vol", label_wait: "Temps d'attente (Meet & Greet)", label_luggage: "Nombre de bagages", extra_child_seat: "Siège enfant",
+                summary_total: "Prix total", btn_next: "Suivant", btn_prev: "Retour", btn_submit: "Confirmer le transfert",
+                info_title: "Informations importantes", footer_about: "Qui sommes-nous", footer_services: "Aéroports", footer_contact: "Contact", footer_privacy: "Confidentialité"
+            },
+            en: {
+                hero_title: "Airport Transfer Specialist", hero_subtitle: "Reliable transport to and from all major airports.",
+                step1_title: "Select your flight details", label_airport: "Airport", label_destination: "Destination (Address)", label_date: "Date", label_time: "Time",
+                opt_select_airport: "Select an airport...",
+                step2_title: "Choose your vehicle", step3_title: "Flight Information", step4_title: "Personal Details",
+                label_flight: "Flight number", label_wait: "Wait time (Meet & Greet)", label_luggage: "Number of luggage", extra_child_seat: "Child seat",
+                summary_total: "Total price", btn_next: "Next", btn_prev: "Back", btn_submit: "Confirm Transfer",
+                info_title: "Important Information", footer_about: "Who we are", footer_services: "Airports", footer_contact: "Contact", footer_privacy: "Privacy"
+            }
+        };
+
+        // ========== INITIALISATIE ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
+            renderVehicles();
+            setLanguage('nl');
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('booking-date').setAttribute('min', today);
+        });
+
+        // ========== KAART FUNCTIES ==========
+        function initMap() {
+            map = L.map('map', {zoomControl: false}).setView([50.9008, 4.4844], 10);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+        }
+
+        function selectAirport() {
+            const select = document.getElementById('airport-select');
+            const option = select.selectedOptions[0];
+            if (!option.value) return;
+
+            const lat = parseFloat(option.dataset.lat);
+            const lon = parseFloat(option.dataset.lon);
+
+            if (pickupMarker) map.removeLayer(pickupMarker);
+
+            const planeIcon = L.divIcon({
+                html: `<div style="color: #0369a1; font-size: 24px;"><i class="fas fa-plane"></i></div>`,
+                className: '', iconSize: [24, 24], iconAnchor: [12, 12]
+            });
+
+            pickupMarker = L.marker([lat, lon], {icon: planeIcon}).addTo(map);
+            map.flyTo([lat, lon], 13);
+
+            if (destinationMarker) calculateRoute();
+            checkFormCompletion();
+        }
+
+        async function searchAddress(query, type) {
+            const list = document.getElementById(`${type}-suggestions`);
+            if (query.length < 3) {
+                list.classList.add('hidden');
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`);
+                const data = await response.json();
+
+                list.innerHTML = '';
+                if (data.features.length > 0) {
+                    list.classList.remove('hidden');
+                    data.features.forEach(feature => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item text-sm';
+                        const name = feature.properties.name || '';
+                        const city = feature.properties.city || '';
+                        const street = feature.properties.street || '';
+                        const label = `${name} ${street} ${city}`.trim();
+                        div.innerText = label;
+                        div.onclick = () => selectAddress(feature, type);
+                        list.appendChild(div);
+                    });
+                } else {
+                    list.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('Fout bij zoeken adres:', error);
+            }
+        }
+
+        function selectAddress(feature, type) {
+            const [lon, lat] = feature.geometry.coordinates;
+            const name = feature.properties.name || '';
+            const city = feature.properties.city || '';
+            const street = feature.properties.street || '';
+            const label = `${name} ${street} ${city}`.trim();
+
+            document.getElementById(type).value = label;
+            document.getElementById(`${type}-suggestions`).classList.add('hidden');
+
+            if (destinationMarker) map.removeLayer(destinationMarker);
+            destinationMarker = L.marker([lat, lon]).addTo(map);
+
+            if (pickupMarker) calculateRoute();
+
+            map.flyTo([lat, lon], 14);
+            checkFormCompletion();
+        }
+
+        async function calculateRoute() {
+            const p1 = pickupMarker.getLatLng();
+            const p2 = destinationMarker.getLatLng();
+
+            try {
+                const response = await fetch(`https://router.project-osrm.org/route/v1/driving/${p1.lng},${p1.lat};${p2.lng},${p2.lat}?overview=full&geometries=geojson`);
+                const data = await response.json();
+
+                if (data.routes && data.routes.length > 0) {
+                    const route = data.routes[0];
+                    if (routeLayer) map.removeLayer(routeLayer);
+
+                    routeLayer = L.geoJSON(route.geometry, {
+                        style: { color: '#0369a1', weight: 5, opacity: 0.6 }
+                    }).addTo(map);
+
+                    map.fitBounds(routeLayer.getBounds(), { padding: [50, 50] });
+                }
+            } catch (error) {
+                console.error('Fout bij routeberekening:', error);
+            }
+        }
+
+        // ========== BOEKING LOGICA ==========
+        function renderVehicles() {
+            const container = document.getElementById('vehicle-list');
+            container.innerHTML = vehicles.map(v => `
+                <div class="vehicle-card flex justify-between items-center" id="v-${v.id}" onclick="selectVehicle('${v.id}')">
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-car text-2xl text-gray-300"></i>
+                        <div>
+                            <h4 class="font-bold text-gray-700">${v.name}</h4>
+                            <p class="text-[10px] uppercase font-bold text-gray-400">${v.capacity}</p>
+                        </div>
+                    </div>
+                    <div class="font-black text-[#0369a1]">€ ${v.price.toFixed(2)}</div>
+                </div>
+            `).join('');
+            selectVehicle('standard');
+        }
+
+        function selectVehicle(id) {
+            selectedVehicle = vehicles.find(v => v.id === id);
+            document.querySelectorAll('.vehicle-card').forEach(el => el.classList.remove('selected'));
+            document.getElementById(`v-${id}`).classList.add('selected');
+            updatePrice();
+        }
+
+        function updatePrice() {
+            if (!selectedVehicle) return;
+            let total = selectedVehicle.price;
+
+            const wait = parseInt(document.getElementById('wait-time').value);
+            if (wait === 30) total += 10;
+            if (wait === 45) total += 20;
+            if (wait === 60) total += 30;
+
+            document.getElementById('total-price').innerText = `€ ${total.toFixed(2)}`;
+        }
+
+        document.getElementById('wait-time').addEventListener('change', updatePrice);
+
+        function goToStep(step) {
+            document.querySelectorAll('.booking-step').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+
+            document.querySelectorAll('.step-bar').forEach((el, index) => {
+                const stepNum = index + 1;
+                el.classList.toggle('active', stepNum <= step);
+            });
+
+            currentStep = step;
+            window.scrollTo({ top: document.getElementById('booking-section').offsetTop - 50, behavior: 'smooth' });
+        }
+
+        function checkFormCompletion() {
+            const airport = document.getElementById('airport-select').value;
+            const dest = document.getElementById('destination').value;
+            const date = document.getElementById('booking-date').value;
+            const time = document.getElementById('booking-time').value;
+
+            const btn = document.getElementById('to-step-2');
+            btn.disabled = !(airport && dest && date && time);
+        }
+
+        document.getElementById('booking-date').addEventListener('change', checkFormCompletion);
+        document.getElementById('booking-time').addEventListener('change', checkFormCompletion);
+
+        function submitBooking() {
+            const name = document.getElementById('guest-name').value;
+            if (!name) {
+                alert(currentLang === 'nl' ? "Voer uw naam in." : "Veuillez entrer votre nom.");
+                return;
+            }
+            alert(currentLang === 'nl' ? "Transfer succesvol gereserveerd! Fijne vlucht." : "Transfert réservé avec succès ! Bon vol.");
+            location.reload();
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+            // Update Select
+            const airportSelect = document.getElementById('airport-select');
+            if (airportSelect && translations[lang]['opt_select_airport']) {
+                airportSelect.options[0].text = translations[lang]['opt_select_airport'];
+            }
+        }
+    </script>
+</body>
+</html>
