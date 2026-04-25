@@ -158,7 +158,7 @@
                                         <label class="block text-sm font-bold mb-2 text-slate-700" data-i18n="label_pickup">Ophaallocatie</label>
                                         <div class="relative">
                                             <i class="fas fa-circle text-[8px] text-green-500 absolute left-4 top-1/2 -translate-y-1/2"></i>
-                                            <input type="text" id="pickup" class="w-full pl-10 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="bijv. Antwerpen Centraal" oninput="searchAddress(this.value, 'pickup')">
+                                            <input type="text" id="pickup" name="pickup" class="w-full pl-10 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="bijv. Antwerpen Centraal" data-i18n="[placeholder]pickup_placeholder" oninput="searchAddress(this.value, 'pickup')">
                                         </div>
                                         <div id="pickup-results" class="absolute z-50 w-full bg-white shadow-xl rounded-xl mt-1 overflow-hidden hidden"></div>
                                     </div>
@@ -167,7 +167,7 @@
                                         <label class="block text-sm font-bold mb-2 text-slate-700" data-i18n="label_destination">Bestemming</label>
                                         <div class="relative">
                                             <i class="fas fa-location-dot text-sm text-red-500 absolute left-4 top-1/2 -translate-y-1/2"></i>
-                                            <input type="text" id="destination" class="w-full pl-10 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="bijv. Brussels Airport" oninput="searchAddress(this.value, 'destination')">
+                                            <input type="text" id="destination" name="destination" class="w-full pl-10 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="bijv. Brussels Airport" data-i18n="[placeholder]destination_placeholder" oninput="searchAddress(this.value, 'destination')">
                                         </div>
                                         <div id="destination-results" class="absolute z-50 w-full bg-white shadow-xl rounded-xl mt-1 overflow-hidden hidden"></div>
                                     </div>
@@ -175,16 +175,16 @@
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
                                             <label class="block text-sm font-bold mb-2 text-slate-700" data-i18n="label_date">Datum</label>
-                                            <input type="date" id="booking-date" class="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" onchange="validateStep1()">
+                                            <input type="date" id="booking-date" name="booking-date" class="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" onchange="validateStep1()">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-bold mb-2 text-slate-700" data-i18n="label_time">Tijd</label>
-                                            <input type="time" id="booking-time" class="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" onchange="validateStep1()">
+                                            <input type="time" id="booking-time" name="booking-time" class="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" onchange="validateStep1()">
                                         </div>
                                     </div>
 
                                     <div class="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl">
-                                        <input type="checkbox" id="return-trip" class="w-5 h-5 rounded accent-primary" onchange="updatePrice()">
+                                        <input type="checkbox" id="return-trip" name="return-trip" class="w-5 h-5 rounded accent-primary" onchange="updatePrice()">
                                         <label for="return-trip" class="text-sm font-bold text-slate-700" data-i18n="return_trip">Retourtje</label>
                                     </div>
 
@@ -234,7 +234,7 @@
                                                 <i class="fas fa-users text-primary"></i>
                                                 <span class="font-medium" data-i18n="passengers_label">Passagiers</span>
                                             </div>
-                                            <input type="number" id="extra-passengers" value="1" min="1" max="8" class="w-16 bg-white border-none rounded-lg text-center font-bold outline-none" onchange="updatePrice()">
+                                            <input type="number" id="extra-passengers" name="extra-passengers" value="1" min="1" max="8" class="w-16 bg-white border-none rounded-lg text-center font-bold outline-none" onchange="updatePrice()">
                                         </div>
 
                                         <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
@@ -244,7 +244,7 @@
                                             </div>
                                             <div class="flex items-center gap-2">
                                                 <span class="text-xs text-slate-400">+ €5.00</span>
-                                                <input type="number" id="extra-child-seat" value="0" min="0" max="3" class="w-16 bg-white border-none rounded-lg text-center font-bold outline-none" onchange="updatePrice()">
+                                                <input type="number" id="extra-child-seat" name="extra-child-seat" value="0" min="0" max="3" class="w-16 bg-white border-none rounded-lg text-center font-bold outline-none" onchange="updatePrice()">
                                             </div>
                                         </div>
 
@@ -255,7 +255,7 @@
                                             </div>
                                             <div class="flex items-center gap-2">
                                                 <span class="text-xs text-slate-400">+ €5.00</span>
-                                                <input type="checkbox" id="extra-wifi" class="w-5 h-5 rounded accent-primary" onchange="updatePrice()">
+                                                <input type="checkbox" id="extra-wifi" name="extra-wifi" class="w-5 h-5 rounded accent-primary" onchange="updatePrice()">
                                             </div>
                                         </div>
 
@@ -266,14 +266,14 @@
                                             </div>
                                             <div class="flex items-center gap-2">
                                                 <span class="text-xs text-slate-400">+ €3.00</span>
-                                                <input type="number" id="extra-water" value="0" min="0" max="6" class="w-16 bg-white border-none rounded-lg text-center font-bold outline-none" onchange="updatePrice()">
+                                                <input type="number" id="extra-water" name="extra-water" value="0" min="0" max="6" class="w-16 bg-white border-none rounded-lg text-center font-bold outline-none" onchange="updatePrice()">
                                             </div>
                                         </div>
                                     </div>
 
                                     <div>
                                         <label class="block text-sm font-bold mb-2 text-slate-700" data-i18n="special_requests_label">Speciale Verzoeken</label>
-                                        <textarea id="special-requests" rows="3" class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="..." data-i18n="[placeholder]special_requests_placeholder"></textarea>
+                                        <textarea id="special-requests" name="special-requests" rows="3" class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="..." data-i18n="[placeholder]special_requests_placeholder"></textarea>
                                     </div>
 
                                     <div class="flex gap-4">
@@ -289,15 +289,15 @@
                                     <div class="space-y-4">
                                         <div>
                                             <label class="block text-sm font-bold mb-2 text-slate-700" data-i18n="label_name">Naam</label>
-                                            <input type="text" id="customer-name" class="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="John Doe" required>
+                                            <input type="text" id="customer-name" name="customer-name" class="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="John Doe" data-i18n="[placeholder]label_name">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-bold mb-2 text-slate-700" data-i18n="label_email">Email</label>
-                                            <input type="email" id="customer-email" class="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="john@example.com" required>
+                                            <input type="email" id="customer-email" name="customer-email" class="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="john@example.com" data-i18n="[placeholder]label_email">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-bold mb-2 text-slate-700" data-i18n="label_phone">Telefoon</label>
-                                            <input type="tel" id="customer-phone" class="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="+32 ..." required>
+                                            <input type="tel" id="customer-phone" name="customer-phone" class="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none transition" placeholder="+32 ..." data-i18n="[placeholder]label_phone">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-bold mb-3 text-slate-700" data-i18n="payment_label">Betaalmethode</label>
@@ -490,13 +490,51 @@
         </div>
     </footer>
 
+    <!-- MODAL VOOR BOEKINGSFICHE -->
+    <div id="booking-fiche-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-2xl rounded-[32px] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
+                        <i class="fas fa-file-invoice text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-serif font-bold text-primary uppercase tracking-tight" data-i18n="fiche_title">Boekingsfiche</h2>
+                </div>
+                <button onclick="closeFiche()" class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-slate-400 hover:text-red-500 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="fiche-content" class="p-8 overflow-y-auto flex-grow bg-white">
+                <!-- Wordt dynamisch gevuld -->
+            </div>
+
+            <div class="p-8 bg-slate-50 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="printFiche()" class="flex items-center justify-center gap-2 px-6 py-4 bg-white border border-slate-200 rounded-2xl font-bold text-slate-600 hover:bg-slate-100 transition shadow-sm">
+                    <i class="fas fa-print"></i>
+                    <span data-i18n="btn_print">Afdrukken</span>
+                </button>
+                <button onclick="saveFicheAsJSON()" class="flex items-center justify-center gap-2 px-6 py-4 bg-white border border-slate-200 rounded-2xl font-bold text-slate-600 hover:bg-slate-100 transition shadow-sm">
+                    <i class="fas fa-download"></i>
+                    <span data-i18n="btn_save">Opslaan JSON</span>
+                </button>
+                <button onclick="closeFiche()" class="px-6 py-4 bg-primary text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-primary/30 transition transform active:scale-95">
+                    <span data-i18n="btn_close">Sluiten</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ========== CONFIGURATIE & STATE ==========
         let map, pickupMarker, destinationMarker, routeLayer;
         let currentStep = 1;
         let selectedVehicle = null;
         let routeDistance = 0;
+        let routeDuration = 0;
         let currentLang = 'nl';
+        let pickupCoords = { lat: null, lon: null };
+        let destinationCoords = { lat: null, lon: null };
 
         const vehicles = [
             { id: 'sedan', name: 'Standard Sedan', price: 45, seats: 4, luggage: 3, img: 'https://placehold.co/400x200?text=Sedan' },
@@ -520,7 +558,8 @@
                 footer_about: "Wie zijn we", footer_services: "Diensten", footer_contact: "Contact", footer_privacy: "Privacy",
                 monitoring_bookings: "Boekingen vandaag", monitoring_vehicles: "Actieve voertuigen",
                 shuttle_title: "Shuttle Service", shuttle_desc: "Stations, hotels, evenementen – betrouwbaar en op tijd",
-                group_title: "Groepsvervoer", group_desc: "Minibus (8 pers) | Autocar (20-50 pers) – passend bij uw groep"
+                group_title: "Groepsvervoer", group_desc: "Minibus (8 pers) | Autocar (20-50 pers) – passend bij uw groep",
+                fiche_title: "Fiche de Réservation", fiche_number: "Numéro de réservation", fiche_client: "Données Client", fiche_route: "Détails de l'itinéraire", fiche_vehicle: "Véhicule", fiche_extras: "Extras", fiche_total: "Prix Total", fiche_payment: "Mode de paiement", btn_print: "Imprimer", btn_save: "Enregistrer JSON", btn_close: "Fermer", fiche_distance: "Distance", fiche_duration: "Durée", fiche_date_time: "Date & Heure"
             },
             fr: {
                 nav_home: "Accueil", nav_book: "Réserver", nav_services: "Services", nav_about: "À Propos",
@@ -536,7 +575,8 @@
                 footer_about: "Qui sommes-nous", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Confidentialité",
                 monitoring_bookings: "Réservations aujourd'hui", monitoring_vehicles: "Véhicules actifs",
                 shuttle_title: "Service de Navette", shuttle_desc: "Gares, hôtels, événements – fiable et à l'heure",
-                group_title: "Transport de Groupe", group_desc: "Minibus (8 pers) | Autocar (20-50 pers) – adapté à votre groupe"
+                group_title: "Transport de Groupe", group_desc: "Minibus (8 pers) | Autocar (20-50 pers) – adapté à votre groupe",
+                fiche_title: "Fiche de Réservation", fiche_number: "Numéro de réservation", fiche_client: "Données Client", fiche_route: "Détails de l'itinéraire", fiche_vehicle: "Véhicule", fiche_extras: "Extras", fiche_total: "Prix Total", fiche_payment: "Mode de paiement", btn_print: "Imprimer", btn_save: "Enregistrer JSON", btn_close: "Fermer", fiche_distance: "Distance", fiche_duration: "Durée", fiche_date_time: "Date & Heure"
             },
             en: {
                 nav_home: "Home", nav_book: "Book", nav_services: "Services", nav_about: "About Us",
@@ -552,9 +592,26 @@
                 footer_about: "Who we are", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Privacy",
                 monitoring_bookings: "Bookings today", monitoring_vehicles: "Active vehicles",
                 shuttle_title: "Shuttle Service", shuttle_desc: "Stations, hotels, events – reliable and on time",
-                group_title: "Group Transport", group_desc: "Minibus (8 pers) | Coach (20-50 pers) – matching your group"
+                group_title: "Group Transport", group_desc: "Minibus (8 pers) | Coach (20-50 pers) – matching your group",
+                fiche_title: "Booking Fiche", fiche_number: "Booking Number", fiche_client: "Client Details", fiche_route: "Route Details", fiche_vehicle: "Vehicle", fiche_extras: "Extras", fiche_total: "Total Price", fiche_payment: "Payment Method", btn_print: "Print", btn_save: "Save JSON", btn_close: "Close", fiche_distance: "Distance", fiche_duration: "Duration", fiche_date_time: "Date & Time"
             }
         };
+
+        // Add NL translations for the fiche
+        translations.nl.fiche_title = "Boekingsfiche";
+        translations.nl.fiche_number = "Boekingsnummer";
+        translations.nl.fiche_client = "Klantgegevens";
+        translations.nl.fiche_route = "Routegegevens";
+        translations.nl.fiche_vehicle = "Voertuig";
+        translations.nl.fiche_extras = "Extra's";
+        translations.nl.fiche_total = "Totaalprijs";
+        translations.nl.fiche_payment = "Betaalmethode";
+        translations.nl.btn_print = "Afdrukken";
+        translations.nl.btn_save = "Opslaan als JSON";
+        translations.nl.btn_close = "Sluiten";
+        translations.nl.fiche_distance = "Afstand";
+        translations.nl.fiche_duration = "Reistijd";
+        translations.nl.fiche_date_time = "Datum & Tijd";
 
         // ========== INITIALISATIE ==========
         document.addEventListener('DOMContentLoaded', () => {
@@ -619,9 +676,11 @@
             document.getElementById(`${type}-results`).classList.add('hidden');
 
             if (type === 'pickup') {
+                pickupCoords = { lat: coords[1], lon: coords[0] };
                 if (pickupMarker) map.removeLayer(pickupMarker);
                 pickupMarker = L.marker(latLng, { icon: L.divIcon({ className: 'custom-div-icon', html: "<i class='fas fa-circle text-green-500 text-xl'></i>", iconSize: [20, 20], iconAnchor: [10, 10] }) }).addTo(map);
             } else {
+                destinationCoords = { lat: coords[1], lon: coords[0] };
                 if (destinationMarker) map.removeLayer(destinationMarker);
                 destinationMarker = L.marker(latLng, { icon: L.divIcon({ className: 'custom-div-icon', html: "<i class='fas fa-location-dot text-red-500 text-xl'></i>", iconSize: [20, 20], iconAnchor: [10, 20] }) }).addTo(map);
             }
@@ -663,9 +722,9 @@
                 map.fitBounds(routeLayer.getBounds(), { padding: [50, 50] });
 
                 routeDistance = data.routes[0].distance / 1000;
-                const duration = Math.round(data.routes[0].duration / 60);
+                routeDuration = Math.round(data.routes[0].duration / 60);
 
-                document.getElementById('route-info').innerText = `Afstand: ${routeDistance.toFixed(1)} km | Tijd: ca. ${duration} min`;
+                document.getElementById('route-info').innerText = `Afstand: ${routeDistance.toFixed(1)} km | Tijd: ca. ${routeDuration} min`;
                 updatePrice();
             } catch (error) {
                 console.error('Route fout:', error);
@@ -765,12 +824,195 @@
             renderVehicles();
         }
 
+        function generateBookingNumber() {
+            const now = new Date();
+            const dateStr = now.getFullYear().toString() +
+                          (now.getMonth() + 1).toString().padStart(2, '0') +
+                          now.getDate().toString().padStart(2, '0');
+            const random = Math.floor(Math.random() * 9999) + 1;
+            return `FX-${dateStr}-${random.toString().padStart(4, '0')}`;
+        }
+
+        function collectBookingData() {
+            const fullName = document.getElementById('customer-name').value;
+            const nameParts = fullName.split(' ');
+            const firstName = nameParts[0];
+            const lastName = nameParts.slice(1).join(' ');
+
+            const childSeats = parseInt(document.getElementById('extra-child-seat').value) || 0;
+            const waterBottles = parseInt(document.getElementById('extra-water').value) || 0;
+            const wifi = document.getElementById('extra-wifi').checked;
+            const returnTrip = document.getElementById('return-trip').checked;
+
+            let total = selectedVehicle ? selectedVehicle.price : 0;
+            total += childSeats * 5;
+            if (wifi) total += 5;
+            total += waterBottles * 3;
+            if (returnTrip) total *= 2;
+
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || 'cash';
+
+            return {
+                template_code: "T1",
+                booking_number: generateBookingNumber(),
+                first_name: firstName,
+                last_name: lastName,
+                email: document.getElementById('customer-email').value,
+                phone: document.getElementById('customer-phone').value,
+                pickup_address: document.getElementById('pickup').value,
+                pickup_lat: pickupCoords.lat,
+                pickup_lon: pickupCoords.lon,
+                destination_address: document.getElementById('destination').value,
+                destination_lat: destinationCoords.lat,
+                destination_lon: destinationCoords.lon,
+                distance_km: routeDistance.toFixed(1),
+                duration_min: routeDuration,
+                is_return_trip: returnTrip,
+                vehicle_code: selectedVehicle?.id,
+                vehicle_name: selectedVehicle?.name,
+                base_price: selectedVehicle?.price,
+                booking_date: document.getElementById('booking-date').value,
+                booking_time: document.getElementById('booking-time').value,
+                passengers: document.getElementById('extra-passengers').value,
+                child_seats: childSeats,
+                wifi: wifi,
+                water_bottles: waterBottles,
+                special_requests: document.getElementById('special-requests').value,
+                payment_method: paymentMethod,
+                total_price: total.toFixed(2),
+                create_account: false
+            };
+        }
+
+        function showBookingFiche(data) {
+            const modal = document.getElementById('booking-fiche-modal');
+            const content = document.getElementById('fiche-content');
+
+            content.innerHTML = `
+                <div class="space-y-6 text-sm">
+                    <div class="flex justify-between items-start border-b border-slate-100 pb-4">
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1" data-i18n="fiche_number">${translations[currentLang].fiche_number}</h3>
+                            <p class="text-lg font-bold text-primary">${data.booking_number}</p>
+                        </div>
+                        <div class="text-right">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1" data-i18n="fiche_date_time">${translations[currentLang].fiche_date_time}</h3>
+                            <p class="font-bold">${data.booking_date} | ${data.booking_time}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3" data-i18n="fiche_client">${translations[currentLang].fiche_client}</h3>
+                            <p class="font-bold text-slate-800">${data.first_name} ${data.last_name}</p>
+                            <p class="text-slate-500">${data.email}</p>
+                            <p class="text-slate-500">${data.phone}</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3" data-i18n="fiche_vehicle">${translations[currentLang].fiche_vehicle}</h3>
+                            <p class="font-bold text-slate-800">${data.vehicle_name}</p>
+                            <p class="text-slate-500">${data.passengers} Passagiers</p>
+                            <p class="text-slate-500">${data.is_return_trip ? translations[currentLang].return_trip : ''}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3" data-i18n="fiche_route">${translations[currentLang].fiche_route}</h3>
+                        <div class="space-y-2">
+                            <div class="flex gap-3">
+                                <i class="fas fa-circle text-[8px] text-green-500 mt-1.5"></i>
+                                <div>
+                                    <p class="font-bold text-slate-800">${data.pickup_address}</p>
+                                    <p class="text-[10px] text-slate-400">LAT: ${data.pickup_lat}, LON: ${data.pickup_lon}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <i class="fas fa-location-dot text-xs text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="font-bold text-slate-800">${data.destination_address}</p>
+                                    <p class="text-[10px] text-slate-400">LAT: ${data.destination_lat}, LON: ${data.destination_lon}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-200 flex justify-between text-xs">
+                            <span><strong data-i18n="fiche_distance">${translations[currentLang].fiche_distance}</strong>: ${data.distance_km} km</span>
+                            <span><strong data-i18n="fiche_duration">${translations[currentLang].fiche_duration}</strong>: ${data.duration_min} min</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3" data-i18n="fiche_extras">${translations[currentLang].fiche_extras}</h3>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <p class="flex justify-between border-b border-slate-50 pb-1"><span>Kinderstoeltjes:</span> <span>${data.child_seats} x €5</span></p>
+                            <p class="flex justify-between border-b border-slate-50 pb-1"><span>WiFi:</span> <span>${data.wifi ? 'Ja (€5)' : 'Nee'}</span></p>
+                            <p class="flex justify-between border-b border-slate-50 pb-1"><span>Water:</span> <span>${data.water_bottles} x €3</span></p>
+                            <p class="flex justify-between border-b border-slate-50 pb-1"><span>Betaalmethode:</span> <span class="uppercase font-bold">${data.payment_method}</span></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-primary text-white p-6 rounded-2xl flex justify-between items-center shadow-lg shadow-primary/20">
+                        <div>
+                            <h3 class="text-xs font-bold opacity-70 uppercase tracking-widest mb-1" data-i18n="fiche_total">${translations[currentLang].fiche_total}</h3>
+                            <p class="text-3xl font-bold">€ ${data.total_price}</p>
+                        </div>
+                        <i class="fas fa-receipt text-3xl opacity-30"></i>
+                    </div>
+                </div>
+            `;
+
+            window.currentBookingData = data;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFiche() {
+            const modal = document.getElementById('booking-fiche-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function printFiche() {
+            const printContent = document.getElementById('fiche-content').innerHTML;
+            const originalContent = document.body.innerHTML;
+            document.body.innerHTML = `
+                <div style="padding: 40px; font-family: sans-serif;">
+                    <h1 style="color: #1e6f8c; margin-bottom: 20px;">Fleetconnect Booking</h1>
+                    ${printContent}
+                </div>
+            `;
+            window.print();
+            location.reload();
+        }
+
+        function saveFicheAsJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.currentBookingData, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `booking_${window.currentBookingData.booking_number}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
         function handleFormSubmit(e) {
             e.preventDefault();
-            alert(currentLang === 'nl' ? 'Bedankt voor uw boeking! We nemen zo snel mogelijk contact met u op.' :
-                  currentLang === 'fr' ? 'Merci pour votre réservation ! Nous vous contacterons dans les plus brefs délais.' :
-                  'Thank you for your booking! We will contact you as soon as possible.');
-            location.reload();
+
+            // Handmatige validatie voor stap 4
+            const name = document.getElementById('customer-name').value;
+            const email = document.getElementById('customer-email').value;
+            const phone = document.getElementById('customer-phone').value;
+
+            if (!name || !email || !phone) {
+                alert(currentLang === 'nl' ? 'Vul alstublieft alle verplichte velden in.' :
+                      currentLang === 'fr' ? 'Veuillez remplir tous les champs obligatoires.' :
+                      'Please fill in all required fields.');
+                return false;
+            }
+
+            const bookingData = collectBookingData();
+            showBookingFiche(bookingData);
             return false;
         }
 

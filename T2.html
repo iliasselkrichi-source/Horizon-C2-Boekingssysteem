@@ -288,9 +288,9 @@
                             <div id="step-4" class="hidden space-y-8">
                                 <h3 class="text-xl font-serif font-bold text-gold uppercase tracking-widest mb-6" data-i18n="step4_title">Persoonlijke Gegevens</h3>
                                 <div class="space-y-6">
-                                    <input type="text" id="customer-name" class="w-full px-6 py-4 rounded-xl outline-none transition" placeholder="Uw Naam" required>
-                                    <input type="email" id="customer-email" class="w-full px-6 py-4 rounded-xl outline-none transition" placeholder="E-mailadres" required>
-                                    <input type="tel" id="customer-phone" class="w-full px-6 py-4 rounded-xl outline-none transition" placeholder="Telefoonnummer" required>
+                                    <input type="text" id="customer-name" name="customer-name" class="w-full px-6 py-4 rounded-xl outline-none transition" placeholder="Uw Naam" data-i18n="[placeholder]customer_name_placeholder">
+                                    <input type="email" id="customer-email" name="customer-email" class="w-full px-6 py-4 rounded-xl outline-none transition" placeholder="E-mailadres" data-i18n="[placeholder]customer_email_placeholder">
+                                    <input type="tel" id="customer-phone" name="customer-phone" class="w-full px-6 py-4 rounded-xl outline-none transition" placeholder="Telefoonnummer" data-i18n="[placeholder]customer_phone_placeholder">
 
                                     <div>
                                         <label class="block text-xs font-bold mb-3 text-gold uppercase tracking-widest" data-i18n="payment_label">Betaalmethode</label>
@@ -458,6 +458,47 @@
     </main>
 
     <!-- FOOTER SECTIE -->
+    <!-- BOOKING FICHE MODAL -->
+    <div id="booking-fiche-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 backdrop-blur-xl p-4">
+        <div class="bg-dark border border-gold/30 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl shadow-gold/10 flex flex-col max-h-[90vh]">
+            <!-- Header -->
+            <div class="p-6 border-b border-gold/10 flex justify-between items-center bg-gold/5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 border border-gold rounded-full flex items-center justify-center text-gold shadow-lg shadow-gold/20">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-white font-serif font-bold tracking-widest uppercase" data-i18n="fiche_title">Booking Bevestiging</h2>
+                        <p class="text-[10px] text-gold uppercase tracking-[0.2em]" data-i18n="fiche_subtitle">Uw Luxe Reis Is Gepland</p>
+                    </div>
+                </div>
+                <button onclick="closeFiche()" class="text-slate-400 hover:text-white transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Content Area (Scrollable) -->
+            <div id="fiche-content" class="p-8 overflow-y-auto custom-scrollbar bg-dark text-white">
+                <!-- Wordt dynamisch gevuld door JS -->
+            </div>
+
+            <!-- Footer / Acties -->
+            <div class="p-6 border-t border-gold/10 bg-gold/5 flex flex-wrap gap-4 justify-between items-center">
+                <div class="flex gap-4">
+                    <button onclick="printFiche()" class="flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 text-white rounded-xl hover:bg-white/10 transition text-xs font-bold uppercase tracking-widest">
+                        <i class="fas fa-print text-gold"></i> <span data-i18n="btn_print">Print</span>
+                    </button>
+                    <button onclick="saveFicheAsJSON()" class="flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 text-white rounded-xl hover:bg-white/10 transition text-xs font-bold uppercase tracking-widest">
+                        <i class="fas fa-download text-gold"></i> <span data-i18n="btn_download">JSON</span>
+                    </button>
+                </div>
+                <button onclick="location.reload()" class="px-8 py-3 bg-gold text-dark rounded-xl font-bold hover:shadow-xl hover:shadow-gold/20 transition uppercase tracking-widest text-xs">
+                    <span data-i18n="btn_close">Sluiten</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer id="main-footer" class="bg-black text-white py-20 border-t border-gold/10">
         <div class="container mx-auto px-6 text-center">
             <div class="flex items-center justify-center gap-2 mb-12">
@@ -514,7 +555,9 @@
                 monitoring_bookings: "Boekingen vandaag", monitoring_vehicles: "Actieve voertuigen",
                 shuttle_title: "Shuttle Service", shuttle_desc: "Luchthavens, stations, hotels – exclusief en punctueel",
                 group_title: "Groepsvervoer", group_desc: "Minibus (8 pers) | Autocar (20-50 pers) – voor grote gezelschappen",
-                return_trip: "Retourtje"
+                return_trip: "Retourtje",
+                customer_name_placeholder: "Uw Naam", customer_email_placeholder: "E-mailadres", customer_phone_placeholder: "Telefoonnummer",
+                fiche_title: "Booking Bevestiging", fiche_subtitle: "Uw Luxe Reis Is Gepland", fiche_number: "Boekingsnummer", fiche_date_time: "Datum & Tijd", fiche_client: "Klantgegevens", fiche_vehicle: "Voertuig", fiche_route: "Route Details", fiche_distance: "Afstand", fiche_duration: "Reistijd", fiche_extras: "Geselecteerde Opties", fiche_total: "Totaalprijs", btn_print: "Printen", btn_download: "Download JSON", btn_close: "Sluiten"
             },
             fr: {
                 nav_home: "Accueil", nav_book: "Réserver", nav_services: "Services", nav_gallery: "Flotte", nav_about: "À Propos",
@@ -528,7 +571,9 @@
                 monitoring_bookings: "Réservations aujourd'hui", monitoring_vehicles: "Véhicules actifs",
                 shuttle_title: "Service de Navette", shuttle_desc: "Aéroports, gares, hôtels – exclusif et ponctuel",
                 group_title: "Transport de Groupe", group_desc: "Minibus (8 pers) | Autocar (20-50 pers) – pour les grands groupes",
-                return_trip: "Aller-retour"
+                return_trip: "Aller-retour",
+                customer_name_placeholder: "Votre Nom", customer_email_placeholder: "Adresse e-mail", customer_phone_placeholder: "Numéro de téléphone",
+                fiche_title: "Confirmation de Réservation", fiche_subtitle: "Votre Voyage de Luxe est Planifié", fiche_number: "Numéro de Réservation", fiche_date_time: "Date et Heure", fiche_client: "Détails du Client", fiche_vehicle: "Véhicule", fiche_route: "Détails de l'Itinéraire", fiche_distance: "Distance", fiche_duration: "Durée", fiche_extras: "Options Sélectionnées", fiche_total: "Prix Total", btn_print: "Imprimer", btn_download: "Télécharger JSON", btn_close: "Fermer"
             },
             en: {
                 nav_home: "Home", nav_book: "Book Now", nav_services: "Services", nav_gallery: "Fleet", nav_about: "About Us",
@@ -542,7 +587,9 @@
                 monitoring_bookings: "Bookings today", monitoring_vehicles: "Active vehicles",
                 shuttle_title: "Shuttle Service", shuttle_desc: "Airports, stations, hotels – exclusive and punctual",
                 group_title: "Group Transport", group_desc: "Minibus (8 pers) | Coach (20-50 pers) – for large groups",
-                return_trip: "Return Trip"
+                return_trip: "Return Trip",
+                customer_name_placeholder: "Your Name", customer_email_placeholder: "Email Address", customer_phone_placeholder: "Phone Number",
+                fiche_title: "Booking Confirmation", fiche_subtitle: "Your Luxury Journey is Planned", fiche_number: "Booking Number", fiche_date_time: "Date & Time", fiche_client: "Client Details", fiche_vehicle: "Vehicle", fiche_route: "Route Details", fiche_distance: "Distance", fiche_duration: "Duration", fiche_extras: "Selected Options", fiche_total: "Total Price", btn_print: "Print", btn_download: "Download JSON", btn_close: "Close"
             }
         };
 
@@ -684,6 +731,178 @@
             }
 
             document.getElementById('display-price').innerText = `€ ${total.toFixed(2)}`;
+            return total;
+        }
+
+        function generateBookingNumber() {
+            const now = new Date();
+            const dateStr = now.getFullYear().toString() +
+                          (now.getMonth() + 1).toString().padStart(2, '0') +
+                          now.getDate().toString().padStart(2, '0');
+            const random = Math.floor(Math.random() * 9999) + 1;
+            return `FX-${dateStr}-${random.toString().padStart(4, '0')}`;
+        }
+
+        function collectBookingData() {
+            const fullName = document.getElementById('customer-name').value;
+            const nameParts = fullName.split(' ');
+            const firstName = nameParts[0];
+            const lastName = nameParts.slice(1).join(' ');
+
+            const champagne = document.getElementById('extra-champagne').checked;
+            const lighting = document.getElementById('extra-lighting').checked;
+            const wifi = document.getElementById('extra-wifi').checked;
+            const water = document.getElementById('extra-water').checked;
+            const childSeats = parseInt(document.getElementById('extra-child-seat').value) || 0;
+            const returnTrip = document.getElementById('return-trip').checked;
+
+            const totalPrice = updatePrice();
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || 'cash';
+
+            return {
+                template_code: "T2",
+                booking_number: generateBookingNumber(),
+                booking_date: document.getElementById('booking-date').value,
+                booking_time: document.getElementById('booking-time').value,
+                pickup_address: document.getElementById('pickup').value,
+                destination_address: document.getElementById('destination').value,
+                pickup_lat: pickupMarker?.getLatLng().lat.toFixed(6) || "0.000000",
+                pickup_lon: pickupMarker?.getLatLng().lng.toFixed(6) || "0.000000",
+                destination_lat: destinationMarker?.getLatLng().lat.toFixed(6) || "0.000000",
+                destination_lon: destinationMarker?.getLatLng().lng.toFixed(6) || "0.000000",
+                distance_km: routeDistance.toFixed(1),
+                duration_min: Math.round(routeDistance * 1.5),
+                vehicle_id: selectedVehicle ? selectedVehicle.id : 'unknown',
+                vehicle_name: selectedVehicle ? selectedVehicle.name : 'Unknown',
+                passengers: selectedVehicle ? selectedVehicle.seats : 0,
+                first_name: firstName,
+                last_name: lastName || '-',
+                email: document.getElementById('customer-email').value,
+                phone: document.getElementById('customer-phone').value,
+                is_return_trip: returnTrip,
+                payment_method: paymentMethod,
+                child_seats: childSeats,
+                wifi: wifi,
+                champagne: champagne,
+                lighting: lighting,
+                water_bottles: water ? 1 : 0, // In T2 it's a checkbox
+                total_price: totalPrice.toFixed(2),
+                special_requests: "" // T2 doesn't have it in form but we add it for schema
+            };
+        }
+
+        function showBookingFiche(data) {
+            const modal = document.getElementById('booking-fiche-modal');
+            const content = document.getElementById('fiche-content');
+
+            content.innerHTML = `
+                <div class="space-y-6 text-sm text-slate-300">
+                    <div class="flex justify-between items-start border-b border-gold/10 pb-4">
+                        <div>
+                            <h3 class="text-xs font-bold text-gold uppercase tracking-widest mb-1" data-i18n="fiche_number">${translations[currentLang].fiche_number}</h3>
+                            <p class="text-lg font-bold text-white">${data.booking_number}</p>
+                        </div>
+                        <div class="text-right">
+                            <h3 class="text-xs font-bold text-gold uppercase tracking-widest mb-1" data-i18n="fiche_date_time">${translations[currentLang].fiche_date_time}</h3>
+                            <p class="font-bold text-white">${data.booking_date} | ${data.booking_time}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xs font-bold text-gold uppercase tracking-widest mb-3" data-i18n="fiche_client">${translations[currentLang].fiche_client}</h3>
+                            <p class="font-bold text-white">${data.first_name} ${data.last_name}</p>
+                            <p class="text-slate-400">${data.email}</p>
+                            <p class="text-slate-400">${data.phone}</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-bold text-gold uppercase tracking-widest mb-3" data-i18n="fiche_vehicle">${translations[currentLang].fiche_vehicle}</h3>
+                            <p class="font-bold text-white">${data.vehicle_name}</p>
+                            <p class="text-slate-400">${data.passengers} Passagiers</p>
+                            <p class="text-slate-400">${data.is_return_trip ? translations[currentLang].return_trip : ''}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10 shadow-inner">
+                        <h3 class="text-xs font-bold text-gold uppercase tracking-widest mb-3" data-i18n="fiche_route">${translations[currentLang].fiche_route}</h3>
+                        <div class="space-y-4">
+                            <div class="flex gap-4">
+                                <div class="w-2 h-2 rounded-full bg-green-500 mt-1.5 shadow-lg shadow-green-500/50"></div>
+                                <div>
+                                    <p class="font-bold text-white">${data.pickup_address}</p>
+                                    <p class="text-[10px] text-slate-500">LAT: ${data.pickup_lat}, LON: ${data.pickup_lon}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-2 h-2 rounded-full bg-red-500 mt-1.5 shadow-lg shadow-red-500/50"></div>
+                                <div>
+                                    <p class="font-bold text-white">${data.destination_address}</p>
+                                    <p class="text-[10px] text-slate-500">LAT: ${data.destination_lat}, LON: ${data.destination_lon}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/5 flex justify-between text-[10px] uppercase tracking-widest text-gold/60 font-bold">
+                            <span><span data-i18n="fiche_distance">${translations[currentLang].fiche_distance}</span>: ${data.distance_km} km</span>
+                            <span><span data-i18n="fiche_duration">${translations[currentLang].fiche_duration}</span>: ${data.duration_min} min</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xs font-bold text-gold uppercase tracking-widest mb-3" data-i18n="fiche_extras">${translations[currentLang].fiche_extras}</h3>
+                        <div class="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
+                            <p class="flex justify-between border-b border-white/5 pb-1"><span>Champagne:</span> <span class="text-white">${data.champagne ? 'Ja (€45)' : 'Nee'}</span></p>
+                            <p class="flex justify-between border-b border-white/5 pb-1"><span>Sfeerverlichting:</span> <span class="text-white">${data.lighting ? 'Ja (€15)' : 'Nee'}</span></p>
+                            <p class="flex justify-between border-b border-white/5 pb-1"><span>WiFi:</span> <span class="text-white">${data.wifi ? 'Ja (€5)' : 'Nee'}</span></p>
+                            <p class="flex justify-between border-b border-white/5 pb-1"><span>Waterflessen:</span> <span class="text-white">${data.water_bottles > 0 ? 'Ja (€3)' : 'Nee'}</span></p>
+                            <p class="flex justify-between border-b border-white/5 pb-1"><span>Kinderstoel:</span> <span class="text-white">${data.child_seats} x €5</span></p>
+                            <p class="flex justify-between border-b border-white/5 pb-1"><span>Betaalmethode:</span> <span class="uppercase font-bold text-gold">${data.payment_method}</span></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gold text-dark p-6 rounded-2xl flex justify-between items-center shadow-2xl shadow-gold/20">
+                        <div>
+                            <h3 class="text-[10px] font-bold opacity-70 uppercase tracking-[0.2em] mb-1" data-i18n="fiche_total">${translations[currentLang].fiche_total}</h3>
+                            <p class="text-3xl font-serif font-bold">€ ${data.total_price}</p>
+                        </div>
+                        <i class="fas fa-crown text-3xl opacity-20"></i>
+                    </div>
+                </div>
+            `;
+
+            window.currentBookingData = data;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFiche() {
+            const modal = document.getElementById('booking-fiche-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function printFiche() {
+            const printContent = document.getElementById('fiche-content').innerHTML;
+            const originalContent = document.body.innerHTML;
+            document.body.innerHTML = `
+                <div style="padding: 40px; font-family: serif; background: #0a1a2f; color: white;">
+                    <h1 style="color: #c9a03d; margin-bottom: 20px; font-size: 24px;">Fleetconnect Premium Booking</h1>
+                    ${printContent}
+                </div>
+            `;
+            window.print();
+            location.reload();
+        }
+
+        function saveFicheAsJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.currentBookingData, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `booking_premium_${window.currentBookingData.booking_number}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
         }
 
         function validateStep1() {
@@ -707,10 +926,21 @@
 
         function handleFormSubmit(e) {
             e.preventDefault();
-            alert(currentLang === 'nl' ? 'Bedankt voor uw boeking! We nemen zo snel mogelijk contact met u op.' :
-                  currentLang === 'fr' ? 'Merci pour votre réservation ! Nous vous contacterons dans les plus brefs délais.' :
-                  'Thank you for your booking! We will contact you as soon as possible.');
-            location.reload();
+
+            // Handmatige validatie voor stap 4
+            const name = document.getElementById('customer-name').value;
+            const email = document.getElementById('customer-email').value;
+            const phone = document.getElementById('customer-phone').value;
+
+            if (!name || !email || !phone) {
+                alert(currentLang === 'nl' ? 'Vul alstublieft alle verplichte velden in.' :
+                      currentLang === 'fr' ? 'Veuillez remplir tous les champs obligatoires.' :
+                      'Please fill in all required fields.');
+                return false;
+            }
+
+            const bookingData = collectBookingData();
+            showBookingFiche(bookingData);
             return false;
         }
 
