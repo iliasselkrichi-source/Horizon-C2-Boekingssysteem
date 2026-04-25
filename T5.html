@@ -152,6 +152,24 @@
         <!-- BOOKING SECTIE -->
         <section id="booking-section" class="py-16 -mt-10">
             <div class="container mx-auto px-6">
+                <!-- LIVE MONITORING (Aviation Style) -->
+                <div id="monitoring" class="mb-10 flex justify-center gap-10">
+                    <div class="bg-white/90 backdrop-blur px-8 py-4 rounded-2xl shadow-sm border border-blue-100 flex items-center gap-4">
+                        <i class="fas fa-plane-arrival text-blue-500 text-xl"></i>
+                        <div>
+                            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest" data-i18n="monitoring_bookings">Boekingen vandaag</p>
+                            <span id="stat-bookings" class="text-3xl font-black text-[#0369a1]">0</span>
+                        </div>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur px-8 py-4 rounded-2xl shadow-sm border border-blue-100 flex items-center gap-4">
+                        <i class="fas fa-taxi text-blue-500 text-xl"></i>
+                        <div>
+                            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
+                            <span id="stat-vehicles" class="text-3xl font-black text-[#0369a1]">0</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex flex-col lg:flex-row gap-10">
 
                     <!-- Formulier -->
@@ -268,7 +286,7 @@
                                                 <span class="text-[10px] uppercase font-bold text-[#0369a1]">Gratis tot 45 min na landing</span>
                                             </div>
                                         </div>
-                                        <select id="wait-time" class="p-2 border rounded-lg font-bold outline-none">
+                                        <select id="wait-time" class="p-2 border rounded-lg font-bold outline-none" onchange="updatePrice()">
                                             <option value="15">15 min</option>
                                             <option value="30">30 min</option>
                                             <option value="45" selected>45 min</option>
@@ -284,6 +302,26 @@
                                             </div>
                                         </div>
                                         <input type="number" id="child-seats" min="0" max="4" value="0" class="w-16 p-2 border rounded-lg text-center font-bold outline-none" onchange="updatePrice()">
+                                    </div>
+                                    <div class="flex items-center justify-between p-5 border rounded-xl bg-slate-50">
+                                        <div class="flex items-center gap-4">
+                                            <i class="fas fa-wifi text-[#0369a1]"></i>
+                                            <div>
+                                                <span class="font-bold text-sm block" data-i18n="wifi_label">Premium WiFi</span>
+                                                <span class="text-[10px] uppercase font-bold text-blue-600">+ €5,00</span>
+                                            </div>
+                                        </div>
+                                        <input type="checkbox" id="wifi-opt" class="w-6 h-6 accent-[#0369a1]" onchange="updatePrice()">
+                                    </div>
+                                    <div class="flex items-center justify-between p-5 border rounded-xl bg-slate-50">
+                                        <div class="flex items-center gap-4">
+                                            <i class="fas fa-wine-bottle text-[#0369a1]"></i>
+                                            <div>
+                                                <span class="font-bold text-sm block" data-i18n="water_label">Gekoeld Water</span>
+                                                <span class="text-[10px] uppercase font-bold text-blue-600">+ €3,00 per fles</span>
+                                            </div>
+                                        </div>
+                                        <input type="number" id="water-bottles" min="0" max="10" value="0" class="w-16 p-2 border rounded-lg text-center font-bold outline-none" onchange="updatePrice()">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="special_requests_label">Bericht voor de chauffeur</label>
@@ -394,25 +432,6 @@
             </div>
         </section>
 
-        <!-- LIVE MONITORING SECTIE -->
-        <section id="monitoring" class="py-20 bg-blue-900 text-white">
-            <div class="container mx-auto px-6">
-                <div class="max-w-4xl mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                        <div class="bg-white/10 p-10 rounded-[32px] backdrop-blur-md border border-white/10 text-center relative overflow-hidden">
-                            <i class="fas fa-plane-arrival absolute -top-4 -right-4 text-8xl opacity-5"></i>
-                            <p class="text-xs font-bold text-blue-200 uppercase tracking-widest mb-4" data-i18n="monitoring_bookings">Boekingen vandaag</p>
-                            <span id="stat-bookings" class="text-6xl font-black">0</span>
-                        </div>
-                        <div class="bg-white/10 p-10 rounded-[32px] backdrop-blur-md border border-white/10 text-center relative overflow-hidden">
-                            <i class="fas fa-plane-departure absolute -top-4 -right-4 text-8xl opacity-5"></i>
-                            <p class="text-xs font-bold text-blue-200 uppercase tracking-widest mb-4" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
-                            <span id="stat-vehicles" class="text-6xl font-black">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- OVER ONS SECTIE -->
         <section id="about" class="py-24 bg-white">
@@ -523,6 +542,7 @@
                 hero_title: "Airport Transfer Specialist", hero_subtitle: "Gegarandeerd op tijd voor uw vlucht. Professionele chauffeurs voor alle Belgische luchthavens.",
                 step1_title: "Vlucht Details", select_airport_label: "Luchthaven", airport_placeholder: "Selecteer luchthaven...", label_pickup: "Uw Adres", label_destination: "Bestemming", label_date: "Datum", label_time: "Tijd", return_trip: "Retourrit nodig",
                 step2_title: "Kies uw voertuig", step3_title: "Extra Opties & Bagage", step4_title: "Uw Contactgegevens",
+                child_seat_label: "Kinderstoel", wifi_label: "Premium WiFi", water_label: "Gekoeld Water", special_requests_label: "Speciale Verzoeken",
                 btn_next: "Volgende", btn_prev: "Terug", btn_submit: "Bevestig Airport Transfer",
                 label_name: "Volledige Naam", label_email: "Email Adres", label_phone: "Telefoonnummer",
                 payment_label: "Betaalmethode", payment_cash: "Contant", payment_card: "Kaart", payment_online: "Online",
@@ -537,6 +557,7 @@
                 hero_title: "Spécialiste du Transfert Aéroport", hero_subtitle: "À l'heure pour votre vol, garanti. Chauffeurs professionnels pour tous les aéroports belges.",
                 step1_title: "Détails du vol", select_airport_label: "Aéroport", airport_placeholder: "Sélectionnez l'aéroport...", label_pickup: "Votre Adresse", label_destination: "Destination", label_date: "Date", label_time: "Heure", return_trip: "Besoin d'un retour",
                 step2_title: "Choisissez votre véhicule", step3_title: "Options & Bagages", step4_title: "Vos Coordonnées",
+                child_seat_label: "Siège enfant", wifi_label: "WiFi Premium", water_label: "Eau Fraîche", special_requests_label: "Demandes Spéciales",
                 btn_next: "Suivant", btn_prev: "Précédent", btn_submit: "Confirmer le transfert",
                 label_name: "Nom complet", label_email: "E-mail", label_phone: "Téléphone",
                 payment_label: "Mode de paiement", payment_cash: "Espèces", payment_card: "Carte", payment_online: "En ligne",
@@ -551,6 +572,7 @@
                 hero_title: "Airport Transfer Specialist", hero_subtitle: "On time for your flight, guaranteed. Professional chauffeurs for all Belgian airports.",
                 step1_title: "Flight Details", select_airport_label: "Airport", airport_placeholder: "Select airport...", label_pickup: "Your Address", label_destination: "Destination", label_date: "Date", label_time: "Time", return_trip: "Return trip needed",
                 step2_title: "Choose vehicle", step3_title: "Options & Luggage", step4_title: "Your Details",
+                child_seat_label: "Child Seat", wifi_label: "Premium WiFi", water_label: "Chilled Water", special_requests_label: "Special Requests",
                 btn_next: "Next", btn_prev: "Back", btn_submit: "Confirm Airport Transfer",
                 label_name: "Full Name", label_email: "Email Address", label_phone: "Phone Number",
                 payment_label: "Payment Method", payment_cash: "Cash", payment_card: "Card", payment_online: "Online",
@@ -660,6 +682,9 @@
         function updatePrice() {
             let total = selectedVehicle ? selectedVehicle.price : 0;
             total += (parseInt(document.getElementById('child-seats').value) || 0) * 5;
+            if(document.getElementById('wifi-opt').checked) total += 5;
+            total += (parseInt(document.getElementById('water-bottles').value) || 0) * 3;
+            if(document.getElementById('wait-time').value === '60') total += 10;
             document.querySelectorAll('.total-price').forEach(el => el.innerText = `€ ${total.toFixed(2)}`);
         }
 

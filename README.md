@@ -1,51 +1,55 @@
 # Taxi Booking Templates
 
-Deze repository bevat 5 verschillende taxi booking templates, elk ontworpen voor een specifiek segment van de markt. Alle templates zijn volledig functioneel met een werkend boekingssysteem, routeberekening en lokalisatie.
+Dit project bevat 5 verschillende taxi/transfer boekings templates, elk geoptimaliseerd voor een specifieke niche binnen de transportsector. Alle templates zijn volledig zelfstandig werkend (standalone) en bevatten een functioneel boekingssysteem met kaartintegratie en adres-suggesties.
 
 ## Overzicht van Templates
 
-### 1. T1.html - Standaard Taxi Booking
+### T1: Standaard Taxi Booking (`T1.html`)
 *   **Stijl:** Klassiek, schoon en vertrouwd.
-*   **Doel:** Algemeen taxi-vervoer.
-*   **Kenmerken:** 4-staps flow, zij-aan-zij kaart en formulier in de booking sectie.
-*   **Kleur:** Blauw (#1e6f8c).
+*   **Focus:** Algemene taxi diensten.
+*   **Kenmerken:** Blauwe accenten (#1e6f8c), 50/50 split layout voor kaart en formulier, 4-stappen boekingsflow.
 
-### 2. T2.html - Premium Taxi / Limousine
+### T2: Premium Taxi / Limousine (`T2.html`)
 *   **Stijl:** Luxe, donker en elegant.
-*   **Doel:** VIP en limousine services.
-*   **Kenmerken:** Full-screen hero, glass-morphism effecten, donkere overlay.
-*   **Kleur:** Goud (#c9a03d) op Donkerblauw (#0a1a2f).
+*   **Focus:** VIP vervoer en limousines.
+*   **Kenmerken:** Donkerblauw/zwart palet met gouden accenten (#c9a03d), full-screen hero, glass-morphism kaarten en luxe extra's.
 
-### 3. T3.html - Snelle Booking (Minimalistisch)
-*   **Stijl:** Ultra-minimalistisch met veel witruimte.
-*   **Doel:** Gebruikers die direct willen boeken zonder stappen.
-*   **Kenmerken:** Alles-op-één-pagina formulier, geen stappenflow, direct resultaat.
-*   **Kleur:** Zacht zwart (#333333) op Wit.
+### T3: Snelle Booking - Minimalistisch (`T3.html`)
+*   **Stijl:** Zeer eenvoudig, wit en modern.
+*   **Focus:** Snelle conversie.
+*   **Kenmerken:** GEEN stappenflow. Het volledige formulier is direct zichtbaar op één pagina voor maximale snelheid.
 
-### 4. T4.html - Zakelijk / Corporate Taxi
-*   **Stijl:** Zakelijk, strak en professioneel.
-*   **Doel:** B2B vervoer en bedrijfsaccounts.
-*   **Kenmerken:** Extra velden voor Bedrijfsnaam, BTW nummer en Kostenplaats. Focus op facturatie.
-*   **Kleur:** Marineblauw (#1e3a5f).
+### T4: Zakelijk / Corporate Taxi (`T4.html`)
+*   **Stijl:** Professioneel, strak en zakelijk.
+*   **Focus:** B2B vervoer.
+*   **Kenmerken:** Marineblauw (#1e3a5f), extra velden voor bedrijfsnaam, BTW-nummer en kostenplaatsen.
 
-### 5. T5.html - Airport Transfer Specialist
-*   **Stijl:** Informatief en gericht op reizigers.
-*   **Doel:** Luchthavenvervoer.
-*   **Kenmerken:** Luchthavenselectie dropdown, vluchtnummer invoer, bagage-opties en informatie over wachttijden.
-*   **Kleur:** Lichtblauw (#e0f2fe).
+### T5: Airport Transfer Specialist (`T5.html`)
+*   **Stijl:** Duidelijk en informatief.
+*   **Focus:** Luchthavenvervoer.
+*   **Kenmerken:** Selectiemenu voor luchthavens (Zaventem, Charleroi, etc.), velden voor vluchtnummers en bagage, routeberekening vanaf luchthavens.
 
-## Technische Details
+## Technische Specificaties
 
-*   **Framework:** Tailwind CSS voor styling.
-*   **Kaarten:** Leaflet.js met OpenStreetMap (CartoDB tiles).
-*   **Geocoding:** Photon API (Komoot) voor adres-suggesties.
-*   **Routing:** OSRM (Open Source Routing Machine) voor routeberekening en afstand.
-*   **Lokalisatie:** Ondersteuning voor Nederlands (NL), Frans (FR) en Engels (EN) via data-attributen.
-*   **Responsive:** Geoptimaliseerd voor Mobiel, Tablet en Desktop.
+*   **Frontend:** HTML5, Tailwind CSS, Font Awesome.
+*   **Kaarten:** Leaflet.js met CartoDB tiles.
+*   **Geocoding:** Photon API (Komoot).
+*   **Routing:** OSRM (Open Source Routing Machine).
+*   **Talen:** Volledige ondersteuning voor Nederlands, Frans en Engels via `data-i18n`.
+*   **Responsiviteit:** Volledig responsive (Mobiel, Tablet, Desktop).
+
+## Verplichte Elementen (Alle Templates)
+
+Elk template voldoet aan de volgende vereisten:
+1.  **Semantische HTML:** Gebruik van `<header>`, `<main>`, `<section>`, `<footer>`.
+2.  **Sectie ID's:** `main-header`, `hero`, `booking-section`, `map`, `services`, `about`, `main-footer`.
+3.  **Branding:** Verplichte footer teksten: "Operated by Fleetconnect" en "Design by Ryzen Outsourcing".
+4.  **Placeholders:** Gebruik van `placehold.co` voor alle afbeeldingen.
+5.  **Documentatie:** Volledig voorzien van Nederlandstalig commentaar per sectie en functie.
 
 ## Gebruik
-Elk HTML bestand is zelfstandig (standalone). Alle CSS en JavaScript is inline of wordt geladen via betrouwbare CDN's. Er zijn geen lokale assets nodig behalve de HTML bestanden zelf.
+
+Open een willekeurig `.html` bestand direct in een moderne webbrower om de template en het boekingssysteem te bekijken en te testen. Er is geen build-stap of server nodig.
 
 ---
-*Operated by Fleetconnect*
-*Design by Ryzen Outsourcing*
+© 2024 - Ryzen Outsourcing & Fleetconnect

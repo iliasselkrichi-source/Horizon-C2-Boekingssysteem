@@ -132,9 +132,21 @@
 
         <!-- BOOKING SECTIE -->
         <section id="booking-section" class="py-16">
-            <div class="container mx-auto px-6">
-                <div class="booking-container">
+            <div class="container mx-auto px-6 text-center">
+                <!-- LIVE MONITORING (Minimalist) -->
+                <div id="monitoring" class="mb-12 flex justify-center gap-16">
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-2" data-i18n="monitoring_bookings">Boekingen vandaag</p>
+                        <span id="stat-bookings" class="text-4xl font-light text-gray-900">0</span>
+                    </div>
+                    <div class="w-px bg-gray-100 h-10 self-center"></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-2" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
+                        <span id="stat-vehicles" class="text-4xl font-light text-gray-900">0</span>
+                    </div>
+                </div>
 
+                <div class="booking-container text-left">
                     <div id="map"></div>
 
                     <div class="space-y-12">
@@ -270,23 +282,6 @@
 </div>
 </section>
 
-<!-- LIVE MONITORING SECTIE -->
-<section id="monitoring" class="py-20 border-t border-gray-100">
-    <div class="container mx-auto px-6">
-        <div class="max-w-4xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                <div class="border-l border-gray-200 pl-8">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-4" data-i18n="monitoring_bookings">Boekingen vandaag</p>
-                    <span id="stat-bookings" class="text-6xl font-light text-gray-900">0</span>
-                </div>
-                <div class="border-l border-gray-200 pl-8">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-4" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
-                    <span id="stat-vehicles" class="text-6xl font-light text-gray-900">0</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- OVER ONS SECTIE -->
 <section id="about" class="py-20 border-t border-gray-100">

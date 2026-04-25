@@ -230,6 +230,13 @@
                                 </div>
                                 <div class="flex items-center justify-between p-4 border rounded-lg">
                                     <div>
+                                        <span class="font-semibold text-sm block" data-i18n="child_seat_label">Kinderstoel</span>
+                                        <span class="text-[10px] text-blue-600 font-bold">+ €5.00 / stuk</span>
+                                    </div>
+                                    <input type="number" id="child-seats" min="0" max="4" value="0" class="w-16 border rounded p-1 text-center font-bold" onchange="updatePrice()">
+                                </div>
+                                <div class="flex items-center justify-between p-4 border rounded-lg">
+                                    <div>
                                         <span class="font-semibold text-sm block" data-i18n="wifi_label">High-Speed WiFi</span>
                                         <span class="text-[10px] text-blue-600 font-bold">+ €5.00</span>
                                     </div>
@@ -330,6 +337,20 @@
 
                     <!-- Kaart Rechts -->
                     <div class="lg:w-2/5">
+                        <!-- LIVE MONITORING (Corporate Block) -->
+                        <div id="monitoring" class="mb-8 border border-slate-300 bg-white p-6 shadow-sm">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center border-r border-slate-100">
+                                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2" data-i18n="monitoring_bookings">Boekingen vandaag</p>
+                                    <div class="inline-block px-4 py-2 bg-[#1e3a5f] text-white text-xl font-black rounded-sm" id="stat-bookings">0</div>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-2" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
+                                    <div class="inline-block px-4 py-2 bg-[#1e3a5f] text-white text-xl font-black rounded-sm" id="stat-vehicles">0</div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="map" class="sticky top-24 shadow-lg border-4 border-white"></div>
                         <div id="route-info" class="mt-6 p-6 corporate-card hidden">
                             <div class="flex justify-around text-center">
@@ -386,23 +407,6 @@
             </div>
         </section>
 
-        <!-- LIVE MONITORING SECTIE -->
-        <section id="monitoring" class="py-16 bg-slate-50 border-y border-slate-200">
-            <div class="container mx-auto px-6">
-                <div class="max-w-5xl mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border border-slate-300">
-                        <div class="bg-white p-12 text-center border-r border-slate-300">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-6" data-i18n="monitoring_bookings">Boekingen vandaag</p>
-                            <div class="inline-block px-8 py-4 bg-[#1e3a5f] text-white text-5xl font-black rounded-sm" id="stat-bookings">0</div>
-                        </div>
-                        <div class="bg-white p-12 text-center">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-6" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
-                            <div class="inline-block px-8 py-4 bg-[#1e3a5f] text-white text-5xl font-black rounded-sm" id="stat-vehicles">0</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- OVER ONS -->
         <section id="about" class="py-24">
@@ -510,7 +514,7 @@
                 hero_title: "Zakelijk Vervoer op Maat", hero_subtitle: "Efficiëntie, punctualiteit en comfort voor uw team en relaties.",
                 step1_title: "Route", label_pickup: "Ophaallocatie", label_destination: "Bestemming", label_date: "Datum", label_time: "Tijd", return_trip: "Retourrit", payment_label: "Betaalmethode", payment_cash: "Contant", payment_card: "Kaart", payment_online: "Op Factuur",
                 step2_title: "Voertuig", step3_title: "Aanvullende services", step4_title: "Facturatie",
-                passengers_label: "Passagiers", wifi_label: "High-Speed WiFi", water_label: "Premium Water", special_requests_label: "Speciale Verzoeken",
+                passengers_label: "Passagiers", child_seat_label: "Kinderstoel", wifi_label: "High-Speed WiFi", water_label: "Premium Water", special_requests_label: "Speciale Verzoeken",
                 total_price_label: "Totaal (Excl. BTW)", btn_next: "Volgende", btn_prev: "Vorige", btn_submit: "Bevestig Boeking",
                 label_name: "Naam", label_email: "Email", label_phone: "Telefoon",
                 services_title: "Onze Zakelijke Oplossingen", service1_title: "Zakelijk Taxi", service2_title: "Directie Vervoer", service3_title: "Luchthaven Transfers", service4_title: "24/7 Dispatching", service4_desc: "Live tracking beschikbaar",
@@ -524,7 +528,7 @@
                 hero_title: "Transport d'Affaires sur Mesure", hero_subtitle: "Efficacité, ponctualité et confort pour votre équipe et vos partenaires.",
                 step1_title: "Route", label_pickup: "Prise en charge", label_destination: "Destination", label_date: "Date", label_time: "Heure", return_trip: "Retour", payment_label: "Mode de paiement", payment_cash: "Espèces", payment_card: "Carte", payment_online: "Sur Facture",
                 step2_title: "Véhicule", step3_title: "Services additionnels", step4_title: "Facturation",
-                passengers_label: "Passagers", wifi_label: "WiFi Haut Débit", water_label: "Eau Premium", special_requests_label: "Demandes Spéciales",
+                passengers_label: "Passagers", child_seat_label: "Siège enfant", wifi_label: "WiFi Haut Débit", water_label: "Eau Premium", special_requests_label: "Demandes Spéciales",
                 total_price_label: "Total (HT)", btn_next: "Suivant", btn_prev: "Précédent", btn_submit: "Confirmer la Réservation",
                 label_name: "Nom", label_email: "Email", label_phone: "Téléphone",
                 services_title: "Solutions d'Affaires", service1_title: "Taxi d'Affaires", service2_title: "Transport de Direction", service3_title: "Transferts Aéroport", service4_title: "Dispatching 24/7", service4_desc: "Suivi en direct disponible",
@@ -538,7 +542,7 @@
                 hero_title: "Custom Business Transport", hero_subtitle: "Efficiency, punctuality and comfort for your team and relations.",
                 step1_title: "Route", label_pickup: "Pickup", label_destination: "Destination", label_date: "Date", label_time: "Time", return_trip: "Return", payment_label: "Payment Method", payment_cash: "Cash", payment_card: "Card", payment_online: "On Invoice",
                 step2_title: "Vehicle", step3_title: "Additional services", step4_title: "Billing",
-                passengers_label: "Passengers", wifi_label: "High-Speed WiFi", water_label: "Premium Water", special_requests_label: "Special Requests",
+                passengers_label: "Passengers", child_seat_label: "Child seat", wifi_label: "High-Speed WiFi", water_label: "Premium Water", special_requests_label: "Special Requests",
                 total_price_label: "Total (Excl. VAT)", btn_next: "Next", btn_prev: "Previous", btn_submit: "Confirm Booking",
                 label_name: "Name", label_email: "Email", label_phone: "Phone",
                 services_title: "Business Solutions", service1_title: "Business Taxi", service2_title: "Executive Transport", service3_title: "Airport Transfers", service4_title: "24/7 Dispatching", service4_desc: "Live tracking available",
@@ -629,6 +633,7 @@
 
         function updatePrice() {
             let total = selectedVehicle ? selectedVehicle.price : 0;
+            total += (parseInt(document.getElementById('child-seats').value) || 0) * 5;
             if(document.getElementById('wifi-opt').checked) total += 5;
             total += (parseInt(document.getElementById('water-bottles').value) || 0) * 3;
             document.querySelectorAll('.total-price').forEach(el => el.innerText = `€ ${total.toFixed(2)}`);

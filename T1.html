@@ -179,6 +179,28 @@
         <!-- BOOKING SECTIE -->
         <section id="booking-section" class="py-24">
             <div class="container mx-auto px-4">
+                <!-- LIVE MONITORING (Compact) -->
+                <div id="monitoring" class="mb-12 flex flex-wrap justify-center gap-8">
+                    <div class="bg-white px-8 py-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-[#1e6f8c]/10 rounded-full flex items-center justify-center text-[#1e6f8c]">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest" data-i18n="monitoring_bookings">Boekingen vandaag</p>
+                            <p id="stat-bookings" class="text-2xl font-black text-[#1e6f8c]">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-white px-8 py-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+                        <div class="w-12 h-12 bg-[#1e6f8c]/10 rounded-full flex items-center justify-center text-[#1e6f8c]">
+                            <i class="fas fa-taxi"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
+                            <p id="stat-vehicles" class="text-2xl font-black text-[#1e6f8c]">0</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex flex-col lg:flex-row gap-16">
 
                     <!-- Kaart Links (50%) -->
@@ -451,23 +473,6 @@
             </div>
         </section>
 
-        <!-- LIVE MONITORING SECTIE -->
-        <section id="monitoring" class="py-12 bg-gray-50">
-            <div class="container mx-auto px-4">
-                <div class="max-w-4xl mx-auto bg-white p-10 rounded-[32px] shadow-lg border border-gray-100">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <div class="text-center p-6 border-r border-gray-100 last:border-r-0">
-                            <p class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2" data-i18n="monitoring_bookings">Boekingen vandaag</p>
-                            <span id="stat-bookings" class="text-5xl font-black text-[#1e6f8c]">0</span>
-                        </div>
-                        <div class="text-center p-6">
-                            <p class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
-                            <span id="stat-vehicles" class="text-5xl font-black text-[#1e6f8c]">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- OVER ONS SECTIE -->
         <section id="about" class="py-24">

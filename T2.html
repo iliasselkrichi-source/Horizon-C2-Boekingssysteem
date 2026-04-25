@@ -264,6 +264,19 @@
 
             <div class="container mx-auto px-4 relative z-10">
                 <div class="max-w-4xl mx-auto glass-card p-12 mt-[200px]">
+                    <!-- LIVE MONITORING (Inside card) -->
+                    <div id="monitoring" class="mb-12 flex justify-center gap-12 border-b border-white/10 pb-10">
+                        <div class="text-center">
+                            <p class="text-[10px] font-bold text-[#c9a03d] uppercase tracking-[0.2em] mb-2" data-i18n="monitoring_bookings">Boekingen vandaag</p>
+                            <span id="stat-bookings" class="text-4xl font-black text-white">0</span>
+                        </div>
+                        <div class="w-px bg-white/10 h-12"></div>
+                        <div class="text-center">
+                            <p class="text-[10px] font-bold text-[#c9a03d] uppercase tracking-[0.2em] mb-2" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
+                            <span id="stat-vehicles" class="text-4xl font-black text-white">0</span>
+                        </div>
+                    </div>
+
                     <div class="step-indicator">
                         <div class="step active" id="indicator-1">1</div>
                         <div class="step" id="indicator-2">2</div>
@@ -524,23 +537,6 @@
             </div>
         </section>
 
-        <!-- LIVE MONITORING SECTIE -->
-        <section id="monitoring" class="py-24 bg-black/40 border-y border-white/5">
-            <div class="container mx-auto px-4">
-                <div class="max-w-4xl mx-auto glass-card p-12 border-[#c9a03d]/30 shadow-[0_0_50px_rgba(201,160,61,0.1)]">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                        <div class="text-center p-8 border-r border-white/10 last:border-r-0">
-                            <p class="text-xs font-bold text-[#c9a03d] uppercase tracking-[0.3em] mb-4" data-i18n="monitoring_bookings">Boekingen vandaag</p>
-                            <span id="stat-bookings" class="text-6xl font-black text-white">0</span>
-                        </div>
-                        <div class="text-center p-8">
-                            <p class="text-xs font-bold text-[#c9a03d] uppercase tracking-[0.3em] mb-4" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
-                            <span id="stat-vehicles" class="text-6xl font-black text-white">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- GALLERY / OVER ONS -->
         <section id="about" class="py-32">
