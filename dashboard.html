@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleetconnect - Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- FullCalendar -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e3a5f',
+                        secondary: '#1e6f8c',
+                        accent: '#c9a03d',
+                        dark: '#0f172a',
+                        success: '#22c55e',
+                        warning: '#eab308',
+                        danger: '#ef4444'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .sidebar-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #c9a03d;
+            color: #c9a03d;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .fc .fc-toolbar-title { font-size: 1.25rem; font-weight: 700; text-transform: uppercase; }
+        .fc .fc-button-primary { background-color: #1e3a5f; border-color: #1e3a5f; }
+        .fc .fc-button-primary:hover { background-color: #1e6f8c; border-color: #1e6f8c; }
+
+        [v-cloak] { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-dark text-white flex flex-col shrink-0">
+        <div class="p-6 border-b border-white/10 flex items-center gap-3">
+            <div class="w-10 h-10 bg-accent text-dark rounded-xl flex items-center justify-center font-black">FC</div>
+            <span class="text-xl font-extrabold tracking-tighter uppercase">Fleetconnect</span>
+        </div>
+
+        <nav class="flex-grow py-6 space-y-1 overflow-y-auto custom-scrollbar">
+            <button onclick="showSection('new-orders')" id="nav-new-orders" class="sidebar-item w-full flex items-center gap-4 px-6 py-4 text-slate-400 hover:bg-white/5 hover:text-white transition group">
+                <i class="fas fa-bell text-lg group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold uppercase tracking-wider">New Orders</span>
+                <span id="badge-new-orders" class="ml-auto bg-danger text-white text-[10px] px-2 py-0.5 rounded-full hidden">0</span>
+            </button>
+
+            <button onclick="showSection('orders')" id="nav-orders" class="sidebar-item w-full flex items-center gap-4 px-6 py-4 text-slate-400 hover:bg-white/5 hover:text-white transition group">
+                <i class="fas fa-calendar-check text-lg group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold uppercase tracking-wider">Orders</span>
+            </button>
+
+            <button onclick="showSection('live')" id="nav-live" class="sidebar-item w-full flex items-center gap-4 px-6 py-4 text-slate-400 hover:bg-white/5 hover:text-white transition group">
+                <i class="fas fa-broadcast-tower text-lg group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold uppercase tracking-wider">Live Paneel</span>
+            </button>
+
+            <button onclick="showSection('history')" id="nav-history" class="sidebar-item w-full flex items-center gap-4 px-6 py-4 text-slate-400 hover:bg-white/5 hover:text-white transition group">
+                <i class="fas fa-history text-lg group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold uppercase tracking-wider">History</span>
+            </button>
+
+            <button onclick="showSection('drivers')" id="nav-drivers" class="sidebar-item w-full flex items-center gap-4 px-6 py-4 text-slate-400 hover:bg-white/5 hover:text-white transition group">
+                <i class="fas fa-id-card text-lg group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold uppercase tracking-wider">Drivers</span>
+            </button>
+
+            <button onclick="showSection('financial')" id="nav-financial" class="sidebar-item w-full flex items-center gap-4 px-6 py-4 text-slate-400 hover:bg-white/5 hover:text-white transition group">
+                <i class="fas fa-chart-line text-lg group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold uppercase tracking-wider">Financial</span>
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-white/10">
+            <button onclick="showSection('wiki')" id="nav-wiki" class="sidebar-item w-full flex items-center gap-4 px-6 py-4 text-slate-400 hover:bg-white/5 hover:text-white transition group rounded-xl">
+                <i class="fas fa-book-open text-lg group-hover:scale-110 transition"></i>
+                <span class="text-sm font-bold uppercase tracking-wider">Wiki Agent</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow flex flex-col min-w-0 bg-slate-50">
+        <!-- TOPBAR -->
+        <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-10 shrink-0">
+            <h2 id="section-title" class="text-2xl font-black text-primary uppercase tracking-tight">Dashboard</h2>
+            <div class="flex items-center gap-6">
+                <div class="relative">
+                    <button class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 hover:bg-slate-200 transition">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="h-8 w-px bg-slate-200"></div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold">Admin Panel</p>
+                        <p class="text-[10px] text-slate-400 uppercase font-bold">Fleet Manager</p>
+                    </div>
+                    <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENT AREA -->
+        <div id="content-area" class="flex-grow overflow-y-auto p-10 custom-scrollbar">
+
+            <!-- SECTION: NEW ORDERS -->
+            <section id="section-new-orders" class="section hidden space-y-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div class="flex gap-4">
+                        <input type="text" id="search-new-orders" placeholder="Zoek op naam of order..." class="px-4 py-2 border border-slate-200 rounded-lg text-sm w-64 outline-none focus:ring-2 focus:ring-primary/20">
+                        <select class="px-4 py-2 border border-slate-200 rounded-lg text-sm outline-none">
+                            <option>Alle types</option>
+                            <option>Cash</option>
+                            <option>Factuur</option>
+                        </select>
+                    </div>
+                    <button onclick="refreshData()" class="bg-primary text-white px-6 py-2 rounded-lg font-bold text-sm hover:opacity-90 transition flex items-center gap-2">
+                        <i class="fas fa-sync-alt"></i> Verversen
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Ordernummer</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Datum & Tijd</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Naam</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Voertuig</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Status</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest text-right">Actie</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-new-orders">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                    <div id="loader-new-orders" class="p-10 text-center hidden text-slate-400">
+                        <i class="fas fa-circle-notch fa-spin text-3xl"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: ORDERS -->
+            <section id="section-orders" class="section hidden space-y-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div class="flex gap-4">
+                        <input type="text" id="search-orders" placeholder="Zoek op planning..." class="px-4 py-2 border border-slate-200 rounded-lg text-sm w-64 outline-none">
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Ordernummer</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Datum & Tijd</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Naam</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Chauffeur</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Betaalstatus</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest text-right">Actie</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-orders">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECTION: LIVE PANEEL -->
+            <section id="section-live" class="section hidden space-y-10">
+                <!-- Widgets -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Dagomzet Totaal</p>
+                        <p class="text-3xl font-black text-primary" id="widget-total-revenue">€ 0.00</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-success">
+                        <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Cash Ontvangen</p>
+                        <p class="text-3xl font-black text-success" id="widget-cash-revenue">€ 0.00</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-primary">
+                        <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Openstaande Facturen</p>
+                        <p class="text-3xl font-black text-primary" id="widget-invoice-revenue">€ 0.00</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-accent">
+                        <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2">Totale Commissie</p>
+                        <p class="text-3xl font-black text-accent" id="widget-commission">€ 0.00</p>
+                    </div>
+                </div>
+
+                <!-- Calendar -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                    <div id="calendar"></div>
+                </div>
+
+                <!-- Daily Schedule -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="text-lg font-black text-primary uppercase tracking-tight">Dagschema - <span id="current-date-display">...</span></h3>
+                        <i class="fas fa-calendar-day text-slate-300"></i>
+                    </div>
+                    <div class="p-8 space-y-4" id="daily-schedule-list">
+                        <!-- Dynamic list -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: HISTORY -->
+            <section id="section-history" class="section hidden space-y-8">
+                <div class="flex justify-between items-center">
+                    <div class="flex gap-4">
+                        <input type="month" id="history-month-filter" class="px-4 py-2 border border-slate-200 rounded-lg text-sm outline-none">
+                    </div>
+                    <button onclick="exportHistory()" class="bg-slate-800 text-white px-6 py-2 rounded-lg font-bold text-sm hover:opacity-90 transition flex items-center gap-2">
+                        <i class="fas fa-file-export"></i> Download Rapport (.CSV)
+                    </button>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="px-6 py-4 font-black uppercase text-slate-400 text-[10px]">Order</th>
+                                <th class="px-6 py-4 font-black uppercase text-slate-400 text-[10px]">Datum</th>
+                                <th class="px-6 py-4 font-black uppercase text-slate-400 text-[10px]">Klant</th>
+                                <th class="px-6 py-4 font-black uppercase text-slate-400 text-[10px]">Chauffeur</th>
+                                <th class="px-6 py-4 font-black uppercase text-slate-400 text-[10px]">Bedrag</th>
+                                <th class="px-6 py-4 font-black uppercase text-slate-400 text-[10px]">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-history">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECTION: DRIVERS -->
+            <section id="section-drivers" class="section hidden space-y-8">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-black text-primary uppercase">Vlootbeheer</h3>
+                    <button onclick="openDriverModal()" class="bg-accent text-dark px-6 py-2 rounded-lg font-bold text-sm hover:opacity-90 transition flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Nieuwe Chauffeur
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="driver-grid">
+                    <!-- Dynamic driver cards -->
+                </div>
+            </section>
+
+            <!-- SECTION: FINANCIAL -->
+            <section id="section-financial" class="section hidden space-y-10">
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
+                        <p class="text-[10px] font-black uppercase text-slate-400 mb-2">Omzet deze week</p>
+                        <p class="text-4xl font-black text-primary" id="fin-week-rev">€ 0.00</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
+                        <p class="text-[10px] font-black uppercase text-slate-400 mb-2">Omzet deze maand</p>
+                        <p class="text-4xl font-black text-primary" id="fin-month-rev">€ 0.00</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm text-center">
+                        <p class="text-[10px] font-black uppercase text-slate-400 mb-2">Jaartotaal</p>
+                        <p class="text-4xl font-black text-primary" id="fin-year-rev">€ 0.00</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-10 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 class="font-black uppercase tracking-widest text-xs mb-8 text-slate-400">Bron Analyse (T1-T5)</h4>
+                    <div id="source-stats" class="space-y-6">
+                        <!-- T1 Standard, T2 Premium, etc -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: WIKI AGENT -->
+            <section id="section-wiki" class="section hidden">
+                <div class="bg-white p-12 rounded-3xl border border-slate-200 shadow-sm max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-black text-primary uppercase mb-10 border-b-4 border-accent inline-block pb-2 tracking-tighter">Data Flow Working Rules</h2>
+
+                    <div class="space-y-12 text-slate-600 leading-relaxed">
+                        <div>
+                            <h3 class="text-lg font-bold text-dark mb-4 flex items-center gap-3">
+                                <span class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-primary">1</span>
+                                Intake: New Orders
+                            </h3>
+                            <p>Alle boekingen vanuit de templates (T1-T5) landen in de sectie <strong>New Orders</strong> met de status <em>'new'</em>. De dispatcher controleert de Universele Fiche en klikt op <strong>Bevestigen</strong>.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-dark mb-4 flex items-center gap-3">
+                                <span class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-primary">2</span>
+                                Planning: Orders
+                            </h3>
+                            <p>Bevestigde ritten verschijnen in de <strong>Orders</strong> sectie. Hier is het de taak van de dispatcher om een <strong>Driver</strong> toe te wijzen via het multivenster in de fiche. Zodra toegewezen, kan de rit worden gemonitord.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-dark mb-4 flex items-center gap-3">
+                                <span class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-primary">3</span>
+                                Real-time: Live Paneel
+                            </h3>
+                            <p>Het <strong>Live Paneel</strong> toont de dagelijkse omzet en de agenda. De kalender geeft een visueel overzicht van de drukte en het dagschema toont chronologisch alle actieve ritten van vandaag.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-dark mb-4 flex items-center gap-3">
+                                <span class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-primary">4</span>
+                                Archief: History
+                            </h3>
+                            <p>Voltooide ritten worden gearchiveerd in <strong>History</strong>. Deze data is essentieel voor de maandafsluiting en kan worden geëxporteerd naar CSV voor administratieve doeleinden.</p>
+                        </div>
+
+                        <div class="p-8 bg-slate-50 rounded-2xl border-l-8 border-accent">
+                            <h4 class="font-bold text-dark mb-2">Financiële Monitoring</h4>
+                            <p class="text-sm">In de Financial sectie wordt automatisch berekend hoeveel commissie er verschuldigd is aan onderaannemers en wat de verhouding is tussen Cash en Factuur ritten.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- MODALS -->
+    <!-- Booking Details / Fiche Modal -->
+    <div id="modal-fiche" class="fixed inset-0 z-[100] hidden items-center justify-center bg-dark/60 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl my-8">
+            <div id="fiche-modal-content">
+                <!-- Dynamic Fiche -->
+            </div>
+            <div class="p-8 border-t border-slate-100 flex justify-between bg-slate-50 rounded-b-3xl">
+                <button onclick="closeModal('modal-fiche')" class="px-8 py-3 bg-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-300 transition">Sluiten</button>
+                <div id="fiche-action-buttons">
+                    <!-- Actions like Confirm or Assign -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assign Driver Modal -->
+    <div id="modal-assign" class="fixed inset-0 z-[110] hidden items-center justify-center bg-dark/80 backdrop-blur-md p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-6 bg-primary text-white">
+                <h3 class="text-lg font-bold uppercase tracking-tight">Driver Toewijzen</h3>
+            </div>
+            <div class="p-8 space-y-6">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-3 tracking-widest">Selecteer Chauffeur</label>
+                    <select id="assign-driver-select" class="w-full px-4 py-3 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-primary/20">
+                        <option value="">Kies een chauffeur...</option>
+                    </select>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="closeModal('modal-assign')" class="flex-grow py-4 border border-slate-200 font-bold rounded-xl hover:bg-slate-50 transition">Annuleren</button>
+                    <button onclick="confirmAssignment()" class="flex-grow py-4 bg-accent text-dark font-bold rounded-xl hover:opacity-90 transition shadow-lg shadow-accent/20 uppercase tracking-widest text-xs">Bevestigen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Driver Modal -->
+    <div id="modal-driver" class="fixed inset-0 z-[100] hidden items-center justify-center bg-dark/60 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
+            <div class="p-8 bg-slate-50 border-b border-slate-100">
+                <h3 class="text-xl font-black text-primary uppercase tracking-tight">Nieuwe Driver Toevoegen</h3>
+            </div>
+            <form id="driver-form" class="p-8 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2">Onderaannemer</label>
+                        <input type="text" name="subcontractor" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2">Naam Chauffeur</label>
+                        <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2">GSM</label>
+                        <input type="tel" name="phone" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2">E-mail</label>
+                        <input type="email" name="email" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2">Voertuig Type</label>
+                        <input type="text" name="vehicle_type" placeholder="bijv. Mercedes V-Class" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2">Nummerplaat</label>
+                        <input type="text" name="license_plate" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl">
+                    </div>
+                </div>
+                <div class="pt-6 flex gap-4">
+                    <button type="button" onclick="closeModal('modal-driver')" class="flex-grow py-4 border border-slate-200 font-bold rounded-xl uppercase text-xs">Annuleren</button>
+                    <button type="submit" class="flex-grow py-4 bg-primary text-white font-bold rounded-xl hover:opacity-90 transition uppercase tracking-widest text-xs">Opslaan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Supabase initialisatie
+        const supabaseUrl = 'https://kwsuqzbqzsmgkjaslwkz.supabase.co';
+        const supabaseAnonKey = 'sb_publishable_5hdl73a9-jNd9n3lnsYVyQ_dMYgiSLA';
+        const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        // State Management
+        let allBookings = [];
+        let allDrivers = [];
+        let currentSection = 'new-orders';
+        let calendar = null;
+        let selectedBookingForAssign = null;
+
+        // ========== INITIALISATIE ==========
+        document.addEventListener('DOMContentLoaded', async () => {
+            initCalendar();
+            showSection('new-orders');
+            await refreshData();
+
+            // Auto refresh stats every 2 mins
+            setInterval(refreshData, 120000);
+        });
+
+        // ========== SECTIE NAVIGATIE ==========
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+
+            document.getElementById(`section-${id}`).classList.remove('hidden');
+            document.getElementById(`nav-${id}`).classList.add('active');
+
+            currentSection = id;
+            document.getElementById('section-title').innerText = id.replace('-', ' ').toUpperCase();
+
+            if (id === 'live') {
+                setTimeout(() => calendar.render(), 100);
+            }
+        }
+
+        // ========== DATA LADDEN ==========
+        async function refreshData() {
+            showLoaders(true);
+            try {
+                // Fetch Bookings
+                const { data: bookings, error: bError } = await supabase
+                    .from('bookings')
+                    .select('*')
+                    .order('booking_date', { ascending: true })
+                    .order('booking_time', { ascending: true });
+
+                if (bError) throw bError;
+                allBookings = bookings;
+
+                // Fetch Drivers
+                const { data: drivers, error: dError } = await supabase
+                    .from('drivers')
+                    .select('*');
+
+                if (!dError) allDrivers = drivers;
+
+                renderAll();
+            } catch (err) {
+                console.error("Fetch error:", err);
+                // If tables don't exist yet, we show placeholders or log it
+            } finally {
+                showLoaders(false);
+            }
+        }
+
+        function showLoaders(show) {
+            const loader = document.getElementById('loader-new-orders');
+            if (show) loader.classList.remove('hidden');
+            else loader.classList.add('hidden');
+        }
+
+        // ========== RENDERING ==========
+        function renderAll() {
+            renderNewOrders();
+            renderOrders();
+            renderLivePanel();
+            renderHistory();
+            renderDrivers();
+            renderFinancial();
+            updateBadges();
+        }
+
+        function updateBadges() {
+            const newCount = allBookings.filter(b => !b.status || b.status === 'new').length;
+            const badge = document.getElementById('badge-new-orders');
+            if (newCount > 0) {
+                badge.innerText = newCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // 1. New Orders
+        function renderNewOrders() {
+            const list = document.getElementById('table-new-orders');
+            list.innerHTML = '';
+
+            const news = allBookings.filter(b => !b.status || b.status === 'new');
+
+            news.forEach(b => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-100 hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-bold text-slate-800">${b.booking_number}</td>
+                    <td class="px-6 py-4">
+                        <p class="text-sm font-semibold">${b.booking_date}</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">${b.booking_time}</p>
+                    </td>
+                    <td class="px-6 py-4 text-sm font-medium">${b.first_name} ${b.last_name || ''}</td>
+                    <td class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">${b.vehicle_name || b.vehicle_id}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 bg-slate-100 text-slate-500 text-[9px] font-black uppercase rounded">${b.payment_method}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="openFiche('${b.id}')" class="bg-primary text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider hover:bg-secondary transition">Fiche & Bevestig</button>
+                    </td>
+                `;
+                list.appendChild(tr);
+            });
+        }
+
+        // 2. Orders (Planning)
+        function renderOrders() {
+            const list = document.getElementById('table-orders');
+            list.innerHTML = '';
+
+            const confirmed = allBookings.filter(b => b.status === 'confirmed' || b.status === 'assigned');
+
+            confirmed.forEach(b => {
+                const driver = allDrivers.find(d => d.id == b.driver_id);
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-100 hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-bold text-slate-800">${b.booking_number}</td>
+                    <td class="px-6 py-4">
+                        <p class="text-sm font-semibold">${b.booking_date}</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">${b.booking_time}</p>
+                    </td>
+                    <td class="px-6 py-4 text-sm font-medium">${b.first_name} ${b.last_name || ''}</td>
+                    <td class="px-6 py-4">
+                        ${b.driver_id ?
+                            `<span class="text-xs font-bold text-success flex items-center gap-2"><i class="fas fa-user-check"></i> ${driver ? driver.name : 'Chauffeur'}</span>` :
+                            `<span class="text-xs font-bold text-warning italic">Niet toegewezen</span>`
+                        }
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 bg-primary/10 text-primary text-[9px] font-black uppercase rounded">${b.payment_method}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="openFiche('${b.id}')" class="bg-accent text-dark px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider hover:opacity-90 transition">Planning</button>
+                    </td>
+                `;
+                list.appendChild(tr);
+            });
+        }
+
+        // 3. Live Panel
+        function renderLivePanel() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('current-date-display').innerText = new Date().toLocaleDateString('nl-BE', { weekday: 'long', day: 'numeric', month: 'long' });
+
+            const todayBookings = allBookings.filter(b => b.booking_date === today);
+
+            let total = 0, cash = 0, invoice = 0;
+            todayBookings.forEach(b => {
+                const price = parseFloat(b.total_price) || 0;
+                total += price;
+                if (b.payment_method === 'cash') cash += price;
+                else invoice += price;
+            });
+
+            document.getElementById('widget-total-revenue').innerText = `€ ${total.toFixed(2)}`;
+            document.getElementById('widget-cash-revenue').innerText = `€ ${cash.toFixed(2)}`;
+            document.getElementById('widget-invoice-revenue').innerText = `€ ${invoice.toFixed(2)}`;
+            document.getElementById('widget-commission').innerText = `€ ${(total * 0.15).toFixed(2)}`; // Placeholder 15%
+
+            // Schedule
+            const schedule = document.getElementById('daily-schedule-list');
+            schedule.innerHTML = '';
+
+            if (todayBookings.length === 0) {
+                schedule.innerHTML = '<p class="text-slate-400 text-sm italic py-4">Geen ritten gepland voor vandaag.</p>';
+            }
+
+            todayBookings.forEach(b => {
+                const driver = allDrivers.find(d => d.id == b.driver_id);
+                const div = document.createElement('div');
+                div.className = "flex items-center gap-6 p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-primary/20 transition cursor-pointer";
+                div.innerHTML = `
+                    <div class="text-center min-w-[60px] border-r border-slate-200 pr-6">
+                        <p class="text-lg font-black text-primary tracking-tighter">${b.booking_time}</p>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="font-bold text-sm uppercase">${b.pickup_address.substring(0, 40)}...</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Naar: ${b.destination_address.substring(0, 40)}...</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs font-bold">${b.first_name}</p>
+                        ${driver ?
+                            `<p class="text-[10px] text-success font-black uppercase"><i class="fas fa-car mr-1"></i> ${driver.name}</p>` :
+                            `<p class="text-[10px] text-danger font-black uppercase">Ongepland</p>`
+                        }
+                    </div>
+                `;
+                div.onclick = () => openFiche(b.id);
+                schedule.appendChild(div);
+            });
+
+            // Calendar Events
+            if (calendar) {
+                calendar.removeAllEvents();
+                allBookings.forEach(b => {
+                    calendar.addEvent({
+                        id: b.id,
+                        title: `${b.booking_time} - ${b.first_name} (${b.vehicle_id})`,
+                        start: b.booking_date,
+                        backgroundColor: b.status === 'completed' ? '#22c55e' : (b.driver_id ? '#1e6f8c' : '#eab308'),
+                        borderColor: 'transparent'
+                    });
+                });
+            }
+        }
+
+        // 4. History
+        function renderHistory() {
+            const list = document.getElementById('table-history');
+            list.innerHTML = '';
+
+            const completed = allBookings.filter(b => b.status === 'completed');
+
+            completed.forEach(b => {
+                const driver = allDrivers.find(d => d.id == b.driver_id);
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-100 hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-bold">${b.booking_number}</td>
+                    <td class="px-6 py-4 text-slate-500">${b.booking_date}</td>
+                    <td class="px-6 py-4 font-medium">${b.first_name}</td>
+                    <td class="px-6 py-4 text-xs font-bold uppercase text-slate-400">${driver ? driver.name : '-'}</td>
+                    <td class="px-6 py-4 font-black">€ ${b.total_price}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 bg-success/10 text-success text-[9px] font-black uppercase rounded">Voltooid</span>
+                    </td>
+                `;
+                list.appendChild(tr);
+            });
+        }
+
+        // 5. Drivers
+        function renderDrivers() {
+            const grid = document.getElementById('driver-grid');
+            grid.innerHTML = '';
+
+            allDrivers.forEach(d => {
+                const div = document.createElement('div');
+                div.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative group";
+                div.innerHTML = `
+                    <button onclick="deleteDriver('${d.id}')" class="absolute top-4 right-4 text-slate-300 hover:text-danger opacity-0 group-hover:opacity-100 transition">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-accent/20 text-accent rounded-xl flex items-center justify-center font-bold">
+                            ${d.name.charAt(0)}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-dark">${d.name}</h4>
+                            <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest">${d.subcontractor || 'Fleetconnect'}</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-xs">
+                        <p class="flex items-center gap-3 text-slate-600 font-medium"><i class="fas fa-phone text-slate-400 w-4"></i> ${d.phone}</p>
+                        <p class="flex items-center gap-3 text-slate-600 font-medium"><i class="fas fa-car text-slate-400 w-4"></i> ${d.vehicle_type}</p>
+                        <div class="pt-4 border-t border-slate-50">
+                            <span class="text-[10px] font-black uppercase bg-slate-100 px-3 py-1 rounded-full text-slate-500">${d.license_plate}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        // 6. Financial
+        function renderFinancial() {
+            // Stats logic here
+            const total = allBookings.reduce((sum, b) => sum + (parseFloat(b.total_price) || 0), 0);
+            document.getElementById('fin-year-rev').innerText = `€ ${total.toFixed(2)}`;
+
+            // Source analysis (Template codes)
+            const sources = ['T1', 'T2', 'T3', 'T4', 'T5'];
+            const sourceList = document.getElementById('source-stats');
+            sourceList.innerHTML = '';
+
+            sources.forEach(src => {
+                const bookings = allBookings.filter(b => b.template_code === src);
+                const rev = bookings.reduce((sum, b) => sum + (parseFloat(b.total_price) || 0), 0);
+                const perc = total > 0 ? (rev / total * 100) : 0;
+
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-bold text-dark">${src} - ${getTemplateName(src)}</span>
+                        <span class="text-sm font-black text-primary">€ ${rev.toFixed(2)} (${Math.round(perc)}%)</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-primary" style="width: ${perc}%"></div>
+                    </div>
+                `;
+                sourceList.appendChild(div);
+            });
+        }
+
+        function getTemplateName(code) {
+            const names = { T1: 'Standard', T2: 'Premium', T3: 'Minimal', T4: 'Business', T5: 'Airport' };
+            return names[code] || 'Unknown';
+        }
+
+        // ========== ACTIES & MODALS ==========
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function openFiche(id) {
+            const b = allBookings.find(x => x.id == id);
+            if (!b) return;
+
+            const content = document.getElementById('fiche-modal-content');
+            const actions = document.getElementById('fiche-action-buttons');
+
+            // Generate Fiche Content (Reuse standard layout logic)
+            content.innerHTML = `
+                <div class="p-10 space-y-10">
+                    <div class="flex justify-between items-start border-b-4 border-primary pb-6">
+                        <div>
+                            <h2 class="text-3xl font-black text-primary uppercase tracking-tighter">${b.booking_number}</h2>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Status: ${b.status || 'NEW'}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xl font-bold">${b.booking_date}</p>
+                            <p class="text-sm font-bold text-slate-400">${b.booking_time}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-10">
+                        <div>
+                            <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Klantgegevens</h4>
+                            <p class="text-lg font-bold">${b.first_name} ${b.last_name || ''}</p>
+                            <p class="text-sm text-slate-600">${b.email}</p>
+                            <p class="text-sm text-slate-600">${b.phone}</p>
+                            ${b.company_name ? `<p class="mt-4 p-4 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold">🏢 ${b.company_name} (BTW: ${b.vat_number})</p>` : ''}
+                        </div>
+                        <div>
+                            <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Voertuig & Prijs</h4>
+                            <p class="text-lg font-bold uppercase">${b.vehicle_name || b.vehicle_id}</p>
+                            <p class="text-sm text-slate-600">${b.passengers} Passagiers | ${b.payment_method.toUpperCase()}</p>
+                            <p class="text-3xl font-black text-primary mt-4 italic">€ ${b.total_price}</p>
+                        </div>
+                    </div>
+
+                    <div class="p-8 bg-slate-900 text-white rounded-3xl relative overflow-hidden">
+                        <div class="relative z-10 space-y-6">
+                            <div class="flex gap-4">
+                                <div class="w-6 h-6 rounded-full border-4 border-accent shrink-0"></div>
+                                <div>
+                                    <p class="text-xs font-bold text-accent uppercase mb-1">Ophaallocatie</p>
+                                    <p class="font-bold">${b.pickup_address}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-6 h-6 rounded-full bg-accent shrink-0"></div>
+                                <div>
+                                    <p class="text-xs font-bold text-accent uppercase mb-1">Bestemming</p>
+                                    <p class="font-bold">${b.destination_address}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <i class="fas fa-route absolute -bottom-10 -right-10 text-[180px] text-white/5"></i>
+                    </div>
+
+                    ${b.status === 'confirmed' || b.status === 'assigned' ? `
+                        <div class="p-8 border-4 border-dashed border-slate-200 rounded-3xl flex justify-between items-center bg-slate-50">
+                            <div>
+                                <h4 class="text-xs font-black uppercase text-slate-400 mb-1">Toegewezen Driver</h4>
+                                <p class="text-lg font-bold">${getCurrentDriverName(b.driver_id)}</p>
+                            </div>
+                            <button onclick="openAssignModal('${b.id}')" class="px-6 py-2 bg-white border border-slate-200 font-bold rounded-lg text-xs hover:bg-slate-100 transition uppercase tracking-widest">
+                                ${b.driver_id ? 'Wijzigen' : 'Toewijzen'}
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            actions.innerHTML = '';
+            if (!b.status || b.status === 'new') {
+                actions.innerHTML = `
+                    <button onclick="updateBookingStatus('${b.id}', 'confirmed')" class="px-10 py-3 bg-success text-white font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition shadow-lg shadow-success/20">Bevestigen</button>
+                `;
+            } else if (b.status === 'confirmed' || b.status === 'assigned') {
+                actions.innerHTML = `
+                    <button onclick="updateBookingStatus('${b.id}', 'completed')" class="px-10 py-3 bg-primary text-white font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition shadow-lg shadow-primary/20">Rit Voltooien</button>
+                `;
+            }
+
+            openModal('modal-fiche');
+        }
+
+        function getCurrentDriverName(id) {
+            const d = allDrivers.find(x => x.id == id);
+            return d ? d.name : 'Geen chauffeur toegewezen';
+        }
+
+        async function updateBookingStatus(id, status) {
+            try {
+                const { error } = await supabase
+                    .from('bookings')
+                    .update({ status: status })
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                closeModal('modal-fiche');
+                await refreshData();
+            } catch (err) {
+                alert("Fout bij updaten status: " + err.message);
+            }
+        }
+
+        // Driver Assignment
+        function openAssignModal(bookingId) {
+            selectedBookingForAssign = bookingId;
+            const select = document.getElementById('assign-driver-select');
+            select.innerHTML = '<option value="">Kies een chauffeur...</option>';
+
+            allDrivers.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.innerText = `${d.name} (${d.vehicle_type})`;
+                select.appendChild(opt);
+            });
+
+            openModal('modal-assign');
+        }
+
+        async function confirmAssignment() {
+            const driverId = document.getElementById('assign-driver-select').value;
+            if (!driverId) { alert("Kies een chauffeur"); return; }
+
+            try {
+                const { error } = await supabase
+                    .from('bookings')
+                    .update({
+                        driver_id: driverId,
+                        status: 'assigned'
+                    })
+                    .eq('id', selectedBookingForAssign);
+
+                if (error) throw error;
+
+                closeModal('modal-assign');
+                closeModal('modal-fiche');
+                await refreshData();
+            } catch (err) {
+                alert("Fout bij toewijzen: " + err.message);
+            }
+        }
+
+        // Driver CRUD
+        function openDriverModal() {
+            document.getElementById('driver-form').reset();
+            openModal('modal-driver');
+        }
+
+        document.getElementById('driver-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const driverData = Object.fromEntries(formData.entries());
+
+            try {
+                const { error } = await supabase
+                    .from('drivers')
+                    .insert([driverData]);
+
+                if (error) throw error;
+
+                closeModal('modal-driver');
+                await refreshData();
+            } catch (err) {
+                alert("Fout bij opslaan driver: " + err.message);
+            }
+        };
+
+        async function deleteDriver(id) {
+            if (!confirm("Driver verwijderen?")) return;
+            try {
+                const { error } = await supabase
+                    .from('drivers')
+                    .delete()
+                    .eq('id', id);
+                if (error) throw error;
+                await refreshData();
+            } catch (err) {
+                alert("Fout bij verwijderen: " + err.message);
+            }
+        }
+
+        // Export
+        function exportHistory() {
+            const completed = allBookings.filter(b => b.status === 'completed');
+            if (completed.length === 0) { alert("Geen data om te exporteren"); return; }
+
+            let csv = "Ordernummer,Datum,Tijd,Klant,Email,Telefoon,Ophalen,Bestemming,Voertuig,Prijs,Betaalmethode\n";
+            completed.forEach(b => {
+                csv += `${b.booking_number},${b.booking_date},${b.booking_time},${b.first_name} ${b.last_name},${b.email},${b.phone},"${b.pickup_address}","${b.destination_address}",${b.vehicle_id},${b.total_price},${b.payment_method}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `fleet_export_${new Date().toISOString().split('T')[0]}.csv`);
+            a.click();
+        }
+
+        // Calendar Init
+        function initCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'nl',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                eventClick: function(info) {
+                    openFiche(info.event.id);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
