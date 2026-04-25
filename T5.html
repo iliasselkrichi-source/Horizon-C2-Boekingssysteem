@@ -364,27 +364,110 @@
         <!-- SERVICES -->
         <section id="services" class="py-24 bg-white border-t">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-extrabold text-center mb-16" data-i18n="services_title">Luchthaven Services</h2>
-                <div class="grid md:grid-cols-4 gap-8">
-                    <div class="text-center p-6 border rounded-2xl">
-                        <i class="fas fa-id-badge text-3xl text-blue-500 mb-6"></i>
-                        <h3 class="font-bold mb-3">Meet & Greet</h3>
-                        <p class="text-xs text-gray-500">Uw chauffeur wacht u op in de aankomsthal met een naambordje.</p>
+                <h2 class="text-3xl font-extrabold text-center mb-16 uppercase tracking-tight text-[#0369a1]" data-i18n="services_title">Luchthaven Services</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center p-10 border border-blue-100 bg-blue-50/20 rounded-[40px] hover:bg-blue-50 transition duration-300 relative overflow-hidden group">
+                        <i class="fas fa-plane text-4xl text-blue-500 mb-6 group-hover:scale-110 transition-transform"></i>
+                        <h3 class="font-bold mb-3" data-i18n="service1_title">Airport Taxi</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Direct van uw voordeur naar de vertrekhal.</p>
                     </div>
-                    <div class="text-center p-6 border rounded-2xl">
-                        <i class="fas fa-clock text-3xl text-blue-500 mb-6"></i>
-                        <h3 class="font-bold mb-3">24/7 Service</h3>
-                        <p class="text-xs text-gray-500">Dag en nacht beschikbaar voor alle vroege of late vluchten.</p>
+                    <div class="text-center p-10 border border-blue-100 bg-blue-50/20 rounded-[40px] hover:bg-blue-50 transition duration-300 relative overflow-hidden group">
+                        <i class="fas fa-shuttle-van text-4xl text-blue-500 mb-6 group-hover:scale-110 transition-transform"></i>
+                        <h3 class="font-bold mb-3" data-i18n="service2_title">Shuttle Service</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Groepsvervoer op maat voor families.</p>
                     </div>
-                    <div class="text-center p-6 border rounded-2xl">
-                        <i class="fas fa-star text-3xl text-blue-500 mb-6"></i>
-                        <h3 class="font-bold mb-3">Luxe Vloot</h3>
-                        <p class="text-xs text-gray-500">Altijd een schoon en modern voertuig voor uw comfort.</p>
+                    <div class="text-center p-10 border border-blue-100 bg-blue-50/20 rounded-[40px] hover:bg-blue-50 transition duration-300 relative overflow-hidden group">
+                        <i class="fas fa-gem text-4xl text-blue-500 mb-6 group-hover:scale-110 transition-transform"></i>
+                        <h3 class="font-bold mb-3" data-i18n="service3_title">Luxe Vloot</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Premium business class voertuigen.</p>
                     </div>
-                    <div class="text-center p-6 border rounded-2xl">
-                        <i class="fas fa-shield-alt text-3xl text-blue-500 mb-6"></i>
-                        <h3 class="font-bold mb-3">Veilig Reizen</h3>
-                        <p class="text-xs text-gray-500">Gecertificeerde chauffeurs en verzekerd vervoer.</p>
+                    <div class="text-center p-10 border border-blue-100 bg-blue-50/20 rounded-[40px] hover:bg-blue-50 transition duration-300 relative overflow-hidden group">
+                        <i class="fas fa-headset text-4xl text-blue-500 mb-6 group-hover:scale-110 transition-transform"></i>
+                        <h3 class="font-bold mb-3" data-i18n="service4_title">24/7 Dispatching</h3>
+                        <div class="flex items-center justify-center gap-2 text-blue-600 font-bold text-[10px] uppercase tracking-wide mb-2">
+                            <i class="fas fa-map-location-dot"></i>
+                            <span data-i18n="service4_desc">Live tracking beschikbaar</span>
+                        </div>
+                        <p class="text-xs text-gray-500 leading-relaxed">Continu monitoring van uw vlucht.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LIVE MONITORING SECTIE -->
+        <section id="monitoring" class="py-20 bg-blue-900 text-white">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div class="bg-white/10 p-10 rounded-[32px] backdrop-blur-md border border-white/10 text-center relative overflow-hidden">
+                            <i class="fas fa-plane-arrival absolute -top-4 -right-4 text-8xl opacity-5"></i>
+                            <p class="text-xs font-bold text-blue-200 uppercase tracking-widest mb-4" data-i18n="monitoring_bookings">Boekingen vandaag</p>
+                            <span id="stat-bookings" class="text-6xl font-black">0</span>
+                        </div>
+                        <div class="bg-white/10 p-10 rounded-[32px] backdrop-blur-md border border-white/10 text-center relative overflow-hidden">
+                            <i class="fas fa-plane-departure absolute -top-4 -right-4 text-8xl opacity-5"></i>
+                            <p class="text-xs font-bold text-blue-200 uppercase tracking-widest mb-4" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
+                            <span id="stat-vehicles" class="text-6xl font-black">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OVER ONS SECTIE -->
+        <section id="about" class="py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <div class="lg:w-1/2">
+                        <h2 class="text-3xl font-extrabold text-[#0369a1] mb-6" data-i18n="about_title">Over AirPortXpress</h2>
+                        <p class="text-gray-600 leading-relaxed mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus neque quis tempor bibendum.</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3 text-sm font-semibold text-gray-700">
+                                <i class="fas fa-check-circle text-blue-500"></i>
+                                Gecertificeerde chauffeurs
+                            </li>
+                            <li class="flex items-center gap-3 text-sm font-semibold text-gray-700">
+                                <i class="fas fa-check-circle text-blue-500"></i>
+                                Vaste prijzen, geen verrassingen
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <img src="https://placehold.co/600x400?text=Airport+Transfer+Service" alt="About" class="rounded-[40px] shadow-xl">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTIE -->
+        <section id="contact" class="py-24 bg-blue-50/30">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white p-12 rounded-[40px] border border-blue-100 shadow-sm">
+                        <h2 class="text-3xl text-center mb-12 font-extrabold text-[#0369a1]" data-i18n="contact_title">Airport Support</h2>
+                        <form id="contact-form" onsubmit="submitContact(event)" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="contact_name">Naam</label>
+                                    <input type="text" id="contact-name" required class="airport-input">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="contact_email">Email</label>
+                                    <input type="email" id="contact-email" required class="airport-input">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="contact_subject">Onderwerp</label>
+                                <input type="text" id="contact-subject" required class="airport-input">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="contact_message">Bericht</label>
+                                <textarea id="contact-message" required rows="5" class="airport-input"></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="bg-[#0369a1] hover:bg-[#0284c7] text-white px-12 py-4 rounded-xl font-bold text-lg shadow-md transition transform hover:scale-105 inline-block" data-i18n="contact_send">Verzenden</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -443,7 +526,12 @@
                 btn_next: "Volgende", btn_prev: "Terug", btn_submit: "Bevestig Airport Transfer",
                 label_name: "Volledige Naam", label_email: "Email Adres", label_phone: "Telefoonnummer",
                 payment_label: "Betaalmethode", payment_cash: "Contant", payment_card: "Kaart", payment_online: "Online",
-                total_price_label: "Totaalprijs", services_title: "Luchthaven Services", footer_about: "Wie zijn we", footer_services: "Diensten", footer_contact: "Contact", footer_privacy: "Privacy"
+                total_price_label: "Totaalprijs", services_title: "Luchthaven Services",
+                service1_title: "Airport Taxi", service2_title: "Shuttle Service", service3_title: "Luxe Vloot", service4_title: "24/7 Dispatching", service4_desc: "Live tracking beschikbaar",
+                contact_title: "Airport Support", contact_name: "Naam", contact_email: "Email", contact_subject: "Onderwerp", contact_message: "Bericht", contact_send: "Verstuur bericht", contact_success: "Bedankt! We nemen contact met u op.",
+                about_title: "Over AirPortXpress",
+                footer_about: "Wie zijn we", footer_services: "Diensten", footer_contact: "Contact", footer_privacy: "Privacy",
+                monitoring_bookings: "Boekingen vandaag", monitoring_vehicles: "Actieve voertuigen"
             },
             fr: {
                 hero_title: "Spécialiste du Transfert Aéroport", hero_subtitle: "À l'heure pour votre vol, garanti. Chauffeurs professionnels pour tous les aéroports belges.",
@@ -452,7 +540,12 @@
                 btn_next: "Suivant", btn_prev: "Précédent", btn_submit: "Confirmer le transfert",
                 label_name: "Nom complet", label_email: "E-mail", label_phone: "Téléphone",
                 payment_label: "Mode de paiement", payment_cash: "Espèces", payment_card: "Carte", payment_online: "En ligne",
-                total_price_label: "Prix total", services_title: "Services Aéroport", footer_about: "Qui sommes-nous", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Confidentialité"
+                total_price_label: "Prix total", services_title: "Services Aéroport",
+                service1_title: "Taxi Aéroport", service2_title: "Service de Navette", service3_title: "Flotte de Luxe", service4_title: "Dispatching 24/7", service4_desc: "Suivi en direct disponible",
+                contact_title: "Support Aéroport", contact_name: "Nom", contact_email: "Email", contact_subject: "Sujet", contact_message: "Message", contact_send: "Envoyer le message", contact_success: "Merci ! Nous vous contacterons.",
+                about_title: "À propos d'AirPortXpress",
+                footer_about: "Qui sommes-nous", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Confidentialité",
+                monitoring_bookings: "Réservations aujourd'hui", monitoring_vehicles: "Véhicules actifs"
             },
             en: {
                 hero_title: "Airport Transfer Specialist", hero_subtitle: "On time for your flight, guaranteed. Professional chauffeurs for all Belgian airports.",
@@ -461,7 +554,12 @@
                 btn_next: "Next", btn_prev: "Back", btn_submit: "Confirm Airport Transfer",
                 label_name: "Full Name", label_email: "Email Address", label_phone: "Phone Number",
                 payment_label: "Payment Method", payment_cash: "Cash", payment_card: "Card", payment_online: "Online",
-                total_price_label: "Total Price", services_title: "Airport Services", footer_about: "About us", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Privacy"
+                total_price_label: "Total Price", services_title: "Airport Services",
+                service1_title: "Airport Taxi", service2_title: "Shuttle Service", service3_title: "Luxury Fleet", service4_title: "24/7 Dispatching", service4_desc: "Live tracking available",
+                contact_title: "Airport Support", contact_name: "Name", contact_email: "Email", contact_subject: "Subject", contact_message: "Message", contact_send: "Send message", contact_success: "Thank you! We will contact you.",
+                about_title: "About AirPortXpress",
+                footer_about: "About us", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Privacy",
+                monitoring_bookings: "Bookings today", monitoring_vehicles: "Active vehicles"
             }
         };
 
@@ -469,6 +567,7 @@
             initMap();
             renderVehicles();
             setLanguage('nl');
+            updateMonitoringData();
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('booking-date').setAttribute('min', today);
         });
@@ -587,6 +686,12 @@
             location.reload();
         }
 
+        function submitContact(event) {
+            event.preventDefault();
+            alert(translations[currentLang].contact_success);
+            document.getElementById('contact-form').reset();
+        }
+
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -597,6 +702,34 @@
                 }
             });
             renderVehicles();
+        }
+
+        // ========== MONITORING LOGICA ==========
+        function updateMonitoringData() {
+            const now = new Date();
+            const dateStr = now.toDateString();
+            const lastUpdate = localStorage.getItem('monitoring_last_update');
+            if (lastUpdate !== dateStr) {
+                const day = now.getDay();
+                let minB, maxB;
+                if (day >= 1 && day <= 5) { minB = 20; maxB = 40; }
+                else if (day === 6) { minB = 15; maxB = 30; }
+                else { minB = 10; maxB = 20; }
+                const bookings = Math.floor(Math.random() * (maxB - minB + 1)) + minB;
+                localStorage.setItem('monitoring_bookings', bookings);
+                localStorage.setItem('monitoring_last_update', dateStr);
+            }
+            const hour = now.getHours();
+            let activeVehicles;
+            if (hour >= 7 && hour <= 9 || hour >= 16 && hour <= 18) {
+                activeVehicles = Math.floor(Math.random() * 6) + 10;
+            } else {
+                activeVehicles = Math.floor(Math.random() * 5) + 8;
+            }
+            const bookingsElement = document.getElementById('stat-bookings');
+            const vehiclesElement = document.getElementById('stat-vehicles');
+            if (bookingsElement) bookingsElement.innerText = localStorage.getItem('monitoring_bookings');
+            if (vehiclesElement) vehiclesElement.innerText = activeVehicles;
         }
     </script>
 </body>

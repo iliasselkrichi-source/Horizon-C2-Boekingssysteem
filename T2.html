@@ -175,6 +175,37 @@
             border-radius: 24px;
             text-align: center;
         }
+
+        .asymmetric-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .large-block {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .premium-glow-button {
+            box-shadow: 0 0 20px rgba(201, 160, 61, 0.2);
+            transition: all 0.3s;
+        }
+
+        .premium-glow-button:hover {
+            box-shadow: 0 0 40px rgba(201, 160, 61, 0.4);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 1024px) {
+            .asymmetric-grid {
+                grid-template-columns: 1fr;
+            }
+            .large-block {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -438,36 +469,74 @@
                     <h2 class="text-5xl md:text-6xl font-extrabold mb-6 text-white" data-i18n="services_title">Onze Elite Services</h2>
                     <div class="w-24 h-1 bg-[#c9a03d] mx-auto"></div>
                 </div>
-                <div class="grid md:grid-cols-3 gap-16">
-                    <div class="group">
-                        <div class="mb-10 overflow-hidden rounded-3xl h-64 relative">
-                            <img src="https://placehold.co/600x400?text=VIP+Lounge" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                            <div class="absolute inset-0 bg-[#0a1a2f]/40 flex items-center justify-center">
-                                <i class="fas fa-star text-4xl text-[#c9a03d]"></i>
+
+                <div class="asymmetric-grid">
+                    <!-- Groot Blok: Premium Taxi -->
+                    <div class="large-block group relative overflow-hidden rounded-[40px] border border-[#c9a03d]/30 bg-gradient-to-br from-[#0a1a2f] to-[#1e293b] p-12 shadow-[0_0_30px_rgba(201,160,61,0.05)] hover:shadow-[0_0_60px_rgba(201,160,61,0.2)] transition-all duration-500">
+                        <div class="relative z-10">
+                            <div class="w-20 h-20 bg-[#c9a03d]/10 rounded-2xl flex items-center justify-center mb-8 border border-[#c9a03d]/20">
+                                <i class="fas fa-crown text-4xl text-[#c9a03d]"></i>
+                            </div>
+                            <h3 class="text-4xl font-bold text-white mb-6" data-i18n="service1_title">Premium Taxi</h3>
+                            <p class="text-gray-400 text-xl leading-relaxed max-w-2xl">Exclusieve ritten in onze meest luxueuze voertuigen. Geniet van ultiem comfort, privacy en een discrete topservice die al uw verwachtingen overtreft.</p>
+                            <div class="mt-10 flex gap-4">
+                                <span class="px-4 py-2 bg-[#c9a03d]/10 text-[#c9a03d] rounded-full text-xs font-bold tracking-widest uppercase">Luxe Interieur</span>
+                                <span class="px-4 py-2 bg-[#c9a03d]/10 text-[#c9a03d] rounded-full text-xs font-bold tracking-widest uppercase">VIP Service</span>
                             </div>
                         </div>
-                        <h3 class="text-3xl mb-4 font-bold text-white" data-i18n="service1_title">VIP Chauffeur</h3>
-                        <p class="text-gray-400 leading-relaxed text-lg">Hoogst getrainde chauffeurs voor een vlekkeloze ervaring van deur tot deur.</p>
+                        <div class="absolute top-0 right-0 p-12 opacity-10 group-hover:scale-110 transition duration-700">
+                            <i class="fas fa-gem text-[200px] text-[#c9a03d]"></i>
+                        </div>
+                        <div class="absolute bottom-0 right-0 w-64 h-64 bg-[#c9a03d]/5 blur-[100px]"></div>
                     </div>
-                    <div class="group">
-                        <div class="mb-10 overflow-hidden rounded-3xl h-64 relative">
-                            <img src="https://placehold.co/600x400?text=Business+Jet+Connect" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                            <div class="absolute inset-0 bg-[#0a1a2f]/40 flex items-center justify-center">
-                                <i class="fas fa-briefcase text-4xl text-[#c9a03d]"></i>
-                            </div>
+
+                    <!-- Klein Blok 1: Zakelijk Vervoer -->
+                    <div class="glass-card p-10 group border-[#c9a03d]/20 hover:border-[#c9a03d]/50 transition duration-500">
+                        <div class="w-16 h-16 bg-[#c9a03d]/10 rounded-xl flex items-center justify-center mb-6 border border-[#c9a03d]/20">
+                            <i class="fas fa-briefcase text-2xl text-[#c9a03d]"></i>
                         </div>
-                        <h3 class="text-3xl mb-4 font-bold text-white" data-i18n="service2_title">Corporate Hospitality</h3>
-                        <p class="text-gray-400 leading-relaxed text-lg">Professioneel vervoer voor uw belangrijkste zakelijke relaties en directie.</p>
+                        <h3 class="text-2xl font-bold text-white mb-4" data-i18n="service2_title">Zakelijk Vervoer</h3>
+                        <p class="text-gray-400 leading-relaxed text-sm">Professioneel vervoer voor uw zakelijke afspraken.</p>
                     </div>
-                    <div class="group">
-                        <div class="mb-10 overflow-hidden rounded-3xl h-64 relative">
-                            <img src="https://placehold.co/600x400?text=Luxury+Transfer" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                            <div class="absolute inset-0 bg-[#0a1a2f]/40 flex items-center justify-center">
-                                <i class="fas fa-plane-arrival text-4xl text-[#c9a03d]"></i>
-                            </div>
+
+                    <!-- Klein Blok 2: Luchthaven Vervoer -->
+                    <div class="glass-card p-10 group border-[#c9a03d]/20 hover:border-[#c9a03d]/50 transition duration-500">
+                        <div class="w-16 h-16 bg-[#c9a03d]/10 rounded-xl flex items-center justify-center mb-6 border border-[#c9a03d]/20">
+                            <i class="fas fa-plane-arrival text-2xl text-[#c9a03d]"></i>
                         </div>
-                        <h3 class="text-3xl mb-4 font-bold text-white" data-i18n="service3_title">Airport Concierge</h3>
-                        <p class="text-gray-400 leading-relaxed text-lg">Meet & greet service direct bij de gate of private jet terminal.</p>
+                        <h3 class="text-2xl font-bold text-white mb-4" data-i18n="service3_title">Luchthaven Vervoer</h3>
+                        <p class="text-gray-400 leading-relaxed text-sm">Stijlvolle transfers naar alle luchthavens.</p>
+                    </div>
+
+                    <!-- Klein Blok 3: 24/7 Dispatching -->
+                    <div class="glass-card p-10 group border-[#c9a03d]/20 hover:border-[#c9a03d]/50 transition duration-500">
+                        <div class="w-16 h-16 bg-[#c9a03d]/10 rounded-xl flex items-center justify-center mb-6 border border-[#c9a03d]/20">
+                            <i class="fas fa-headset text-2xl text-[#c9a03d]"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4" data-i18n="service4_title">24/7 Dispatching</h3>
+                        <div class="flex items-center gap-2 text-[#c9a03d] font-bold text-[10px] uppercase tracking-widest mb-2">
+                            <i class="fas fa-map-location-dot"></i>
+                            <span data-i18n="service4_desc">Live tracking beschikbaar</span>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed text-sm">Continu monitoring voor uw veiligheid.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LIVE MONITORING SECTIE -->
+        <section id="monitoring" class="py-24 bg-black/40 border-y border-white/5">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto glass-card p-12 border-[#c9a03d]/30 shadow-[0_0_50px_rgba(201,160,61,0.1)]">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div class="text-center p-8 border-r border-white/10 last:border-r-0">
+                            <p class="text-xs font-bold text-[#c9a03d] uppercase tracking-[0.3em] mb-4" data-i18n="monitoring_bookings">Boekingen vandaag</p>
+                            <span id="stat-bookings" class="text-6xl font-black text-white">0</span>
+                        </div>
+                        <div class="text-center p-8">
+                            <p class="text-xs font-bold text-[#c9a03d] uppercase tracking-[0.3em] mb-4" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
+                            <span id="stat-vehicles" class="text-6xl font-black text-white">0</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -500,6 +569,40 @@
                         <img src="https://placehold.co/400x500?text=Fleet" class="rounded-3xl shadow-2xl h-80 w-full object-cover">
                         <img src="https://placehold.co/400x500?text=Detail" class="rounded-3xl shadow-2xl h-80 w-full object-cover">
                         <img src="https://placehold.co/400x500?text=Service" class="rounded-3xl shadow-2xl h-80 w-full object-cover -mt-12">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTIE -->
+        <section id="contact" class="py-32 bg-black/50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-[#0a1a2f] p-16 rounded-[40px] border border-[#c9a03d]/30 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                        <h2 class="text-5xl text-center mb-16 font-extrabold text-white" data-i18n="contact_title">Elite Contact</h2>
+                        <form id="contact-form" onsubmit="submitContact(event)" class="space-y-10">
+                            <div class="grid md:grid-cols-2 gap-10">
+                                <div>
+                                    <label class="block text-xs font-bold mb-4 uppercase tracking-[0.2em] text-gray-400" data-i18n="contact_name">Naam</label>
+                                    <input type="text" id="contact-name" required class="premium-input">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold mb-4 uppercase tracking-[0.2em] text-gray-400" data-i18n="contact_email">E-mail</label>
+                                    <input type="email" id="contact-email" required class="premium-input">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-4 uppercase tracking-[0.2em] text-gray-400" data-i18n="contact_subject">Onderwerp</label>
+                                <input type="text" id="contact-subject" required class="premium-input">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-4 uppercase tracking-[0.2em] text-gray-400" data-i18n="contact_message">Bericht</label>
+                                <textarea id="contact-message" required rows="5" class="premium-input"></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="bg-gradient-to-r from-[#c9a03d] to-[#b08a30] text-[#0a1a2f] px-16 py-5 rounded-full font-black text-xl premium-glow-button" data-i18n="contact_send">Verzenden</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -559,9 +662,11 @@
                 step3_title: "Luxe Opties", passengers_label: "Aantal Passagiers", child_seat_label: "Kinderzitje", wifi_label: "Premium WiFi", water_label: "Water & Snacks", special_requests_label: "Speciale Instructies", special_requests_placeholder: "Specifieke wensen voor de rit...", total_price_label: "Investering in comfort",
                 step4_title: "Persoonlijke Gegevens", label_name: "Naam", label_email: "E-mail", label_phone: "Telefoon", label_payment_step4: "Definitieve Betaalkeuze",
                 btn_next: "Doorgaan", btn_prev: "Vorige", btn_submit: "Bevestig Uw Reis",
-                services_title: "Onze Elite Services", service1_title: "VIP Chauffeur", service2_title: "Corporate Hospitality", service3_title: "Airport Concierge",
+                services_title: "Onze Elite Services", service1_title: "Premium Taxi", service2_title: "Zakelijk Vervoer", service3_title: "Luchthaven Vervoer", service4_title: "24/7 Dispatching", service4_desc: "Live tracking beschikbaar",
                 about_title: "Passie voor Perfectie",
-                footer_about: "Wie zijn we", footer_services: "Diensten", footer_contact: "Contact", footer_privacy: "Privacy"
+                contact_title: "Elite Contact", contact_name: "Naam", contact_email: "E-mail", contact_subject: "Onderwerp", contact_message: "Bericht", contact_send: "Verstuur bericht", contact_success: "Bedankt! We nemen contact met u op.",
+                footer_about: "Wie zijn we", footer_services: "Diensten", footer_contact: "Contact", footer_privacy: "Privacy",
+                monitoring_bookings: "Boekingen vandaag", monitoring_vehicles: "Actieve voertuigen"
             },
             fr: {
                 nav_home: "Accueil", nav_book: "Réserver", nav_services: "Services", nav_about: "À Propos",
@@ -571,9 +676,11 @@
                 step3_title: "Options de Luxe", passengers_label: "Nombre de Passagers", child_seat_label: "Siège enfant", wifi_label: "WiFi Premium", water_label: "Eau & Snacks", special_requests_label: "Instructions Spéciales", special_requests_placeholder: "Souhaits spécifiques pour le trajet...", total_price_label: "Investissement confort",
                 step4_title: "Coordonnées Personnelles", label_name: "Nom", label_email: "E-mail", label_phone: "Téléphone", label_payment_step4: "Choix de Paiement Final",
                 btn_next: "Continuer", btn_prev: "Précédent", btn_submit: "Confirmez Votre Voyage",
-                services_title: "Nos Services Élite", service1_title: "Chauffeur VIP", service2_title: "Hospitalité Corporate", service3_title: "Conciergerie Aéroport",
+                services_title: "Nos Services Élite", service1_title: "Taxi Premium", service2_title: "Transport d'Affaires", service3_title: "Transfert Aéroport", service4_title: "Dispatching 24/7", service4_desc: "Suivi en direct disponible",
                 about_title: "La Passion de la Perfection",
-                footer_about: "Qui sommes-nous", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Confidentialité"
+                contact_title: "Contact Élite", contact_name: "Nom", contact_email: "E-mail", contact_subject: "Sujet", contact_message: "Message", contact_send: "Envoyer le message", contact_success: "Merci ! Nous vous contacterons sous peu.",
+                footer_about: "Qui sommes-nous", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Confidentialité",
+                monitoring_bookings: "Réservations aujourd'hui", monitoring_vehicles: "Véhicules actifs"
             },
             en: {
                 nav_home: "Home", nav_book: "Book", nav_services: "Services", nav_about: "About Us",
@@ -583,9 +690,11 @@
                 step3_title: "Luxury Options", passengers_label: "Number of Passengers", child_seat_label: "Child Seat", wifi_label: "Premium WiFi", water_label: "Water & Snacks", special_requests_label: "Special Instructions", special_requests_placeholder: "Specific requests for the ride...", total_price_label: "Investment in comfort",
                 step4_title: "Personal Details", label_name: "Name", label_email: "Email", label_phone: "Phone", label_payment_step4: "Final Payment Choice",
                 btn_next: "Continue", btn_prev: "Previous", btn_submit: "Confirm Your Journey",
-                services_title: "Our Elite Services", service1_title: "VIP Chauffeur", service2_title: "Corporate Hospitality", service3_title: "Airport Concierge",
+                services_title: "Our Elite Services", service1_title: "Premium Taxi", service2_title: "Business Transport", service3_title: "Airport Transfer", service4_title: "24/7 Dispatching", service4_desc: "Live tracking available",
                 about_title: "Passion for Perfection",
-                footer_about: "Who we are", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Privacy"
+                contact_title: "Elite Contact", contact_name: "Name", contact_email: "Email", contact_subject: "Subject", contact_message: "Message", contact_send: "Send message", contact_success: "Thank you! We will contact you soon.",
+                footer_about: "Who we are", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Privacy",
+                monitoring_bookings: "Bookings today", monitoring_vehicles: "Active vehicles"
             }
         };
 
@@ -594,6 +703,7 @@
             initMap();
             renderVehicles();
             setLanguage('nl');
+            updateMonitoringData();
 
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('booking-date').setAttribute('min', today);
@@ -785,6 +895,12 @@
             location.reload();
         }
 
+        function submitContact(event) {
+            event.preventDefault();
+            alert(translations[currentLang].contact_success);
+            document.getElementById('contact-form').reset();
+        }
+
         // ========== TAAL FUNCTIES ==========
         function setLanguage(lang) {
             currentLang = lang;
@@ -800,6 +916,38 @@
             });
             renderVehicles();
             updatePrice();
+        }
+
+        // ========== MONITORING LOGICA ==========
+        function updateMonitoringData() {
+            const now = new Date();
+            const dateStr = now.toDateString();
+            const lastUpdate = localStorage.getItem('monitoring_last_update');
+
+            if (lastUpdate !== dateStr) {
+                // Nieuwe dag, reset data
+                const day = now.getDay();
+                let minB, maxB;
+                if (day >= 1 && day <= 5) { minB = 20; maxB = 40; }
+                else if (day === 6) { minB = 15; maxB = 30; }
+                else { minB = 10; maxB = 20; }
+                const bookings = Math.floor(Math.random() * (maxB - minB + 1)) + minB;
+                localStorage.setItem('monitoring_bookings', bookings);
+                localStorage.setItem('monitoring_last_update', dateStr);
+            }
+
+            const hour = now.getHours();
+            let activeVehicles;
+            if (hour >= 7 && hour <= 9 || hour >= 16 && hour <= 18) {
+                activeVehicles = Math.floor(Math.random() * 6) + 10;
+            } else {
+                activeVehicles = Math.floor(Math.random() * 5) + 8;
+            }
+
+            const bookingsElement = document.getElementById('stat-bookings');
+            const vehiclesElement = document.getElementById('stat-vehicles');
+            if (bookingsElement) bookingsElement.innerText = localStorage.getItem('monitoring_bookings');
+            if (vehiclesElement) vehiclesElement.innerText = activeVehicles;
         }
     </script>
 </body>

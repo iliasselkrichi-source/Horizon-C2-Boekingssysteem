@@ -352,22 +352,53 @@
         <!-- SERVICES SECTIE -->
         <section id="services" class="py-24 bg-white border-t border-gray-100">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-extrabold mb-12 text-center" data-i18n="services_title">Onze Zakelijke Oplossingen</h2>
-                <div class="grid md:grid-cols-3 gap-10">
-                    <div class="p-8 border rounded-2xl hover:shadow-xl transition">
-                        <i class="fas fa-user-tie text-3xl text-blue-600 mb-6"></i>
-                        <h3 class="text-xl font-bold mb-4">Directievervoer</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">Discrete en comfortabele ritten voor uw management team.</p>
+                <h2 class="text-3xl font-extrabold mb-12 text-center uppercase tracking-widest text-[#1e3a5f]" data-i18n="services_title">Zakelijke Oplossingen</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-0">
+                    <div class="p-10 border border-slate-200 hover:bg-slate-50 transition">
+                        <p class="text-4xl font-black text-slate-100 mb-4">01</p>
+                        <i class="fas fa-briefcase text-2xl text-[#1e3a5f] mb-4"></i>
+                        <h3 class="text-lg font-bold mb-4" data-i18n="service1_title">Zakelijk Taxi</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Punctueel en representatief vervoer voor al uw ritten.</p>
                     </div>
-                    <div class="p-8 border rounded-2xl hover:shadow-xl transition">
-                        <i class="fas fa-shuttle-van text-3xl text-blue-600 mb-6"></i>
-                        <h3 class="text-xl font-bold mb-4">Shuttle Service</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">Transport voor grotere groepen naar events of kantoorparken.</p>
+                    <div class="p-10 border border-slate-200 hover:bg-slate-50 transition">
+                        <p class="text-4xl font-black text-slate-100 mb-4">02</p>
+                        <i class="fas fa-user-tie text-2xl text-[#1e3a5f] mb-4"></i>
+                        <h3 class="text-lg font-bold mb-4" data-i18n="service2_title">Directie Vervoer</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Hoogwaardig vervoer met focus op management comfort.</p>
                     </div>
-                    <div class="p-8 border rounded-2xl hover:shadow-xl transition">
-                        <i class="fas fa-file-invoice-dollar text-3xl text-blue-600 mb-6"></i>
-                        <h3 class="text-xl font-bold mb-4">Facturatie op Maat</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">Gedetailleerde maandelijkse facturatie gesorteerd op kostenplaats.</p>
+                    <div class="p-10 border border-slate-200 hover:bg-slate-50 transition">
+                        <p class="text-4xl font-black text-slate-100 mb-4">03</p>
+                        <i class="fas fa-plane-departure text-2xl text-[#1e3a5f] mb-4"></i>
+                        <h3 class="text-lg font-bold mb-4" data-i18n="service3_title">Luchthaven Transfers</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">Zorgeloze ritten naar alle internationale vliegvelden.</p>
+                    </div>
+                    <div class="p-10 border border-slate-200 hover:bg-slate-50 transition">
+                        <p class="text-4xl font-black text-slate-100 mb-4">04</p>
+                        <i class="fas fa-headset text-2xl text-[#1e3a5f] mb-4"></i>
+                        <h3 class="text-lg font-bold mb-4" data-i18n="service4_title">24/7 Dispatching</h3>
+                        <div class="flex items-center gap-2 text-[#1e3a5f] font-bold text-[10px] uppercase tracking-widest mb-2">
+                            <i class="fas fa-map-location-dot"></i>
+                            <span data-i18n="service4_desc">Live tracking beschikbaar</span>
+                        </div>
+                        <p class="text-xs text-gray-500 leading-relaxed">Continu monitoring van al uw ritten.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LIVE MONITORING SECTIE -->
+        <section id="monitoring" class="py-16 bg-slate-50 border-y border-slate-200">
+            <div class="container mx-auto px-6">
+                <div class="max-w-5xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border border-slate-300">
+                        <div class="bg-white p-12 text-center border-r border-slate-300">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-6" data-i18n="monitoring_bookings">Boekingen vandaag</p>
+                            <div class="inline-block px-8 py-4 bg-[#1e3a5f] text-white text-5xl font-black rounded-sm" id="stat-bookings">0</div>
+                        </div>
+                        <div class="bg-white p-12 text-center">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-6" data-i18n="monitoring_vehicles">Actieve voertuigen</p>
+                            <div class="inline-block px-8 py-4 bg-[#1e3a5f] text-white text-5xl font-black rounded-sm" id="stat-vehicles">0</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -396,6 +427,38 @@
                             <p class="text-xs text-gray-400">Logistiek</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTIE -->
+        <section id="contact" class="py-24 bg-white border-t border-gray-100">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-extrabold mb-12 text-center" data-i18n="contact_title">Zakelijk Contact</h2>
+                    <form id="contact-form" onsubmit="submitContact(event)" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase mb-2 block" data-i18n="contact_name">Naam</label>
+                                <input type="text" id="contact-name" required class="corporate-input">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase mb-2 block" data-i18n="contact_email">Zakelijk Email</label>
+                                <input type="email" id="contact-email" required class="corporate-input">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase mb-2 block" data-i18n="contact_subject">Onderwerp</label>
+                            <input type="text" id="contact-subject" required class="corporate-input">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase mb-2 block" data-i18n="contact_message">Bericht</label>
+                            <textarea id="contact-message" required rows="5" class="corporate-input"></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="bg-[#1e3a5f] text-white px-12 py-4 rounded-lg font-bold hover:bg-[#162a45] transition uppercase tracking-widest text-sm" data-i18n="contact_send">Verzenden</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </section>
@@ -450,8 +513,11 @@
                 passengers_label: "Passagiers", wifi_label: "High-Speed WiFi", water_label: "Premium Water", special_requests_label: "Speciale Verzoeken",
                 total_price_label: "Totaal (Excl. BTW)", btn_next: "Volgende", btn_prev: "Vorige", btn_submit: "Bevestig Boeking",
                 label_name: "Naam", label_email: "Email", label_phone: "Telefoon",
-                services_title: "Zakelijke Oplossingen", about_title: "Uw Mobiliteitspartner",
-                footer_about: "Over ons", footer_services: "Diensten", footer_contact: "Contact", footer_privacy: "Privacy"
+                services_title: "Onze Zakelijke Oplossingen", service1_title: "Zakelijk Taxi", service2_title: "Directie Vervoer", service3_title: "Luchthaven Transfers", service4_title: "24/7 Dispatching", service4_desc: "Live tracking beschikbaar",
+                contact_title: "Zakelijk Contact", contact_name: "Naam", contact_email: "Zakelijk Email", contact_subject: "Onderwerp", contact_message: "Bericht", contact_send: "Verstuur bericht", contact_success: "Bedankt! We nemen contact met u op.",
+                about_title: "Uw Mobiliteitspartner",
+                footer_about: "Over ons", footer_services: "Diensten", footer_contact: "Contact", footer_privacy: "Privacy",
+                monitoring_bookings: "Boekingen vandaag", monitoring_vehicles: "Actieve voertuigen"
             },
             fr: {
                 nav_home: "Accueil", nav_book: "Réserver", nav_services: "Services",
@@ -461,8 +527,11 @@
                 passengers_label: "Passagers", wifi_label: "WiFi Haut Débit", water_label: "Eau Premium", special_requests_label: "Demandes Spéciales",
                 total_price_label: "Total (HT)", btn_next: "Suivant", btn_prev: "Précédent", btn_submit: "Confirmer la Réservation",
                 label_name: "Nom", label_email: "Email", label_phone: "Téléphone",
-                services_title: "Solutions d'Affaires", about_title: "Votre Partenaire Mobilité",
-                footer_about: "À propos", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Confidentialité"
+                services_title: "Solutions d'Affaires", service1_title: "Taxi d'Affaires", service2_title: "Transport de Direction", service3_title: "Transferts Aéroport", service4_title: "Dispatching 24/7", service4_desc: "Suivi en direct disponible",
+                contact_title: "Contact Professionnel", contact_name: "Nom", contact_email: "Email Professionnel", contact_subject: "Sujet", contact_message: "Message", contact_send: "Envoyer le message", contact_success: "Merci ! Nous vous contacterons sous peu.",
+                about_title: "Votre Partenaire Mobilité",
+                footer_about: "À propos", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Confidentialité",
+                monitoring_bookings: "Réservations aujourd'hui", monitoring_vehicles: "Véhicules actifs"
             },
             en: {
                 nav_home: "Home", nav_book: "Book", nav_services: "Services",
@@ -472,8 +541,11 @@
                 passengers_label: "Passengers", wifi_label: "High-Speed WiFi", water_label: "Premium Water", special_requests_label: "Special Requests",
                 total_price_label: "Total (Excl. VAT)", btn_next: "Next", btn_prev: "Previous", btn_submit: "Confirm Booking",
                 label_name: "Name", label_email: "Email", label_phone: "Phone",
-                services_title: "Business Solutions", about_title: "Your Mobility Partner",
-                footer_about: "About us", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Privacy"
+                services_title: "Business Solutions", service1_title: "Business Taxi", service2_title: "Executive Transport", service3_title: "Airport Transfers", service4_title: "24/7 Dispatching", service4_desc: "Live tracking available",
+                contact_title: "Business Contact", contact_name: "Name", contact_email: "Business Email", contact_subject: "Subject", contact_message: "Message", contact_send: "Send message", contact_success: "Thank you! We will contact you soon.",
+                about_title: "Your Mobility Partner",
+                footer_about: "About us", footer_services: "Services", footer_contact: "Contact", footer_privacy: "Privacy",
+                monitoring_bookings: "Bookings today", monitoring_vehicles: "Active vehicles"
             }
         };
 
@@ -481,6 +553,7 @@
             initMap();
             renderVehicles();
             setLanguage('nl');
+            updateMonitoringData();
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('booking-date').setAttribute('min', today);
         });
@@ -592,6 +665,12 @@
             location.reload();
         }
 
+        function submitContact(event) {
+            event.preventDefault();
+            alert(translations[currentLang].contact_success);
+            document.getElementById('contact-form').reset();
+        }
+
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -602,6 +681,34 @@
                 }
             });
             renderVehicles();
+        }
+
+        // ========== MONITORING LOGICA ==========
+        function updateMonitoringData() {
+            const now = new Date();
+            const dateStr = now.toDateString();
+            const lastUpdate = localStorage.getItem('monitoring_last_update');
+            if (lastUpdate !== dateStr) {
+                const day = now.getDay();
+                let minB, maxB;
+                if (day >= 1 && day <= 5) { minB = 20; maxB = 40; }
+                else if (day === 6) { minB = 15; maxB = 30; }
+                else { minB = 10; maxB = 20; }
+                const bookings = Math.floor(Math.random() * (maxB - minB + 1)) + minB;
+                localStorage.setItem('monitoring_bookings', bookings);
+                localStorage.setItem('monitoring_last_update', dateStr);
+            }
+            const hour = now.getHours();
+            let activeVehicles;
+            if (hour >= 7 && hour <= 9 || hour >= 16 && hour <= 18) {
+                activeVehicles = Math.floor(Math.random() * 6) + 10;
+            } else {
+                activeVehicles = Math.floor(Math.random() * 5) + 8;
+            }
+            const bookingsElement = document.getElementById('stat-bookings');
+            const vehiclesElement = document.getElementById('stat-vehicles');
+            if (bookingsElement) bookingsElement.innerText = localStorage.getItem('monitoring_bookings');
+            if (vehiclesElement) vehiclesElement.innerText = activeVehicles;
         }
     </script>
 </body>
