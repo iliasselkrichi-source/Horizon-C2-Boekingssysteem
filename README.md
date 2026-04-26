@@ -1,36 +1,40 @@
-# Fleetconnect Taxi Booking Templates
+# Fleetconnect Booking Templates & Dashboard
 
-Dit project bevat 5 verschillende standalone HTML-templates voor taxi- en vervoersdiensten, ontwikkeld voor Fleetconnect.
+Dit project bevat een suite van 10 standalone HTML-templates voor verschillende vervoers- en verblijfsdiensten, samen met een centraal beheer-dashboard voor Fleetconnect.
 
 ## Overzicht van Templates
 
-1.  **T1.html - Standaard Taxi**: Een klassiek, schoon en vertrouwd ontwerp voor algemene taxidiensten.
-2.  **T2.html - Premium Limo**: Een luxe, elegant ontwerp met een donker kleurenpalet en goudkleurige accenten, specifiek voor limousine- en VIP-vervoer.
-3.  **T3.html - Fleet Direct**: Een minimalistisch, modern ontwerp met veel witruimte en een zakelijke uitstraling.
-4.  **T4.html - Fleet Business**: Een strak en professioneel ontwerp gericht op zakelijke klanten, inclusief extra velden voor bedrijfsgegevens en facturatie.
-5.  **T5.html - Airport Transfer**: Een gespecialiseerd ontwerp voor luchthavenvervoer met specifieke velden voor vluchtnummers en wachttijden.
+### Taxi & Limousine (H-serie)
+1.  **T1.html (H1)** - Standaard Taxi: Klassiek en vertrouwd ontwerp.
+2.  **T2.html (H2)** - Premium Limo: Luxe donker ontwerp met goud-accenten.
+3.  **T3.html (H3)** - Fleet Direct: Minimalistisch wit ontwerp voor snelle boekingen.
+4.  **T4.html (H4)** - Fleet Business: Zakelijk ontwerp met BTW/Bedrijfsvelden.
+5.  **T5.html (H5)** - Airport Transfer: Gespecialiseerd voor luchthavens met vluchtnummers.
 
-## Kernfunctionaliteiten (in alle templates)
+### Hotels & Accommodatie (HT-serie)
+6.  **H1_hotel_luxe.html (HT1)** - Luxury Stay: Elegant boekingsformulier voor high-end hotels.
+7.  **H2_hotel_budget.html (HT2)** - Urban Stay: Modern en efficiënt voor stadshotels.
 
-- **4-Stappen Boekingsflow**: Een intuïtieve flow van Route naar Voertuigkeuze, Extra's en persoonlijke Gegevens.
-- **Interactieve Kaart**: Gebruik van Leaflet.js voor routevisualisatie.
-- **Adres Suggesties**: Integratie met de Photon API voor snelle adresinvoer.
-- **Routeberekening**: Real-time berekening van afstand en duur via de OSRM API.
-- **Meertaligheid**: Volledige ondersteuning voor Nederlands, Frans en Engels (keuze wordt opgeslagen in localStorage).
-- **Responsiviteit**: Geoptimaliseerd voor mobiel, tablet en desktop.
-- **Inline CSS & JS**: Alle bestanden zijn zelfstandig en vereisen geen externe assets (behalve CDN libraries).
+### Reisagentschap & Tours (RA-serie)
+8.  **A1_reis_pakket.html (RA1)** - Travel Package: Voor volledige vakantiepakketten.
+9.  **A2_vlucht_hotel.html (RA2)** - Flight + Hotel: Gecombineerde boekingsflow.
+10. **A3_rondreis.html (RA3)** - Tour Discovery: Voor meerdaagse rondreizen met route-overzicht.
 
-## Technische Details
+## Beheer Dashboard
+- **dashboard.html**: Een centraal administratiepaneel dat ritten van alle 10 templates ontvangt via Supabase. Bevat functionaliteit voor dispatching, chauffeurstoewijzing (Driver CRUD), dagschema's, financiële rapportage en data-export.
 
-- **Framework**: Tailwind CSS (CDN)
-- **Icons**: Font Awesome 6.4.0
-- **Fonts**: Inter & Playfair Display (Google Fonts)
-- **Kaart**: Leaflet 1.9.4
-- **Backend**: De templates zijn voorbereid voor backend-integratie (momenteel gesimuleerd met een alert bij verzending).
+## Kernfunctionaliteiten
+- **Supabase Integratie**: Alle boekingen worden live opgeslagen in een centrale database.
+- **Interactieve Kaarten**: Routevisualisatie via Leaflet.js en OSRM.
+- **Meertaligheid**: Volledige ondersteuning voor NL, FR en EN.
+- **Responsiviteit**: Geoptimaliseerd voor elk schermformaat.
+- **Branding**: Voorzien van verplichte "Operated by Fleetconnect" en "Design by Ryzen Outsourcing" vermeldingen.
 
-## Gebruik
-
-Elke template kan direct geopend worden in een moderne webbrowser. Er is geen build-stap nodig.
+## Technische Stack
+- **Frontend**: HTML5, Tailwind CSS, Font Awesome.
+- **Maps**: Leaflet.js, Photon (Geocoding), OSRM (Routing).
+- **Backend**: Supabase (PostgreSQL + Realtime).
+- **Calendar**: FullCalendar 6.
 
 ---
 Operated by Fleetconnect

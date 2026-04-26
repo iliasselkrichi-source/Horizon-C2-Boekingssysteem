@@ -335,10 +335,28 @@
     </div>
 
     <script>
-        // Supabase initialisatie
-        const supabaseUrl = 'https://kwsuqzbqzsmgkjaslwkz.supabase.co';
-        const supabaseAnonKey = 'sb_publishable_5hdl73a9-jNd9n3lnsYVyQ_dMYgiSLA';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+        // ========== CONFIGURATIE & STATE ==========
+        const SUPABASE_URL = 'https://kwsuqzbqzsmgkjaslwkz.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_5hdl73a9-jNd9n3lnsYVyQ_dMYgiSLA';
+
+        async function saveBookingToSupabase(bookingData) {
+            const { createClient } = supabase;
+            const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+            const { data, error } = await supabaseClient
+                .from('bookings')
+                .insert([{
+                    ...bookingData,
+                    status: 'pending',
+                    created_at: new Date().toISOString()
+                }]);
+
+            if (error) {
+                console.error('Supabase error:', error);
+            } else {
+                console.log('Booking saved:', data);
+            }
+        }
 
         let map, hotelMarker;
         let currentStep = 1;
@@ -532,15 +550,8 @@
             e.preventDefault();
             const bookingData = collectBookingData();
 
-            try {
-                const { data, error } = await supabaseClient
-                    .from('bookings')
-                    .insert([bookingData]);
-
-                if (error) console.error('Supabase error:', error);
-            } catch (err) {
-                console.error('Network error:', err);
-            }
+            // Opslaan naar Supabase
+            await saveBookingToSupabase(bookingData);
 
             showBookingFiche(bookingData);
             return false;
