@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2 - Sky & Stay | Flight + Hotel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4361ee', // Electric Blue
+                        secondary: '#4cc9f0', // Cyan
+                        accent: '#7209b7', // Purple
+                        dark: '#03071e',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .step-indicator.active { border-color: #4361ee; color: #4361ee; }
+        #map { height: 400px; border-radius: 30px; }
+        .selection-card.selected { border-color: #4361ee; background-color: #eef2ff; }
+        input, select { border-radius: 12px !important; transition: all 0.3s; }
+        input:focus { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(67, 97, 238, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans">
+
+    <!-- HEADER -->
+    <header id="main-header" class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-tr from-primary to-accent rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i class="fas fa-plane-up"></i>
+                </div>
+                <span class="text-xl font-black text-dark tracking-tighter uppercase">Sky & Stay</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                <a href="#hero" class="hover:text-primary transition">Home</a>
+                <a href="#booking-section" class="hover:text-primary transition">Combi Boeken</a>
+                <a href="#contact" class="hover:text-primary transition">Support</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex gap-2">
+                    <button onclick="setLanguage('nl')" class="w-8 h-8 rounded-lg text-[10px] font-bold bg-slate-100 hover:bg-primary hover:text-white transition">NL</button>
+                    <button onclick="setLanguage('fr')" class="w-8 h-8 rounded-lg text-[10px] font-bold bg-slate-100 hover:bg-primary hover:text-white transition">FR</button>
+                    <button onclick="setLanguage('en')" class="w-8 h-8 rounded-lg text-[10px] font-bold bg-slate-100 hover:bg-primary hover:text-white transition">EN</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section id="hero" class="py-24 bg-dark text-white relative overflow-hidden">
+            <div class="container mx-auto px-6 z-10 relative">
+                <div class="max-w-3xl">
+                    <h1 class="text-5xl md:text-8xl font-black mb-8 leading-[0.9] tracking-tighter" data-i18n="hero_title">Fly. Sleep. Repeat.</h1>
+                    <p class="text-slate-400 text-xl mb-12 max-w-xl" data-i18n="hero_subtitle">De slimste manier om je vlucht en hotel te combineren. Altijd de beste deals, overal ter wereld.</p>
+                    <div class="flex flex-wrap gap-8">
+                        <div class="bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                            <p class="text-secondary font-black text-4xl" id="bookings-count">85+</p>
+                            <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest mt-1" data-i18n="monitoring_bookings">Bundels verkocht vandaag</p>
+                        </div>
+                        <div class="bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                            <p class="text-accent font-black text-4xl" id="items-count">250</p>
+                            <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest mt-1" data-i18n="monitoring_active">Luchtvaart Partners</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute -top-24 -right-24 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px]"></div>
+            <div class="absolute top-1/2 right-10 -translate-y-1/2 hidden lg:block opacity-20">
+                <i class="fas fa-city text-[400px]"></i>
+            </div>
+        </section>
+
+        <!-- BOOKING SECTIE -->
+        <section id="booking-section" class="py-20 -mt-16 relative z-20">
+            <div class="container mx-auto px-6">
+                <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+
+                    <!-- Formulier Links -->
+                    <div class="lg:w-3/5 bg-white p-8 md:p-16 rounded-[40px] shadow-2xl border border-slate-100">
+                        <!-- Stap Indicators -->
+                        <div class="flex justify-between mb-20 relative">
+                            <div class="absolute top-1/2 left-0 w-full h-px bg-slate-100 -translate-y-1/2"></div>
+                            <div class="step-indicator active w-14 h-14 rounded-full border-4 border-slate-100 bg-white flex items-center justify-center font-black z-10 transition-all duration-500" id="step-1-indicator">1</div>
+                            <div class="step-indicator w-14 h-14 rounded-full border-4 border-slate-100 bg-white flex items-center justify-center font-black text-slate-300 z-10" id="step-2-indicator">2</div>
+                            <div class="step-indicator w-14 h-14 rounded-full border-4 border-slate-100 bg-white flex items-center justify-center font-black text-slate-300 z-10" id="step-3-indicator">3</div>
+                            <div class="step-indicator w-14 h-14 rounded-full border-4 border-slate-100 bg-white flex items-center justify-center font-black text-slate-300 z-10" id="step-4-indicator">4</div>
+                        </div>
+
+                        <form id="booking-form" onsubmit="return handleFormSubmit(event)">
+                            <!-- STAP 1 -->
+                            <div id="step-1" class="space-y-8">
+                                <h2 class="text-3xl font-black text-dark tracking-tight italic" data-i18n="step1_title">Plan uw route</h2>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="relative">
+                                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 ml-1">Vanaf</label>
+                                        <input type="text" id="departure-city" required class="w-full p-5 bg-slate-50 border-none text-sm font-bold" placeholder="Stad of luchthaven..." oninput="searchAddress(this.value, 'pickup')">
+                                        <div id="pickup-results" class="absolute z-50 w-full bg-white border border-slate-200 shadow-xl mt-1 hidden text-xs"></div>
+                                    </div>
+                                    <div class="relative">
+                                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 ml-1">Naar</label>
+                                        <input type="text" id="destination-city" required class="w-full p-5 bg-slate-50 border-none text-sm font-bold" placeholder="Hotelbestemming..." oninput="searchAddress(this.value, 'destination')">
+                                        <div id="destination-results" class="absolute z-50 w-full bg-white border border-slate-200 shadow-xl mt-1 hidden text-xs"></div>
+                                    </div>
+                                </div>
+                                <div class="grid md:grid-cols-3 gap-6">
+                                    <div>
+                                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 ml-1">Vertrek</label>
+                                        <input type="date" id="departure-date" required class="w-full p-5 bg-slate-50 border-none text-sm font-bold" onchange="validateStep1()">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 ml-1">Terug</label>
+                                        <input type="date" id="return-date" required class="w-full p-5 bg-slate-50 border-none text-sm font-bold" onchange="validateStep1()">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 ml-1">Personen</label>
+                                        <input type="number" id="adults" value="2" min="1" max="10" class="w-full p-5 bg-slate-50 border-none text-sm font-bold" onchange="updatePrice()">
+                                    </div>
+                                </div>
+                                <button type="button" id="btn-step-1-next" onclick="goToStep(2)" class="w-full bg-primary text-white py-6 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20 transition disabled:opacity-30" disabled data-i18n="btn_next">Zoek Combinaties</button>
+                            </div>
+
+                            <!-- STAP 2 -->
+                            <div id="step-2" class="hidden space-y-8">
+                                <h2 class="text-3xl font-black text-dark tracking-tight italic" data-i18n="step2_title">Kies uw comfort</h2>
+                                <div id="option-list" class="space-y-4">
+                                    <!-- JS Render: Flight Class + Hotel Stars -->
+                                </div>
+                                <div class="flex gap-4">
+                                    <button type="button" onclick="goToStep(1)" class="w-1/3 border-2 border-slate-100 py-5 rounded-2xl font-black uppercase text-xs" data-i18n="btn_prev">Vorige</button>
+                                    <button type="button" id="btn-step-2-next" onclick="goToStep(3)" class="w-2/3 bg-primary text-white py-5 rounded-2xl font-black uppercase tracking-widest transition disabled:opacity-50" disabled data-i18n="btn_next">Extra Opties</button>
+                                </div>
+                            </div>
+
+                            <!-- STAP 3 -->
+                            <div id="step-3" class="hidden space-y-8">
+                                <h2 class="text-3xl font-black text-dark tracking-tight italic" data-i18n="step3_title">Maak het compleet</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <label class="flex items-center justify-between p-6 border-2 border-slate-100 rounded-3xl cursor-pointer hover:border-primary transition">
+                                        <div class="flex items-center gap-4">
+                                            <i class="fas fa-suitcase-rolling text-primary text-2xl"></i>
+                                            <span class="text-[10px] font-black uppercase" data-i18n="extra_bag">Extra Bagage (+€45)</span>
+                                        </div>
+                                        <input type="checkbox" id="extra-baggage" class="w-5 h-5 accent-primary" onchange="updatePrice()">
+                                    </label>
+                                    <label class="flex items-center justify-between p-6 border-2 border-slate-100 rounded-3xl cursor-pointer hover:border-primary transition">
+                                        <div class="flex items-center gap-4">
+                                            <i class="fas fa-van-shuttle text-primary text-2xl"></i>
+                                            <span class="text-[10px] font-black uppercase" data-i18n="extra_trans">Hotel Transfer (+€30)</span>
+                                        </div>
+                                        <input type="checkbox" id="extra-transfer" class="w-5 h-5 accent-primary" onchange="updatePrice()">
+                                    </label>
+                                    <label class="flex items-center justify-between p-6 border-2 border-slate-100 rounded-3xl cursor-pointer hover:border-primary transition">
+                                        <div class="flex items-center gap-4">
+                                            <i class="fas fa-coffee text-primary text-2xl"></i>
+                                            <span class="text-[10px] font-black uppercase" data-i18n="extra_breakfast">Hotel Ontbijt (+€20/dag)</span>
+                                        </div>
+                                        <input type="checkbox" id="extra-breakfast" class="w-5 h-5 accent-primary" onchange="updatePrice()">
+                                    </label>
+                                    <label class="flex items-center justify-between p-6 border-2 border-slate-100 rounded-3xl cursor-pointer hover:border-primary transition">
+                                        <div class="flex items-center gap-4">
+                                            <i class="fas fa-shield-virus text-primary text-2xl"></i>
+                                            <span class="text-[10px] font-black uppercase" data-i18n="extra_ins">Reisverzekering (+€55)</span>
+                                        </div>
+                                        <input type="checkbox" id="extra-insurance" class="w-5 h-5 accent-primary" onchange="updatePrice()">
+                                    </label>
+                                </div>
+                                <div class="flex gap-4">
+                                    <button type="button" onclick="goToStep(2)" class="w-1/3 border-2 border-slate-100 py-5 rounded-2xl font-black uppercase text-xs" data-i18n="btn_prev">Terug</button>
+                                    <button type="button" onclick="goToStep(4)" class="w-2/3 bg-primary text-white py-5 rounded-2xl font-black uppercase tracking-widest transition" data-i18n="btn_next">Details</button>
+                                </div>
+                            </div>
+
+                            <!-- STAP 4 -->
+                            <div id="step-4" class="hidden space-y-8">
+                                <h2 class="text-3xl font-black text-dark tracking-tight italic" data-i18n="step4_title">Uw details</h2>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <input type="text" id="first-name" required class="w-full p-5 bg-slate-50 border-none font-bold" placeholder="Voornaam">
+                                    <input type="text" id="last-name" required class="w-full p-5 bg-slate-50 border-none font-bold" placeholder="Achternaam">
+                                </div>
+                                <input type="email" id="email" required class="w-full p-5 bg-slate-50 border-none font-bold" placeholder="Email">
+                                <input type="text" id="passport" class="w-full p-5 bg-slate-50 border-none font-bold" placeholder="Paspoortnummer (Optioneel)">
+                                <select id="payment-method" class="w-full p-5 bg-slate-50 border-none font-black uppercase text-[10px]">
+                                    <option value="card">Betaalpas / Creditcard</option>
+                                    <option value="online">IDEAL / Bancontact</option>
+                                </select>
+                                <div class="flex gap-4">
+                                    <button type="button" onclick="goToStep(3)" class="w-1/3 border-2 border-slate-100 py-5 rounded-2xl font-black uppercase text-xs" data-i18n="btn_prev">Terug</button>
+                                    <button type="submit" class="w-2/3 bg-accent text-white py-5 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-accent/20 transition" data-i18n="btn_confirm">Boeking Afronden</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Kaart Rechts -->
+                    <div class="lg:w-2/5">
+                        <div class="sticky top-32 space-y-6">
+                            <div id="map" class="shadow-2xl border-4 border-white rotate-1"></div>
+                            <div class="bg-primary text-white p-10 rounded-[50px] shadow-2xl relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <p class="text-[10px] font-black uppercase tracking-[0.4em] mb-4 opacity-60" data-i18n="price_label">Bundel Totaal</p>
+                                    <p class="text-6xl font-black tracking-tighter" id="display-price">€ 0.00</p>
+                                    <div class="mt-10 flex flex-col gap-2 text-xs font-bold text-secondary">
+                                        <p id="route-info"><i class="fas fa-map-marked-alt mr-2"></i> 0 km | 0 min</p>
+                                        <p><i class="fas fa-hotel mr-2"></i> Inclusief hotelovernachtingen</p>
+                                    </div>
+                                </div>
+                                <div class="absolute -bottom-10 -right-10 text-[200px] text-white/5 font-black">STAY</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="main-footer" class="bg-dark text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-sm font-bold text-slate-600 mb-2 uppercase">Operated by Fleetconnect</p>
+            <p class="text-sm font-bold text-slate-600 mb-12 uppercase tracking-widest">Design by Ryzen Outsourcing</p>
+            <div class="flex justify-center gap-16 mb-12">
+                <a href="#" class="hover:text-secondary transition text-xs font-black uppercase tracking-widest">Help Center</a>
+                <a href="#" class="hover:text-secondary transition text-xs font-black uppercase tracking-widest">Terms</a>
+                <a href="#" class="hover:text-secondary transition text-xs font-black uppercase tracking-widest">Privacy</a>
+            </div>
+            <p class="text-[10px] font-black uppercase tracking-[0.8em] text-slate-700">&copy; 2024 SKY & STAY COMBO</p>
+        </div>
+    </footer>
+
+    <!-- FICHE -->
+    <div id="booking-fiche-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-dark/95 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-2xl rounded-[40px] shadow-2xl overflow-hidden">
+            <div id="fiche-content" class="p-10 md:p-16"></div>
+            <div class="p-10 border-t border-slate-100 flex justify-between bg-slate-50">
+                <div class="flex gap-4">
+                    <button onclick="printFiche()" class="w-12 h-12 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition"><i class="fas fa-print"></i></button>
+                    <button onclick="saveFicheAsJSON()" class="w-12 h-12 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition"><i class="fas fa-download"></i></button>
+                </div>
+                <button onclick="location.reload()" class="bg-dark text-white px-10 rounded-xl font-black uppercase tracking-widest text-[10px]">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://kwsuqzbqzsmgkjaslwkz.supabase.co';
+        const supabaseAnonKey = 'sb_publishable_5hdl73a9-jNd9n3lnsYVyQ_dMYgiSLA';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        let map, pMarker, dMarker, rLayer, currentStep = 1, currentLang = 'nl', selectedOption = null;
+
+        const options = [
+            { id: 'eco-3', name: 'Economy Vlucht + 3* Hotel', price: 499 },
+            { id: 'bus-4', name: 'Business Vlucht + 4* Hotel', price: 949 },
+            { id: 'first-5', name: 'First Class + 5* Luxury Resort', price: 1899 }
+        ];
+
+        const translations = {
+            nl: {
+                hero_title: "Fly. Sleep. Repeat.", hero_subtitle: "Vlucht en hotel combineren met de beste deals.",
+                monitoring_bookings: "Bundels verkocht vandaag", monitoring_active: "Luchtvaart Partners",
+                step1_title: "Plan uw route", step2_title: "Kies uw comfort", step3_title: "Maak het compleet", step4_title: "Uw details",
+                btn_next: "Verder", btn_prev: "Terug", btn_confirm: "Boeking Afronden", price_label: "Bundel Totaal",
+                extra_bag: "Extra Bagage (+€45)", extra_trans: "Hotel Transfer (+€30)", extra_breakfast: "Ontbijt (+€20/dag)", extra_ins: "Reisverzekering (+€55)"
+            },
+            fr: {
+                hero_title: "Voler. Dormir. Recommencer.", hero_subtitle: "Combinez vol et hôtel avec les meilleures offres.",
+                monitoring_bookings: "Packs vendus aujourd'hui", monitoring_active: "Partenaires aériens",
+                step1_title: "Planifiez votre route", step2_title: "Choisissez votre confort", step3_title: "Complétez votre voyage", step4_title: "Vos détails",
+                btn_next: "Suivant", btn_prev: "Précédent", btn_confirm: "Finaliser la réservation", price_label: "Total du pack",
+                extra_bag: "Bagages suppl. (+45€)", extra_trans: "Transfert hôtel (+30€)", extra_breakfast: "Petit-déj (+20€/j)", extra_ins: "Assurance voyage (+55€)"
+            },
+            en: {
+                hero_title: "Fly. Sleep. Repeat.", hero_subtitle: "The smartest way to combine flight and hotel.",
+                monitoring_bookings: "Bundles sold today", monitoring_active: "Airline Partners",
+                step1_title: "Plan your route", step2_title: "Choose comfort", step3_title: "Make it complete", step4_title: "Your details",
+                btn_next: "Next", btn_prev: "Back", btn_confirm: "Finalize Booking", price_label: "Bundle Total",
+                extra_bag: "Extra Baggage (+€45)", extra_trans: "Hotel Transfer (+€30)", extra_breakfast: "Breakfast (+€20/day)", extra_ins: "Travel Insurance (+€55)"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap(); renderOptions();
+            setLanguage(localStorage.getItem('mon_lang_A2') || 'nl');
+            updateMonitoringData();
+            document.getElementById('departure-date').value = new Date().toISOString().split('T')[0];
+        });
+
+        function initMap() {
+            map = L.map('map', { zoomControl: false }).setView([50.8503, 4.3517], 4);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
+        }
+
+        async function searchAddress(q, type) {
+            if (q.length < 3) return;
+            try {
+                const res = await fetch(`https://photon.komoot.io/api/?q=${q}&limit=1`);
+                const data = await res.json();
+                if (data.features.length > 0) selectAddr(data.features[0], type);
+            } catch(e) {}
+        }
+
+        function selectAddr(f, type) {
+            const ll = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+            if (type === 'pickup') { if(pMarker) map.removeLayer(pMarker); pMarker = L.marker(ll).addTo(map); }
+            else { if(dMarker) map.removeLayer(dMarker); dMarker = L.marker(ll).addTo(map); }
+            if (pMarker && dMarker) calcRoute(); else map.setView(ll, 10);
+            validateStep1();
+        }
+
+        async function calcRoute() {
+            const p = pMarker.getLatLng(), d = dMarker.getLatLng();
+            try {
+                const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${p.lng},${p.lat};${d.lng},${d.lat}?overview=full&geometries=geojson`);
+                const data = await res.json();
+                if (rLayer) map.removeLayer(rLayer);
+                rLayer = L.geoJSON(data.routes[0].geometry, { style: { color: '#4361ee', weight: 6, opacity: 0.8 } }).addTo(map);
+                map.fitBounds(rLayer.getBounds(), { padding: [50, 50] });
+                const dist = (data.routes[0].distance/1000).toFixed(0);
+                document.getElementById('route-info').innerText = `${dist} km | ca. ${Math.round(dist/800 * 60)} min vlucht`;
+            } catch(e) {}
+        }
+
+        function setLanguage(l) {
+            currentLang = l; localStorage.setItem('mon_lang_A2', l);
+            document.querySelectorAll('[data-i18n]').forEach(e => {
+                const k = e.getAttribute('data-i18n');
+                e.innerText = translations[l][k] || e.innerText;
+            });
+            renderOptions();
+        }
+
+        function goToStep(s) {
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            document.getElementById(`step-${s}`).classList.remove('hidden');
+            document.querySelectorAll('.step-indicator').forEach((e, i) => {
+                e.classList.toggle('active', i < s);
+                e.classList.toggle('text-primary', i < s);
+                e.classList.toggle('text-slate-300', i >= s);
+            });
+            currentStep = s;
+        }
+
+        function validateStep1() {
+            const f = document.getElementById('departure-city').value, t = document.getElementById('destination-city').value, d1 = document.getElementById('departure-date').value, d2 = document.getElementById('return-date').value;
+            document.getElementById('btn-step-1-next').disabled = !(f && t && d1 && d2);
+            updatePrice();
+        }
+
+        function renderOptions() {
+            const list = document.getElementById('option-list'); list.innerHTML = '';
+            options.forEach(o => {
+                const div = document.createElement('div');
+                div.className = `selection-card p-6 border-2 border-slate-100 rounded-3xl cursor-pointer hover:border-primary transition flex justify-between items-center ${selectedOption?.id === o.id ? 'selected' : ''}`;
+                div.onclick = () => { selectedOption = o; renderOptions(); updatePrice(); document.getElementById('btn-step-2-next').disabled = false; };
+                div.innerHTML = `<div><h4 class="font-black text-lg uppercase">${o.name}</h4><p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Geselecteerde Bundle</p></div><p class="font-black text-xl text-primary italic">€ ${o.price}</p>`;
+                list.appendChild(div);
+            });
+        }
+
+        function updatePrice() {
+            let t = 0; if (selectedOption) {
+                const ad = parseInt(document.getElementById('adults').value), d1 = new Date(document.getElementById('departure-date').value), d2 = new Date(document.getElementById('return-date').value);
+                const nights = Math.max(1, Math.ceil((d2 - d1) / 86400000)) || 1;
+                t = selectedOption.price * ad;
+                if (document.getElementById('extra-baggage').checked) t += (45 * ad);
+                if (document.getElementById('extra-transfer').checked) t += (30 * ad);
+                if (document.getElementById('extra-breakfast').checked) t += (20 * nights * ad);
+                if (document.getElementById('extra-insurance').checked) t += (55 * ad);
+            }
+            document.getElementById('display-price').innerText = `€ ${t.toFixed(2)}`;
+            return t;
+        }
+
+        function collectBookingData() {
+            return {
+                template_code: "A2", booking_number: `RA-SKY-${Date.now().toString().slice(-6)}`,
+                departure: document.getElementById('departure-city').value, destination: document.getElementById('destination-city').value,
+                dep_date: document.getElementById('departure-date').value, ret_date: document.getElementById('return-date').value,
+                adults: document.getElementById('adults').value, bundle: selectedOption?.name,
+                first_name: document.getElementById('first-name').value, last_name: document.getElementById('last-name').value,
+                email: document.getElementById('email').value, passport: document.getElementById('passport').value,
+                payment_method: document.getElementById('payment-method').value, total_price: updatePrice().toFixed(2),
+                booking_date: new Date().toISOString().split('T')[0], booking_time: new Date().toLocaleTimeString('nl-BE')
+            };
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault(); const d = collectBookingData();
+            try { await supabaseClient.from('bookings').insert([d]); } catch (e) {}
+            showFiche(d); return false;
+        }
+
+        function showFiche(d) {
+            document.getElementById('fiche-content').innerHTML = `
+                <div class="text-dark"><h2 class="text-5xl font-black uppercase tracking-tighter mb-4 italic">SKY CONFIRMED</h2>
+                <p class="text-[10px] font-black text-primary tracking-[0.5em] mb-12 uppercase">Booking Reference: ${d.booking_number}</p>
+                <div class="space-y-10"><div class="grid grid-cols-2 gap-10"><div><p class="font-black text-[10px] text-slate-400 uppercase mb-2">Route</p><p class="font-bold text-lg leading-none">${d.departure} ✈ ${d.destination}</p></div>
+                <div><p class="font-black text-[10px] text-slate-400 uppercase mb-2">Periode</p><p class="font-bold text-lg leading-none">${d.dep_date} tot ${d.ret_date}</p></div></div>
+                <div class="grid grid-cols-2 gap-10"><div><p class="font-black text-[10px] text-slate-400 uppercase mb-2">Klant</p><p class="font-bold text-lg leading-none">${d.first_name} ${d.last_name}</p><p class="text-xs text-slate-400 mt-1">${d.email}</p></div>
+                <div><p class="font-black text-[10px] text-slate-400 uppercase mb-2">Bundle</p><p class="font-bold text-lg leading-none text-primary uppercase">${d.bundle}</p></div></div>
+                <div class="bg-dark p-10 rounded-[30px] flex justify-between items-center"><p class="text-white font-black uppercase tracking-[0.2em] text-[10px]">Grand Total</p><p class="text-white text-5xl font-black italic">€ ${d.total_price}</p></div></div></div>`;
+            window.currentBookingData = d; document.getElementById('booking-fiche-modal').classList.remove('hidden'); document.getElementById('booking-fiche-modal').classList.add('flex');
+        }
+
+        function printFiche() { window.print(); }
+        function saveFicheAsJSON() {
+            const blob = new Blob([JSON.stringify(window.currentBookingData, null, 2)], {type: 'application/json'});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'sky_stay_booking.json'; a.click();
+        }
+
+        function updateMonitoringData() {
+            const d = new Date().toDateString();
+            if (localStorage.getItem('mon_date_A2') !== d) {
+                localStorage.setItem('mon_b_A2', Math.floor(Math.random()*40)+60);
+                localStorage.setItem('mon_date_A2', d);
+            }
+            document.getElementById('bookings-count').innerText = localStorage.getItem('mon_b_A2')+'+';
+            document.getElementById('items-count').innerText = Math.floor(Math.random()*100)+200;
+            setTimeout(updateMonitoringData, 30000);
+        }
+    </script>
+</body>
+</html>

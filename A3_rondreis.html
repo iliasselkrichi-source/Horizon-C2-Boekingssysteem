@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A3 - Terra Explorer | Guided Tours</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f4a261', // Ochre/Earth
+                        secondary: '#2a9d8f', // Forest Green
+                        accent: '#e76f51', // Terracotta
+                        dark: '#264653',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        .step-indicator.active { color: #f4a261; border-color: #f4a261; }
+        #map { height: 400px; border-radius: 40px; border: 2px solid #f4a261; }
+        .tour-card.selected { border-color: #f4a261; background-color: #fffaf0; }
+        input, select, textarea { border-radius: 16px !important; border: 1px solid #e2e8f0 !important; }
+    </style>
+</head>
+<body class="bg-[#fdfcf0] text-slate-800 font-sans">
+
+    <!-- HEADER -->
+    <header id="main-header" class="bg-white/70 backdrop-blur-xl border-b border-orange-100 sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white shadow-xl shadow-primary/30">
+                    <i class="fas fa-mountain-sun"></i>
+                </div>
+                <span class="text-xl font-black text-dark tracking-tighter uppercase font-display">Terra Explorer</span>
+            </div>
+            <div class="hidden md:flex items-center gap-10 text-xs font-black uppercase tracking-widest text-dark/60">
+                <a href="#hero" class="hover:text-primary transition">Avonturen</a>
+                <a href="#booking-section" class="hover:text-primary transition">Boek Tour</a>
+                <a href="#contact" class="hover:text-primary transition">Contact</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex bg-orange-50 p-1 rounded-full border border-orange-100">
+                    <button onclick="setLanguage('nl')" class="px-3 py-1 text-[10px] font-bold rounded-full hover:bg-white transition">NL</button>
+                    <button onclick="setLanguage('fr')" class="px-3 py-1 text-[10px] font-bold rounded-full hover:bg-white transition">FR</button>
+                    <button onclick="setLanguage('en')" class="px-3 py-1 text-[10px] font-bold rounded-full hover:bg-white transition">EN</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section id="hero" class="py-24 bg-[#fdfcf0] relative overflow-hidden">
+            <div class="container mx-auto px-6 z-10 relative">
+                <div class="flex flex-col lg:flex-row items-center gap-20">
+                    <div class="lg:w-1/2">
+                        <h1 class="text-6xl md:text-8xl font-black text-dark leading-tight mb-8 font-display" data-i18n="hero_title">Verleg je Grenzen.</h1>
+                        <p class="text-slate-500 text-xl mb-12 max-w-lg leading-relaxed" data-i18n="hero_subtitle">Ontdek de verborgen parels van de wereld met onze begeleide rondreizen. Van de hoogste pieken tot de diepste valleien.</p>
+                        <div class="flex gap-12">
+                            <div class="bg-white p-6 rounded-3xl shadow-xl shadow-orange-900/5">
+                                <p class="text-primary font-black text-4xl" id="bookings-count">65+</p>
+                                <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mt-1" data-i18n="monitoring_bookings">Expedities gestart</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-3xl shadow-xl shadow-orange-900/5">
+                                <p class="text-secondary font-black text-4xl" id="items-count">12</p>
+                                <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mt-1" data-i18n="monitoring_active">Actieve Gidsen</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <img src="https://placehold.co/800x600?text=Adventure+Tour" alt="Tour" class="rounded-[60px] shadow-3xl rotate-2">
+                    </div>
+                </div>
+            </div>
+            <div class="absolute -bottom-20 -left-20 w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[80px]"></div>
+        </section>
+
+        <!-- BOOKING SECTIE -->
+        <section id="booking-section" class="py-24 bg-white rounded-[100px] shadow-2xl relative z-20">
+            <div class="container mx-auto px-6">
+                <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-16">
+
+                    <!-- Formulier Rechts -->
+                    <div class="lg:w-3/5 order-2 lg:order-1">
+                        <!-- Stap Indicators -->
+                        <div class="flex justify-between mb-16 px-4">
+                            <div class="step-indicator active w-12 h-12 rounded-full border-2 border-slate-200 bg-white flex items-center justify-center font-black text-xs transition-all duration-500 shadow-sm" id="step-1-indicator">01</div>
+                            <div class="step-indicator w-12 h-12 rounded-full border-2 border-slate-200 bg-white flex items-center justify-center font-black text-xs text-slate-300" id="step-2-indicator">02</div>
+                            <div class="step-indicator w-12 h-12 rounded-full border-2 border-slate-200 bg-white flex items-center justify-center font-black text-xs text-slate-300" id="step-3-indicator">03</div>
+                            <div class="step-indicator w-12 h-12 rounded-full border-2 border-slate-200 bg-white flex items-center justify-center font-black text-xs text-slate-300" id="step-4-indicator">04</div>
+                        </div>
+
+                        <form id="booking-form" onsubmit="return handleFormSubmit(event)">
+                            <!-- STAP 1 -->
+                            <div id="step-1" class="space-y-10">
+                                <h2 class="text-4xl font-black text-dark tracking-tighter" data-i18n="step1_title">Plan uw expeditie</h2>
+                                <div class="grid md:grid-cols-2 gap-8">
+                                    <div class="relative">
+                                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Startlocatie</label>
+                                        <input type="text" id="start-city" required class="w-full p-6 bg-slate-50 border-none font-bold" placeholder="Zoek stad..." oninput="searchAddress(this.value, 'pickup')">
+                                        <div id="pickup-results" class="absolute z-50 w-full bg-white border border-slate-200 shadow-xl mt-1 hidden text-xs"></div>
+                                    </div>
+                                    <div class="relative">
+                                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Eindlocatie</label>
+                                        <input type="text" id="end-city" required class="w-full p-6 bg-slate-50 border-none font-bold" placeholder="Zoek stad..." oninput="searchAddress(this.value, 'destination')">
+                                        <div id="destination-results" class="absolute z-50 w-full bg-white border border-slate-200 shadow-xl mt-1 hidden text-xs"></div>
+                                    </div>
+                                </div>
+                                <div class="grid md:grid-cols-2 gap-8">
+                                    <div>
+                                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Startdatum</label>
+                                        <input type="date" id="start-date" required class="w-full p-6 bg-slate-50 border-none font-bold" onchange="validateStep1()">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-widest">Reizigers</label>
+                                        <input type="number" id="travelers" value="1" min="1" max="15" class="w-full p-6 bg-slate-50 border-none font-bold" onchange="updatePrice()">
+                                    </div>
+                                </div>
+                                <button type="button" id="btn-step-1-next" onclick="goToStep(2)" class="w-full bg-primary text-white py-6 rounded-[32px] font-black uppercase tracking-widest shadow-2xl shadow-primary/40 transition disabled:opacity-30" disabled data-i18n="btn_next">Kies Tourpakket</button>
+                            </div>
+
+                            <!-- STAP 2 -->
+                            <div id="step-2" class="hidden space-y-10">
+                                <h2 class="text-4xl font-black text-dark tracking-tighter" data-i18n="step2_title">Onze routes</h2>
+                                <div id="tour-list" class="grid md:grid-cols-2 gap-6">
+                                    <!-- JS Render -->
+                                </div>
+                                <div class="flex gap-4">
+                                    <button type="button" onclick="goToStep(1)" class="w-1/3 border-4 border-slate-50 py-6 rounded-[32px] font-black uppercase text-[10px]" data-i18n="btn_prev">Terug</button>
+                                    <button type="button" id="btn-step-2-next" onclick="goToStep(3)" class="w-2/3 bg-primary text-white py-6 rounded-[32px] font-black uppercase tracking-widest transition disabled:opacity-50" disabled data-i18n="btn_next">Expeditie Opties</button>
+                                </div>
+                            </div>
+
+                            <!-- STAP 3 -->
+                            <div id="step-3" class="hidden space-y-10">
+                                <h2 class="text-4xl font-black text-dark tracking-tighter" data-i18n="step3_title">Upgrade je ervaring</h2>
+                                <div class="space-y-4">
+                                    <label class="flex items-center justify-between p-6 bg-slate-50 rounded-[32px] cursor-pointer hover:bg-orange-50 transition border-2 border-transparent hover:border-primary/20">
+                                        <div class="flex items-center gap-6">
+                                            <i class="fas fa-user-ninja text-3xl text-primary"></i>
+                                            <div>
+                                                <p class="font-black uppercase text-sm" data-i18n="extra_guide">Privégids Service</p>
+                                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">+ €120 / dag</p>
+                                            </div>
+                                        </div>
+                                        <input type="checkbox" id="extra-guide" class="w-6 h-6 accent-primary" onchange="updatePrice()">
+                                    </label>
+                                    <label class="flex items-center justify-between p-6 bg-slate-50 rounded-[32px] cursor-pointer hover:bg-orange-50 transition border-2 border-transparent hover:border-primary/20">
+                                        <div class="flex items-center gap-6">
+                                            <i class="fas fa-utensils text-3xl text-primary"></i>
+                                            <div>
+                                                <p class="font-black uppercase text-sm" data-i18n="extra_meals">Maaltijdplan Premium</p>
+                                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">+ €45 p.p. / dag</p>
+                                            </div>
+                                        </div>
+                                        <input type="checkbox" id="extra-meals" class="w-6 h-6 accent-primary" onchange="updatePrice()">
+                                    </label>
+                                    <label class="flex items-center justify-between p-6 bg-slate-50 rounded-[32px] cursor-pointer hover:bg-orange-50 transition border-2 border-transparent hover:border-primary/20">
+                                        <div class="flex items-center gap-6">
+                                            <i class="fas fa-bicycle text-3xl text-primary"></i>
+                                            <div>
+                                                <p class="font-black uppercase text-sm" data-i18n="extra_bikes">E-Bike Verhuur</p>
+                                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">+ €35 / dag</p>
+                                            </div>
+                                        </div>
+                                        <input type="checkbox" id="extra-bikes" class="w-6 h-6 accent-primary" onchange="updatePrice()">
+                                    </label>
+                                </div>
+                                <div class="flex gap-4">
+                                    <button type="button" onclick="goToStep(2)" class="w-1/3 border-4 border-slate-50 py-6 rounded-[32px] font-black uppercase text-[10px]" data-i18n="btn_prev">Terug</button>
+                                    <button type="button" onclick="goToStep(4)" class="w-2/3 bg-primary text-white py-6 rounded-[32px] font-black uppercase tracking-widest transition" data-i18n="btn_next">Details</button>
+                                </div>
+                            </div>
+
+                            <!-- STAP 4 -->
+                            <div id="step-4" class="hidden space-y-10">
+                                <h2 class="text-4xl font-black text-dark tracking-tighter" data-i18n="step4_title">Laatste details</h2>
+                                <div class="space-y-6">
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <input type="text" id="first-name" required class="w-full p-6 bg-slate-50 border-none" placeholder="Voornaam">
+                                        <input type="text" id="last-name" required class="w-full p-6 bg-slate-50 border-none" placeholder="Achternaam">
+                                    </div>
+                                    <input type="email" id="email" required class="w-full p-6 bg-slate-50 border-none" placeholder="Email Adres">
+                                    <textarea id="diet" rows="3" class="w-full p-6 bg-slate-50 border-none" placeholder="Dieetwensen of opmerkingen..."></textarea>
+                                    <div class="bg-dark p-6 rounded-[32px] flex items-center justify-between text-white">
+                                        <p class="font-black uppercase text-[10px] tracking-widest opacity-60" data-i18n="label_payment">Betaling</p>
+                                        <select id="payment-method" class="bg-transparent border-none text-sm font-black uppercase outline-none">
+                                            <option value="card" class="text-dark">Credit Card</option>
+                                            <option value="crypto" class="text-dark">Crypto (BTC/ETH)</option>
+                                            <option value="bank" class="text-dark">Bank Transfer</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 pt-6">
+                                    <button type="button" onclick="goToStep(3)" class="w-1/3 border-4 border-slate-50 py-6 rounded-[32px] font-black uppercase text-[10px]" data-i18n="btn_prev">Terug</button>
+                                    <button type="submit" class="w-2/3 bg-accent text-white py-6 rounded-[32px] font-black uppercase tracking-widest shadow-2xl shadow-accent/40 transition" data-i18n="btn_confirm">Boek Expedite</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Kaart Links -->
+                    <div class="lg:w-2/5 order-1 lg:order-2">
+                        <div class="sticky top-32 space-y-10">
+                            <div id="map" class="shadow-[0_40px_100px_-20px_rgba(244,162,97,0.3)]"></div>
+                            <div class="p-10 bg-dark rounded-[60px] text-white relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <p class="text-[10px] font-black uppercase text-primary tracking-[0.5em] mb-4" data-i18n="price_label">Totaalprijs Expeditie</p>
+                                    <p class="text-7xl font-black tracking-tighter" id="display-price">€ 0.00</p>
+                                    <div class="mt-12 flex items-center justify-between">
+                                        <div class="flex flex-col gap-1">
+                                            <p id="route-info" class="text-xs font-bold text-slate-400 tracking-wider">0 km | 0 min route</p>
+                                            <p class="text-[10px] text-secondary font-black uppercase">Guided Overland Route</p>
+                                        </div>
+                                        <i class="fas fa-compass text-5xl text-primary animate-spin-slow"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="main-footer" class="bg-[#fdfcf0] py-24 border-t border-orange-100">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex items-center justify-center gap-3 mb-16">
+                <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white">
+                    <i class="fas fa-mountain-sun"></i>
+                </div>
+                <span class="text-2xl font-black text-dark tracking-tighter uppercase font-display">Terra Explorer</span>
+            </div>
+            <p class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-2">Operated by Fleetconnect</p>
+            <p class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-16">Design by Ryzen Outsourcing</p>
+            <div class="flex justify-center gap-12 mb-16">
+                <a href="#" class="w-12 h-12 rounded-full border-2 border-orange-100 flex items-center justify-center text-dark hover:bg-primary hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="w-12 h-12 rounded-full border-2 border-orange-100 flex items-center justify-center text-dark hover:bg-primary hover:text-white transition"><i class="fab fa-vimeo-v"></i></a>
+                <a href="#" class="w-12 h-12 rounded-full border-2 border-orange-100 flex items-center justify-center text-dark hover:bg-primary hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+            </div>
+            <p class="text-[10px] font-black uppercase tracking-[1em] text-slate-200">&copy; 2024 TERRA EXPLORER WORLDWIDE</p>
+        </div>
+    </footer>
+
+    <!-- FICHE -->
+    <div id="booking-fiche-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-dark/95 backdrop-blur-xl p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-2xl rounded-[80px] shadow-2xl overflow-hidden border-8 border-orange-50">
+            <div id="fiche-content" class="p-16"></div>
+            <div class="p-12 border-t border-slate-50 flex justify-between bg-orange-50/30">
+                <div class="flex gap-4">
+                    <button onclick="printFiche()" class="w-14 h-14 bg-white rounded-3xl shadow-xl flex items-center justify-center text-primary hover:scale-105 transition"><i class="fas fa-print"></i></button>
+                    <button onclick="saveFicheAsJSON()" class="w-14 h-14 bg-white rounded-3xl shadow-xl flex items-center justify-center text-primary hover:scale-105 transition"><i class="fas fa-download"></i></button>
+                </div>
+                <button onclick="location.reload()" class="bg-dark text-white px-12 rounded-3xl font-black uppercase tracking-widest text-xs shadow-xl shadow-dark/20">Expeditie Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://kwsuqzbqzsmgkjaslwkz.supabase.co';
+        const supabaseAnonKey = 'sb_publishable_5hdl73a9-jNd9n3lnsYVyQ_dMYgiSLA';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        let map, pMarker, dMarker, rLayer, currentStep = 1, currentLang = 'nl', selectedTour = null;
+
+        const tours = [
+            { id: 'atlas', name: 'Atlas Gebergte - 14 Dagen', price: 2150, days: 14 },
+            { id: 'sahara', name: 'Sahara Crossing - 8 Dagen', price: 1490, days: 8 },
+            { id: 'coast', name: 'Wild Atlantic Road - 10 Dagen', price: 1850, days: 10 },
+            { id: 'peak', name: 'Summits & Valleys - 21 Dagen', price: 3400, days: 21 }
+        ];
+
+        const translations = {
+            nl: {
+                hero_title: "Verleg je Grenzen.", hero_subtitle: "Ontdek de verborgen parels van de wereld met onze begeleide rondreizen.",
+                monitoring_bookings: "Expedities gestart", monitoring_active: "Actieve Gidsen",
+                step1_title: "Plan uw expeditie", step2_title: "Onze routes", step3_title: "Upgrade je ervaring", step4_title: "Laatste details",
+                btn_next: "Verder", btn_prev: "Terug", btn_confirm: "Boek Expeditie", price_label: "Totaalprijs Expeditie",
+                extra_guide: "Privégids Service", extra_meals: "Maaltijdplan Premium", extra_bikes: "E-Bike Verhuur"
+            },
+            fr: {
+                hero_title: "Dépassez vos limites.", hero_subtitle: "Découvrez les joyaux cachés du monde avec nos circuits accompagnés.",
+                monitoring_bookings: "Expéditions lancées", monitoring_active: "Guides actifs",
+                step1_title: "Planifiez votre expédition", step2_title: "Nos itinéraires", step3_title: "Améliorez l'expérience", step4_title: "Derniers détails",
+                btn_next: "Suivant", btn_prev: "Précédent", btn_confirm: "Réserver l'expédition", price_label: "Prix total expédition",
+                extra_guide: "Service guide privé", extra_meals: "Plan repas premium", extra_bikes: "Location vélo élec."
+            },
+            en: {
+                hero_title: "Push Your Limits.", hero_subtitle: "Discover the world's hidden gems with our guided round tours.",
+                monitoring_bookings: "Expeditions started", monitoring_active: "Active Guides",
+                step1_title: "Plan expedition", step2_title: "Our routes", step3_title: "Upgrade experience", step4_title: "Final details",
+                btn_next: "Next", btn_prev: "Back", btn_confirm: "Book Expedition", price_label: "Total Expedition Price",
+                extra_guide: "Private Guide Service", extra_meals: "Premium Meal Plan", extra_bikes: "E-Bike Rental"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap(); renderTours();
+            setLanguage(localStorage.getItem('mon_lang_A3') || 'nl');
+            updateMonitoringData();
+            document.getElementById('start-date').value = new Date().toISOString().split('T')[0];
+        });
+
+        function initMap() {
+            map = L.map('map', { zoomControl: false }).setView([31.7917, -7.0926], 6); // Default: Atlas region
+            L.tileLayer('https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=de8169991316441b802613e53612807e', { attribution: '&copy; Thunderforest' }).addTo(map);
+        }
+
+        async function searchAddress(q, type) {
+            if (q.length < 3) return;
+            try {
+                const res = await fetch(`https://photon.komoot.io/api/?q=${q}&limit=1`);
+                const data = await res.json();
+                if (data.features.length > 0) selectAddr(data.features[0], type);
+            } catch(e) {}
+        }
+
+        function selectAddr(f, type) {
+            const ll = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+            if (type === 'pickup') { if(pMarker) map.removeLayer(pMarker); pMarker = L.marker(ll).addTo(map); }
+            else { if(dMarker) map.removeLayer(dMarker); dMarker = L.marker(ll).addTo(map); }
+            if (pMarker && dMarker) calcRoute(); else map.setView(ll, 8);
+            validateStep1();
+        }
+
+        async function calcRoute() {
+            const p = pMarker.getLatLng(), d = dMarker.getLatLng();
+            try {
+                const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${p.lng},${p.lat};${d.lng},${d.lat}?overview=full&geometries=geojson`);
+                const data = await res.json();
+                if (rLayer) map.removeLayer(rLayer);
+                rLayer = L.geoJSON(data.routes[0].geometry, { style: { color: '#f4a261', weight: 8, opacity: 0.7 } }).addTo(map);
+                map.fitBounds(rLayer.getBounds(), { padding: [100, 100] });
+                const dist = (data.routes[0].distance/1000).toFixed(0);
+                document.getElementById('route-info').innerText = `${dist} km | ca. ${Math.round(dist/70)} uur route`;
+            } catch(e) {}
+        }
+
+        function setLanguage(l) {
+            currentLang = l; localStorage.setItem('mon_lang_A3', l);
+            document.querySelectorAll('[data-i18n]').forEach(e => {
+                const k = e.getAttribute('data-i18n');
+                e.innerText = translations[l][k] || e.innerText;
+            });
+            renderTours();
+        }
+
+        function goToStep(s) {
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            document.getElementById(`step-${s}`).classList.remove('hidden');
+            document.querySelectorAll('.step-indicator').forEach((e, i) => {
+                e.classList.toggle('active', i < s);
+                e.classList.toggle('bg-slate-50', i >= s);
+            });
+            currentStep = s;
+        }
+
+        function validateStep1() {
+            const f = document.getElementById('start-city').value, t = document.getElementById('end-city').value, d = document.getElementById('start-date').value;
+            document.getElementById('btn-step-1-next').disabled = !(f && t && d);
+            updatePrice();
+        }
+
+        function renderTours() {
+            const list = document.getElementById('tour-list'); list.innerHTML = '';
+            tours.forEach(t => {
+                const div = document.createElement('div');
+                div.className = `tour-card p-6 border-4 border-slate-50 rounded-[40px] cursor-pointer hover:border-primary transition flex flex-col justify-between ${selectedTour?.id === t.id ? 'selected' : ''}`;
+                div.onclick = () => { selectedTour = t; renderTours(); updatePrice(); document.getElementById('btn-step-2-next').disabled = false; };
+                div.innerHTML = `<h4 class="font-black text-lg uppercase tracking-tighter leading-none mb-4">${t.name}</h4><div class="flex justify-between items-end"><span class="text-[10px] font-black text-slate-300 uppercase tracking-widest">${t.days} DAGEN</span><p class="font-black text-xl text-primary italic">€ ${t.price}</p></div>`;
+                list.appendChild(div);
+            });
+        }
+
+        function updatePrice() {
+            let t = 0; if (selectedTour) {
+                const travelers = parseInt(document.getElementById('travelers').value);
+                t = selectedTour.price * travelers;
+                if (document.getElementById('extra-guide').checked) t += (120 * selectedTour.days);
+                if (document.getElementById('extra-meals').checked) t += (45 * selectedTour.days * travelers);
+                if (document.getElementById('extra-bikes').checked) t += (35 * selectedTour.days * travelers);
+            }
+            document.getElementById('display-price').innerText = `€ ${t.toFixed(2)}`;
+            return t;
+        }
+
+        function collectBookingData() {
+            return {
+                template_code: "A3", booking_number: `RA-TR-${Date.now().toString().slice(-6)}`,
+                start_city: document.getElementById('start-city').value, end_city: document.getElementById('end-city').value,
+                start_date: document.getElementById('start-date').value, travelers: document.getElementById('travelers').value,
+                tour_name: selectedTour?.name, first_name: document.getElementById('first-name').value, last_name: document.getElementById('last-name').value,
+                email: document.getElementById('email').value, diet: document.getElementById('diet').value,
+                payment_method: document.getElementById('payment-method').value, total_price: updatePrice().toFixed(2),
+                booking_date: new Date().toISOString().split('T')[0], booking_time: new Date().toLocaleTimeString('nl-BE')
+            };
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault(); const d = collectBookingData();
+            try { await supabaseClient.from('bookings').insert([d]); } catch (e) {}
+            showFiche(d); return false;
+        }
+
+        function showFiche(d) {
+            document.getElementById('fiche-content').innerHTML = `
+                <div class="text-dark"><h2 class="text-6xl font-black uppercase tracking-tighter mb-4 font-display">EXPEDITION LOG</h2>
+                <p class="text-[10px] font-black text-primary tracking-[1em] mb-12 uppercase">REF: ${d.booking_number}</p>
+                <div class="grid grid-cols-2 gap-10 text-sm mb-16"><div class="space-y-6"><div><p class="font-black text-[10px] text-slate-300 uppercase mb-1">Route</p><p class="font-bold">${d.start_city} <i class="fas fa-arrow-right mx-2 text-[8px]"></i> ${d.end_city}</p></div>
+                <div><p class="font-black text-[10px] text-slate-300 uppercase mb-1">Datum</p><p class="font-bold">${d.start_date}</p></div></div>
+                <div class="space-y-6"><div><p class="font-black text-[10px] text-slate-300 uppercase mb-1">Explorer</p><p class="font-bold">${d.first_name} ${d.last_name}</p></div>
+                <div><p class="font-black text-[10px] text-slate-300 uppercase mb-1">Expeditie</p><p class="font-bold text-primary uppercase">${d.tour_name}</p></div></div></div>
+                <div class="p-12 bg-dark rounded-[50px] flex justify-between items-center"><p class="text-white font-black uppercase tracking-[0.4em] text-[10px]">Total Investment</p><p class="text-white text-6xl font-black italic">€ ${d.total_price}</p></div></div>`;
+            window.currentBookingData = d; document.getElementById('booking-fiche-modal').classList.remove('hidden'); document.getElementById('booking-fiche-modal').classList.add('flex');
+        }
+
+        function printFiche() { window.print(); }
+        function saveFicheAsJSON() {
+            const blob = new Blob([JSON.stringify(window.currentBookingData, null, 2)], {type: 'application/json'});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'expedition_booking.json'; a.click();
+        }
+
+        function updateMonitoringData() {
+            const d = new Date().toDateString();
+            if (localStorage.getItem('mon_date_A3') !== d) {
+                localStorage.setItem('mon_b_A3', Math.floor(Math.random()*20)+40);
+                localStorage.setItem('mon_date_A3', d);
+            }
+            document.getElementById('bookings-count').innerText = localStorage.getItem('mon_b_A3')+'+';
+            document.getElementById('items-count').innerText = Math.floor(Math.random()*5)+10;
+            setTimeout(updateMonitoringData, 30000);
+        }
+    </script>
+</body>
+</html>

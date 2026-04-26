@@ -723,7 +723,7 @@
             document.getElementById('fin-year-rev').innerText = `€ ${total.toFixed(2)}`;
 
             // Source analysis (Template codes)
-            const sources = ['T1', 'T2', 'T3', 'T4', 'T5'];
+            const sources = ['T1', 'T2', 'T3', 'T4', 'T5', 'H1', 'H2', 'A1', 'A2', 'A3'];
             const sourceList = document.getElementById('source-stats');
             sourceList.innerHTML = '';
 
@@ -747,7 +747,11 @@
         }
 
         function getTemplateName(code) {
-            const names = { T1: 'Standard', T2: 'Premium', T3: 'Minimal', T4: 'Business', T5: 'Airport' };
+            const names = {
+                T1: 'Taxi Standard', T2: 'Taxi Premium', T3: 'Taxi Minimal', T4: 'Taxi Business', T5: 'Taxi Airport',
+                H1: 'Hotel Luxe', H2: 'Hotel Budget',
+                A1: 'Reis Pakket', A2: 'Vlucht + Hotel', A3: 'Rondreis'
+            };
             return names[code] || 'Unknown';
         }
 
@@ -805,22 +809,35 @@
 
                     <div class="p-8 bg-slate-900 text-white rounded-3xl relative overflow-hidden">
                         <div class="relative z-10 space-y-6">
+                            ${b.pickup_address ? `
                             <div class="flex gap-4">
                                 <div class="w-6 h-6 rounded-full border-4 border-accent shrink-0"></div>
                                 <div>
-                                    <p class="text-xs font-bold text-accent uppercase mb-1">Ophaallocatie</p>
+                                    <p class="text-xs font-bold text-accent uppercase mb-1">Locatie / Van</p>
                                     <p class="font-bold">${b.pickup_address}</p>
                                 </div>
                             </div>
+                            ` : ''}
+                            ${b.destination_address || b.destination ? `
                             <div class="flex gap-4">
                                 <div class="w-6 h-6 rounded-full bg-accent shrink-0"></div>
                                 <div>
-                                    <p class="text-xs font-bold text-accent uppercase mb-1">Bestemming</p>
-                                    <p class="font-bold">${b.destination_address}</p>
+                                    <p class="text-xs font-bold text-accent uppercase mb-1">Bestemming / Naar</p>
+                                    <p class="font-bold">${b.destination_address || b.destination}</p>
                                 </div>
                             </div>
+                            ` : ''}
+                            ${b.checkin_date ? `
+                            <div class="flex gap-4 text-accent">
+                                <i class="fas fa-calendar-alt mt-1"></i>
+                                <div>
+                                    <p class="text-xs font-bold uppercase mb-1">Check-in / Out</p>
+                                    <p class="font-bold text-white">${b.checkin_date} tot ${b.checkout_date}</p>
+                                </div>
+                            </div>
+                            ` : ''}
                         </div>
-                        <i class="fas fa-route absolute -bottom-10 -right-10 text-[180px] text-white/5"></i>
+                        <i class="fas fa-globe-europe absolute -bottom-10 -right-10 text-[180px] text-white/5"></i>
                     </div>
 
                     ${b.status === 'confirmed' || b.status === 'assigned' ? `
