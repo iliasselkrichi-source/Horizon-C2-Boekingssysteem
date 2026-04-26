@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaga Airport Transfer | E2</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary: #0d9488; /* Turquoise for Airport */
+            --primary-dark: #0f766e;
+            --accent: #f59e0b;
+            --bg-glass: rgba(255, 255, 255, 0.9);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdfa;
+            color: #1e293b;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .glass-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+        .step-active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        .step-inactive {
+            color: #94a3b8;
+            border-bottom: 3px solid transparent;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #99f6e4; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #5eead4; }
+
+        #map { height: 350px; border-radius: 16px; width: 100%; z-index: 10; }
+
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; }
+            .glass-card { box-shadow: none; border: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-teal-100 sticky top-0 z-50 no-print">
+        <div class="max-container mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="bg-teal-600 p-2 rounded-lg">
+                    <i class="fas fa-plane-arrival text-white text-xl"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight">Malaga<span class="text-teal-600">Airport</span>Transfer</span>
+                <span class="ml-2 px-2 py-0.5 bg-teal-50 rounded text-xs font-semibold text-teal-600">E2</span>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="flex gap-2 text-xs font-semibold">
+                    <button onclick="setLanguage('es')" class="hover:text-teal-600 lang-btn" id="lang-es">ES</button>
+                    <span class="text-slate-300">|</span>
+                    <button onclick="setLanguage('en')" class="hover:text-teal-600 lang-btn" id="lang-en">EN</button>
+                    <span class="text-slate-300">|</span>
+                    <button onclick="setLanguage('fr')" class="hover:text-teal-600 lang-btn" id="lang-fr">FR</button>
+                    <span class="text-slate-300">|</span>
+                    <button onclick="setLanguage('nl')" class="hover:text-teal-600 lang-btn" id="lang-nl">NL</button>
+                </div>
+                <div class="hidden md:flex flex-col text-right">
+                    <span class="text-[10px] uppercase text-teal-400 font-bold tracking-widest" data-i18n="dispatch_title">Servicio de Enlace</span>
+                    <span class="text-sm font-bold text-teal-800">+34 951 000 002</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-12 px-4 max-w-6xl mx-auto">
+
+        <!-- Hero Title -->
+        <div class="text-center mb-12 no-print">
+            <h1 class="text-5xl md:text-6xl font-serif font-bold text-teal-900 mb-4" data-i18n="hero_title">Transfer Aeropuerto Málaga</h1>
+            <p class="text-lg text-teal-700/70" data-i18n="hero_subtitle">Recogida con cartel, espera gratuita y precios cerrados.</p>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 no-print max-w-2xl mx-auto">
+            <div class="glass-card p-6 flex items-center gap-4 border-l-4 border-teal-600">
+                <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-teal-600">
+                    <i class="fas fa-calendar-check text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="text-2xl font-bold" id="stats-bookings">--</h4>
+                    <p class="text-xs text-slate-500 uppercase font-bold" data-i18n="stats_reservations">Reservas Hoy</p>
+                </div>
+            </div>
+            <div class="glass-card p-6 flex items-center gap-4 border-l-4 border-teal-500">
+                <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-teal-600">
+                    <i class="fas fa-car-side text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="text-2xl font-bold" id="stats-vehicles">--</h4>
+                    <p class="text-xs text-slate-500 uppercase font-bold" data-i18n="stats_active">Vehículos Activos</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Section -->
+        <div class="glass-card overflow-hidden no-print">
+            <div class="flex border-b border-teal-50 bg-teal-50/30">
+                <button onclick="goToStep(1)" id="step-nav-1" class="flex-1 py-4 text-center font-bold text-sm uppercase tracking-wider transition-all step-active">
+                    <span class="block md:inline mr-1 text-[10px] opacity-60">01</span> <span data-i18n="step_route">Ruta</span>
+                </button>
+                <button onclick="goToStep(2)" id="step-nav-2" class="flex-1 py-4 text-center font-bold text-sm uppercase tracking-wider transition-all step-inactive" disabled>
+                    <span class="block md:inline mr-1 text-[10px] opacity-60">02</span> <span data-i18n="step_vehicle">Vehículo</span>
+                </button>
+                <button onclick="goToStep(3)" id="step-nav-3" class="flex-1 py-4 text-center font-bold text-sm uppercase tracking-wider transition-all step-inactive" disabled>
+                    <span class="block md:inline mr-1 text-[10px] opacity-60">03</span> <span data-i18n="step_extras">Extras</span>
+                </button>
+                <button onclick="goToStep(4)" id="step-nav-4" class="flex-1 py-4 text-center font-bold text-sm uppercase tracking-wider transition-all step-inactive" disabled>
+                    <span class="block md:inline mr-1 text-[10px] opacity-60">04</span> <span data-i18n="step_details">Detalles</span>
+                </button>
+            </div>
+
+            <div class="p-8 md:p-12">
+                <div id="step-1" class="space-y-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div class="space-y-6">
+                            <div class="space-y-4">
+                                <div class="relative">
+                                    <label class="text-[10px] uppercase font-bold text-teal-400 absolute top-2 left-4 z-10" data-i18n="label_pickup">Punto de Recogida</label>
+                                    <div class="relative">
+                                        <i class="fas fa-plane-departure text-teal-500 absolute left-4 top-8 text-xs"></i>
+                                        <input type="text" id="pickup" placeholder="Aeropuerto o dirección..." class="w-full pt-8 pb-3 px-10 bg-white border-2 border-teal-50 rounded-xl focus:border-teal-500 focus:outline-none transition-all">
+                                        <div id="pickup-suggestions" class="absolute z-20 w-full bg-white shadow-xl rounded-b-xl overflow-hidden hidden border border-teal-100"></div>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <label class="text-[10px] uppercase font-bold text-teal-400 absolute top-2 left-4 z-10" data-i18n="label_dest">Destino</label>
+                                    <div class="relative">
+                                        <i class="fas fa-map-marker-alt text-red-500 absolute left-4 top-8 text-xs"></i>
+                                        <input type="text" id="destination" placeholder="Hotel o dirección..." class="w-full pt-8 pb-3 px-10 bg-white border-2 border-teal-50 rounded-xl focus:border-teal-500 focus:outline-none transition-all">
+                                        <div id="dest-suggestions" class="absolute z-20 w-full bg-white shadow-xl rounded-b-xl overflow-hidden hidden border border-teal-100"></div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="relative">
+                                        <label class="text-[10px] uppercase font-bold text-teal-400 absolute top-2 left-4 z-10" data-i18n="label_date">Fecha</label>
+                                        <input type="date" id="booking-date" class="w-full pt-8 pb-3 px-4 bg-white border-2 border-teal-50 rounded-xl focus:border-teal-500 focus:outline-none transition-all">
+                                    </div>
+                                    <div class="relative">
+                                        <label class="text-[10px] uppercase font-bold text-teal-400 absolute top-2 left-4 z-10" data-i18n="label_time">Hora</label>
+                                        <input type="time" id="booking-time" class="w-full pt-8 pb-3 px-4 bg-white border-2 border-teal-50 rounded-xl focus:border-teal-500 focus:outline-none transition-all">
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <label class="flex items-center gap-3 p-4 bg-white rounded-xl cursor-pointer border-2 border-teal-50 hover:border-teal-200 transition-all">
+                                        <input type="checkbox" id="return-trip" class="w-5 h-5 rounded text-teal-600 focus:ring-teal-500" onchange="updatePrice()">
+                                        <span class="text-sm font-semibold text-teal-700" data-i18n="label_return">Viaje de Vuelta</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 p-4 bg-teal-50 rounded-xl cursor-pointer border-2 border-teal-100 hover:border-teal-300 transition-all">
+                                        <input type="checkbox" id="airport-fee" class="w-5 h-5 rounded text-teal-600 focus:ring-teal-500" checked onchange="updatePrice()">
+                                        <span class="text-sm font-semibold text-teal-700" data-i18n="label_fee">Suplemento Aeropuerto (€6)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button onclick="validateStep1()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 px-12 rounded-2xl shadow-xl shadow-teal-100 transition-all group">
+                            <span data-i18n="btn_next">Ver Vehículos</span> <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: VEHICLE -->
+                <div id="step-2" class="hidden space-y-8 text-center">
+                    <h2 class="text-3xl font-serif text-teal-900" data-i18n="h_vehicle">Seleccione su Transfer</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div onclick="selectVehicle('sedan', 1.30, 4, 3)" class="vehicle-card group bg-white border-2 border-teal-50 rounded-3xl p-6 cursor-pointer hover:border-teal-600 hover:shadow-xl transition-all relative overflow-hidden" id="v-sedan">
+                            <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=400&h=200" alt="Sedan" class="w-full mb-6 rounded-xl">
+                            <h3 class="text-xl font-bold mb-2">Standard Sedan</h3>
+                            <div class="flex items-center justify-center gap-4 text-teal-400 text-xs mb-4">
+                                <span><i class="fas fa-user-friends mr-1"></i> 4</span>
+                                <span><i class="fas fa-suitcase mr-1"></i> 3</span>
+                            </div>
+                            <div class="text-2xl font-black text-teal-900" id="price-sedan">-- €</div>
+                        </div>
+                        <div onclick="selectVehicle('executive', 1.80, 3, 2)" class="vehicle-card bg-white border-2 border-teal-50 rounded-3xl p-6 cursor-pointer hover:border-teal-600 hover:shadow-xl transition-all relative" id="v-executive">
+                            <img src="https://images.unsplash.com/photo-1563720223185-11003d5169bd?auto=format&fit=crop&q=80&w=400&h=200" alt="Executive" class="w-full mb-6 rounded-xl">
+                            <h3 class="text-xl font-bold mb-2">Executive</h3>
+                            <div class="flex items-center justify-center gap-4 text-teal-400 text-xs mb-4">
+                                <span><i class="fas fa-user-friends mr-1"></i> 3</span>
+                                <span><i class="fas fa-suitcase mr-1"></i> 2</span>
+                            </div>
+                            <div class="text-2xl font-black text-teal-900" id="price-executive">-- €</div>
+                        </div>
+                        <div onclick="selectVehicle('suv', 2.10, 4, 4)" class="vehicle-card bg-white border-2 border-teal-50 rounded-3xl p-6 cursor-pointer hover:border-teal-600 hover:shadow-xl transition-all relative" id="v-suv">
+                            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=400&h=200" alt="SUV" class="w-full mb-6 rounded-xl">
+                            <h3 class="text-xl font-bold mb-2">Premium SUV</h3>
+                            <div class="flex items-center justify-center gap-4 text-teal-400 text-xs mb-4">
+                                <span><i class="fas fa-user-friends mr-1"></i> 4</span>
+                                <span><i class="fas fa-suitcase mr-1"></i> 4</span>
+                            </div>
+                            <div class="text-2xl font-black text-teal-900" id="price-suv">-- €</div>
+                        </div>
+                        <div onclick="selectVehicle('van', 2.60, 8, 8)" class="vehicle-card bg-white border-2 border-teal-50 rounded-3xl p-6 cursor-pointer hover:border-teal-600 hover:shadow-xl transition-all relative" id="v-van">
+                            <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=400&h=200" alt="Van" class="w-full mb-6 rounded-xl">
+                            <h3 class="text-xl font-bold mb-2">Large Minibus</h3>
+                            <div class="flex items-center justify-center gap-4 text-teal-400 text-xs mb-4">
+                                <span><i class="fas fa-user-friends mr-1"></i> 8</span>
+                                <span><i class="fas fa-suitcase mr-1"></i> 8</span>
+                            </div>
+                            <div class="text-2xl font-black text-teal-900" id="price-van">-- €</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center max-w-4xl mx-auto pt-8">
+                        <button onclick="goToStep(1)" class="text-teal-400 font-bold hover:text-teal-600 transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i> <span data-i18n="btn_back">Atrás</span>
+                        </button>
+                        <button onclick="validateStep2()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 px-12 rounded-2xl shadow-xl shadow-teal-100 transition-all">
+                            <span data-i18n="btn_next">Continuar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: EXTRAS -->
+                <div id="step-3" class="hidden space-y-8">
+                    <h2 class="text-3xl font-serif text-teal-900" data-i18n="h_extras">Servicios Especiales</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="relative">
+                                <label class="text-[10px] uppercase font-bold text-teal-400 absolute top-2 left-4 z-10" data-i18n="label_flight">Número de Vuelo</label>
+                                <input type="text" id="flight-num" placeholder="IB-1234" class="w-full pt-8 pb-3 px-4 bg-white border-2 border-teal-50 rounded-xl focus:border-teal-500 focus:outline-none transition-all">
+                            </div>
+                            <div class="flex items-center justify-between p-6 bg-teal-50 rounded-3xl">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-teal-600 shadow-sm">
+                                        <i class="fas fa-suitcase-rolling"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-teal-900" data-i18n="extra_luggage">Equipaje Extra</h4>
+                                        <p class="text-xs text-teal-400 font-semibold">+3.00 € / ud</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button onclick="updateExtra('bags', -1)" class="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-teal-100 transition-colors shadow-sm">-</button>
+                                    <span id="extra-bags-qty" class="font-bold w-4 text-center">0</span>
+                                    <button onclick="updateExtra('bags', 1)" class="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-teal-100 transition-colors shadow-sm">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-6 bg-teal-50 rounded-3xl">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-teal-600 shadow-sm">
+                                        <i class="fas fa-baby"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-teal-900" data-i18n="extra_child">Silla de Bebé</h4>
+                                        <p class="text-xs text-teal-400 font-semibold">+5.00 € / ud</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button onclick="updateExtra('child', -1)" class="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-teal-100 transition-colors shadow-sm">-</button>
+                                    <span id="extra-child-qty" class="font-bold w-4 text-center">0</span>
+                                    <button onclick="updateExtra('child', 1)" class="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-teal-100 transition-colors shadow-sm">+</button>
+                                </div>
+                            </div>
+                            <div class="p-6 bg-teal-900 text-teal-100 rounded-3xl">
+                                <p class="text-sm font-medium" data-i18n="meet_msg">Monitorizamos su vuelo en tiempo real. Si se retrasa, le esperamos sin coste adicional hasta 60 minutos.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button onclick="goToStep(2)" class="text-teal-400 font-bold hover:text-teal-600 transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i> <span data-i18n="btn_back">Atrás</span>
+                        </button>
+                        <button onclick="goToStep(4)" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 px-12 rounded-2xl shadow-xl shadow-teal-100 transition-all">
+                            <span data-i18n="btn_next">Resumen Final</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: DETAILS -->
+                <div id="step-4" class="hidden space-y-8">
+                    <h2 class="text-3xl font-serif text-teal-900" data-i18n="h_details">Confirmar Reserva</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div class="space-y-4">
+                            <div class="relative">
+                                <label class="text-[10px] uppercase font-bold text-teal-400 absolute top-2 left-4 z-10" data-i18n="label_name">Nombre del Pasajero</label>
+                                <input type="text" id="full-name" class="w-full pt-8 pb-3 px-4 bg-white border-2 border-teal-50 rounded-xl focus:border-teal-500 focus:outline-none transition-all">
+                            </div>
+                            <div class="relative">
+                                <label class="text-[10px] uppercase font-bold text-teal-400 absolute top-2 left-4 z-10" data-i18n="label_phone">Móvil (con prefijo)</label>
+                                <input type="tel" id="phone" placeholder="+34 600 000 000" class="w-full pt-8 pb-3 px-4 bg-white border-2 border-teal-50 rounded-xl focus:border-teal-500 focus:outline-none transition-all">
+                            </div>
+                            <div class="relative">
+                                <label class="text-[10px] uppercase font-bold text-teal-400 absolute top-2 left-4 z-10" data-i18n="label_email">Email de Confirmación</label>
+                                <input type="email" id="email" class="w-full pt-8 pb-3 px-4 bg-white border-2 border-teal-50 rounded-xl focus:border-teal-500 focus:outline-none transition-all">
+                            </div>
+                        </div>
+                        <div class="bg-teal-900 rounded-3xl p-8 text-white">
+                            <div class="space-y-4 mb-8">
+                                <div class="flex justify-between text-sm">
+                                    <span class="opacity-50" data-i18n="summary_route">Transfer</span>
+                                    <span id="summary-route" class="font-medium text-right ml-4">--</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="opacity-50" data-i18n="summary_flight">Vuelo</span>
+                                    <span id="summary-flight" class="font-medium">--</span>
+                                </div>
+                                <div class="pt-4 border-t border-white/10 flex justify-between items-baseline">
+                                    <span class="text-xs uppercase tracking-widest font-bold text-teal-400" data-i18n="summary_total">Precio Cerrado</span>
+                                    <span id="summary-total" class="text-4xl font-black">0.00 €</span>
+                                </div>
+                            </div>
+                            <button onclick="completeBooking()" class="w-full bg-teal-500 hover:bg-teal-400 text-teal-950 font-black py-5 rounded-2xl transition-all shadow-lg shadow-teal-950">
+                                <span data-i18n="btn_confirm">CONFIRMAR Y PAGAR</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Fiche -->
+    <div id="fiche-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl">
+            <div class="p-8 border-b border-teal-50 bg-teal-50 flex justify-between items-center">
+                <h2 class="text-2xl font-serif font-bold text-teal-900" data-i18n="fiche_title">Ficha de Transfer</h2>
+                <p class="text-xs text-teal-600 font-bold uppercase tracking-widest" id="fiche-id">E2-XXXXXX</p>
+            </div>
+            <div class="p-8" id="fiche-content"></div>
+            <div class="p-8 bg-teal-50 flex gap-4 no-print">
+                <button onclick="window.print()" class="flex-1 bg-teal-900 text-white font-bold py-3 rounded-xl hover:bg-teal-800 transition-all">
+                    <i class="fas fa-print mr-2"></i> <span data-i18n="btn_print">Imprimir</span>
+                </button>
+                <button onclick="downloadJSON()" class="flex-1 border-2 border-teal-200 text-teal-700 font-bold py-3 rounded-xl hover:bg-white transition-all">
+                    JSON
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-teal-50 py-12 px-4 no-print mt-12">
+        <div class="max-w-6xl mx-auto text-center">
+            <p class="text-sm text-teal-500 font-medium">Operated by Fleetconnect</p>
+            <p class="text-xs text-teal-400 mt-1">Design by Ryzen Outsourcing</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const translations = {
+            es: {
+                dispatch_title: "Servicio de Enlace",
+                stats_reservations: "Reservas Hoy",
+                stats_active: "Vehículos Activos",
+                hero_title: "Transfer Aeropuerto Málaga",
+                hero_subtitle: "Recogida con cartel, espera gratuita y precios cerrados.",
+                step_route: "Ruta", step_vehicle: "Vehículo", step_extras: "Extras", step_details: "Detalles",
+                label_pickup: "Punto de Recogida", label_dest: "Destino", label_date: "Fecha", label_time: "Hora",
+                label_return: "Viaje de Vuelta", label_fee: "Suplemento Aeropuerto (€6)",
+                btn_next: "Continuar", btn_back: "Atrás", h_vehicle: "Seleccione su Transfer",
+                h_extras: "Servicios Especiales", label_flight: "Número de Vuelo", extra_luggage: "Equipaje Extra",
+                extra_child: "Silla de Bebé", meet_msg: "Monitorizamos su vuelo en tiempo real. Si se retrasa, le esperamos sin coste adicional hasta 60 minutos.",
+                h_details: "Confirmar Reserva", label_name: "Nombre del Pasajero", label_phone: "Móvil (con prefijo)",
+                label_email: "Email de Confirmación", summary_route: "Transfer", summary_flight: "Vuelo",
+                summary_total: "Precio Cerrado", btn_confirm: "CONFIRMAR Y PAGAR", fiche_title: "Ficha de Transfer", btn_print: "Imprimir"
+            },
+            en: {
+                dispatch_title: "Shuttle Service",
+                stats_reservations: "Bookings Today",
+                stats_active: "Active Vehicles",
+                hero_title: "Malaga Airport Transfer",
+                hero_subtitle: "Meet & Greet, free waiting time and fixed prices.",
+                step_route: "Route", step_vehicle: "Vehicle", step_extras: "Extras", step_details: "Details",
+                label_pickup: "Pickup Point", label_dest: "Destination", label_date: "Date", label_time: "Time",
+                label_return: "Return Trip", label_fee: "Airport Surcharge (€6)",
+                btn_next: "Next Step", btn_back: "Back", h_vehicle: "Select your Transfer",
+                h_extras: "Special Services", label_flight: "Flight Number", extra_luggage: "Extra Luggage",
+                extra_child: "Child Seat", meet_msg: "We track your flight in real time. If delayed, we wait up to 60 min for free.",
+                h_details: "Confirm Booking", label_name: "Passenger Name", label_phone: "Mobile Phone",
+                label_email: "Confirmation Email", summary_route: "Transfer", summary_flight: "Flight",
+                summary_total: "Fixed Price", btn_confirm: "CONFIRM & PAY", fiche_title: "Transfer Fiche", btn_print: "Print"
+            },
+            fr: {
+                dispatch_title: "Service de Navette",
+                stats_reservations: "Réservations Aujourd'hui",
+                stats_active: "Véhicules Actifs",
+                hero_title: "Transfert Aéroport Malaga",
+                hero_subtitle: "Accueil personnalisé, temps d'attente gratuit et prix fixes.",
+                step_route: "Itinéraire", step_vehicle: "Véhicule", step_extras: "Extras", step_details: "Détails",
+                label_pickup: "Point de Départ", label_dest: "Destination", label_date: "Date", label_time: "Heure",
+                label_return: "Trajet de Retour", label_fee: "Supplément Aéroport (€6)",
+                btn_next: "Suivant", btn_back: "Retour", h_vehicle: "Choisissez votre Transfert",
+                h_extras: "Services Spéciaux", label_flight: "Numéro de Vol", extra_luggage: "Bagages Supplémentaires",
+                extra_child: "Siège Bébé", meet_msg: "Nous suivons votre vol en temps réel. En cas de retard, nous vous attendons gratuitement jusqu'à 60 min.",
+                h_details: "Confirmer la Réservation", label_name: "Nom du Passager", label_phone: "Téléphone Mobile",
+                label_email: "E-mail de Confirmation", summary_route: "Transfert", summary_flight: "Vol",
+                summary_total: "Prix Fixe", btn_confirm: "CONFIRMER & PAYER", fiche_title: "Fiche de Transfert", btn_print: "Imprimer"
+            },
+            nl: {
+                dispatch_title: "Shuttleservice",
+                stats_reservations: "Boekingen Vandaag",
+                stats_active: "Actieve Voertuigen",
+                hero_title: "Malaga Luchthaven Transfer",
+                hero_subtitle: "Meet & Greet, gratis wachttijd en vaste prijzen.",
+                step_route: "Route", step_vehicle: "Voertuig", step_extras: "Extra's", step_details: "Details",
+                label_pickup: "Ophaalpunt", label_dest: "Bestemming", label_date: "Datum", label_time: "Tijd",
+                label_return: "Retourrit", label_fee: "Luchthaventoeslag (€6)",
+                btn_next: "Volgende Stap", btn_back: "Terug", h_vehicle: "Selecteer uw Transfer",
+                h_extras: "Speciale Services", label_flight: "Vluchtnummer", extra_luggage: "Extra Bagage",
+                extra_child: "Kinderzitje", meet_msg: "Wij volgen uw vlucht in realtime. Bij vertraging wachten wij tot 60 min gratis op u.",
+                h_details: "Boeking Bevestigen", label_name: "Naam Passagier", label_phone: "Mobiele Telefoon",
+                label_email: "Bevestigingsmail", summary_route: "Transfer", summary_flight: "Vlucht",
+                summary_total: "Vaste Prijs", btn_confirm: "BEVESTIGEN & BETALEN", fiche_title: "Transferfiche", btn_print: "Printen"
+            }
+        };
+
+        let currentLang = 'es';
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
+            });
+            localStorage.setItem('malaga_lang', lang);
+        }
+        setLanguage(localStorage.getItem('malaga_lang') || 'es');
+
+        let map, markerPickup, markerDest, polyline;
+        const MALAGA_CENTER = [36.7213, -4.4214];
+
+        function initMap() {
+            map = L.map('map').setView(MALAGA_CENTER, 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            markerPickup = L.marker(MALAGA_CENTER).addTo(map);
+            markerDest = L.marker(MALAGA_CENTER, { opacity: 0 }).addTo(map);
+        }
+
+        async function getRoute(p1, p2) {
+            const response = await fetch(`https://router.project-osrm.org/route/v1/driving/${p1[1]},${p1[0]};${p2[1]},${p2[0]}?overview=full&geometries=geojson`);
+            const data = await response.json();
+            if (data.code === 'Ok') {
+                const route = data.routes[0];
+                if (polyline) map.removeLayer(polyline);
+                polyline = L.geoJSON(route.geometry, { style: { color: '#0d9488', weight: 6 } }).addTo(map);
+                map.fitBounds(polyline.getBounds(), { padding: [40, 40] });
+                bookingData.distance = route.distance / 1000;
+                updatePrice();
+            }
+        }
+
+        async function searchAddress(query, elementId) {
+            if (query.length < 3) return;
+            const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&lat=36.72&lon=-4.42`);
+            const data = await res.json();
+            const container = document.getElementById(`${elementId}-suggestions`);
+            container.innerHTML = '';
+            container.classList.remove('hidden');
+            data.features.forEach(f => {
+                const div = document.createElement('div');
+                div.className = "px-4 py-3 hover:bg-teal-50 cursor-pointer text-sm border-b border-teal-50 last:border-0";
+                div.innerText = f.properties.name + (f.properties.city ? `, ${f.properties.city}` : '');
+                div.onclick = () => {
+                    const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+                    document.getElementById(elementId).value = div.innerText;
+                    container.classList.add('hidden');
+                    if (elementId === 'pickup') { bookingData.pickup = div.innerText; bookingData.pickup_coords = coords; markerPickup.setLatLng(coords); }
+                    else { bookingData.destination = div.innerText; bookingData.dest_coords = coords; markerDest.setLatLng(coords).setOpacity(1); }
+                    if (bookingData.pickup_coords && bookingData.dest_coords) getRoute(bookingData.pickup_coords, bookingData.dest_coords);
+                };
+                container.appendChild(div);
+            });
+        }
+
+        document.getElementById('pickup').oninput = (e) => searchAddress(e.target.value, 'pickup');
+        document.getElementById('destination').oninput = (e) => searchAddress(e.target.value, 'destination');
+
+        let bookingData = {
+            template_code: 'E2',
+            ready_for_supabase: true,
+            pickup_location: '', pickup_coords: null, destination_location: '', dest_coords: null,
+            booking_date: '', booking_time: '', return_trip: false, distance_km: 0, vehicle_type: null,
+            extras: { child_seats: 0, bags: 0, flight: '' }, total_price: 0
+        };
+
+        function updatePrice() {
+            if (!bookingData.vehicle_type) return;
+            let price = 5.00 + (bookingData.distance_km * bookingData.vehicle_type.kmPrice);
+            if (document.getElementById('airport-fee').checked) price += 6;
+            price += bookingData.extras.child_seats * 5;
+            price += bookingData.extras.bags * 3;
+            const hour = parseInt(document.getElementById('booking-time').value.split(':')[0]);
+            if (hour >= 23 || hour < 6) price *= 1.2;
+            if (document.getElementById('return-trip').checked) price *= 2;
+            bookingData.total_price = price;
+            document.querySelectorAll('[id^="price-"]').forEach(el => el.innerText = "-- €");
+            document.getElementById(`price-${bookingData.vehicle_type.id}`).innerText = `${price.toFixed(2)} €`;
+            document.getElementById('summary-total').innerText = `${price.toFixed(2)} €`;
+        }
+
+        function selectVehicle(id, kmPrice, pax, bags) {
+            bookingData.vehicle_type = { id, kmPrice, pax, bags };
+            document.querySelectorAll('.vehicle-card').forEach(c => c.classList.remove('border-teal-600', 'bg-teal-50'));
+            document.getElementById(`v-${id}`).classList.add('border-teal-600', 'bg-teal-50');
+            updatePrice();
+        }
+
+        function updateExtra(type, change) {
+            if (type === 'child') {
+                bookingData.extras.child_seats = Math.max(0, bookingData.extras.child_seats + change);
+                document.getElementById(`extra-child-qty`).innerText = bookingData.extras.child_seats;
+            } else {
+                bookingData.extras[type] = Math.max(0, bookingData.extras[type] + change);
+                document.getElementById(`extra-${type}-qty`).innerText = bookingData.extras[type];
+            }
+            updatePrice();
+        }
+
+        function goToStep(s) {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`step-${i}`).classList.toggle('hidden', i !== s);
+                document.getElementById(`step-nav-${i}`).classList.toggle('step-active', i === s);
+            }
+            if (s === 4) {
+                document.getElementById('summary-route').innerText = `${bookingData.pickup_location} ➔ ${bookingData.destination_location}`;
+                document.getElementById('summary-flight').innerText = document.getElementById('flight-num').value || 'N/A';
+            }
+        }
+
+        function validateStep1() {
+            bookingData.booking_date = document.getElementById('booking-date').value;
+            bookingData.booking_time = document.getElementById('booking-time').value;
+            bookingData.return_trip = document.getElementById('return-trip').checked;
+            if (bookingData.pickup_location && bookingData.destination_location && bookingData.booking_date && bookingData.booking_time) {
+                document.getElementById('step-nav-2').disabled = false;
+                goToStep(2);
+            } else alert("Complete los datos del trayecto.");
+        }
+
+        function validateStep2() {
+            if (bookingData.vehicle_type) { document.getElementById('step-nav-3').disabled = false; goToStep(3); }
+            else alert("Seleccione un vehículo.");
+        }
+
+        function completeBooking() {
+            bookingData.client_name = document.getElementById('full-name').value;
+            bookingData.client_phone = document.getElementById('phone').value;
+            bookingData.client_email = document.getElementById('email').value;
+            bookingData.extras.flight = document.getElementById('flight-num').value;
+            if (!bookingData.client_name || !bookingData.client_phone || !bookingData.client_email) return alert("Complete sus datos.");
+            const bookingId = `E2-${Date.now().toString().slice(-6)}`;
+            bookingData.booking_id = bookingId;
+            document.getElementById('fiche-id').innerText = bookingId;
+            document.getElementById('fiche-content').innerHTML = `<p class="font-bold">${bookingData.client_name}</p><p>${bookingData.pickup_location} ➔ ${bookingData.destination_location}</p><p class="text-2xl font-black mt-4">${bookingData.total_price.toFixed(2)} €</p>`;
+            document.getElementById('fiche-modal').classList.remove('hidden');
+            console.log("🚀 Supabase:", bookingData);
+        }
+
+        window.onload = () => { initMap(); updateStats(); setInterval(updateStats, 30000); };
+        function updateStats() {
+            document.getElementById('stats-bookings').innerText = Math.floor(Math.random() * 50) + 100;
+            document.getElementById('stats-vehicles').innerText = Math.floor(Math.random() * 20) + 30;
+        }
+    </script>
+</body>
+</html>
