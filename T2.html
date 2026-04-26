@@ -747,7 +747,7 @@
                           (now.getMonth() + 1).toString().padStart(2, '0') +
                           now.getDate().toString().padStart(2, '0');
             const random = Math.floor(Math.random() * 9999) + 1;
-            return `FX-${dateStr}-${random.toString().padStart(4, '0')}`;
+            return `H2-${dateStr}-${random.toString().padStart(4, '0')}`;
         }
 
         function collectBookingData() {
@@ -767,7 +767,7 @@
             const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value || 'cash';
 
             return {
-                template_code: "T2",
+                template_code: "H2",
                 booking_number: generateBookingNumber(),
                 booking_date: document.getElementById('booking-date').value,
                 booking_time: document.getElementById('booking-time').value,

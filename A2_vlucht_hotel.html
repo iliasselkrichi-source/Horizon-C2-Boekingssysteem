@@ -394,7 +394,7 @@
 
         function collectBookingData() {
             return {
-                template_code: "A2", booking_number: `RA-SKY-${Date.now().toString().slice(-6)}`,
+                template_code: "RA2", booking_number: `RA2-SKY-${Date.now().toString().slice(-6)}`,
                 departure: document.getElementById('departure-city').value, destination: document.getElementById('destination-city').value,
                 dep_date: document.getElementById('departure-date').value, ret_date: document.getElementById('return-date').value,
                 adults: document.getElementById('adults').value, bundle: selectedOption?.name,

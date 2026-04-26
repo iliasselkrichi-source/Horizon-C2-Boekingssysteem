@@ -348,7 +348,7 @@
 
         function collectBookingData() {
             return {
-                template_code: "H2", booking_number: `HT-URB-${Date.now().toString().slice(-6)}`,
+                template_code: "HT2", booking_number: `HT2-URB-${Date.now().toString().slice(-6)}`,
                 checkin_date: document.getElementById('checkin-date').value, checkout_date: document.getElementById('checkout-date').value,
                 adults: document.getElementById('adults').value, children: document.getElementById('children').value,
                 room_type: selectedRoom?.name, first_name: document.getElementById('first-name').value, last_name: document.getElementById('last-name').value,

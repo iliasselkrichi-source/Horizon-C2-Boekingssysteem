@@ -405,7 +405,7 @@
 
         function collectBookingData() {
             return {
-                template_code: "A3", booking_number: `RA-TR-${Date.now().toString().slice(-6)}`,
+                template_code: "RA3", booking_number: `RA3-TR-${Date.now().toString().slice(-6)}`,
                 start_city: document.getElementById('start-city').value, end_city: document.getElementById('end-city').value,
                 start_date: document.getElementById('start-date').value, travelers: document.getElementById('travelers').value,
                 tour_name: selectedTour?.name, first_name: document.getElementById('first-name').value, last_name: document.getElementById('last-name').value,

@@ -723,7 +723,7 @@
             document.getElementById('fin-year-rev').innerText = `€ ${total.toFixed(2)}`;
 
             // Source analysis (Template codes)
-            const sources = ['T1', 'T2', 'T3', 'T4', 'T5', 'H1', 'H2', 'A1', 'A2', 'A3'];
+            const sources = ['H1', 'H2', 'H3', 'H4', 'H5', 'HT1', 'HT2', 'RA1', 'RA2', 'RA3'];
             const sourceList = document.getElementById('source-stats');
             sourceList.innerHTML = '';
 
@@ -748,9 +748,9 @@
 
         function getTemplateName(code) {
             const names = {
-                T1: 'Taxi Standard', T2: 'Taxi Premium', T3: 'Taxi Minimal', T4: 'Taxi Business', T5: 'Taxi Airport',
-                H1: 'Hotel Luxe', H2: 'Hotel Budget',
-                A1: 'Reis Pakket', A2: 'Vlucht + Hotel', A3: 'Rondreis'
+                H1: 'Taxi Standard', H2: 'Taxi Premium', H3: 'Taxi Minimal', H4: 'Taxi Business', H5: 'Taxi Airport',
+                HT1: 'Hotel Luxe', HT2: 'Hotel Budget',
+                RA1: 'Reis Pakket', RA2: 'Vlucht + Hotel', RA3: 'Rondreis'
             };
             return names[code] || 'Unknown';
         }
@@ -827,12 +827,12 @@
                                 </div>
                             </div>
                             ` : ''}
-                            ${b.checkin_date ? `
+                            ${b.checkin_date || b.dep_date || b.start_date ? `
                             <div class="flex gap-4 text-accent">
                                 <i class="fas fa-calendar-alt mt-1"></i>
                                 <div>
-                                    <p class="text-xs font-bold uppercase mb-1">Check-in / Out</p>
-                                    <p class="font-bold text-white">${b.checkin_date} tot ${b.checkout_date}</p>
+                                    <p class="text-xs font-bold uppercase mb-1">Periode / Datum</p>
+                                    <p class="font-bold text-white">${b.checkin_date || b.dep_date || b.start_date} ${b.checkout_date || b.ret_date ? 'tot ' + (b.checkout_date || b.ret_date) : ''}</p>
                                 </div>
                             </div>
                             ` : ''}

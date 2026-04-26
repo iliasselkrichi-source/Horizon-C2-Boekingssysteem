@@ -387,7 +387,7 @@
 
         function collectBookingData() {
             return {
-                template_code: "A1", booking_number: `RA-PKT-${Date.now().toString().slice(-6)}`,
+                template_code: "RA1", booking_number: `RA1-PKT-${Date.now().toString().slice(-6)}`,
                 departure_airport: document.getElementById('departure-airport').value, destination: document.getElementById('destination-airport').value,
                 departure_date: document.getElementById('departure-date').value, adults: document.getElementById('adults').value, children: document.getElementById('children').value,
                 package_name: selectedPackage?.name, first_name: document.getElementById('first-name').value, last_name: document.getElementById('last-name').value,

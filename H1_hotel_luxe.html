@@ -494,7 +494,7 @@
             const now = new Date();
             const dateStr = now.getFullYear().toString() + (now.getMonth() + 1).toString().padStart(2, '0') + now.getDate().toString().padStart(2, '0');
             const random = Math.floor(Math.random() * 9999) + 1;
-            return `HT-${dateStr}-${random.toString().padStart(4, '0')}`;
+            return `HT1-${dateStr}-${random.toString().padStart(4, '0')}`;
         }
 
         function collectBookingData() {
@@ -503,7 +503,7 @@
             const totalPrice = updatePrice();
 
             return {
-                template_code: "H1",
+                template_code: "HT1",
                 booking_number: generateBookingNumber(),
                 checkin_date: ci,
                 checkout_date: co,
