@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaga VIP Limousine | E3</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-dark: #b8860b;
+            --black: #0a0a0a;
+            --glass: rgba(15, 15, 15, 0.85);
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--black);
+            color: #e5e5e5;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+        .step-active {
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+        }
+        .step-inactive {
+            color: #4b5563;
+            border-bottom: 2px solid transparent;
+        }
+        .gold-button {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--black);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+        .gold-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+        #map { height: 400px; border-radius: 24px; width: 100%; border: 1px solid rgba(212, 175, 55, 0.1); }
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(212, 175, 55, 0.2) !important;
+            color: white !important;
+        }
+        input:focus { border-color: var(--gold) !important; outline: none; }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; color: black; }
+            .glass-card { box-shadow: none; border: 1px solid #ddd; background: white; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Premium Header -->
+    <header class="bg-black/50 backdrop-blur border-b border-gold/10 sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 border-2 border-gold rounded-full flex items-center justify-center">
+                    <i class="fas fa-crown text-gold text-xl"></i>
+                </div>
+                <div>
+                    <span class="block text-2xl font-serif font-bold tracking-widest uppercase text-white">Malaga<span class="text-gold">VIP</span></span>
+                    <span class="block text-[8px] uppercase tracking-[0.3em] text-gold/60 font-bold">Limousine Services</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-8">
+                <div class="flex gap-4 text-[10px] font-bold tracking-widest">
+                    <button onclick="setLanguage('es')" class="hover:text-gold lang-btn" id="lang-es">ES</button>
+                    <button onclick="setLanguage('en')" class="hover:text-gold lang-btn" id="lang-en">EN</button>
+                    <button onclick="setLanguage('fr')" class="hover:text-gold lang-btn" id="lang-fr">FR</button>
+                    <button onclick="setLanguage('nl')" class="hover:text-gold lang-btn" id="lang-nl">NL</button>
+                </div>
+                <div class="h-10 w-px bg-gold/10"></div>
+                <span class="text-gold font-serif italic text-lg">+34 951 000 003</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-16 px-6 max-w-7xl mx-auto">
+
+        <!-- Monitoring Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 no-print">
+            <div class="glass-card p-8 border-l-4 border-gold">
+                <div class="flex items-center gap-6">
+                    <i class="fas fa-calendar-check text-gold text-3xl"></i>
+                    <div>
+                        <h4 class="text-3xl font-serif font-bold text-white" id="stats-bookings">--</h4>
+                        <p class="text-[10px] uppercase tracking-widest text-gold/50 font-bold">Reservas Hoy</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card p-8 border-l-4 border-white/20">
+                <div class="flex items-center gap-6">
+                    <i class="fas fa-car-side text-white text-3xl opacity-50"></i>
+                    <div>
+                        <h4 class="text-3xl font-serif font-bold text-white" id="stats-vehicles">--</h4>
+                        <p class="text-[10px] uppercase tracking-widest text-white/30 font-bold">Flota Activa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card p-8 flex flex-col justify-center text-center bg-gold/5">
+                <div class="text-gold text-[10px] font-bold tracking-[0.3em] uppercase mb-1">Live Status</div>
+                <p class="text-sm italic font-serif text-white/80">Alta disponibilidad en Puerto Banús.</p>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="text-center mb-20 no-print">
+            <h1 class="text-6xl md:text-7xl font-serif font-bold text-white mb-6" data-i18n="hero_title">Exclusividad en cada Trayecto</h1>
+            <p class="text-xl text-gold/60 font-light tracking-widest uppercase" data-i18n="hero_subtitle">Servicio VIP de Limusina en la Costa del Sol</p>
+        </div>
+
+        <!-- Booking Interface -->
+        <div class="glass-card overflow-hidden no-print">
+            <!-- Steps -->
+            <div class="flex border-b border-gold/5 bg-white/5">
+                <button onclick="goToStep(1)" id="step-nav-1" class="flex-1 py-6 text-center text-xs uppercase tracking-[0.2em] font-bold transition-all step-active">01. <span data-i18n="step_route">Ruta</span></button>
+                <button onclick="goToStep(2)" id="step-nav-2" class="flex-1 py-6 text-center text-xs uppercase tracking-[0.2em] font-bold transition-all step-inactive" disabled>02. <span data-i18n="step_vehicle">Flota</span></button>
+                <button onclick="goToStep(3)" id="step-nav-3" class="flex-1 py-6 text-center text-xs uppercase tracking-[0.2em] font-bold transition-all step-inactive" disabled>03. <span data-i18n="step_extras">Experiencia</span></button>
+                <button onclick="goToStep(4)" id="step-nav-4" class="flex-1 py-6 text-center text-xs uppercase tracking-[0.2em] font-bold transition-all step-inactive" disabled>04. <span data-i18n="step_details">Reserva</span></button>
+            </div>
+
+            <div class="p-10 md:p-16">
+                <!-- Step 1 -->
+                <div id="step-1" class="space-y-12">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                        <div class="space-y-8">
+                            <div class="space-y-6">
+                                <div class="relative">
+                                    <label class="text-[9px] uppercase font-bold text-gold tracking-widest mb-2 block" data-i18n="label_pickup">Punto de Recogida</label>
+                                    <input type="text" id="pickup" placeholder="Ubicación VIP..." class="w-full p-4 rounded-xl focus:outline-none transition-all">
+                                    <div id="pickup-suggestions" class="absolute z-20 w-full bg-black/90 border border-gold/20 rounded-b-xl overflow-hidden hidden"></div>
+                                </div>
+                                <div class="relative">
+                                    <label class="text-[9px] uppercase font-bold text-gold tracking-widest mb-2 block" data-i18n="label_dest">Destino</label>
+                                    <input type="text" id="destination" placeholder="Lugar de Llegada..." class="w-full p-4 rounded-xl focus:outline-none transition-all">
+                                    <div id="dest-suggestions" class="absolute z-20 w-full bg-black/90 border border-gold/20 rounded-b-xl overflow-hidden hidden"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="text-[9px] uppercase font-bold text-gold tracking-widest mb-2 block" data-i18n="label_date">Fecha</label>
+                                        <input type="date" id="booking-date" class="w-full p-4 rounded-xl">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase font-bold text-gold tracking-widest mb-2 block" data-i18n="label_time">Hora</label>
+                                        <input type="time" id="booking-time" class="w-full p-4 rounded-xl">
+                                    </div>
+                                </div>
+                                <label class="flex items-center gap-4 p-5 rounded-2xl bg-white/5 border border-gold/10 cursor-pointer hover:bg-white/10 transition-all">
+                                    <input type="checkbox" id="return-trip" class="w-5 h-5 rounded border-gold text-gold bg-black" onchange="updatePrice()">
+                                    <span class="text-sm font-medium tracking-wide uppercase" data-i18n="label_return">Trayecto de Vuelta de Cortesía</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="map"></div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button onclick="validateStep1()" class="gold-button py-5 px-16 rounded-full text-sm">
+                            <span data-i18n="btn_next">Descubrir Flota</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div id="step-2" class="hidden space-y-12">
+                    <h2 class="text-4xl font-serif text-white text-center" data-i18n="h_vehicle">Nuestra Selección Exclusiva</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Luxury Sedan -->
+                        <div onclick="selectVehicle('limo', 3.50, 4, 3)" class="vehicle-card group p-8 rounded-[40px] bg-white/5 border-2 border-transparent hover:border-gold transition-all cursor-pointer text-center" id="v-limo">
+                            <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=400&h=200" alt="Limo" class="w-full mb-8 rounded-3xl filter grayscale group-hover:grayscale-0 transition-all">
+                            <h3 class="text-2xl font-serif font-bold text-gold mb-2">Majestic Limousine</h3>
+                            <p class="text-[10px] uppercase tracking-widest text-white/40 mb-6">Máximo Confort y Discreción</p>
+                            <div class="text-3xl font-light text-white" id="price-limo">-- €</div>
+                        </div>
+                        <!-- Luxury SUV -->
+                        <div onclick="selectVehicle('vip-suv', 4.00, 4, 4)" class="vehicle-card group p-8 rounded-[40px] bg-white/5 border-2 border-transparent hover:border-gold transition-all cursor-pointer text-center" id="v-vip-suv">
+                            <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=400&h=200" alt="SUV" class="w-full mb-8 rounded-3xl filter grayscale group-hover:grayscale-0 transition-all">
+                            <h3 class="text-2xl font-serif font-bold text-gold mb-2">Grand SUV VIP</h3>
+                            <p class="text-[10px] uppercase tracking-widest text-white/40 mb-6">Poder y Estilo Elevado</p>
+                            <div class="text-3xl font-light text-white" id="price-vip-suv">-- €</div>
+                        </div>
+                        <!-- Presidential -->
+                        <div onclick="selectVehicle('presidential', 6.00, 2, 2)" class="vehicle-card group p-8 rounded-[40px] bg-white/5 border-2 border-transparent hover:border-gold transition-all cursor-pointer text-center" id="v-presidential">
+                            <img src="https://images.unsplash.com/photo-1563720223185-11003d5169bd?auto=format&fit=crop&q=80&w=400&h=200" alt="President" class="w-full mb-8 rounded-3xl filter grayscale group-hover:grayscale-0 transition-all">
+                            <h3 class="text-2xl font-serif font-bold text-gold mb-2">Presidential Fleet</h3>
+                            <p class="text-[10px] uppercase tracking-widest text-white/40 mb-6">Lo último en Lujo Privado</p>
+                            <div class="text-3xl font-light text-white" id="price-presidential">-- €</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center max-w-4xl mx-auto">
+                        <button onclick="goToStep(1)" class="text-white/30 hover:text-gold text-xs font-bold uppercase tracking-widest transition-all">Atrás</button>
+                        <button onclick="validateStep2()" class="gold-button py-5 px-16 rounded-full text-sm">Siguiente</button>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div id="step-3" class="hidden space-y-12">
+                    <h2 class="text-4xl font-serif text-white" data-i18n="h_extras">Personalice su Experiencia</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <label class="flex items-center justify-between p-10 rounded-[32px] bg-white/5 border border-gold/10 cursor-pointer hover:bg-gold/5 transition-all">
+                            <div class="flex items-center gap-6">
+                                <i class="fas fa-glass-cheers text-gold text-3xl"></i>
+                                <div>
+                                    <h4 class="font-serif text-xl font-bold">Moët & Chandon</h4>
+                                    <p class="text-xs text-gold/60 uppercase tracking-widest">+45.00 €</p>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="extra-champagne" class="w-8 h-8 rounded border-gold text-gold bg-black" onchange="updatePrice()">
+                        </label>
+                        <label class="flex items-center justify-between p-10 rounded-[32px] bg-white/5 border border-gold/10 cursor-pointer hover:bg-gold/5 transition-all">
+                            <div class="flex items-center gap-6">
+                                <i class="fas fa-lightbulb text-gold text-3xl"></i>
+                                <div>
+                                    <h4 class="font-serif text-xl font-bold">Atmósfera LED</h4>
+                                    <p class="text-xs text-gold/60 uppercase tracking-widest">+15.00 €</p>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="extra-lights" class="w-8 h-8 rounded border-gold text-gold bg-black" onchange="updatePrice()">
+                        </label>
+                    </div>
+                    <div class="flex justify-between items-center max-w-4xl mx-auto">
+                        <button onclick="goToStep(2)" class="text-white/30 hover:text-gold text-xs font-bold uppercase tracking-widest transition-all">Regresar</button>
+                        <button onclick="goToStep(4)" class="gold-button py-5 px-16 rounded-full text-sm">Resumen</button>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div id="step-4" class="hidden space-y-12">
+                    <h2 class="text-4xl font-serif text-white" data-i18n="h_details">Datos para la Excelencia</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                        <div class="space-y-6">
+                            <input type="text" id="full-name" placeholder="Nombre Ilustre..." class="w-full p-5 rounded-2xl">
+                            <input type="tel" id="phone" placeholder="Teléfono de Contacto..." class="w-full p-5 rounded-2xl">
+                            <input type="email" id="email" placeholder="Correo Electrónico..." class="w-full p-5 rounded-2xl">
+                            <textarea id="message" rows="4" placeholder="Requerimientos Especiales..." class="w-full p-5 rounded-2xl"></textarea>
+                        </div>
+                        <div class="p-12 rounded-[40px] bg-gold/5 border border-gold/20 flex flex-col justify-between">
+                            <div class="space-y-6">
+                                <h3 class="font-serif text-2xl text-gold border-b border-gold/10 pb-4">Su Reserva VIP</h3>
+                                <div class="flex justify-between">
+                                    <span class="text-xs uppercase tracking-widest text-white/40">Trayecto</span>
+                                    <span id="summary-route" class="text-sm font-bold text-right ml-4">--</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-xs uppercase tracking-widest text-white/40">Inversión Total</span>
+                                    <span id="summary-total" class="text-4xl font-serif font-bold text-gold">0.00 €</span>
+                                </div>
+                            </div>
+                            <button onclick="completeBooking()" class="gold-button w-full py-6 rounded-2xl mt-12 text-lg">RESERVAR AHORA</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mandatory Footer -->
+    <footer class="bg-black border-t border-gold/10 py-12 px-6 no-print">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
+                <p class="text-sm text-gold font-medium">Operated by Fleetconnect</p>
+                <p class="text-xs text-gold/50 mt-1">Design by Ryzen Outsourcing</p>
+            </div>
+            <div class="flex gap-8 text-white/30 text-xs uppercase tracking-widest font-bold">
+                <a href="#" class="hover:text-gold transition-colors">Wie zijn we</a>
+                <a href="#" class="hover:text-gold transition-colors">Diensten</a>
+                <a href="#" class="hover:text-gold transition-colors">Contact</a>
+                <a href="#" class="hover:text-gold transition-colors">Privacy</a>
+            </div>
+            <div class="flex gap-6 text-gold/40 text-xl">
+                <i class="fab fa-facebook-f hover:text-gold cursor-pointer"></i>
+                <i class="fab fa-instagram hover:text-gold cursor-pointer"></i>
+                <i class="fab fa-whatsapp hover:text-gold cursor-pointer"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Fiche Modal -->
+    <div id="fiche-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/95 backdrop-blur-xl">
+        <div class="bg-[#111] w-full max-w-3xl rounded-[48px] border border-gold/30 p-12 overflow-hidden shadow-[0_0_100px_rgba(212,175,55,0.1)]">
+            <div class="text-center mb-12">
+                <i class="fas fa-crown text-gold text-5xl mb-4"></i>
+                <h2 class="text-4xl font-serif text-white mb-2">Comprobante VIP</h2>
+                <p class="text-gold tracking-[0.4em] uppercase text-[10px]" id="fiche-id">REF: E3-XXXXXX</p>
+            </div>
+            <div id="fiche-content" class="space-y-8 border-y border-gold/10 py-10"></div>
+            <div class="flex gap-6 mt-12 no-print">
+                <button onclick="window.print()" class="gold-button flex-1 py-5 rounded-2xl">IMPRIMIR</button>
+                <button onclick="downloadJSON()" class="flex-1 border border-gold/30 text-gold font-bold py-5 rounded-2xl hover:bg-gold/10 transition-all uppercase tracking-widest text-xs">Descargar JSON</button>
+                <button onclick="location.reload()" class="text-white/20 hover:text-white transition-all text-[10px] uppercase font-bold">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const translations = {
+            es: {
+                hero_title: "Exclusividad en cada Trayecto",
+                hero_subtitle: "Servicio VIP de Limusina en la Costa del Sol",
+                step_route: "Ruta", step_vehicle: "Flota", step_extras: "Experiencia", step_details: "Reserva",
+                label_pickup: "Punto de Recogida", label_dest: "Destino", label_date: "Fecha", label_time: "Hora", label_return: "Trayecto de Vuelta de Cortesía",
+                btn_next: "Continuar", h_vehicle: "Nuestra Selección Exclusiva", h_extras: "Personalice su Experiencia", h_details: "Datos para la Excelencia"
+            },
+            en: {
+                hero_title: "Exclusivity in Every Journey",
+                hero_subtitle: "VIP Limousine Service on the Costa del Sol",
+                step_route: "Route", step_vehicle: "Fleet", step_extras: "Experience", step_details: "Booking",
+                label_pickup: "Pickup Point", label_dest: "Destination", label_date: "Date", label_time: "Time", label_return: "Complimentary Return Trip",
+                btn_next: "Discover Fleet", h_vehicle: "Our Exclusive Selection", h_extras: "Personalize Your Experience", h_details: "Details for Excellence"
+            },
+            fr: {
+                hero_title: "L'Exclusivité à Chaque Trajet",
+                hero_subtitle: "Service de Limousine VIP sur la Costa del Sol",
+                step_route: "Itinéraire", step_vehicle: "Flotte", step_extras: "Expérience", step_details: "Réservation",
+                label_pickup: "Point de Départ", label_dest: "Destination", label_date: "Date", label_time: "Heure", label_return: "Trajet de Retour de Courtoisie",
+                btn_next: "Découvrir la Flotte", h_vehicle: "Notre Sélection Exclusive", h_extras: "Personnalisez Votre Expérience", h_details: "Données pour l'Excellence"
+            },
+            nl: {
+                hero_title: "Exclusiviteit bij Elke Reis",
+                hero_subtitle: "VIP Limousine Service aan de Costa del Sol",
+                step_route: "Route", step_vehicle: "Vloot", step_extras: "Ervaring", step_details: "Reservering",
+                label_pickup: "Ophaalpunt", label_dest: "Bestemming", label_date: "Datum", label_time: "Tijd", label_return: "Gratis Retourrit",
+                btn_next: "Ontdek de Vloot", h_vehicle: "Onze Exclusieve Selectie", h_extras: "Personaliseer Uw Ervaring", h_details: "Gegevens voor Uitmuntendheid"
+            }
+        };
+
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerText = translations[lang][key];
+            });
+        }
+        setLanguage('es');
+
+        let map, markerPickup, markerDest, polyline;
+        const MALAGA_CENTER = [36.7213, -4.4214];
+
+        function initMap() {
+            map = L.map('map').setView(MALAGA_CENTER, 13);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+            markerPickup = L.marker(MALAGA_CENTER).addTo(map);
+            markerDest = L.marker(MALAGA_CENTER, { opacity: 0 }).addTo(map);
+        }
+
+        async function getRoute(p1, p2) {
+            const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${p1[1]},${p1[0]};${p2[1]},${p2[0]}?overview=full&geometries=geojson`);
+            const data = await res.json();
+            if (data.code === 'Ok') {
+                const route = data.routes[0];
+                if (polyline) map.removeLayer(polyline);
+                polyline = L.geoJSON(route.geometry, { style: { color: '#d4af37', weight: 4 } }).addTo(map);
+                map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+                bookingData.distance = route.distance / 1000;
+                updatePrice();
+            }
+        }
+
+        async function searchAddress(query, elementId) {
+            if (query.length < 3) return;
+            const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&lat=36.72&lon=-4.42`);
+            const data = await res.json();
+            const container = document.getElementById(`${elementId}-suggestions`);
+            container.innerHTML = '';
+            container.classList.remove('hidden');
+            data.features.forEach(f => {
+                const div = document.createElement('div');
+                div.className = "px-6 py-4 hover:bg-gold/10 cursor-pointer text-sm text-white/80 border-b border-gold/5";
+                div.innerText = f.properties.name + (f.properties.city ? `, ${f.properties.city}` : '');
+                div.onclick = () => {
+                    const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+                    document.getElementById(elementId).value = div.innerText;
+                    container.classList.add('hidden');
+                    if (elementId === 'pickup') { bookingData.pickup = div.innerText; bookingData.pickup_coords = coords; markerPickup.setLatLng(coords); }
+                    else { bookingData.destination = div.innerText; bookingData.dest_coords = coords; markerDest.setLatLng(coords).setOpacity(1); }
+                    if (bookingData.pickup_coords && bookingData.dest_coords) getRoute(bookingData.pickup_coords, bookingData.dest_coords);
+                };
+                container.appendChild(div);
+            });
+        }
+        document.getElementById('pickup').oninput = (e) => searchAddress(e.target.value, 'pickup');
+        document.getElementById('destination').oninput = (e) => searchAddress(e.target.value, 'destination');
+
+        let bookingData = {
+            template_code: 'E3',
+            ready_for_supabase: true,
+            pickup_location: '', pickup_coords: null, destination_location: '', dest_coords: null,
+            booking_date: '', booking_time: '', return_trip: false, distance_km: 0, vehicle_type: null,
+            extras: { champagne: false, lights: false }, total_price: 0
+        };
+
+        function updatePrice() {
+            if (!bookingData.vehicle_type) return;
+            let price = 5.00 + (bookingData.distance_km * bookingData.vehicle_type.kmPrice);
+            if (document.getElementById('extra-champagne').checked) price += 45;
+            if (document.getElementById('extra-lights').checked) price += 15;
+            const hour = parseInt(document.getElementById('booking-time').value.split(':')[0]);
+            if (hour >= 22 || hour < 7) price *= 1.25;
+            if (document.getElementById('return-trip').checked) price *= 2;
+            bookingData.total_price = price;
+            document.querySelectorAll('[id^="price-"]').forEach(el => el.innerText = "-- €");
+            document.getElementById(`price-${bookingData.vehicle_type.id}`).innerText = `${price.toFixed(2)} €`;
+            document.getElementById('summary-total').innerText = `${price.toFixed(2)} €`;
+        }
+
+        function selectVehicle(id, kmPrice) {
+            bookingData.vehicle_type = { id, kmPrice };
+            document.querySelectorAll('.vehicle-card').forEach(c => c.classList.remove('border-gold', 'bg-gold/10'));
+            document.getElementById(`v-${id}`).classList.add('border-gold', 'bg-gold/10');
+            updatePrice();
+        }
+
+        function goToStep(s) {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`step-${i}`).classList.toggle('hidden', i !== s);
+                document.getElementById(`step-nav-${i}`).classList.toggle('step-active', i === s);
+            }
+            if (s === 4) document.getElementById('summary-route').innerText = `${bookingData.pickup_location} ➔ ${bookingData.destination_location}`;
+        }
+
+        function validateStep1() {
+            bookingData.booking_date = document.getElementById('booking-date').value;
+            bookingData.booking_time = document.getElementById('booking-time').value;
+            bookingData.return_trip = document.getElementById('return-trip').checked;
+            if (bookingData.pickup_location && bookingData.destination_location && bookingData.booking_date && bookingData.booking_time) {
+                document.getElementById('step-nav-2').disabled = false;
+                goToStep(2);
+            }
+        }
+        function validateStep2() { if (bookingData.vehicle_type) { document.getElementById('step-nav-3').disabled = false; goToStep(3); } }
+
+        function completeBooking() {
+            bookingData.client_name = document.getElementById('full-name').value;
+            bookingData.client_phone = document.getElementById('phone').value;
+            bookingData.client_email = document.getElementById('email').value;
+            bookingData.client_message = document.getElementById('message').value;
+
+            const bookingId = `E3-${Date.now().toString().slice(-6)}`;
+            bookingData.booking_id = bookingId;
+            document.getElementById('fiche-id').innerText = `REF: ${bookingId}`;
+            document.getElementById('fiche-content').innerHTML = `
+                <div class="grid grid-cols-2 gap-10">
+                    <div><h4 class="text-gold text-[8px] uppercase tracking-widest mb-2">Pasajero</h4><p class="text-white text-xl font-serif">${bookingData.client_name}</p></div>
+                    <div class="text-right"><h4 class="text-gold text-[8px] uppercase tracking-widest mb-2">Fecha</h4><p class="text-white text-xl font-serif">${bookingData.booking_date}</p></div>
+                    <div class="col-span-2 p-8 rounded-3xl bg-white/5"><h4 class="text-gold text-[8px] uppercase tracking-widest mb-4">Trayecto VIP</h4><p class="text-white font-serif">${bookingData.pickup_location} ➔ ${bookingData.destination_location}</p></div>
+                    <div><h4 class="text-gold text-[8px] uppercase tracking-widest mb-2">Vehículo</h4><p class="text-white uppercase font-serif">${bookingData.vehicle_type.id}</p></div>
+                    <div class="text-right"><h4 class="text-gold text-[8px] uppercase tracking-widest mb-2">Inversión</h4><p class="text-3xl text-gold font-serif">${bookingData.total_price.toFixed(2)} €</p></div>
+                </div>`;
+            document.getElementById('fiche-modal').classList.remove('hidden');
+            console.log("🚀 Supabase:", bookingData);
+        }
+
+        function updateStats() {
+            document.getElementById('stats-bookings').innerText = Math.floor(Math.random() * 15) + 25;
+            document.getElementById('stats-vehicles').innerText = Math.floor(Math.random() * 5) + 10;
+        }
+
+        window.onload = () => {
+            initMap();
+            updateStats();
+            setInterval(updateStats, 30000);
+        };
+    </script>
+</body>
+</html>

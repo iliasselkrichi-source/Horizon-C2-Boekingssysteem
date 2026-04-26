@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaga Taxi Standard | E1</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary: #2563eb; /* Blue for Standard */
+            --primary-dark: #1d4ed8;
+            --accent: #f59e0b;
+            --bg-glass: rgba(255, 255, 255, 0.9);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .glass-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .step-active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        .step-inactive {
+            color: #94a3b8;
+            border-bottom: 3px solid transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        #map { height: 350px; border-radius: 16px; width: 100%; z-index: 10; }
+
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; }
+            .glass-card { box-shadow: none; border: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 no-print">
+        <div class="max-container mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="bg-blue-600 p-2 rounded-lg">
+                    <i class="fas fa-taxi text-white text-xl"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight">Malaga<span class="text-blue-600">Taxi</span></span>
+                <span class="ml-2 px-2 py-0.5 bg-slate-100 rounded text-xs font-semibold text-slate-500">E1</span>
+            </div>
+
+            <!-- Language Selector -->
+            <div class="flex items-center gap-4">
+                <div class="flex gap-2 text-xs font-semibold">
+                    <button onclick="setLanguage('es')" class="hover:text-blue-600 lang-btn" id="lang-es">ES</button>
+                    <span class="text-slate-300">|</span>
+                    <button onclick="setLanguage('en')" class="hover:text-blue-600 lang-btn" id="lang-en">EN</button>
+                    <span class="text-slate-300">|</span>
+                    <button onclick="setLanguage('fr')" class="hover:text-blue-600 lang-btn" id="lang-fr">FR</button>
+                    <span class="text-slate-300">|</span>
+                    <button onclick="setLanguage('nl')" class="hover:text-blue-600 lang-btn" id="lang-nl">NL</button>
+                </div>
+                <div class="hidden md:flex flex-col text-right">
+                    <span class="text-[10px] uppercase text-slate-400 font-bold tracking-widest" data-i18n="dispatch_title">Central de Reservas</span>
+                    <span class="text-sm font-bold text-slate-700">+34 951 000 000</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-12 px-4 max-w-6xl mx-auto">
+
+        <!-- Dashboard / Monitoring (Simulated) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 no-print">
+            <div class="glass-card p-6 flex items-center gap-4 border-l-4 border-blue-600">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                    <i class="fas fa-calendar-check text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="text-2xl font-bold" id="stats-bookings">--</h4>
+                    <p class="text-xs text-slate-500 uppercase font-bold" data-i18n="stats_reservations">Reservas Hoy</p>
+                </div>
+            </div>
+            <div class="glass-card p-6 flex items-center gap-4 border-l-4 border-green-500">
+                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                    <i class="fas fa-car-side text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="text-2xl font-bold" id="stats-vehicles">--</h4>
+                    <p class="text-xs text-slate-500 uppercase font-bold" data-i18n="stats_active">Vehículos Activos</p>
+                </div>
+            </div>
+            <div class="glass-card p-6 bg-slate-900 text-white border-none">
+                <div class="flex flex-col justify-between h-full">
+                    <div class="flex items-center gap-2 text-blue-400 mb-2">
+                        <i class="fas fa-bolt"></i>
+                        <span class="text-[10px] font-bold uppercase tracking-widest" data-i18n="live_status">Estado en Vivo</span>
+                    </div>
+                    <p class="text-sm opacity-80" data-i18n="live_msg">Demanda alta en Centro Histórico. Disponibilidad inmediata.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Section -->
+        <div class="glass-card overflow-hidden no-print">
+            <!-- Step Navigation -->
+            <div class="flex border-b border-slate-100 bg-slate-50/50">
+                <button onclick="goToStep(1)" id="step-nav-1" class="flex-1 py-4 text-center font-bold text-sm uppercase tracking-wider transition-all step-active">
+                    <span class="block md:inline mr-1 text-[10px] opacity-60">01</span> <span data-i18n="step_route">Ruta</span>
+                </button>
+                <button onclick="goToStep(2)" id="step-nav-2" class="flex-1 py-4 text-center font-bold text-sm uppercase tracking-wider transition-all step-inactive" disabled>
+                    <span class="block md:inline mr-1 text-[10px] opacity-60">02</span> <span data-i18n="step_vehicle">Vehículo</span>
+                </button>
+                <button onclick="goToStep(3)" id="step-nav-3" class="flex-1 py-4 text-center font-bold text-sm uppercase tracking-wider transition-all step-inactive" disabled>
+                    <span class="block md:inline mr-1 text-[10px] opacity-60">03</span> <span data-i18n="step_extras">Extras</span>
+                </button>
+                <button onclick="goToStep(4)" id="step-nav-4" class="flex-1 py-4 text-center font-bold text-sm uppercase tracking-wider transition-all step-inactive" disabled>
+                    <span class="block md:inline mr-1 text-[10px] opacity-60">04</span> <span data-i18n="step_details">Detalles</span>
+                </button>
+            </div>
+
+            <!-- Form Content -->
+            <div class="p-8 md:p-12">
+
+                <!-- STEP 1: ROUTE -->
+                <div id="step-1" class="space-y-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div class="space-y-6">
+                            <h2 class="text-3xl font-serif text-slate-800" data-i18n="h_route">¿A dónde vamos?</h2>
+
+                            <!-- Quick Selection -->
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <button onclick="quickSet('Aeropuerto de Málaga (AGP)', 36.6749, -4.4991)" class="px-3 py-2 bg-slate-100 hover:bg-blue-100 hover:text-blue-700 rounded-lg text-xs font-semibold transition-colors">
+                                    ✈️ AGP
+                                </button>
+                                <button onclick="quickSet('Estación María Zambrano', 36.7115, -4.4326)" class="px-3 py-2 bg-slate-100 hover:bg-blue-100 hover:text-blue-700 rounded-lg text-xs font-semibold transition-colors">
+                                    🚉 Tren
+                                </button>
+                                <button onclick="quickSet('Puerto de Málaga', 36.7161, -4.4173)" class="px-3 py-2 bg-slate-100 hover:bg-blue-100 hover:text-blue-700 rounded-lg text-xs font-semibold transition-colors">
+                                    ⚓ Puerto
+                                </button>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="relative">
+                                    <label class="text-[10px] uppercase font-bold text-slate-400 absolute top-2 left-4 z-10" data-i18n="label_pickup">Punto de Recogida</label>
+                                    <div class="relative">
+                                        <i class="fas fa-circle text-blue-500 absolute left-4 top-8 text-[8px]"></i>
+                                        <input type="text" id="pickup" placeholder="Dirección en Malaga..." class="w-full pt-8 pb-3 px-10 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-500 focus:outline-none transition-all">
+                                        <div id="pickup-suggestions" class="absolute z-20 w-full bg-white shadow-xl rounded-b-xl overflow-hidden hidden border border-slate-200"></div>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <label class="text-[10px] uppercase font-bold text-slate-400 absolute top-2 left-4 z-10" data-i18n="label_dest">Destino</label>
+                                    <div class="relative">
+                                        <i class="fas fa-map-marker-alt text-red-500 absolute left-4 top-8 text-xs"></i>
+                                        <input type="text" id="destination" placeholder="Dirección de llegada..." class="w-full pt-8 pb-3 px-10 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-500 focus:outline-none transition-all">
+                                        <div id="dest-suggestions" class="absolute z-20 w-full bg-white shadow-xl rounded-b-xl overflow-hidden hidden border border-slate-200"></div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="relative">
+                                        <label class="text-[10px] uppercase font-bold text-slate-400 absolute top-2 left-4 z-10" data-i18n="label_date">Fecha</label>
+                                        <input type="date" id="booking-date" class="w-full pt-8 pb-3 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-500 focus:outline-none transition-all">
+                                    </div>
+                                    <div class="relative">
+                                        <label class="text-[10px] uppercase font-bold text-slate-400 absolute top-2 left-4 z-10" data-i18n="label_time">Hora</label>
+                                        <input type="time" id="booking-time" class="w-full pt-8 pb-3 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-500 focus:outline-none transition-all">
+                                    </div>
+                                </div>
+                                <label class="flex items-center gap-3 p-4 bg-slate-50 rounded-xl cursor-pointer border-2 border-transparent hover:border-blue-200 transition-all">
+                                    <input type="checkbox" id="return-trip" class="w-5 h-5 rounded text-blue-600 focus:ring-blue-500">
+                                    <span class="text-sm font-semibold text-slate-700" data-i18n="label_return">Viaje de Vuelta</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <div id="map"></div>
+                            <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur p-4 rounded-xl shadow-lg border border-white z-[1000] flex justify-between items-center text-xs">
+                                <div>
+                                    <span class="block uppercase tracking-widest text-slate-400 font-bold mb-1" data-i18n="info_dist">Distancia Est.</span>
+                                    <span id="dist-val" class="text-lg font-bold">0.0 km</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="block uppercase tracking-widest text-slate-400 font-bold mb-1" data-i18n="info_time">Tiempo Est.</span>
+                                    <span id="time-val" class="text-lg font-bold">0 min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button onclick="validateStep1()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-2xl shadow-xl shadow-blue-200 transition-all group">
+                            <span data-i18n="btn_next">Continuar</span> <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: VEHICLE -->
+                <div id="step-2" class="hidden space-y-8">
+                    <h2 class="text-3xl font-serif text-slate-800 text-center" data-i18n="h_vehicle">Elige tu Vehículo</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Standard Sedan -->
+                        <div onclick="selectVehicle('sedan', 1.25, 4, 3)" class="vehicle-card group bg-white border-2 border-slate-100 rounded-3xl p-6 cursor-pointer hover:border-blue-600 hover:shadow-xl transition-all relative overflow-hidden" id="v-sedan">
+                            <div class="absolute top-4 right-4 bg-blue-100 text-blue-600 text-[10px] font-bold px-2 py-1 rounded" data-i18n="v_pop">Popular</div>
+                            <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&q=80&w=400&h=200" alt="Sedan" class="w-full mb-6 group-hover:scale-105 transition-transform rounded-xl">
+                            <h3 class="text-xl font-bold mb-2">Standard Sedan</h3>
+                            <div class="flex items-center gap-4 text-slate-400 text-xs mb-4">
+                                <span><i class="fas fa-user-friends mr-1"></i> 4</span>
+                                <span><i class="fas fa-suitcase mr-1"></i> 3</span>
+                            </div>
+                            <div class="text-2xl font-black text-slate-800" id="price-sedan">-- €</div>
+                        </div>
+                        <!-- Executive -->
+                        <div onclick="selectVehicle('executive', 1.75, 3, 2)" class="vehicle-card bg-white border-2 border-slate-100 rounded-3xl p-6 cursor-pointer hover:border-blue-600 hover:shadow-xl transition-all relative" id="v-executive">
+                            <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=400&h=200" alt="Executive" class="w-full mb-6 rounded-xl">
+                            <h3 class="text-xl font-bold mb-2">Executive</h3>
+                            <div class="flex items-center gap-4 text-slate-400 text-xs mb-4">
+                                <span><i class="fas fa-user-friends mr-1"></i> 3</span>
+                                <span><i class="fas fa-suitcase mr-1"></i> 2</span>
+                            </div>
+                            <div class="text-2xl font-black text-slate-800" id="price-executive">-- €</div>
+                        </div>
+                        <!-- SUV -->
+                        <div onclick="selectVehicle('suv', 2.00, 4, 4)" class="vehicle-card bg-white border-2 border-slate-100 rounded-3xl p-6 cursor-pointer hover:border-blue-600 hover:shadow-xl transition-all relative" id="v-suv">
+                            <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=400&h=200" alt="SUV" class="w-full mb-6 rounded-xl">
+                            <h3 class="text-xl font-bold mb-2">Luxury SUV</h3>
+                            <div class="flex items-center gap-4 text-slate-400 text-xs mb-4">
+                                <span><i class="fas fa-user-friends mr-1"></i> 4</span>
+                                <span><i class="fas fa-suitcase mr-1"></i> 4</span>
+                            </div>
+                            <div class="text-2xl font-black text-slate-800" id="price-suv">-- €</div>
+                        </div>
+                        <!-- Van -->
+                        <div onclick="selectVehicle('van', 2.50, 8, 8)" class="vehicle-card bg-white border-2 border-slate-100 rounded-3xl p-6 cursor-pointer hover:border-blue-600 hover:shadow-xl transition-all relative" id="v-van">
+                            <img src="https://images.unsplash.com/photo-1527786356703-4b100091cd2c?auto=format&fit=crop&q=80&w=400&h=200" alt="Van" class="w-full mb-6 rounded-xl">
+                            <h3 class="text-xl font-bold mb-2">Minivan</h3>
+                            <div class="flex items-center gap-4 text-slate-400 text-xs mb-4">
+                                <span><i class="fas fa-user-friends mr-1"></i> 8</span>
+                                <span><i class="fas fa-suitcase mr-1"></i> 8</span>
+                            </div>
+                            <div class="text-2xl font-black text-slate-800" id="price-van">-- €</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button onclick="goToStep(1)" class="text-slate-400 font-bold hover:text-slate-600 transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i> <span data-i18n="btn_back">Atrás</span>
+                        </button>
+                        <button onclick="validateStep2()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-2xl shadow-xl shadow-blue-200 transition-all">
+                            <span data-i18n="btn_next">Continuar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: EXTRAS -->
+                <div id="step-3" class="hidden space-y-8">
+                    <h2 class="text-3xl font-serif text-slate-800" data-i18n="h_extras">Personaliza tu Viaje</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-6 bg-slate-50 rounded-3xl border-2 border-transparent">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-600 shadow-sm">
+                                        <i class="fas fa-baby"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800" data-i18n="extra_child">Silla de Niño</h4>
+                                        <p class="text-xs text-slate-400 font-semibold">+5.00 €</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button onclick="updateExtra('child', -1)" class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-white transition-colors">-</button>
+                                    <span id="extra-child-qty" class="font-bold w-4 text-center">0</span>
+                                    <button onclick="updateExtra('child', 1)" class="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-white transition-colors">+</button>
+                                </div>
+                            </div>
+                            <label class="flex items-center justify-between p-6 bg-slate-50 rounded-3xl border-2 border-transparent hover:border-blue-200 cursor-pointer transition-all">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-600 shadow-sm">
+                                        <i class="fas fa-wifi"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">WiFi Premium</h4>
+                                        <p class="text-xs text-slate-400 font-semibold">+4.00 €</p>
+                                    </div>
+                                </div>
+                                <input type="checkbox" id="extra-wifi" class="w-6 h-6 rounded text-blue-600" onchange="updatePrice()">
+                            </label>
+                        </div>
+                        <div class="space-y-4">
+                            <label class="flex items-center justify-between p-6 bg-slate-50 rounded-3xl border-2 border-transparent hover:border-blue-200 cursor-pointer transition-all">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-blue-600 shadow-sm">
+                                        <i class="fas fa-bottle-water"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800" data-i18n="extra_water">Agua Mineral</h4>
+                                        <p class="text-xs text-slate-400 font-semibold">+2.00 € / ud</p>
+                                    </div>
+                                </div>
+                                <input type="checkbox" id="extra-water" class="w-6 h-6 rounded text-blue-600" onchange="updatePrice()">
+                            </label>
+                            <div class="p-6 bg-blue-50 rounded-3xl border-2 border-blue-100">
+                                <div class="flex items-center gap-3 text-blue-800 mb-2">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="text-xs font-bold uppercase tracking-widest" data-i18n="note_title">Nota</span>
+                                </div>
+                                <p class="text-sm text-blue-600/80" data-i18n="note_msg">Nuestro conductor le esperará con un cartel identificativo en el punto de recogida.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button onclick="goToStep(2)" class="text-slate-400 font-bold hover:text-slate-600 transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i> <span data-i18n="btn_back">Atrás</span>
+                        </button>
+                        <button onclick="goToStep(4)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-2xl shadow-xl shadow-blue-200 transition-all">
+                            <span data-i18n="btn_next">Continuar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: DETAILS -->
+                <div id="step-4" class="hidden space-y-8">
+                    <h2 class="text-3xl font-serif text-slate-800" data-i18n="h_details">Datos de Contacto</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div class="space-y-4">
+                            <div class="relative">
+                                <label class="text-[10px] uppercase font-bold text-slate-400 absolute top-2 left-4 z-10" data-i18n="label_name">Nombre Completo</label>
+                                <input type="text" id="full-name" class="w-full pt-8 pb-3 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-500 focus:outline-none transition-all">
+                            </div>
+                            <div class="relative">
+                                <label class="text-[10px] uppercase font-bold text-slate-400 absolute top-2 left-4 z-10" data-i18n="label_email">Email</label>
+                                <input type="email" id="email" class="w-full pt-8 pb-3 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-500 focus:outline-none transition-all">
+                            </div>
+                            <div class="relative">
+                                <label class="text-[10px] uppercase font-bold text-slate-400 absolute top-2 left-4 z-10" data-i18n="label_phone">Teléfono</label>
+                                <input type="tel" id="phone" class="w-full pt-8 pb-3 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-500 focus:outline-none transition-all">
+                            </div>
+                            <div class="relative">
+                                <label class="text-[10px] uppercase font-bold text-slate-400 absolute top-2 left-4 z-10" data-i18n="label_msg">Observaciones</label>
+                                <textarea id="message" rows="3" class="w-full pt-8 pb-3 px-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-blue-500 focus:outline-none transition-all"></textarea>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900 rounded-3xl p-8 text-white">
+                            <h3 class="text-xl font-bold mb-6 border-b border-white/10 pb-4" data-i18n="summary_title">Resumen de Reserva</h3>
+                            <div class="space-y-4 mb-8">
+                                <div class="flex justify-between text-sm">
+                                    <span class="opacity-50" data-i18n="summary_route">Trayecto</span>
+                                    <span id="summary-route" class="font-medium text-right ml-4">--</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="opacity-50" data-i18n="summary_vehicle">Vehículo</span>
+                                    <span id="summary-vehicle" class="font-medium">--</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="opacity-50" data-i18n="summary_date">Cita</span>
+                                    <span id="summary-datetime" class="font-medium">--</span>
+                                </div>
+                                <div class="pt-4 border-t border-white/10 flex justify-between items-baseline">
+                                    <span class="text-xs uppercase tracking-widest font-bold text-blue-400" data-i18n="summary_total">Total Estimado</span>
+                                    <span id="summary-total" class="text-4xl font-black">0.00 €</span>
+                                </div>
+                            </div>
+                            <button onclick="completeBooking()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-blue-900/50">
+                                <span data-i18n="btn_confirm">Confirmar Reserva</span>
+                            </button>
+                            <p class="text-[10px] text-center mt-4 opacity-30" data-i18n="summary_disclaimer">Al confirmar, acepta nuestros términos y condiciones de servicio.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Booking Fiche -->
+    <div id="fiche-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl">
+            <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div>
+                    <h2 class="text-2xl font-serif font-bold text-slate-800" data-i18n="fiche_title">Ficha de Reserva</h2>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-widest" id="fiche-id">ID: E1-XXXXXX</p>
+                </div>
+                <button onclick="closeFiche()" class="text-slate-400 hover:text-slate-600 no-print">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-8" id="fiche-content">
+                <!-- Fiche content will be injected here -->
+            </div>
+            <div class="p-8 bg-slate-50 flex gap-4 no-print">
+                <button onclick="window.print()" class="flex-1 bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-print"></i> <span data-i18n="btn_print">Imprimir</span>
+                </button>
+                <button onclick="downloadJSON()" class="flex-1 border-2 border-slate-200 text-slate-600 font-bold py-3 rounded-xl hover:bg-white transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-file-code"></i> <span>JSON</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-12 px-4 no-print">
+        <div class="max-w-6xl mx-auto text-center">
+            <p class="text-sm text-slate-500 font-medium">Operated by Fleetconnect</p>
+            <p class="text-xs text-slate-400 mt-1">Design by Ryzen Outsourcing</p>
+            <div class="flex justify-center gap-6 mt-8">
+                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-slate-400 hover:text-blue-600 transition-colors"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 mt-8 text-[10px] uppercase font-bold tracking-widest text-slate-400">
+                <a href="#" class="hover:text-slate-600">Wie zijn we</a>
+                <a href="#" class="hover:text-slate-600">Diensten</a>
+                <a href="#" class="hover:text-slate-600">Contact</a>
+                <a href="#" class="hover:text-slate-600">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // --- TRANSLATIONS ---
+        const translations = {
+            es: {
+                dispatch_title: "Central de Reservas",
+                stats_reservations: "Reservas Hoy",
+                stats_active: "Vehículos Activos",
+                live_status: "Estado en Vivo",
+                live_msg: "Demanda alta en Centro Histórico. Disponibilidad inmediata.",
+                step_route: "Ruta",
+                step_vehicle: "Vehículo",
+                step_extras: "Extras",
+                step_details: "Detalles",
+                h_route: "¿A dónde vamos?",
+                label_pickup: "Punto de Recogida",
+                label_dest: "Destino",
+                label_date: "Fecha",
+                label_time: "Hora",
+                label_return: "Viaje de Vuelta",
+                info_dist: "Distancia Est.",
+                info_time: "Tiempo Est.",
+                btn_next: "Continuar",
+                btn_back: "Atrás",
+                h_vehicle: "Elige tu Vehículo",
+                v_pop: "Popular",
+                h_extras: "Personaliza tu Viaje",
+                extra_child: "Silla de Niño",
+                extra_water: "Agua Mineral",
+                note_title: "Nota",
+                note_msg: "Nuestro conductor le esperará con un cartel identificativo en el punto de recogida.",
+                h_details: "Datos de Contacto",
+                label_name: "Nombre Completo",
+                label_email: "Email",
+                label_phone: "Teléfono",
+                label_msg: "Observaciones",
+                summary_title: "Resumen de Reserva",
+                summary_route: "Trayecto",
+                summary_vehicle: "Vehículo",
+                summary_date: "Cita",
+                summary_total: "Total Estimado",
+                btn_confirm: "Confirmar Reserva",
+                summary_disclaimer: "Al confirmar, acepta nuestros términos y condiciones de servicio.",
+                fiche_title: "Ficha de Reserva",
+                btn_print: "Imprimir"
+            },
+            en: {
+                dispatch_title: "Booking Center",
+                stats_reservations: "Bookings Today",
+                stats_active: "Active Vehicles",
+                live_status: "Live Status",
+                live_msg: "High demand in Old Town. Immediate availability.",
+                step_route: "Route",
+                step_vehicle: "Vehicle",
+                step_extras: "Extras",
+                step_details: "Details",
+                h_route: "Where are we going?",
+                label_pickup: "Pickup Point",
+                label_dest: "Destination",
+                label_date: "Date",
+                label_time: "Time",
+                label_return: "Return Trip",
+                info_dist: "Est. Distance",
+                info_time: "Est. Time",
+                btn_next: "Continue",
+                btn_back: "Back",
+                h_vehicle: "Choose your Vehicle",
+                v_pop: "Popular",
+                h_extras: "Personalize your Trip",
+                extra_child: "Child Seat",
+                extra_water: "Mineral Water",
+                note_title: "Note",
+                note_msg: "Our driver will wait for you with a sign at the pickup point.",
+                h_details: "Contact Details",
+                label_name: "Full Name",
+                label_email: "Email",
+                label_phone: "Phone",
+                label_msg: "Notes",
+                summary_title: "Booking Summary",
+                summary_route: "Route",
+                summary_vehicle: "Vehicle",
+                summary_date: "Appointment",
+                summary_total: "Estimated Total",
+                btn_confirm: "Confirm Booking",
+                summary_disclaimer: "By confirming, you accept our terms and conditions.",
+                fiche_title: "Booking Fiche",
+                btn_print: "Print"
+            },
+            fr: {
+                dispatch_title: "Centre de Réservation",
+                stats_reservations: "Réservations Aujourd'hui",
+                stats_active: "Véhicules Actifs",
+                live_status: "Statut en Direct",
+                live_msg: "Forte demande en Vieille Ville. Disponibilité immédiate.",
+                step_route: "Itinéraire",
+                step_vehicle: "Véhicule",
+                step_extras: "Extras",
+                step_details: "Détails",
+                h_route: "Où allons-nous ?",
+                label_pickup: "Point de Départ",
+                label_dest: "Destination",
+                label_date: "Date",
+                label_time: "Heure",
+                label_return: "Trajet de Retour",
+                info_dist: "Distance Est.",
+                info_time: "Temps Est.",
+                btn_next: "Continuer",
+                btn_back: "Retour",
+                h_vehicle: "Choisissez votre Véhicule",
+                v_pop: "Populaire",
+                h_extras: "Personnalisez votre Voyage",
+                extra_child: "Siège Enfant",
+                extra_water: "Eau Minérale",
+                note_title: "Note",
+                note_msg: "Notre chauffeur vous attendra avec une pancarte au point de rendez-vous.",
+                h_details: "Coordonnées",
+                label_name: "Nom Complet",
+                label_email: "E-mail",
+                label_phone: "Téléphone",
+                label_msg: "Notes",
+                summary_title: "Résumé de Réservation",
+                summary_route: "Trajet",
+                summary_vehicle: "Véhicule",
+                summary_date: "Rendez-vous",
+                summary_total: "Total Estimé",
+                btn_confirm: "Confirmer la Réservation",
+                summary_disclaimer: "En confirmant, vous acceptez nos conditions générales.",
+                fiche_title: "Fiche de Réservation",
+                btn_print: "Imprimer"
+            },
+            nl: {
+                dispatch_title: "Boekingscentrum",
+                stats_reservations: "Boekingen Vandaag",
+                stats_active: "Actieve Voertuigen",
+                live_status: "Live Status",
+                live_msg: "Veel vraag in de Oude Stad. Onmiddellijke beschikbaarheid.",
+                step_route: "Route",
+                step_vehicle: "Voertuig",
+                step_extras: "Extras",
+                step_details: "Details",
+                h_route: "Waar gaan we heen?",
+                label_pickup: "Ophaalpunt",
+                label_dest: "Bestemming",
+                label_date: "Datum",
+                label_time: "Tijd",
+                label_return: "Retourrit",
+                info_dist: "Geschatte Afstand",
+                info_time: "Geschatte Tijd",
+                btn_next: "Doorgaan",
+                btn_back: "Terug",
+                h_vehicle: "Kies uw Voertuig",
+                v_pop: "Populair",
+                h_extras: "Personaliseer uw Reis",
+                extra_child: "Kinderzitje",
+                extra_water: "Mineraalwater",
+                note_title: "Notitie",
+                note_msg: "Onze chauffeur wacht op u met een bordje op het ophaalpunt.",
+                h_details: "Contactgegevens",
+                label_name: "Volledige Naam",
+                label_email: "E-mail",
+                label_phone: "Telefoon",
+                label_msg: "Opmerkingen",
+                summary_title: "Boekingsoverzicht",
+                summary_route: "Traject",
+                summary_vehicle: "Voertuig",
+                summary_date: "Afspraak",
+                summary_total: "Totaalbedrag",
+                btn_confirm: "Boeking Bevestigen",
+                summary_disclaimer: "Door te bevestigen gaat u akkoord met onze voorwaarden.",
+                fiche_title: "Boekingsfiche",
+                btn_print: "Printen"
+            }
+        };
+
+        let currentLang = 'es';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerText = translations[lang][key];
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('text-blue-600', btn.id === `lang-${lang}`);
+            });
+            localStorage.setItem('malaga_lang', lang);
+        }
+
+        // Initialize Language
+        const savedLang = localStorage.getItem('malaga_lang') || 'es';
+        setLanguage(savedLang);
+
+        // --- MAP & ROUTING ---
+        let map, markerPickup, markerDest, polyline;
+        const MALAGA_CENTER = [36.7213, -4.4214];
+
+        function initMap() {
+            map = L.map('map').setView(MALAGA_CENTER, 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+
+            markerPickup = L.marker(MALAGA_CENTER, { draggable: false }).addTo(map);
+            markerDest = L.marker(MALAGA_CENTER, { draggable: false, opacity: 0 }).addTo(map);
+        }
+
+        async function getRoute(p1, p2) {
+            try {
+                const response = await fetch(`https://router.project-osrm.org/route/v1/driving/${p1[1]},${p1[0]};${p2[1]},${p2[0]}?overview=full&geometries=geojson`);
+                const data = await response.json();
+                if (data.code === 'Ok') {
+                    const route = data.routes[0];
+                    const distance = (route.distance / 1000).toFixed(1);
+                    const duration = Math.round(route.duration / 60);
+
+                    if (polyline) map.removeLayer(polyline);
+                    polyline = L.geoJSON(route.geometry, { style: { color: '#2563eb', weight: 6, opacity: 0.7 } }).addTo(map);
+                    map.fitBounds(polyline.getBounds(), { padding: [40, 40] });
+
+                    document.getElementById('dist-val').innerText = `${distance} km`;
+                    document.getElementById('time-val').innerText = `${duration} min`;
+
+                    bookingData.distance = parseFloat(distance);
+                    bookingData.duration = duration;
+                    updatePrice();
+                }
+            } catch (e) { console.error("Routing error:", e); }
+        }
+
+        // --- GEOCODING (Photon) ---
+        async function searchAddress(query, elementId) {
+            if (query.length < 3) return;
+            try {
+                const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&lat=36.72&lon=-4.42`);
+                const data = await res.json();
+                const container = document.getElementById(`${elementId}-suggestions`);
+                container.innerHTML = '';
+                container.classList.remove('hidden');
+
+                data.features.forEach(f => {
+                    const div = document.createElement('div');
+                    div.className = "px-4 py-3 hover:bg-blue-50 cursor-pointer text-sm border-b border-slate-100 last:border-0";
+                    div.innerText = f.properties.name + (f.properties.city ? `, ${f.properties.city}` : '');
+                    div.onclick = () => {
+                        const coords = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+                        document.getElementById(elementId).value = div.innerText;
+                        container.classList.add('hidden');
+
+                        if (elementId === 'pickup') {
+                            bookingData.pickup = div.innerText;
+                            bookingData.pickup_coords = coords;
+                            markerPickup.setLatLng(coords);
+                        } else {
+                            bookingData.destination = div.innerText;
+                            bookingData.dest_coords = coords;
+                            markerDest.setLatLng(coords).setOpacity(1);
+                        }
+
+                        if (bookingData.pickup_coords && bookingData.dest_coords) {
+                            getRoute(bookingData.pickup_coords, bookingData.dest_coords);
+                        } else {
+                            map.setView(coords, 15);
+                        }
+                    };
+                    container.appendChild(div);
+                });
+            } catch (e) { console.error("Geocoding error:", e); }
+        }
+
+        document.getElementById('pickup').oninput = (e) => searchAddress(e.target.value, 'pickup');
+        document.getElementById('destination').oninput = (e) => searchAddress(e.target.value, 'destination');
+
+        function quickSet(name, lat, lon) {
+            const coords = [lat, lon];
+            document.getElementById('destination').value = name;
+            bookingData.destination = name;
+            bookingData.dest_coords = coords;
+            markerDest.setLatLng(coords).setOpacity(1);
+            if (bookingData.pickup_coords) getRoute(bookingData.pickup_coords, bookingData.dest_coords);
+            else map.setView(coords, 15);
+        }
+
+        // --- BOOKING LOGIC ---
+        let bookingData = {
+            template_code: 'E1',
+            ready_for_supabase: true,
+            pickup_location: '', pickup_coords: null,
+            destination_location: '', dest_coords: null,
+            booking_date: '', booking_time: '',
+            return_trip: false,
+            distance_km: 0, duration_min: 0,
+            vehicle_type: null,
+            extras: { child_seats: 0, wifi: false, water: false },
+            total_price: 0
+        };
+
+        function updatePrice() {
+            if (!bookingData.vehicle_type) return;
+
+            let base = 3.50; // Base flag
+            let price = base + (bookingData.distance_km * bookingData.vehicle_type.kmPrice);
+
+            // Night Surcharge (23:00 - 06:00)
+            const hour = parseInt(document.getElementById('booking-time').value.split(':')[0]);
+            if (hour >= 23 || hour < 6) price *= 1.2;
+
+            // Extras
+            price += bookingData.extras.child_seats * 5;
+            if (bookingData.extras.wifi) price += 4;
+            if (bookingData.extras.water) price += 2;
+
+            // Return
+            if (document.getElementById('return-trip').checked) price *= 2;
+
+            bookingData.total_price = price;
+            document.getElementById(`price-${bookingData.vehicle_type.id}`).innerText = `${price.toFixed(2)} €`;
+            document.getElementById('summary-total').innerText = `${price.toFixed(2)} €`;
+        }
+
+        function selectVehicle(id, kmPrice, pax, bags) {
+            bookingData.vehicle_type = { id, kmPrice, pax, bags };
+            document.querySelectorAll('.vehicle-card').forEach(c => c.classList.remove('border-blue-600', 'bg-blue-50'));
+            document.getElementById(`v-${id}`).classList.add('border-blue-600', 'bg-blue-50');
+            updatePrice();
+        }
+
+        function updateExtra(type, change) {
+            if (type === 'child') {
+                bookingData.extras.child_seats = Math.max(0, bookingData.extras.child_seats + change);
+                document.getElementById('extra-child-qty').innerText = bookingData.extras.child_seats;
+            }
+            updatePrice();
+        }
+
+        // --- STEP NAVIGATION ---
+        function goToStep(s) {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`step-${i}`).classList.toggle('hidden', i !== s);
+                const nav = document.getElementById(`step-nav-${i}`);
+                nav.classList.toggle('step-active', i === s);
+                nav.classList.toggle('step-inactive', i !== s);
+            }
+            if (s === 4) updateSummary();
+        }
+
+        function validateStep1() {
+            bookingData.booking_date = document.getElementById('booking-date').value;
+            bookingData.booking_time = document.getElementById('booking-time').value;
+            if (bookingData.pickup_location && bookingData.destination_location && bookingData.booking_date && bookingData.booking_time) {
+                document.getElementById('step-nav-2').disabled = false;
+                goToStep(2);
+            } else alert("Por favor complete todos los datos del trayecto.");
+        }
+
+        function validateStep2() {
+            if (bookingData.vehicle_type) {
+                document.getElementById('step-nav-3').disabled = false;
+                goToStep(3);
+            } else alert("Por favor seleccione un vehículo.");
+        }
+
+        function updateSummary() {
+            bookingData.extras.wifi = document.getElementById('extra-wifi').checked;
+            bookingData.extras.water = document.getElementById('extra-water').checked;
+            bookingData.return_trip = document.getElementById('return-trip').checked;
+
+            document.getElementById('summary-route').innerText = `${bookingData.pickup_location} ➔ ${bookingData.destination_location}`;
+            document.getElementById('summary-vehicle').innerText = bookingData.vehicle_type.id.toUpperCase();
+            document.getElementById('summary-datetime').innerText = `${bookingData.booking_date} @ ${bookingData.booking_time}`;
+            updatePrice();
+        }
+
+        function completeBooking() {
+            bookingData.client_name = document.getElementById('full-name').value;
+            bookingData.client_email = document.getElementById('email').value;
+            bookingData.client_phone = document.getElementById('phone').value;
+            bookingData.client_message = document.getElementById('message').value;
+
+            if (!bookingData.client_name || !bookingData.client_email || !bookingData.client_phone) {
+                alert("Por favor complete sus datos de contacto.");
+                return;
+            }
+
+            const bookingId = `E1-${Date.now().toString().slice(-6)}`;
+            bookingData.booking_id = bookingId;
+
+            showFiche();
+            submitToSupabase(bookingData);
+        }
+
+        // --- FICHE & EXPORT ---
+        function showFiche() {
+            document.getElementById('fiche-id').innerText = `ID: ${bookingData.id}`;
+            const content = `
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-[10px] uppercase font-bold text-slate-400 mb-2">Cliente</h4>
+                        <p class="font-bold">${bookingData.name}</p>
+                        <p class="text-sm text-slate-500">${bookingData.email}</p>
+                        <p class="text-sm text-slate-500">${bookingData.phone}</p>
+                    </div>
+                    <div class="text-right">
+                        <h4 class="text-[10px] uppercase font-bold text-slate-400 mb-2">Cita</h4>
+                        <p class="font-bold">${bookingData.date}</p>
+                        <p class="text-sm font-bold text-blue-600">${bookingData.time}</p>
+                    </div>
+                    <div class="col-span-2 p-4 bg-slate-50 rounded-2xl">
+                        <h4 class="text-[10px] uppercase font-bold text-slate-400 mb-2">Trayecto</h4>
+                        <p class="text-sm"><strong>Desde:</strong> ${bookingData.pickup}</p>
+                        <p class="text-sm"><strong>Hasta:</strong> ${bookingData.destination}</p>
+                        <p class="text-xs text-slate-400 mt-2 italic">${bookingData.distance} km / ~${bookingData.duration} min</p>
+                    </div>
+                    <div>
+                        <h4 class="text-[10px] uppercase font-bold text-slate-400 mb-2">Vehículo</h4>
+                        <p class="font-bold uppercase">${bookingData.vehicle.id}</p>
+                    </div>
+                    <div class="text-right">
+                        <h4 class="text-[10px] uppercase font-bold text-slate-400 mb-2">Total Estimado</h4>
+                        <p class="text-2xl font-black text-slate-800">${bookingData.total.toFixed(2)} €</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('fiche-content').innerHTML = content;
+            document.getElementById('fiche-modal').classList.remove('hidden');
+        }
+
+        function closeFiche() {
+            document.getElementById('fiche-modal').classList.add('hidden');
+            location.reload();
+        }
+
+        function downloadJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(bookingData, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `reserva_${bookingData.id}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function submitToSupabase(data) {
+            console.log("🚀 Booking Data for Supabase:", data);
+            // TODO: Replace with real Supabase call
+            // const { error } = await supabase.from('bookings').insert([data]);
+            alert("✅ Boeking klaar voor Supabase (geen echte verzending)");
+        }
+
+        // --- SIMULATED LIVE STATS ---
+        function updateStats() {
+            const bookings = Math.floor(Math.random() * 20) + 40;
+            const vehicles = Math.floor(Math.random() * 10) + 15;
+            document.getElementById('stats-bookings').innerText = bookings;
+            document.getElementById('stats-vehicles').innerText = vehicles;
+        }
+
+        window.onload = () => {
+            initMap();
+            updateStats();
+            setInterval(updateStats, 30000);
+
+            // Set default date to today
+            document.getElementById('booking-date').value = new Date().toISOString().split('T')[0];
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaga Business Taxi | E4</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --corporate: #1e3a8a; /* Deep Blue for Business */
+            --corporate-light: #3b82f6;
+            --bg: #f8fafc;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg);
+            color: #334155;
+        }
+        .font-heading {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .btn-corporate {
+            background-color: var(--corporate);
+            color: white;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-corporate:hover {
+            background-color: #1e40af;
+        }
+        .step-active {
+            color: var(--corporate);
+            border-bottom: 3px solid var(--corporate);
+        }
+        .step-inactive {
+            color: #94a3b8;
+            border-bottom: 3px solid transparent;
+        }
+        #map { height: 350px; border-radius: 8px; width: 100%; border: 1px solid #cbd5e1; }
+
+        @media print {
+            .no-print { display: none !important; }
+            .card { border: 1px solid #eee; box-shadow: none; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 h-20 flex items-center no-print">
+        <div class="max-w-7xl mx-auto w-full px-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-900 rounded flex items-center justify-center">
+                    <i class="fas fa-briefcase text-white"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight text-slate-900">Malaga<span class="text-blue-900">Business</span>Taxi</span>
+                <span class="bg-slate-100 text-[10px] font-bold px-2 py-1 rounded text-slate-500">E4</span>
+            </div>
+            <div class="flex gap-6 text-sm font-medium text-slate-500">
+                <button onclick="setLanguage('es')" class="hover:text-blue-900">ES</button>
+                <button onclick="setLanguage('en')" class="hover:text-blue-900">EN</button>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <span class="text-slate-900 font-bold">24/7 Corporate Line: +34 951 000 004</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow py-12 px-6 max-w-5xl mx-auto w-full">
+
+        <!-- Corporate Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 no-print">
+            <div class="card p-6 border-l-4 border-blue-900">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded bg-blue-50 flex items-center justify-center text-blue-900">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-slate-900" id="stats-bookings">--</h4>
+                        <p class="text-[10px] uppercase font-bold text-slate-400">Reservas Hoy</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-6 border-l-4 border-slate-200">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded bg-slate-50 flex items-center justify-center text-slate-400">
+                        <i class="fas fa-car-side"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold text-slate-900" id="stats-vehicles">--</h4>
+                        <p class="text-[10px] uppercase font-bold text-slate-400">Flota Activa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-6 bg-blue-900 text-white flex flex-col justify-center">
+                <div class="flex items-center gap-2 text-blue-300 mb-1">
+                    <i class="fas fa-clock text-xs"></i>
+                    <span class="text-[10px] font-bold uppercase tracking-wider">Disponibilidad</span>
+                </div>
+                <p class="text-xs opacity-80">Tiempo de respuesta: &lt; 15 min</p>
+            </div>
+        </div>
+
+        <header class="mb-10 no-print">
+            <h1 class="text-3xl font-heading font-bold text-slate-900" data-i18n="h_main">Gestión de Transporte Corporativo</h1>
+            <p class="text-slate-500 mt-2" data-i18n="p_main">Soluciones de movilidad eficientes para empresas y ejecutivos.</p>
+        </header>
+
+        <div class="card overflow-hidden no-print">
+            <div class="flex bg-slate-50 border-b border-slate-100">
+                <button onclick="goToStep(1)" id="step-nav-1" class="flex-1 py-4 text-xs font-bold uppercase tracking-wider step-active">1. <span data-i18n="s1">Reserva</span></button>
+                <button onclick="goToStep(2)" id="step-nav-2" class="flex-1 py-4 text-xs font-bold uppercase tracking-wider step-inactive" disabled>2. <span data-i18n="s2">Vehículo</span></button>
+                <button onclick="goToStep(3)" id="step-nav-3" class="flex-1 py-4 text-xs font-bold uppercase tracking-wider step-inactive" disabled>3. <span data-i18n="s3">Opciones</span></button>
+                <button onclick="goToStep(4)" id="step-nav-4" class="flex-1 py-4 text-xs font-bold uppercase tracking-wider step-inactive" disabled>4. <span data-i18n="s4">Facturación</span></button>
+            </div>
+
+            <div class="p-10">
+                <!-- Step 1 -->
+                <div id="step-1" class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase mb-1 block" data-i18n="l_pickup">Recogida</label>
+                                <input type="text" id="pickup" placeholder="Oficina, Aeropuerto..." class="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-900/10 focus:border-blue-900 transition-all outline-none">
+                                <div id="pickup-suggestions" class="absolute z-20 w-1/3 bg-white border border-slate-100 rounded-b shadow-lg hidden"></div>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase mb-1 block" data-i18n="l_dest">Destino</label>
+                                <input type="text" id="destination" placeholder="Dirección de destino..." class="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-900/10 focus:border-blue-900 transition-all outline-none">
+                                <div id="dest-suggestions" class="absolute z-20 w-1/3 bg-white border border-slate-100 rounded-b shadow-lg hidden"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-xs font-bold text-slate-500 uppercase mb-1 block" data-i18n="l_date">Fecha</label>
+                                    <input type="date" id="booking-date" class="w-full p-3 border border-slate-200 rounded-lg outline-none">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold text-slate-500 uppercase mb-1 block" data-i18n="l_time">Hora</label>
+                                    <input type="time" id="booking-time" class="w-full p-3 border border-slate-200 rounded-lg outline-none">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="map"></div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button onclick="validateStep1()" class="btn-corporate px-10 py-3 rounded-lg text-sm" data-i18n="b_next">Siguiente Paso</button>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div id="step-2" class="hidden space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div onclick="selectVehicle('business', 1.65)" class="p-6 border-2 border-slate-100 rounded-xl cursor-pointer hover:border-blue-900 transition-all" id="v-business">
+                            <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=400&h=200" alt="Business" class="w-full mb-6 rounded-lg">
+                            <h3 class="font-bold text-lg text-slate-800">Business Class Sedan</h3>
+                            <p class="text-xs text-slate-500 mt-1">E-Class or similar. WiFi & Water included.</p>
+                            <div class="mt-4 text-2xl font-bold text-blue-900" id="price-business">-- €</div>
+                        </div>
+                        <div onclick="selectVehicle('executive', 2.20)" class="p-6 border-2 border-slate-100 rounded-xl cursor-pointer hover:border-blue-900 transition-all" id="v-executive">
+                            <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=400&h=200" alt="Executive" class="w-full mb-6 rounded-lg">
+                            <h3 class="font-bold text-lg text-slate-800">First Class / Executive</h3>
+                            <p class="text-xs text-slate-500 mt-1">S-Class or similar. Premium service.</p>
+                            <div class="mt-4 text-2xl font-bold text-blue-900" id="price-executive">-- €</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between">
+                        <button onclick="goToStep(1)" class="text-slate-400 font-bold text-sm">Atrás</button>
+                        <button onclick="validateStep2()" class="btn-corporate px-10 py-3 rounded-lg text-sm">Continuar</button>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div id="step-3" class="hidden space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <label class="p-6 border border-slate-200 rounded-xl flex items-center gap-4 cursor-pointer hover:bg-slate-50">
+                            <input type="checkbox" id="extra-wifi" checked class="w-5 h-5 text-blue-900">
+                            <div>
+                                <h4 class="font-bold text-sm">WiFi de Alta Velocidad</h4>
+                                <p class="text-[10px] text-slate-500">Incluido en tarifa business</p>
+                            </div>
+                        </label>
+                        <label class="p-6 border border-slate-200 rounded-xl flex items-center gap-4 cursor-pointer hover:bg-slate-50">
+                            <input type="checkbox" id="extra-press" class="w-5 h-5 text-blue-900">
+                            <div>
+                                <h4 class="font-bold text-sm">Prensa Diaria</h4>
+                                <p class="text-[10px] text-slate-500">+3.00 €</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="flex justify-between">
+                        <button onclick="goToStep(2)" class="text-slate-400 font-bold text-sm">Atrás</button>
+                        <button onclick="goToStep(4)" class="btn-corporate px-10 py-3 rounded-lg text-sm">Facturación</button>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div id="step-4" class="hidden space-y-10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div class="space-y-4">
+                            <input type="text" id="company" placeholder="Nombre de la Empresa" class="w-full p-3 border border-slate-200 rounded-lg outline-none">
+                            <input type="text" id="vat" placeholder="CIF / VAT Number" class="w-full p-3 border border-slate-200 rounded-lg outline-none">
+                            <input type="text" id="cost-center" placeholder="Centro de Coste / Referencia" class="w-full p-3 border border-slate-200 rounded-lg outline-none">
+                            <textarea id="billing-address" rows="3" placeholder="Dirección de Facturación" class="w-full p-3 border border-slate-200 rounded-lg outline-none"></textarea>
+                        </div>
+                        <div class="bg-slate-900 p-8 rounded-xl text-white">
+                            <h3 class="font-bold text-xl mb-4">Confirmación de Cargo</h3>
+                            <div class="space-y-3 mb-6 opacity-80 text-sm">
+                                <p id="summary-route">--</p>
+                                <p id="summary-date">--</p>
+                            </div>
+                            <div class="text-3xl font-bold mb-6" id="summary-total">0.00 €</div>
+                            <button onclick="completeBooking()" class="w-full py-4 bg-blue-600 rounded-lg font-bold">SOLICITAR TRANSPORTE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Fiche Modal -->
+    <div id="fiche-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl p-10">
+            <div class="flex justify-between items-start mb-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-blue-900 rounded flex items-center justify-center">
+                        <i class="fas fa-file-invoice text-white text-xs"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900">Confirmación de Servicio</h2>
+                </div>
+                <span class="text-xs font-bold text-slate-400" id="fiche-id">E4-XXXX</span>
+            </div>
+            <div id="fiche-content" class="space-y-6 text-sm"></div>
+            <div class="mt-10 flex gap-4 no-print">
+                <button onclick="window.print()" class="flex-1 py-3 bg-slate-800 text-white rounded font-bold">Imprimir PDF</button>
+                <button onclick="downloadJSON()" class="flex-1 py-3 border border-slate-200 rounded font-bold text-slate-600">Exportar JSON</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mandatory Footer -->
+    <footer class="bg-white border-t border-slate-200 py-12 px-6 no-print">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
+                <p class="text-sm text-blue-900 font-medium">Operated by Fleetconnect</p>
+                <p class="text-xs text-slate-400 mt-1">Design by Ryzen Outsourcing</p>
+            </div>
+            <div class="flex gap-8 text-slate-500 text-xs uppercase tracking-widest font-bold">
+                <a href="#" class="hover:text-blue-900 transition-colors">Wie zijn we</a>
+                <a href="#" class="hover:text-blue-900 transition-colors">Diensten</a>
+                <a href="#" class="hover:text-blue-900 transition-colors">Contact</a>
+                <a href="#" class="hover:text-blue-900 transition-colors">Privacy</a>
+            </div>
+            <div class="flex gap-6 text-slate-300 text-xl">
+                <i class="fab fa-facebook-f hover:text-blue-900 cursor-pointer"></i>
+                <i class="fab fa-instagram hover:text-blue-900 cursor-pointer"></i>
+                <i class="fab fa-whatsapp hover:text-blue-900 cursor-pointer"></i>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const translations = {
+            es: {
+                h_main: "Gestión de Transporte Corporativo", p_main: "Soluciones de movilidad eficientes para empresas y ejecutivos.",
+                s1: "Reserva", s2: "Vehículo", s3: "Opciones", s4: "Facturación",
+                l_pickup: "Recogida", l_dest: "Destino", l_date: "Fecha", l_time: "Hora",
+                b_next: "Siguiente Paso"
+            },
+            en: {
+                h_main: "Corporate Transport Management", p_main: "Efficient mobility solutions for companies and executives.",
+                s1: "Booking", s2: "Vehicle", s3: "Options", s4: "Billing",
+                l_pickup: "Pickup", l_dest: "Destination", l_date: "Date", l_time: "Time",
+                b_next: "Next Step"
+            },
+            fr: {
+                h_main: "Gestion du Transport d'Entreprise", p_main: "Solutions de mobilité efficaces pour les entreprises et les cadres.",
+                s1: "Réservation", s2: "Véhicule", s3: "Options", s4: "Facturation",
+                l_pickup: "Départ", l_dest: "Destination", l_date: "Date", l_time: "Heure",
+                b_next: "Étape Suivante"
+            },
+            nl: {
+                h_main: "Zakelijk Transportbeheer", p_main: "Efficiënte mobiliteitsoplossingen voor bedrijven en leidinggevenden.",
+                s1: "Boeking", s2: "Voertuig", s3: "Opties", s4: "Facturatie",
+                l_pickup: "Ophalen", l_dest: "Bestemming", l_date: "Datum", l_time: "Tijd",
+                b_next: "Volgende Stap"
+            }
+        };
+
+        function setLanguage(l) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const k = el.getAttribute('data-i18n');
+                if(translations[l][k]) el.innerText = translations[l][k];
+            });
+        }
+
+        let map, markerP, markerD, poly;
+        const CENTER = [36.72, -4.42];
+
+        function initMap() {
+            map = L.map('map').setView(CENTER, 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            markerP = L.marker(CENTER).addTo(map);
+            markerD = L.marker(CENTER, {opacity: 0}).addTo(map);
+        }
+
+        async function getRoute(p1, p2) {
+            const r = await fetch(`https://router.project-osrm.org/route/v1/driving/${p1[1]},${p1[0]};${p2[1]},${p2[0]}?overview=full&geometries=geojson`);
+            const d = await r.json();
+            if(d.code === 'Ok') {
+                if(poly) map.removeLayer(poly);
+                poly = L.geoJSON(d.routes[0].geometry, {style: {color: '#1e3a8a', weight: 5}}).addTo(map);
+                map.fitBounds(poly.getBounds(), {padding:[30,30]});
+                bookingData.distance = d.routes[0].distance / 1000;
+                updatePrice();
+            }
+        }
+
+        async function search(q, id) {
+            if(q.length < 3) return;
+            const r = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=5&lat=36.72&lon=-4.42`);
+            const d = await r.json();
+            const c = document.getElementById(`${id}-suggestions`);
+            c.innerHTML = ''; c.classList.remove('hidden');
+            d.features.forEach(f => {
+                const div = document.createElement('div');
+                div.className = "p-3 hover:bg-slate-50 cursor-pointer text-xs border-b border-slate-50";
+                div.innerText = f.properties.name + (f.properties.city ? `, ${f.properties.city}` : '');
+                div.onclick = () => {
+                    const co = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+                    document.getElementById(id).value = div.innerText;
+                    c.classList.add('hidden');
+                    if(id === 'pickup') { bookingData.pickup = div.innerText; markerP.setLatLng(co); bookingData.p_co = co; }
+                    else { bookingData.dest = div.innerText; markerD.setLatLng(co).setOpacity(1); bookingData.d_co = co; }
+                    if(bookingData.p_co && bookingData.d_co) getRoute(bookingData.p_co, bookingData.d_co);
+                };
+                c.appendChild(div);
+            });
+        }
+        document.getElementById('pickup').oninput = (e) => search(e.target.value, 'pickup');
+        document.getElementById('destination').oninput = (e) => search(e.target.value, 'destination');
+
+        let bookingData = {
+            template_code: 'E4',
+            ready_for_supabase: true,
+            pickup_location: '', pickup_coords: null, destination_location: '', dest_coords: null,
+            booking_date: '', booking_time: '', distance_km: 0, vehicle_type: null, total_price: 0
+        };
+
+        function updatePrice() {
+            if(!bookingData.vehicle_type) return;
+            let p = 4.50 + (bookingData.distance_km * bookingData.vehicle_type.kmPrice);
+            if(document.getElementById('extra-press').checked) p += 3;
+            bookingData.total_price = p;
+            document.querySelectorAll('[id^="price-"]').forEach(el => el.innerText = "-- €");
+            document.getElementById(`price-${bookingData.vehicle_type.id}`).innerText = `${p.toFixed(2)} €`;
+            document.getElementById('summary-total').innerText = `${p.toFixed(2)} €`;
+        }
+
+        function selectVehicle(id, kmPrice) {
+            bookingData.vehicle_type = { id, kmPrice };
+            document.querySelectorAll('[id^="v-"]').forEach(c => c.classList.remove('border-blue-900', 'bg-blue-50'));
+            document.getElementById(`v-${id}`).classList.add('border-blue-900', 'bg-blue-50');
+            updatePrice();
+        }
+
+        function goToStep(s) {
+            for(let i=1; i<=4; i++) {
+                document.getElementById(`step-${i}`).classList.toggle('hidden', i !== s);
+                document.getElementById(`step-nav-${i}`).classList.toggle('step-active', i === s);
+            }
+            if(s === 4) {
+                document.getElementById('summary-route').innerText = `${bookingData.pickup_location} ➔ ${bookingData.destination_location}`;
+                document.getElementById('summary-date').innerText = `${bookingData.booking_date} @ ${bookingData.booking_time}`;
+            }
+        }
+
+        function validateStep1() {
+            bookingData.booking_date = document.getElementById('booking-date').value;
+            bookingData.booking_time = document.getElementById('booking-time').value;
+            if(bookingData.pickup_location && bookingData.destination_location) {
+                document.getElementById('step-nav-2').disabled=false; goToStep(2);
+            }
+        }
+        function validateStep2() { if(bookingData.vehicle_type) { document.getElementById('step-nav-3').disabled=false; goToStep(3); } }
+
+        function completeBooking() {
+            bookingData.client_name = document.getElementById('company').value;
+            bookingData.client_phone = document.getElementById('vat').value; // Using VAT as reference for now
+
+            const id = `E4-${Date.now().toString().slice(-4)}`;
+            bookingData.booking_id = id;
+            document.getElementById('fiche-id').innerText = id;
+            document.getElementById('fiche-content').innerHTML = `
+                <div class="grid grid-cols-2 gap-8 pb-6 border-b">
+                    <div><h4 class="text-slate-400 font-bold mb-1">EMPRESA</h4><p class="font-bold">${document.getElementById('company').value}</p></div>
+                    <div><h4 class="text-slate-400 font-bold mb-1">REF / CIF</h4><p class="font-bold">${document.getElementById('vat').value}</p></div>
+                </div>
+                <div class="py-6"><h4 class="text-slate-400 font-bold mb-1">TRAYECTO</h4><p>${bookingData.pickup_location} ➔ ${bookingData.destination_location}</p></div>
+                <div class="flex justify-between items-baseline pt-6 border-t"><h4 class="text-slate-400 font-bold">TOTAL A FACTURAR</h4><p class="text-3xl font-bold text-blue-900">${bookingData.total_price.toFixed(2)} €</p></div>`;
+            document.getElementById('fiche-modal').classList.remove('hidden');
+            console.log("🚀 Supabase:", bookingData);
+        }
+
+        function updateStats() {
+            document.getElementById('stats-bookings').innerText = Math.floor(Math.random() * 20) + 40;
+            document.getElementById('stats-vehicles').innerText = Math.floor(Math.random() * 10) + 15;
+        }
+
+        window.onload = () => {
+            initMap();
+            updateStats();
+            setInterval(updateStats, 30000);
+        };
+    </script>
+</body>
+</html>
